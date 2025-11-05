@@ -20,3 +20,16 @@ Story Cloze Test (SCT)
 | InputStoryid	| InputSentence1	| InputSentence2	| InputSentence3	| InputSentence4	| RandomFifthSentenceQuiz1	| RandomFifthSentenceQuiz2	| AnswerRightEnding| 
 | ---- | ----| ----- | ---- | ---- | ---- | ---- | ---- |
 | 138d5bfb-05cc-41e3-bf2c-fa85ebad14e2	| Rick grew up in a troubled household.	| He never found good support in family, and turned to gangs.	| It wasn't long before Rick got shot in a robbery.	| The incident caused him to turn a new leaf. |	He is happy now.	| He joined a gang.	| 1 | 
+
+## File Tree
+### data
+Folder with datasets.
+
+### helper.py
+Script with additional functionalities that are not part of the main experiment.
+
+### LICENSE
+MIT-License for use with citations.
+
+### prompt.py
+Script to prompt the models.
