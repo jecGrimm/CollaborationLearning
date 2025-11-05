@@ -1,10 +1,25 @@
 from datasets import load_dataset
 import random
+import os
 
 class ROCStories:
-    def __init__(self):
+    def __init__(self, shuffle = False):
+        '''
+        This constructor loads the original ROCStories data and creates the shuffled dataset.
+
+        @param
+            shuffle: False -> Do not create shuffled data else True
+        '''
         self.orig_dataset = load_dataset("csv", data_files="data/ROCStories_winter2017 - ROCStories_winter2017.csv", split="train")
-        self.shuffled_dataset = self.orig_dataset.map(self.shuffle_sents, batched = True)
+
+        # load shuffled data
+        shuffle_file = "./data/ROCStories_shuffled.jsonl"
+        if not os.path.exists(shuffle_file) or shuffle == True:
+            self.shuffled_dataset = self.orig_dataset.map(self.shuffle_sents, batched = True)
+            # JSON because of list of shuffled sentences
+            self.shuffled_dataset.to_json(shuffle_file) # jsonl because of missing ","
+        else:
+            self.shuffled_dataset = load_dataset("json", data_files=shuffle_file, split="train")
 
     def shuffle_sents(self, batch):
         '''
@@ -25,4 +40,4 @@ class ROCStories:
         
 if __name__ == "__main__":
     roc_data = ROCStories()
-    print(roc_data.shuffled_dataset[:10])
+    print("Done")
