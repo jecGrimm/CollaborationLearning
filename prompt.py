@@ -22,7 +22,7 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self):
+    def prompt_model(self, split = "mini"):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
@@ -31,11 +31,11 @@ class SingleAgent:
             device_map="cpu",
         )
     
-        roc_data = ROCStories()
+        roc_data = ROCStories(split = "mini")
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
 
         outputs = pipe(
-            list(prompt_data["prompt"])[:1],
+            list(prompt_data["prompt"]),
             max_new_tokens=256,
         )
         print(outputs[0][0]["generated_text"])
