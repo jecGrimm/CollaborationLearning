@@ -9,7 +9,7 @@ outfile = cli.experiment_file
 if not os.path.isfile(cli.experiment_file):
     # prompt
     single = SingleAgent()
-    outfile = single.prompt_model()
+    outfile = single.prompt_model(split = cli.split, device = cli.device) 
 
 # evaluate
 evaluate_sent_order(outfile)

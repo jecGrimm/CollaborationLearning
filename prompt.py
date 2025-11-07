@@ -10,7 +10,7 @@ class SingleAgent:
             Please bring the following sentences in the correct order based on their causal and temporal relations:\n\
                 {shuffled_sents}\n\
             Return a list of the sentences in the correct order in the following format:\n\
-                [<sentence1>, <sentence2>, <sentence3>, <sentence4>]\n\
+                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n\
             Answer:\n\
             '''
 
@@ -22,20 +22,20 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self):
+    def prompt_model(self, split = "mini", device = "cpu"):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
             model=model_id,
             torch_dtype=torch.bfloat16,
-            device_map="cpu",
+            device_map=device,
         )
     
-        roc_data = ROCStories()
+        roc_data = ROCStories(split = split)
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
 
         outputs = pipe(
-            list(prompt_data["prompt"])[:1],
+            list(prompt_data["prompt"]),
             max_new_tokens=256,
         )
         print(outputs[0][0]["generated_text"])
@@ -47,8 +47,8 @@ class SingleAgent:
         output_data = prompt_data.add_column("output", output_list)
 
         model_name = model_id.split("/")[-1]
-        os.makedirs(f"./outputs/single/{model_name}/", exist_ok = True)
-        outfile = f"./outputs/single/{model_name}/outputs_single_{model_name}_{str(datetime.now()).replace(" ", "_")}.jsonl"
-        output_data.to_json(outfile)
+        os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
+        outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
+        output_data.to_json(outfile, indent=4)
 
         return outfile
