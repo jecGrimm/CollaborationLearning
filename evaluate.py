@@ -18,7 +18,7 @@ def evaluate_sent_order(experiment_file):
     acc_mean = float(eval_data.with_format("pandas")["accuracy"].mean())
     print("Mean accuracy:", acc_mean)
     with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        json.dump({eval_file.split("/")[-1]: acc_mean}, f)
+        json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
 
 def evaluate_order_answer(batch):

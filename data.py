@@ -22,13 +22,13 @@ class ROCStories:
             # JSON because of list of shuffled sentences
 
             if split == "mini":
-                self.shuffled_dataset.select(range(3)).to_json(shuffle_file)
+                self.shuffled_dataset.select(range(3)).to_json(shuffle_file, indent=4)
             elif split == "dev":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(shuffle_file)
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(shuffle_file, indent=4)
             elif split == "test":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(shuffle_file)
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(shuffle_file, indent=4)
             else: 
-                self.shuffled_dataset.to_json(shuffle_file) # jsonl because of missing ","
+                self.shuffled_dataset.to_json(shuffle_file, indent=4) # jsonl because of missing ","
         else:
             self.shuffled_dataset = load_dataset("json", data_files=shuffle_file, split="train")
 

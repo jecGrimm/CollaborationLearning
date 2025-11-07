@@ -49,6 +49,6 @@ class SingleAgent:
         model_name = model_id.split("/")[-1]
         os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
         outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
-        output_data.to_json(outfile)
+        output_data.to_json(outfile, indent=4)
 
         return outfile
