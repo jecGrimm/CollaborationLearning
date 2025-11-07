@@ -23,6 +23,10 @@ class ROCStories:
 
             if split == "mini":
                 self.shuffled_dataset.select(range(3)).to_json(shuffle_file)
+            elif split == "dev":
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(shuffle_file)
+            elif split == "test":
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(shuffle_file)
             else: 
                 self.shuffled_dataset.to_json(shuffle_file) # jsonl because of missing ","
         else:
@@ -46,5 +50,5 @@ class ROCStories:
         return {"shuffled_sents":  batch_shuffled}
         
 if __name__ == "__main__":
-    roc_data = ROCStories(split = "mini")
+    roc_data = ROCStories(split = "test")
     print("Done")

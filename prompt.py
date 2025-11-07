@@ -22,16 +22,16 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self, split = "mini"):
+    def prompt_model(self, split = "mini", device = "cpu"):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
             model=model_id,
             torch_dtype=torch.bfloat16,
-            device_map="cpu",
+            device_map=device,
         )
     
-        roc_data = ROCStories(split = "mini")
+        roc_data = ROCStories(split = split)
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
 
         outputs = pipe(
@@ -47,8 +47,8 @@ class SingleAgent:
         output_data = prompt_data.add_column("output", output_list)
 
         model_name = model_id.split("/")[-1]
-        os.makedirs(f"./outputs/single/{model_name}/", exist_ok = True)
-        outfile = f"./outputs/single/{model_name}/outputs_single_{model_name}_{str(datetime.now()).replace(" ", "_")}.jsonl"
+        os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
+        outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
         output_data.to_json(outfile)
 
         return outfile

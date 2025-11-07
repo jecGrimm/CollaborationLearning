@@ -12,7 +12,6 @@ def evaluate_sent_order(experiment_file):
     eval_data = exp_data.map(evaluate_order_answer, batched=True, remove_columns=exp_data.column_names)
 
     eval_file = experiment_file.replace("outputs", "eval")
-    # TODO: fix repo list
     os.makedirs(f"{"/".join(eval_file.split("/")[:-1])}", exist_ok = True)
     eval_data.to_json(eval_file)
 
