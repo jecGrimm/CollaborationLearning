@@ -10,7 +10,7 @@ class SingleAgent:
             Please bring the following sentences in the correct order based on their causal and temporal relations:\n\
                 {shuffled_sents}\n\
             Return a list of the sentences in the correct order in the following format:\n\
-                [<sentence1>, <sentence2>, <sentence3>, <sentence4>]\n\
+                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n\
             Answer:\n\
             '''
 

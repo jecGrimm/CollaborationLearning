@@ -13,7 +13,7 @@ def evaluate_sent_order(experiment_file):
 
     eval_file = experiment_file.replace("outputs", "eval")
     # TODO: fix repo list
-    os.makedirs(f"{eval_file.split("/")[:-1]}", exist_ok = True)
+    os.makedirs(f"{"/".join(eval_file.split("/")[:-1])}", exist_ok = True)
     eval_data.to_json(eval_file)
 
     acc_mean = float(eval_data.with_format("pandas")["accuracy"].mean())
@@ -55,7 +55,7 @@ def compute_accuracy_order(pred, batch, i):
         if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
             acc += 1
     
-    return acc/4 # 4 sentences
+    return acc/len(pred) # 4 sentences
 
 if __name__ == "__main__":
     cli = CLI()
