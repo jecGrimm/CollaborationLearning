@@ -55,15 +55,19 @@ class SingleAgent:
 
 class MultiAgent:
     def __init__(self):
-        self.START_PROMPT = '''
-        You are {player_name}. You are playing a game with your partners {other_players}. The game has the following rules: {rules}. You start the conversation with the other players. If you have reached a solution, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:\n
-        [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n
-        Answer:\n
+        self.SYSTEM_PROMPT = '''
+        I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
+        [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
         '''
 
-        self.MID_PROMPT='''
-        You are {player_name}. You are playing a game with your partners {other_players}. The game has the following rules: {rules}. I\'ll provide the conversation history: {conversation}.  Formulate an adequate response to the ongoing conversation. If you have reached a solution, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:\n\ [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n
-        Answer:\n
+        self.START_PROMPT = '''It is currently my ({player_name}) turn and my sentence is "{sentence}". I start the conversation with the other players ({other_players}). Please formulate a beginning statement for the conversation for me. Do not say anything else. Got it?
+        Answer:
+        '''
+        self.MID_PROMPT='''It is currently my ({player_name}) turn and my sentence is "{sentence}". I continue the conversation with the other players ({other_players}).
+        The conversation history: 
+        {conversation}
+        Please formulate a response to the conversation for me. Do not say anything else. Got it?
+        Answer:
         '''
 
         self.RULES = '''
@@ -71,57 +75,86 @@ class MultiAgent:
         - Each player receives one sentence that the other players do not know.
         - All sentences together form a short story and are causally and temporally related to each other.
         - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
-
-        Your sentence: "{sentence}"
+        - The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
+        
+        My sentence: "{sentence}"
         '''
 
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
-    def create_message(self, conv_round, turn, inst, conversation = ""):
-        message = []
+    def create_message(self, conv_round, turn, conversation, roles, player_name):
+        other_players = [name for name in self.NAMES if name != player_name]
+        player_sent = roles[player_name]
+        rules = self.RULES.format(sentence = player_sent)
+
+        message = [
+            {
+                "role": "system",
+                "content": self.SYSTEM_PROMPT.format(
+                    player_name = player_name,
+                    other_players = other_players,
+                    rules = rules
+                    )
+            }
+        ]
 
         if conv_round == 0 and turn == 0:
-            other_players = self.NAMES.pop(turn)
-            rules = self.RULES.format(sentence = inst[f"sentence{turn+1}"])
-            message.append(self.START_PROMPT.format(
-                player_name = self.NAMES[turn],
-                other_players = other_players,
-                rules = rules
-            ))
+            message.append(
+                {
+                    "role": "user",
+                    "content": self.START_PROMPT.format(
+                    player_name = player_name,
+                    other_players = other_players,
+                    sentence = player_sent
+                    )
+                }
+            )
         else:
-            other_players = self.NAMES.pop(turn)
-            rules = self.RULES.format(sentence = inst[f"sentence{turn+1}"])
-            message.append(self.MID_PROMPT.format(
-                player_name = self.NAMES[turn],
-                other_players = other_players,
-                rules = rules,
-                conversation = conversation
-            ))
+            message.append(
+                {
+                    "role": "user",
+                    "content": self.MID_PROMPT.format(
+                        player_name = player_name,
+                        other_players = other_players,
+                        conversation = conversation,
+                        sentence = player_sent
+                    )
+                }
+            )
 
         return message
 
     def play_games(self, batch, pipe):
         batch_convs = []
-        for inst in batch:
+        for i in range(len(batch["storyid"])):
             conv_round = 0
+            turn = 0
             conversation = ""
+            turns = []
+
+            roles = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
             while conv_round < 4:
-                for turn in range(5):
+                while turn < 5:
+                    player_name = self.NAMES[turn]
+
                     model_out = pipe(
-                            self.create_message(conv_round, turn, inst, conversation),
+                            self.create_message(conv_round, turn, conversation, roles, player_name),
                             max_new_tokens=256,
                         )
                     
-                    model_answer = model_out[0][0]["generated_text"].split("Answer:\n")[-1].strip()
+                    model_answer = model_out[0]["generated_text"][2]["content"]
                 
-                conversation += f"\n{self.NAMES[turn]}: {model_answer}\n"
-
-                if "STOP" in model_answer:
-                    conv_round = 4
-                else:
-                    conv_round += 1 
+                    conversation += f"\n{player_name}: {model_answer}\n"
+                    turns.append({"player": player_name, "answer": model_answer})
+                    if "STOP" in model_answer:
+                        conv_round = 4
+                        turn = 5
+                    else: 
+                        turn += 1
+                conv_round += 1
             
-            batch_convs.append(conversation)
+            # TODO auch prompt speichern
+            batch_convs.append(turns)
 
         return {"outputs": batch_convs}
                 
@@ -136,7 +169,7 @@ class MultiAgent:
         )
     
         roc_data = ROCStories(split = split)
-        prompt_data = roc_data.orig_dataset
+        prompt_data = roc_data.shuffled_dataset
         outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True)
 
         model_name = model_id.split("/")[-1]
