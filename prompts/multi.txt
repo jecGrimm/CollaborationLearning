@@ -1,0 +1,77 @@
+1. No optimization, starting prompt: 
+```
+You are {self.player_names[self.player_id]}. You are playing a game with your partners {self.player_names[self.other_player_id]}. The game has the following rules: {self.rules}. You start the conversation with the other players. If you have reached a solution, return a list of the sentences in the correct order in the following format:\n
+[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n
+Answer:\n
+```
+
+2. No optimization, mid prompt:
+```
+You are {self.player_names[self.player_id]}. You are playing a game with your partners {self.player_names[self.other_player_id]}. The game has the following rules: {self.rules}. I\'ll provide the conversation history: {self.conversation}.  Formulate an adequate response to the ongoing conversation. If you have reached a solution, return a list of the sentences in the correct order in the following format:\n\
+[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n
+Answer:\n
+
+3. Rules
+```
+- The game is played by 5 players.
+- Each player receives one sentence that the other players do not know.
+- All sentences together form a short story and are causally and temporally related to each other.
+- The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+
+Your sentence: "{self.sentence}"
+```
+
+4. Names:  
+Soraya
+Nimrod
+Odett
+Wangui
+Cyrene 
+
+5. System prompt, user as player:
+self.SYSTEM_PROMPT = '''
+I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
+[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
+'''
+
+self.START_PROMPT = '''It is currently my ({player_name}) turn. I start the conversation with the other player ({other_players}). Please formulate a beginning statement for the conversation for me.
+Answer:
+'''
+self.MID_PROMPT='''It is currently my ({player_name}) turn. I continue the conversation with the other players ({other_players}). 
+The conversation history: 
+{conversation}
+Please formulate a response to the conversation for me.
+Answer:
+'''
+
+self.RULES = '''
+- The game is played by 5 players.
+- Each player receives one sentence that the other players do not know.
+- All sentences together form a short story and are causally and temporally related to each other.
+- The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+- The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
+
+My sentence: "{sentence}"
+'''
+
+6. Repeat sentence, only return conversation answer
+self.START_PROMPT = '''It is currently my ({player_name}) turn and my sentence is "{sentence}". I start the conversation with the other players ({other_players}). Please formulate a beginning statement for the conversation for me. Do not say anything else. Got it?
+Answer:
+'''
+self.MID_PROMPT='''It is currently my ({player_name}) turn and my sentence is "{sentence}". I continue the conversation with the other players ({other_players}).
+The conversation history: 
+{conversation}
+Please formulate a response to the conversation for me. Do not say anything else. Got it?
+Answer:
+'''
+
+7. Remove sentence relation
+        self.RULES = '''
+        - The game is played by 5 players.
+        - Each player receives one sentence that the other players do not know.
+        - All sentences together form a short story and are causally and temporally related to each other.
+        - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+        - The players conduct a conversation where they exchange their sentences and discuss how they could be ordered correctly.
+        
+        My sentence: "{sentence}"
+        '''

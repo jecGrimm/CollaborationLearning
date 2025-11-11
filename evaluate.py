@@ -6,10 +6,13 @@ import os
 import json
 import re
 
-def evaluate_sent_order(experiment_file):
+def evaluate_sent_order(experiment_file, framework):
     exp_data = load_dataset("json", data_files=experiment_file, split="train")
 
-    eval_data = exp_data.map(evaluate_order_answer, batched=True, remove_columns=exp_data.column_names)
+    if framework == "single":
+        eval_data = exp_data.map(evaluate_order_answer_single, batched=True, remove_columns=exp_data.column_names)
+    else:
+        eval_data = exp_data.map(evaluate_order_answer_multi, batched=True, remove_columns=exp_data.column_names)
 
     eval_file = experiment_file.replace("outputs", "eval")
     os.makedirs(f"{"/".join(eval_file.split("/")[:-1])}", exist_ok = True)
@@ -21,13 +24,26 @@ def evaluate_sent_order(experiment_file):
         json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
 
-def evaluate_order_answer(batch):
+def evaluate_order_answer_single(batch):
     pred_lists = []
     acc = []
     gold_sents = []
 
     for i in range(len(batch["storyid"])):
         pred = extract_answer_list(batch["output"][i])
+        pred_lists.append(pred)
+        acc.append(compute_accuracy_order(pred, batch, i))
+        gold_sents.append(get_sent_list(batch, i))
+    
+    return {"accuracy": acc, "predictions": pred_lists, "gold": gold_sents}
+
+def evaluate_order_answer_multi(batch):
+    pred_lists = []
+    acc = []
+    gold_sents = []
+
+    for i in range(len(batch["storyid"])):
+        pred = extract_answer_list(batch["output"][i][-1]["answer"])
         pred_lists.append(pred)
         acc.append(compute_accuracy_order(pred, batch, i))
         gold_sents.append(get_sent_list(batch, i))
