@@ -17,4 +17,4 @@ if not os.path.isfile(cli.experiment_file):
         outfile = multi.prompt_models(split = cli.split, device = cli.device)
 
 # evaluate
-evaluate_sent_order(outfile)
+evaluate_sent_order(outfile, cli.framework)

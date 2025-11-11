@@ -145,7 +145,7 @@ class MultiAgent:
                     model_answer = model_out[0]["generated_text"][2]["content"]
                 
                     conversation += f"\n{player_name}: {model_answer}\n"
-                    turns.append({"player": player_name, "answer": model_answer})
+                    turns.append({"player": player_name, "answer": model_answer, "system_prompt": model_out[0]["generated_text"][0]["content"], "turn_prompt": model_out[0]["generated_text"][1]["content"]})
                     if "STOP" in model_answer:
                         conv_round = 4
                         turn = 5
@@ -156,7 +156,7 @@ class MultiAgent:
             # TODO auch prompt speichern
             batch_convs.append(turns)
 
-        return {"outputs": batch_convs}
+        return {"output": batch_convs}
                 
 
     def prompt_models(self, split = "mini", device = "cpu"):
