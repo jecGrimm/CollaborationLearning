@@ -2,8 +2,13 @@ import torch
 from transformers import pipeline
 from data import ROCStories
 import os
+import time
 from datetime import datetime
 
+class Agent:
+    def __init__(self):
+        # TODO: define outfile
+        pass
 class SingleAgent:
     def __init__(self):
         self.PROMPT = '''\
@@ -22,13 +27,13 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self, logger, split = "mini", device = "cpu"):
+    def prompt_model(self, logger, split = "mini", device = "cpu", batch_size = 1):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
             model=model_id,
             torch_dtype=torch.bfloat16,
-            device_map=device,
+            device_map=device
         )
         logger.log_pipe(pipe)
     
@@ -37,10 +42,15 @@ class SingleAgent:
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
 
+        start = time.time()
         outputs = pipe(
-            list(prompt_data["prompt"]),
-            max_new_tokens=256,
-        )
+                prompt_data["prompt"],
+                max_new_tokens=256,
+                batch_size = batch_size
+            )
+        end = time.time()
+        logger.rundata.update({"duration": end - start})
+
         print(outputs[0][0]["generated_text"])
         logger.run_data.update({"batch_size": 1, "instances": len(outputs)})
 
@@ -58,7 +68,7 @@ class SingleAgent:
         return outfile
 
 class MultiAgent:
-    def __init__(self):
+    def __init__(self, model_id, split):
         self.SYSTEM_PROMPT = '''
         I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
         [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
@@ -85,6 +95,11 @@ class MultiAgent:
         '''
 
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
+
+        self.model_id = model_id
+        self.model_name = model_id.split("/")[-1]
+        os.makedirs(f"./outputs/multi/{self.model_name}/{split}", exist_ok = True)
+        self.outfile = f"./outputs/multi/{self.model_name}/{split}/outputs_multi_{self.model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
 
     def create_message(self, conv_round, turn, conversation, roles, player_name):
         other_players = [name for name in self.NAMES if name != player_name]
@@ -128,7 +143,7 @@ class MultiAgent:
 
         return message
 
-    def play_games(self, batch, pipe):
+    def play_games(self, batch, pipe, logger):
         batch_convs = []
         for i in range(len(batch["storyid"])):
             conv_round = 0
@@ -141,10 +156,13 @@ class MultiAgent:
                 while turn < 5:
                     player_name = self.NAMES[turn]
 
+                    start = time.time()
                     model_out = pipe(
                             self.create_message(conv_round, turn, conversation, roles, player_name),
                             max_new_tokens=256,
                         )
+                    end = time.time()
+                    logger.rundata.update({"duration": end - start})
                     
                     model_answer = model_out[0]["generated_text"][2]["content"]
                 
@@ -161,27 +179,32 @@ class MultiAgent:
 
         return {"output": batch_convs}
                 
-
-    def prompt_models(self, logger, split = "mini", device = "cpu"):
-        model_id = "meta-llama/Llama-3.2-1B-Instruct"
+    def prompt_models(self, logger, device = "cpu", batch_size = 1):
         pipe = pipeline(
             "text-generation",
-            model=model_id,
+            model=self.model_id,
             torch_dtype=torch.bfloat16,
             device_map=device,
         )
         logger.log_pipe(pipe)
     
-        roc_data = ROCStories(split = split)
-        logger.run_data.update({"shuffle_file": roc_data.shuffle_file})
+        roc_data = ROCStories(split = self.split)
+        logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
-        prompt_data = roc_data.shuffled_dataset
-        outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True)
-        logger.run_data.update({"batch_size": 1000, "instances": len(outputs)})
+        num_shards = (len(prompt_data)/1000)+1
+        processed_inst = 0
+        for shard_idx in range(num_shards):
+            prompt_data = roc_data.shuffled_dataset.shard(num_shards=num_shards, index=shard_idx)
+            outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size, logger=logger)
+            self.save_outputs(outputs, ckpfile=f"{self.outfile[:-5]}_{shard_idx}.json")
 
-        model_name = model_id.split("/")[-1]
-        os.makedirs(f"./outputs/multi/{model_name}/{split}", exist_ok = True)
-        outfile = f"./outputs/multi/{model_name}/{split}/outputs_multi_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
-        outputs.to_json(outfile, indent=4)
+            processed_inst += len(prompt_data)
+            logger.run_data.update({"instances": processed_inst})
 
-        return outfile
+        self.save_outputs(outputs)
+    
+    def save_outputs(self, outputs, ckpfile=None):
+        if ckpfile == None:
+            outputs.to_json(self.outfile, indent=4)
+        else:
+            outputs.to_json(ckpfile, indent=4)

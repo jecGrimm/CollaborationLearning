@@ -51,15 +51,28 @@ class ExperimentLog:
             json.dump(self.run_data, f, indent=4)
 
         run_csv = "./logs/runs.csv"
-        prev_runs = pd.read_csv(run_csv, sep = ";")
-        curr_run = pd.Series(self.run_data)
-        prev_runs._append(curr_run, ignore_index = True)
-        prev_runs.to_csv(run_csv, sep = ";")
+        if os.path.isfile(run_csv):
+            prev_runs = pd.read_csv(run_csv, sep = ";")
+            curr_run = pd.Series(self.run_data)
+            prev_runs._append(curr_run, ignore_index = True)
+            prev_runs.to_csv(run_csv, sep = ";")
+        else:
+            with open(run_csv, "w", encoding="utf-8") as f:
+                fieldnames = self.run_data.keys()
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+
+                writer.writeheader()
+                writer.writerow(self.run_data)
     
     def print_best_run(self):
         df = pd.read_csv("./logs/runs.csv", sep = ";")
         max_df_idx = df.mean_acc.idxmax()
         print(df.loc[max_df_idx])
+
+    def print_fastest_run(self):
+        df = pd.read_csv("./logs/runs.csv", sep = ";")
+        min_df_idx = df.duration.idxmin()
+        print(df.loc[min_df_idx])
 
 if __name__ == "__main__":
     with open("configs/mini_cpu_multi_exp.json", "r", encoding="utf-8") as f:
