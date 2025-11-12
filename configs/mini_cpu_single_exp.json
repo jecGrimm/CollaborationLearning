@@ -1,0 +1,6 @@
+{
+    "split": "mini",
+    "device": "cpu",
+    "framework": "single",
+    "experiment_file": "outputs/single/Llama-3.2-1B-Instruct/mini/outputs_single_Llama-3.2-1B-Instruct_mini_2025-11-07_16:07:56.547230.jsonl"
+}

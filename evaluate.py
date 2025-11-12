@@ -6,7 +6,7 @@ import os
 import json
 import re
 
-def evaluate_sent_order(experiment_file, framework):
+def evaluate_sent_order(experiment_file, framework, logger):
     exp_data = load_dataset("json", data_files=experiment_file, split="train")
 
     if framework == "single":
@@ -19,9 +19,11 @@ def evaluate_sent_order(experiment_file, framework):
     eval_data.to_json(eval_file)
 
     acc_mean = float(eval_data.with_format("pandas")["accuracy"].mean())
+
+    logger.run_data.update({"mean_acc": acc_mean})
     print("Mean accuracy:", acc_mean)
-    with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
+    # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
+    #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
 
 def evaluate_order_answer_single(batch):

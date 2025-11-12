@@ -16,21 +16,21 @@ class ROCStories:
         self.orig_dataset = load_dataset("csv", data_files="data/ROCStories_winter2017 - ROCStories_winter2017.csv", split="train")
 
         # load shuffled data
-        shuffle_file = "./data/ROCStories_shuffled_" + split + ".jsonl"
-        if not os.path.exists(shuffle_file) or shuffle == True:
+        self.shuffle_file = "./data/ROCStories_shuffled_" + split + ".jsonl"
+        if not os.path.exists(self.shuffle_file) or shuffle == True:
             self.shuffled_dataset = self.orig_dataset.map(self.shuffle_sents, batched = True)
             # JSON because of list of shuffled sentences
 
             if split == "mini":
-                self.shuffled_dataset.select(range(3)).to_json(shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(3)).to_json(self.shuffle_file, indent=4)
             elif split == "dev":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
             elif split == "test":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(self.shuffle_file, indent=4)
             else: 
-                self.shuffled_dataset.to_json(shuffle_file, indent=4) # jsonl because of missing ","
+                self.shuffled_dataset.to_json(self.shuffle_file, indent=4) # jsonl because of missing ","
         else:
-            self.shuffled_dataset = load_dataset("json", data_files=shuffle_file, split="train")
+            self.shuffled_dataset = load_dataset("json", data_files=self.shuffle_file, split="train")
 
     def shuffle_sents(self, batch):
         '''
