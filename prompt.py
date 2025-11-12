@@ -22,7 +22,7 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self, split = "mini", device = "cpu"):
+    def prompt_model(self, logger, split = "mini", device = "cpu"):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
@@ -30,8 +30,11 @@ class SingleAgent:
             torch_dtype=torch.bfloat16,
             device_map=device,
         )
+        logger.log_pipe(pipe)
     
         roc_data = ROCStories(split = split)
+        logger.run_data.update({"shuffle_file": roc_data.shuffle_file})
+
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
 
         outputs = pipe(
@@ -39,6 +42,7 @@ class SingleAgent:
             max_new_tokens=256,
         )
         print(outputs[0][0]["generated_text"])
+        logger.run_data.update({"batch_size": 1, "instances": len(outputs)})
 
         output_list = [turn["generated_text"] for conv in outputs for turn in conv]
         num_missing = len(prompt_data) - len(output_list)
@@ -153,13 +157,12 @@ class MultiAgent:
                         turn += 1
                 conv_round += 1
             
-            # TODO auch prompt speichern
             batch_convs.append(turns)
 
         return {"output": batch_convs}
                 
 
-    def prompt_models(self, split = "mini", device = "cpu"):
+    def prompt_models(self, logger, split = "mini", device = "cpu"):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
@@ -167,10 +170,14 @@ class MultiAgent:
             torch_dtype=torch.bfloat16,
             device_map=device,
         )
+        logger.log_pipe(pipe)
     
         roc_data = ROCStories(split = split)
+        logger.run_data.update({"shuffle_file": roc_data.shuffle_file})
+
         prompt_data = roc_data.shuffled_dataset
         outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True)
+        logger.run_data.update({"batch_size": 1000, "instances": len(outputs)})
 
         model_name = model_id.split("/")[-1]
         os.makedirs(f"./outputs/multi/{model_name}/{split}", exist_ok = True)
