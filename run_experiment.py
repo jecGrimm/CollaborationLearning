@@ -15,17 +15,21 @@ def run_experiment(config = None, logger = None):
         # prompt
 
         if config["framework"] == "single":
-            single = SingleAgent()
+            single = SingleAgent(model_id=config["model_id"], split=config["split"])
             
             logger.log_single(single)
 
-            outfile = single.prompt_model(logger, split = config["split"], device = config["device"], batch_size = config["batch_size"]) 
+            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
+
+            outfile = single.define_outfile()
         else:
             multi = MultiAgent(model_id=config["model_id"], split=config["split"])
 
             logger.log_multi(multi)
 
-            outfile = multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
+            multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
+
+            outfile = multi.define_outfile()
 
     # evaluate
     evaluate_sent_order(outfile, config["framework"], logger)
@@ -42,7 +46,8 @@ def test_batch_size(split = "mini", device = "cpu"):
                 "device": device,
                 "framework": fw,
                 "experiment_file": "",
-                "batch_size": batch_size
+                "batch_size": batch_size,
+                "model_id": "meta-llama/Llama-3.2-1B-Instruct"
             }
             logger = ExperimentLog(config)
 
@@ -50,11 +55,9 @@ def test_batch_size(split = "mini", device = "cpu"):
             print(f"Duration: {logger.run_data["duration"]}")
 
         logger.print_fastest_run()
-    
-
-    
-
         
 if __name__ == "__main__":
-    cli = CLI()
-    run_experiment(cli.config)
+    # cli = CLI()
+    # run_experiment(cli.config)
+
+    test_batch_size(split = "mini", device = "cuda:4")

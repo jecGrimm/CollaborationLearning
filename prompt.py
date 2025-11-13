@@ -6,11 +6,34 @@ import time
 from datetime import datetime
 
 class Agent:
-    def __init__(self):
-        # TODO: define outfile
-        pass
-class SingleAgent:
-    def __init__(self):
+    def __init__(self, model_id, split, framework):
+        self.model_id = model_id
+        self.model_name = model_id.split("/")[-1]
+        self.split = split
+        self.framework = framework
+        self.date = str(datetime.now()).replace(" ", "_")
+
+
+    def save_outputs(self, outputs, shard_idx=None):
+        outfile = self.define_outfile(shard_idx=shard_idx)
+        outputs.to_json(outfile, indent=4)
+
+
+    def define_outfile(self, shard_idx = None):
+        if shard_idx == None:
+            os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
+            return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
+        else:
+            os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
+            return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
+
+class SingleAgent(Agent):
+    def __init__(self, model_id, split):
+        self.model_id = model_id
+        self.split = split
+
+        super().__init__(model_id=model_id, split=split, framework="single")
+
         self.PROMPT = '''\
             Please bring the following sentences in the correct order based on their causal and temporal relations:\n\
                 {shuffled_sents}\n\
@@ -27,7 +50,7 @@ class SingleAgent:
 
         return {"prompt": messages}
     
-    def prompt_model(self, logger, split = "mini", device = "cpu", batch_size = 1):
+    def prompt_model(self, logger, device = "cpu", batch_size = 1):
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
@@ -37,38 +60,61 @@ class SingleAgent:
         )
         logger.log_pipe(pipe)
     
-        roc_data = ROCStories(split = split)
-        logger.run_data.update({"shuffle_file": roc_data.shuffle_file})
+        roc_data = ROCStories(split = self.split)
+        logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
+        full_output_list = []
 
         start = time.time()
-        outputs = pipe(
-                prompt_data["prompt"],
-                max_new_tokens=256,
-                batch_size = batch_size
-            )
+        # process data in smaller parts for checkpointing
+        num_shards = int((len(prompt_data)/1000))+1
+        processed_inst = 0 # track number of instances
+        for shard_idx in range(num_shards):
+            # process shard
+            shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
+            outputs = pipe(
+                    list(shard_data["prompt"]),
+                    max_new_tokens=256,
+                    batch_size = batch_size
+                )
+            
+            # store shard output
+            output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
+            full_output_list += output_list
+
+            # TODO: store all current instances in ckp-file and not only the shard
+            output_data = shard_data.add_column("output", output_list)
+            
+            self.save_outputs(outputs=output_data, shard_idx=shard_idx)
+
+            processed_inst += len(shard_data)
+            logger.run_data.update({"instances": processed_inst})
+
+
         end = time.time()
-        logger.rundata.update({"duration": end - start})
+        logger.run_data.update({"duration": end - start}) # track processing time
 
-        print(outputs[0][0]["generated_text"])
-        logger.run_data.update({"batch_size": 1, "instances": len(outputs)})
+        #print(outputs[0][0]["generated_text"])
 
-        output_list = [turn["generated_text"] for conv in outputs for turn in conv]
-        num_missing = len(prompt_data) - len(output_list)
-        output_list = output_list + [""] * num_missing
+        # output_list = [turn["generated_text"] for conv in outputs for turn in conv]
+        # num_missing = len(prompt_data) - len(output_list)
+        # output_list = output_list + [""] * num_missing
 
-        output_data = prompt_data.add_column("output", output_list)
+        # save full output
+        output_data = prompt_data.add_column("output", full_output_list)
+        logger.run_data.update({"instances": len(full_output_list)})
 
-        model_name = model_id.split("/")[-1]
-        os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
-        outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
-        output_data.to_json(outfile, indent=4)
+        # model_name = model_id.split("/")[-1]
+        # os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
+        # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
+        # output_data.to_json(outfile, indent=4)
+        self.save_outputs(output_data)
 
-        return outfile
-
-class MultiAgent:
+class MultiAgent(Agent):
     def __init__(self, model_id, split):
+        super().__init__(model_id=model_id, split=split, framework="multi")
+
         self.SYSTEM_PROMPT = '''
         I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
         [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
@@ -95,11 +141,6 @@ class MultiAgent:
         '''
 
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
-
-        self.model_id = model_id
-        self.model_name = model_id.split("/")[-1]
-        os.makedirs(f"./outputs/multi/{self.model_name}/{split}", exist_ok = True)
-        self.outfile = f"./outputs/multi/{self.model_name}/{split}/outputs_multi_{self.model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
 
     def create_message(self, conv_round, turn, conversation, roles, player_name):
         other_players = [name for name in self.NAMES if name != player_name]
@@ -143,7 +184,7 @@ class MultiAgent:
 
         return message
 
-    def play_games(self, batch, pipe, logger):
+    def play_games(self, batch, pipe, logger, batch_size):
         batch_convs = []
         for i in range(len(batch["storyid"])):
             conv_round = 0
@@ -156,13 +197,11 @@ class MultiAgent:
                 while turn < 5:
                     player_name = self.NAMES[turn]
 
-                    start = time.time()
                     model_out = pipe(
                             self.create_message(conv_round, turn, conversation, roles, player_name),
                             max_new_tokens=256,
+                            batch_size = batch_size
                         )
-                    end = time.time()
-                    logger.rundata.update({"duration": end - start})
                     
                     model_answer = model_out[0]["generated_text"][2]["content"]
                 
@@ -191,20 +230,19 @@ class MultiAgent:
         roc_data = ROCStories(split = self.split)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
+        start = time.time()
+
         num_shards = (len(prompt_data)/1000)+1
         processed_inst = 0
         for shard_idx in range(num_shards):
             prompt_data = roc_data.shuffled_dataset.shard(num_shards=num_shards, index=shard_idx)
             outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size, logger=logger)
-            self.save_outputs(outputs, ckpfile=f"{self.outfile[:-5]}_{shard_idx}.json")
+            self.save_outputs(outputs, shard_idx=shard_idx)
 
             processed_inst += len(prompt_data)
             logger.run_data.update({"instances": processed_inst})
 
+        end = time.time()
+        logger.rundata.update({"duration": end - start})
+
         self.save_outputs(outputs)
-    
-    def save_outputs(self, outputs, ckpfile=None):
-        if ckpfile == None:
-            outputs.to_json(self.outfile, indent=4)
-        else:
-            outputs.to_json(ckpfile, indent=4)

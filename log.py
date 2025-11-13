@@ -23,21 +23,21 @@ class ExperimentLog:
             self.run_data.update(config)
 
     def log_single(self, single):
-        self.run_data.update({"user_prompt", single.PROMPT})
+        self.run_data.update({"user_prompt": single.PROMPT.replace("\n", "\\n")})
 
     def log_multi(self, multi):
-        self.run_data.update({"system_prompt", multi.SYSTEM_PROMPT})
-        self.run_data.update({"start_prompt", multi.START_PROMPT})
-        self.run_data.update({"mid_prompt", multi.MID_PROMPT})
-        self.run_data.update({"rules", multi.RULES})
-        self.run_data.update({"names", multi.NAMES})
+        self.run_data.update({"system_prompt": multi.SYSTEM_PROMPT.replace("\n", "\\n")})
+        self.run_data.update({"start_prompt": multi.START_PROMPT.replace("\n", "\\n")})
+        self.run_data.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
+        self.run_data.update({"rules": multi.RULES.replace("\n", "\\n")})
+        self.run_data.update({"names": multi.NAMES.replace("\n", "\\n")})
 
     def log_pipe(self, pipe):
         self.run_data.update({
             "task": pipe.task,
-            "model": pipe.model,
-            "torch_dtype": pipe.torch_dtype,
-            "device_map": pipe.device_map
+            "model": pipe.model.config.to_dict(),
+            "torch_dtype": str(pipe.torch_dtype),
+            "device_map": pipe.device.type
         })
 
     def store_run_data(self):
