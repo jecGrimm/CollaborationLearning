@@ -55,9 +55,11 @@ class SingleAgent(Agent):
         pipe = pipeline(
             "text-generation",
             model=model_id,
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
             device_map=device
         )
+        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+        pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
         roc_data = ROCStories(split = self.split)
@@ -184,7 +186,7 @@ class MultiAgent(Agent):
 
         return message
 
-    def play_games(self, batch, pipe, logger, batch_size):
+    def play_games(self, batch, pipe, batch_size):
         batch_convs = []
         for i in range(len(batch["storyid"])):
             conv_round = 0
@@ -222,7 +224,7 @@ class MultiAgent(Agent):
         pipe = pipeline(
             "text-generation",
             model=self.model_id,
-            torch_dtype=torch.bfloat16,
+            dtype=torch.bfloat16,
             device_map=device,
         )
         logger.log_pipe(pipe)
@@ -230,19 +232,25 @@ class MultiAgent(Agent):
         roc_data = ROCStories(split = self.split)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
+        prompt_data = roc_data.shuffled_dataset
+        full_output_list = []
+
         start = time.time()
 
-        num_shards = (len(prompt_data)/1000)+1
+        num_shards = int((len(prompt_data)/1000))+1
         processed_inst = 0
         for shard_idx in range(num_shards):
-            prompt_data = roc_data.shuffled_dataset.shard(num_shards=num_shards, index=shard_idx)
-            outputs = prompt_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size, logger=logger)
+            shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
+            outputs = shard_data.map(lambda batch: self.play_games(batch, pipe, batch_size), batched=True, batch_size=batch_size)
             self.save_outputs(outputs, shard_idx=shard_idx)
+
+            full_output_list += outputs["output"]
 
             processed_inst += len(prompt_data)
             logger.run_data.update({"instances": processed_inst})
 
         end = time.time()
-        logger.rundata.update({"duration": end - start})
+        logger.run_data.update({"duration": end - start})
 
-        self.save_outputs(outputs)
+        output_data = prompt_data.add_column("output", full_output_list)
+        self.save_outputs(output_data)

@@ -30,7 +30,7 @@ class ExperimentLog:
         self.run_data.update({"start_prompt": multi.START_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"rules": multi.RULES.replace("\n", "\\n")})
-        self.run_data.update({"names": multi.NAMES.replace("\n", "\\n")})
+        self.run_data.update({"names": multi.NAMES})
 
     def log_pipe(self, pipe):
         self.run_data.update({
@@ -53,13 +53,13 @@ class ExperimentLog:
         run_csv = "./logs/runs.csv"
         if os.path.isfile(run_csv):
             prev_runs = pd.read_csv(run_csv, sep = ";")
-            curr_run = pd.Series(self.run_data)
-            prev_runs._append(curr_run, ignore_index = True)
-            prev_runs.to_csv(run_csv, sep = ";")
+            #curr_run = pd.Series(self.run_data)
+            all_runs = prev_runs._append(self.run_data, ignore_index = True)
+            all_runs.to_csv(run_csv, sep = ";", index = False)
         else:
             with open(run_csv, "w", encoding="utf-8") as f:
                 fieldnames = self.run_data.keys()
-                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
 
                 writer.writeheader()
                 writer.writerow(self.run_data)
@@ -69,15 +69,21 @@ class ExperimentLog:
         max_df_idx = df.mean_acc.idxmax()
         print(df.loc[max_df_idx])
 
-    def print_fastest_run(self):
+    def print_fastest_run(self, framework = None):
         df = pd.read_csv("./logs/runs.csv", sep = ";")
-        min_df_idx = df.duration.idxmin()
+        if framework == None:
+            min_df_idx = df.duration.idxmin()
+        else: 
+            min_df_idx = df.loc[df["framework"] == framework].duration.idxmin()
         print(df.loc[min_df_idx])
 
 if __name__ == "__main__":
-    with open("configs/mini_cpu_multi_exp.json", "r", encoding="utf-8") as f:
-        config = json.load(f)
+    # with open("configs/mini_cpu_multi_exp.json", "r", encoding="utf-8") as f:
+    #     config = json.load(f)
 
-    logger = ExperimentLog(config)
-    logger.store_run_data()
-    logger.print_best_run()
+    # logger = ExperimentLog(config)
+    # logger.store_run_data()
+    # logger.print_best_run()
+
+    logger = ExperimentLog()
+    logger.print_fastest_run(framework="multi")

@@ -38,8 +38,11 @@ def run_experiment(config = None, logger = None):
 
 def test_batch_size(split = "mini", device = "cpu"):
     for fw in ["single", "multi"]:
+        print("\n")
+        print("-" * 30)
         print(f"Processing framework {fw}")
         for batch_size in [1, 8, 64, 256, 1000]:
+            print("\n")
             print(f"Processing batch size {batch_size}")
             config = {
                 "split": split,
@@ -54,10 +57,21 @@ def test_batch_size(split = "mini", device = "cpu"):
             run_experiment(config, logger)
             print(f"Duration: {logger.run_data["duration"]}")
 
-        logger.print_fastest_run()
+        print("\n")
+        logger.print_fastest_run(framework=fw)
         
 if __name__ == "__main__":
     # cli = CLI()
     # run_experiment(cli.config)
 
-    test_batch_size(split = "mini", device = "cuda:4")
+    test_batch_size(split = "dev", device = "cuda:4")
+
+    # config = {
+    #     "split": "mini",
+    #     "device": "cuda:4",
+    #     "framework": "multi",
+    #     "experiment_file": "",
+    #     "batch_size": 8,
+    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct"
+    # }
+    # run_experiment(config)

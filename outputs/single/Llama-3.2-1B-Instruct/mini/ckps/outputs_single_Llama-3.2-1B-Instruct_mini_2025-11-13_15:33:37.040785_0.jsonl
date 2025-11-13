@@ -1,0 +1,58 @@
+
+    {
+        "storyid":"8bbe6d11-1e2e-413c-bf81-eaea05f4f1bd",
+        "storytitle":"David Drops the Weight",
+        "sentence1":"David noticed he had put on a lot of weight recently.",
+        "sentence2":"He examined his habits to try and figure out the reason.",
+        "sentence3":"He realized he'd been eating too much fast food lately.",
+        "sentence4":"He stopped going to burger places and started a vegetarian diet.",
+        "sentence5":"After a few weeks, he started to feel much better.",
+        "shuffled_sents":[
+            "He stopped going to burger places and started a vegetarian diet.",
+            "After a few weeks, he started to feel much better.",
+            "He realized he'd been eating too much fast food lately.",
+            "He examined his habits to try and figure out the reason.",
+            "David noticed he had put on a lot of weight recently."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['He stopped going to burger places and started a vegetarian diet.', 'After a few weeks, he started to feel much better.', \"He realized he'd been eating too much fast food lately.\", 'He examined his habits to try and figure out the reason.', 'David noticed he had put on a lot of weight recently.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             <sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>\n            ['After a few weeks, he started to feel much better.', 'He realized he'd been eating too much fast food lately.', 'He stopped going to burger places and started a vegetarian diet.', 'He examined his habits to try and figure out the reason.', 'David noticed he had put on a lot of weight recently.']\n\n            Explanation:\n                The sentences are in the correct order because they describe events in the order of their cause and effect. The first sentence states that the person stopped going to burger places, which is the cause of the improvement in their health. The second sentence states that the person realized they had been eating too much fast food, which is the reason for their improved health. The third sentence states that the person stopped eating burger places, which is the action taken as a result of their improved health. The fourth sentence states that the person examined their habits to try and figure out the reason for their improved health, which is the action taken as a result of their realization. The fifth sentence states that the person noticed they had put on a lot of weight, which is the result of their improved health."
+    }
+
+    {
+        "storyid":"0beabab2-fb49-460e-a6e6-f35a202e3348",
+        "storytitle":"Frustration",
+        "sentence1":"Tom had a very short temper.",
+        "sentence2":"One day a guest made him very angry.",
+        "sentence3":"He punched a hole in the wall of his house.",
+        "sentence4":"Tom's guest became afraid and left quickly.",
+        "sentence5":"Tom sat on his couch filled with regret about his actions.",
+        "shuffled_sents":[
+            "Tom sat on his couch filled with regret about his actions.",
+            "Tom's guest became afraid and left quickly.",
+            "He punched a hole in the wall of his house.",
+            "Tom had a very short temper.",
+            "One day a guest made him very angry."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['Tom sat on his couch filled with regret about his actions.', \"Tom's guest became afraid and left quickly.\", 'He punched a hole in the wall of his house.', 'Tom had a very short temper.', 'One day a guest made him very angry.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             [\"Tom had a very short temper.\", 'Tom punched a hole in the wall of his house.', 'One day a guest made him very angry.', 'Tom sat on his couch filled with regret about his actions.', 'He became afraid and left quickly.\"] \n             [\"Tom sat on his couch filled with regret about his actions.\", 'He became afraid and left quickly.', 'Tom punched a hole in the wall of his house.', 'One day a guest made him very angry.', 'Tom had a very short temper.']\n             [\"Tom had a very short temper.\", 'Tom punched a hole in the wall of his house.', 'One day a guest made him very angry.', 'Tom sat on his couch filled with regret about his actions.', 'He became afraid and left quickly.'] \n             [\"Tom punched a hole in the wall of his house.\", 'Tom had a very short temper.', 'One day a guest made him very angry.', 'Tom sat on his couch filled with regret about his actions.', 'He became afraid and left quickly.'] \n             [\"Tom sat on his couch filled with regret about his actions.\", 'One day a guest made him very angry.', 'Tom punched a hole in the wall of his house.', 'Tom had a very short temper.', '"
+    }
+
+    {
+        "storyid":"87da1a22-df0b-410c-b186-439700b70ba6",
+        "storytitle":"Marcus Buys Khakis",
+        "sentence1":"Marcus needed clothing for a business casual event.",
+        "sentence2":"All of his clothes were either too formal or too casual.",
+        "sentence3":"He decided to buy a pair of khakis.",
+        "sentence4":"The pair he bought fit him perfectly.",
+        "sentence5":"Marcus was happy to have the right clothes for the event.",
+        "shuffled_sents":[
+            "Marcus was happy to have the right clothes for the event.",
+            "The pair he bought fit him perfectly.",
+            "Marcus needed clothing for a business casual event.",
+            "All of his clothes were either too formal or too casual.",
+            "He decided to buy a pair of khakis."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['Marcus was happy to have the right clothes for the event.', 'The pair he bought fit him perfectly.', 'Marcus needed clothing for a business casual event.', 'All of his clothes were either too formal or too casual.', 'He decided to buy a pair of khakis.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             [\n                ('Marcus needed clothing for a business casual event.', 'He decided to buy a pair of khakis.', 'The pair he bought fit him perfectly.', 'Marcus was happy to have the right clothes for the event.', 'All of his clothes were either too formal or too casual.'],\n             ]\n             Explanation:\n             - The first sentence establishes the reason for Marcus's decision.\n             - The second sentence explains the cause of Marcus's decision.\n             - The third sentence gives the result of Marcus's decision.\n             - The fourth sentence justifies the reason for Marcus's decision.\n             - The fifth sentence provides the explanation for why Marcus needed clothing for the event.\n             The sentences are in the correct order because the causal and temporal relations are as follows:\n             - Marcus needed clothing (reason), he bought the clothes (cause), the clothes fit him perfectly (result), he was happy to have the right clothes (justification), and all his clothes were either too formal or too casual (explanation)."
+    }
+
