@@ -4,6 +4,7 @@ from data import ROCStories
 import os
 import time
 from datetime import datetime
+from tqdm import tqdm
 
 class Agent:
     def __init__(self, model_id, split, framework):
@@ -58,7 +59,8 @@ class SingleAgent(Agent):
             dtype=torch.bfloat16,
             device_map=device
         )
-        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+        pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
+        #pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
@@ -72,14 +74,14 @@ class SingleAgent(Agent):
         # process data in smaller parts for checkpointing
         num_shards = int((len(prompt_data)/1000))+1
         processed_inst = 0 # track number of instances
-        for shard_idx in range(num_shards):
+        for shard_idx in tqdm(range(num_shards), desc = "Processing shards", total = num_shards):
             # process shard
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
-            outputs = pipe(
+            outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
                     max_new_tokens=256,
                     batch_size = batch_size
-                )
+                )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
             output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
@@ -92,6 +94,8 @@ class SingleAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst})
+
+            logger.store_run_data()
 
 
         end = time.time()
@@ -239,7 +243,7 @@ class MultiAgent(Agent):
 
         num_shards = int((len(prompt_data)/1000))+1
         processed_inst = 0
-        for shard_idx in range(num_shards):
+        for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
             outputs = shard_data.map(lambda batch: self.play_games(batch, pipe, batch_size), batched=True, batch_size=batch_size)
             self.save_outputs(outputs, shard_idx=shard_idx)
@@ -248,6 +252,8 @@ class MultiAgent(Agent):
 
             processed_inst += len(prompt_data)
             logger.run_data.update({"instances": processed_inst})
+            
+            logger.store_run_data()
 
         end = time.time()
         logger.run_data.update({"duration": end - start})

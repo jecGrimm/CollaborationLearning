@@ -3,6 +3,7 @@ import os
 import json
 import csv
 import pandas as pd
+import re
 
 class ExperimentLog:
     def __init__(self, config = None):
@@ -44,8 +45,10 @@ class ExperimentLog:
         run_dir = "./logs/runs"
         os.makedirs(run_dir, exist_ok=True)
 
-        run_idx = len(os.listdir(run_dir)) + 1
-        self.run_data.update({"run_idx": run_idx})
+        if "run_idx" not in self.run_data.keys():
+            run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
+            run_idx = max(run_files) + 1
+            self.run_data.update({"run_idx": run_idx})
 
         with open(f"{run_dir}/{run_idx}.json", "w", encoding="utf-8") as f:
             json.dump(self.run_data, f, indent=4)
@@ -64,9 +67,12 @@ class ExperimentLog:
                 writer.writeheader()
                 writer.writerow(self.run_data)
     
-    def print_best_run(self):
+    def print_best_run(self, framework = None):
         df = pd.read_csv("./logs/runs.csv", sep = ";")
-        max_df_idx = df.mean_acc.idxmax()
+        if framework == None:
+            max_df_idx = df.mean_acc.idxmax()
+        else:
+            max_df_idx = df.loc[df["framework"] == framework].mean_acc.idxmax()
         print(df.loc[max_df_idx])
 
     def print_fastest_run(self, framework = None):

@@ -1,0 +1,103 @@
+Prompt:
+Could you please rewrite the following prompt to retrieve the best answer by Llama-3.2-1B-Instruct?
+
+Prompt: 
+'''
+Please bring the following sentences in the correct order based on their causal and temporal relations:
+{shuffled_sents}
+Return a list of the sentences in the correct order in the following format:            
+[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
+Answer:\n
+'''
+
+Prompted in https://lmarena.ai/c/019a8258-ce14-7232-bcd0-63dd2deb7b10
+
+gemini-2.5-pro (winner leaderboard "Text", 14.11.2025)
+Of course! For a smaller model like Llama-3.2-1B-Instruct, the best prompts are extremely clear, direct, and often provide an example to follow. The original prompt is a bit wordy and uses abstract concepts.
+
+Here are a few improved versions, from best to good, with explanations.
+
+### Best Option: One-Shot (Show, Don't Tell)
+
+This approach gives the model a perfect example to follow. Small models are excellent at pattern matching, making this the most reliable method.
+
+```
+Task: Reorder the sentences to create a logical story.
+
+### Example
+Sentences:
+- He checked the time and saw he was late.
+- The alarm clock rang loudly.
+- He jumped out of bed.
+- He quickly got dressed.
+
+Correct Order:
+["The alarm clock rang loudly.", "He jumped out of bed.", "He checked the time and saw he was late.", "He quickly got dressed."]
+
+### Your Turn
+Sentences:
+{shuffled_sents}
+
+Correct Order:
+```
+
+**Why it works best for Llama-3.2-1B-Instruct:**
+*   **Simple Task Name:** "Reorder the sentences to create a logical story" is more intuitive than "based on their causal and temporal relations."
+*   **Clear Structure:** The `###` separators clearly divide the instructions, the example, and the actual task.
+*   **Concrete Example:** It *shows* the model exactly what to do and what the output format looks like (`["...", "...", "..."]`), which is far more effective than describing it in words.
+*   **Implicit Logic:** The example implicitly teaches the model about "causal and temporal" order without using those complex terms.
+*   **Direct Cue:** The final `Correct Order:` line directly prompts the model to generate the answer.
+
+---
+
+### Good Alternative: Simplified & Direct
+
+This version removes the example but simplifies the language and structure, making it much clearer than the original.
+
+```
+Arrange the following sentences into a coherent paragraph, ordered by time and logic.
+
+Sentences to order:
+{shuffled_sents}
+
+Return your answer as a single Python list of strings.
+Answer:
+```
+
+**Why it's better:**
+*   **Strong Verb:** "Arrange" is a clear command.
+*   **Simpler Goal:** "Coherent paragraph, ordered by time and logic" is easy to understand.
+*   **Clear Formatting:** The instruction "Return your answer as a single Python list of strings" is unambiguous.
+*   **Clean Separation:** Using a header like "Sentences to order:" helps the model distinguish the instructions from the data.
+
+---
+
+### Most Direct & Minimalist Option
+
+If you need the absolute shortest prompt, this works by stripping away everything but the core command.
+
+```
+Sort these sentences into the correct logical order.
+
+Sentences:
+{shuffled_sents}
+
+Sorted List:
+```
+
+**Why it's good:**
+*   **Extremely Concise:** No wasted words.
+*   **Clear Command:** "Sort these sentences" is a direct instruction.
+*   **Simple Cue:** "Sorted List:" clearly indicates where the answer should go and hints at the format.
+
+For Llama-3.2-1B-Instruct, the **Best Option (One-Shot)** is highly recommended as it leaves the least room for misinterpretation and leverages the model's strength in pattern recognition.
+
+llama-3.3-70b-instruct (same model type)
+Here is a rewritten prompt to retrieve the best answer by Llama-3.2-1B-Instruct:
+
+"Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence. The reordered sentences should be returned as a list in the format: 
+[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
+where <sentence1> is the first event in the sequence, <sentence2> is the second event, and so on. 
+The sentences to be reordered are: 
+{shuffled_sents}
+Please provide the reordered list of sentences."
