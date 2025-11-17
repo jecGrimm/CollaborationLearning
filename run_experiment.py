@@ -12,7 +12,7 @@ def run_experiment(config = None, logger = None):
 
     outfile = config["experiment_file"]
 
-    if not os.path.isfile(outfile):
+    if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
 
         if config["framework"] == "single":
@@ -25,7 +25,7 @@ def run_experiment(config = None, logger = None):
 
             single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
 
-            outfile = single.define_outfile()
+            outfile = single.define_outfile(hf = True)
         else:
             multi = MultiAgent(model_id=config["model_id"], split=config["split"])
 
@@ -33,19 +33,19 @@ def run_experiment(config = None, logger = None):
 
             multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
 
-            outfile = multi.define_outfile()
+            outfile = multi.define_outfile(hf = True)
 
     # evaluate
     evaluate_sent_order(outfile, config["framework"], logger)
 
     logger.store_run_data()
 
-def test_batch_size(split = "mini", device = "cpu"):
-    for fw in ["single", "multi"]:
+def test_batch_size(split = "mini", device = "cpu", batch_sizes = [1, 8, 64, 256, 1000], frameworks = ["single", "multi"]):
+    for fw in frameworks:
         print("\n")
         print("-" * 30)
         print(f"Processing framework {fw}")
-        for batch_size in [1, 8, 64, 256, 1000]:
+        for batch_size in batch_sizes:
             print("\n")
             print(f"Processing batch size {batch_size}")
             config = {
@@ -111,16 +111,16 @@ if __name__ == "__main__":
     # cli = CLI()
     # run_experiment(cli.config)
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    #test_batch_size(split = "dev", device = device)
+    test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["single"])
 
     # config = {
-    #     "split": "mini",
-    #     "device": "cuda:4",
-    #     "framework": "multi",
+    #     "split": "dev",
+    #     "device": device,
+    #     "framework": "single",
     #     "experiment_file": "",
-    #     "batch_size": 8,
-    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct"
+    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+    #     "batch_size": 8
     # }
     # run_experiment(config)
 
-    test_single_llm_rewritten_prompts(split = "mini", device="device")
+    #test_single_llm_rewritten_prompts(split = "mini", device="device")

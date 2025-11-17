@@ -1,13 +1,17 @@
-from datasets import load_dataset
+from datasets import load_dataset, Dataset, load_from_disk
 from cli import CLI
 import ast
 from data import get_sent_list
 import os
 import json
 import re
+import pandas as pd
+from log import ExperimentLog
 
-def evaluate_sent_order(experiment_file, framework, logger):
-    exp_data = load_dataset("json", data_files=experiment_file, split="train")
+def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
+    # TODO: test if save from disk works
+    #exp_data = load_dataset("json", data_files=experiment_file, split="train")
+    exp_data = load_from_disk(experiment_file)
 
     if framework == "single":
         eval_data = exp_data.map(evaluate_order_answer_single, batched=True, remove_columns=exp_data.column_names)
@@ -56,24 +60,72 @@ def extract_answer_list(model_out):
     try:
         model_answer = model_out.split("Answer:\n")[-1].strip()
         model_pred = ast.literal_eval(model_answer)
-        return model_pred
+        
+        return clean_preds(model_pred)
     except:
         str_match = re.search(r"(\[.*?\])", model_answer) # only use first guess by the model
 
         try:
-            return ast.literal_eval(str_match.group(1))
+            return clean_preds(ast.literal_eval(str_match.group(1)))
         except:
-            return ["", "", "", ""]
+            return ["", "", "", "", ""]
+        
+def clean_preds(model_pred):
+    pred_types = [(i, type(item)) for i, item in enumerate(model_pred) if type(item) != str]
+    cleaned_pred = []
+
+    if len(pred_types) != 0:
+        # Prioritize tuples
+        type_i = 0
+        max_i = len(pred_types)
+        while type_i < max_i:
+            pred_type = pred_types[type_i][1]
+            model_i = pred_types[type_i][0]
+            if pred_type in [tuple, list]:
+                if len(model_pred[model_i]) >= 5:
+                    # only use the first list item 
+                    cleaned_pred = list(model_pred[model_i]) 
+                    type_i = max_i
+                else:
+                    # extract str 
+                    if len(model_pred) == 5:
+                        if type(model_pred[model_i][0]) == str and type(model_pred[model_i][1]) == int:
+                            cleaned_pred = [item[0] for item in model_pred]
+                            type_i = max_i
+                        elif type(model_pred[model_i][1]) == str and type(model_pred[model_i][0]) == int:
+                            cleaned_pred = [item[1] for item in model_pred]
+                            type_i = max_i
+                    
+                    if type(model_pred[model_i][0]) == str and type(model_pred[model_i][1]) == str:
+                        cleaned_pred = list(model_pred[0])
+                        type_i = max_i
+            elif pred_type == int:
+                cleaned_pred = [""] * 5 # do not extract numbers due to wrong instruction following
+            type_i += 1
+
+    else:
+        cleaned_pred = list(model_pred)
+
+    return cleaned_pred[:5] # only use first 5 sentences
 
 def compute_accuracy_order(pred, batch, i):
     acc = 0.0
 
-    for sent_order in range(len(pred)):
-        if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
-            acc += 1
-    
-    return acc/len(pred) # 4 sentences
+    if len(pred) > 0:
+        for sent_order in range(len(pred)):
+            sent_lbl = f"sentence{sent_order+1}"
+            if sent_lbl in batch.keys():
+                if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
+                    acc += 1
+        
+        return acc/len(pred) # 5 sentences
+    else:
+        return 0.0
 
 if __name__ == "__main__":
     cli = CLI()
-    evaluate_sent_order(cli.experiment_file)
+    #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
+    outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
+    
+    #evaluate_sent_order("test.jsonl", "single")
+    evaluate_sent_order(outfile, "single")

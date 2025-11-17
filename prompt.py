@@ -19,14 +19,27 @@ class Agent:
         outfile = self.define_outfile(shard_idx=shard_idx)
         outputs.to_json(outfile, indent=4)
 
+    def save_outputs_hf(self, outputs, shard_idx = None):
+        outpath = self.define_outfile(shard_idx=shard_idx, hf = True)
+        outputs.save_to_disk(outpath)
 
-    def define_outfile(self, shard_idx = None):
+    def define_outfile(self, shard_idx = None, hf = False):
         if shard_idx == None:
-            os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
-            return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
+            if hf == False:
+                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
+                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
+            else:
+                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
+                os.makedirs(path, exist_ok = True)
+                return path
         else:
-            os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
-            return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
+            if hf == False:
+                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
+                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
+            else:
+                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
+                os.makedirs(path, exist_ok = True)
+                return path
 
 class SingleAgent(Agent):
     def __init__(self, model_id, split):
@@ -60,7 +73,7 @@ class SingleAgent(Agent):
             device_map=device
         )
         pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-        #pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
@@ -90,7 +103,7 @@ class SingleAgent(Agent):
             # TODO: store all current instances in ckp-file and not only the shard
             output_data = shard_data.add_column("output", output_list)
             
-            self.save_outputs(outputs=output_data, shard_idx=shard_idx)
+            self.save_outputs_hf(outputs=output_data, shard_idx=shard_idx)
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst})
@@ -115,7 +128,7 @@ class SingleAgent(Agent):
         # os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
         # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
         # output_data.to_json(outfile, indent=4)
-        self.save_outputs(output_data)
+        self.save_outputs_hf(output_data)
 
 class MultiAgent(Agent):
     def __init__(self, model_id, split):
@@ -246,7 +259,7 @@ class MultiAgent(Agent):
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
             outputs = shard_data.map(lambda batch: self.play_games(batch, pipe, batch_size), batched=True, batch_size=batch_size)
-            self.save_outputs(outputs, shard_idx=shard_idx)
+            self.save_outputs_hf(outputs, shard_idx=shard_idx)
 
             full_output_list += outputs["output"]
 
@@ -259,4 +272,4 @@ class MultiAgent(Agent):
         logger.run_data.update({"duration": end - start})
 
         output_data = prompt_data.add_column("output", full_output_list)
-        self.save_outputs(output_data)
+        self.save_outputs_hf(output_data)
