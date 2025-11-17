@@ -89,7 +89,7 @@ class ExperimentLog:
         filtered_df = filtered_df.duration.dropna()
 
         if len(filtered_df) != 0:
-            min_df_idx = filtered_df.duration.idxmin()
+            min_df_idx = filtered_df.idxmin()
 
             print(df.loc[min_df_idx])
         else:

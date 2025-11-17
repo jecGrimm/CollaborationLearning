@@ -129,6 +129,7 @@ class SingleAgent(Agent):
         # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
         # output_data.to_json(outfile, indent=4)
         self.save_outputs_hf(output_data)
+        logger.store_run_data()
 
 class MultiAgent(Agent):
     def __init__(self, model_id, split):
@@ -273,3 +274,4 @@ class MultiAgent(Agent):
 
         output_data = prompt_data.add_column("output", full_output_list)
         self.save_outputs_hf(output_data)
+        logger.store_run_data()
