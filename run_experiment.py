@@ -7,6 +7,9 @@ import pandas as pd
 import torch
 
 def run_experiment(config = None, logger = None):
+    if "device" not in config.keys():
+        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+
     if logger == None:
         logger = ExperimentLog(config)
 
@@ -40,7 +43,7 @@ def run_experiment(config = None, logger = None):
 
     logger.store_run_data()
 
-def test_batch_size(split = "mini", device = "cpu", batch_sizes = [1, 8, 64, 256, 1000], frameworks = ["single", "multi"]):
+def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], frameworks = ["single", "multi"]):
     for fw in frameworks:
         print("\n")
         print("-" * 30)
@@ -50,7 +53,6 @@ def test_batch_size(split = "mini", device = "cpu", batch_sizes = [1, 8, 64, 256
             print(f"Processing batch size {batch_size}")
             config = {
                 "split": split,
-                "device": device,
                 "framework": fw,
                 "experiment_file": "",
                 "batch_size": batch_size,
@@ -109,9 +111,10 @@ def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
         
 if __name__ == "__main__":
     cli = CLI()
-    # run_experiment(cli.config)
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    test_batch_size(split = cli.config["split"], device = device, batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
+
+    run_experiment(cli.config)
+    
+    #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
     #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
 

@@ -5,6 +5,7 @@ import os
 import time
 from datetime import datetime
 from tqdm import tqdm
+from datasets import Dataset, concatenate_datasets
 
 class Agent:
     def __init__(self, model_id, split, framework):
@@ -210,6 +211,7 @@ class MultiAgent(Agent):
         return message
 
     def play_games(self, batch, pipe):
+        '''@deprecated: Process conversations iteratively'''
         batch_turns = []
         batch_players = []
         for i in range(len(batch["storyid"])):
@@ -251,21 +253,52 @@ class MultiAgent(Agent):
     def create_prompts(self, batch, conv_round, turn, player_name):
         messages = []
         for i in range(len(batch["storyid"])):
-            roles = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
-            messages.append(self.create_message(conv_round, turn, batch["conversation_history"], roles, player_name))
+            if conv_round == 0 and turn == 0:
+                batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i])) #assing sentences to players
+
+            messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name))
 
         return {"prompt": messages}
 
     def get_conversation_history(self, batch, outputs, player_name):
         for i, model_out in enumerate(outputs):
+            #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
+
             model_answer = model_out[0]["generated_text"][2]["content"]
                 
-            batch["conversation"][i] += f"\n{player_name}: {model_answer}\n"
+            # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
+            # shard_inst["turns"][0].append(model_answer)
+            # shard_inst["player"][0].append(player_name)
+            # shard_inst["roles"][0] = batch["roles"][i]
+
+            batch["conversation_history"][i] += f"\n{player_name}: {model_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
             if "STOP" in model_answer:
                 batch["stop"][i] = True
+        
+        return batch
+
+    def update_shard(self, batch, filtered_data):
+        """
+        This method updates the instances in the shard data with the processed instances.
+
+        @params
+            batch: batch of shard data instances
+            filtered_data: processed instances
+        """
+        for i in range(len(batch["storyid"])):
+            processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
+
+            if len(processed_inst) == 1:
+                batch["conversation_history"][i] = processed_inst["conversation_history"][0]
+                batch["turns"][i] = processed_inst["turns"][0]
+                batch["player"][i] = processed_inst["player"][0]
+                batch["roles"][i] = processed_inst["roles"][0]
+                batch["stop"][i] = processed_inst["stop"][0]
+
+        return batch
 
     def prompt_models(self, logger, device = "cpu", batch_size = 1):
         pipe = pipeline(
@@ -283,7 +316,7 @@ class MultiAgent(Agent):
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
         prompt_data = roc_data.shuffled_dataset
-        full_output_list = []
+        full_output = None
 
         start = time.time()
 
@@ -300,33 +333,57 @@ class MultiAgent(Agent):
 
             # batch processing
             # add conversation to data
-            shard_data.add_column("stop", [False]*len(shard_data))
-            shard_data.add_column("conversation_history", [""]*len(shard_data))
-            shard_data.add_column("turns", [[""]]*len(shard_data))
-            shard_data.add_column("player", [[""]]*len(shard_data))
+            shard_data = shard_data.add_column("stop", [False]*len(shard_data))
+            shard_data = shard_data.add_column("conversation_history", [""]*len(shard_data))
+            shard_data = shard_data.add_column("turns", [[]]*len(shard_data))
+            shard_data = shard_data.add_column("player", [[]]*len(shard_data))
+            shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
+            #filtered_data = shard_data
             conv_round = 0
             turn = 0
             while conv_round < 4:
                 while turn < 5:
                     player_name = self.NAMES[turn]
 
-                    shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
+                    # filter out early stopping
+                    filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
+
+                    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                     # prompt 
                     turn_outputs = tqdm([out for out in pipe(
-                            list(shard_data["prompt"]),
+                            list(filtered_data["prompt"]),
                             max_new_tokens=256,
                             batch_size = batch_size
-                        )], desc = "Processing prompts", total = len(shard_data["start_prompt"]))
+                        )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
                     # add model answer to conversation history
-                    shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name))
+                    filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
+
+                    shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+
+                    # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
+
+                    # # prompt 
+                    # turn_outputs = tqdm([out for out in pipe(
+                    #         list(shard_data["prompt"]),
+                    #         max_new_tokens=256,
+                    #         batch_size = batch_size
+                    #     )], desc = "Processing prompts", total = len(shard_data["start_prompt"]))
+
+                    # # add model answer to conversation history
+                    # shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name))
 
                     turn += 1
                 conv_round += 1
 
             # save ouput
             outpath = self.save_outputs_hf(outputs=shard_data, shard_idx=shard_idx)
+
+            if full_output:
+                full_output = concatenate_datasets([full_output, shard_data])
+            else:
+                full_output = shard_data
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
@@ -336,7 +393,8 @@ class MultiAgent(Agent):
         end = time.time()
         logger.run_data.update({"duration": end - start})
 
-        output_data = prompt_data.add_column("output", full_output_list)
-        outpath = self.save_outputs_hf(output_data)
+        #output_data = prompt_data.add_column("output", full_output_list)
+        #outpath = self.save_outputs_hf(output_data)
+        outpath = self.save_outputs_hf(full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
