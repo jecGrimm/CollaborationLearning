@@ -7,12 +7,15 @@ import pandas as pd
 import torch
 
 def run_experiment(config = None, logger = None):
+    if "device" not in config.keys():
+        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+
     if logger == None:
         logger = ExperimentLog(config)
 
     outfile = config["experiment_file"]
 
-    if not os.path.isfile(outfile):
+    if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
 
         if config["framework"] == "single":
@@ -25,7 +28,7 @@ def run_experiment(config = None, logger = None):
 
             single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
 
-            outfile = single.define_outfile()
+            outfile = single.define_outfile(hf = True)
         else:
             multi = MultiAgent(model_id=config["model_id"], split=config["split"])
 
@@ -33,24 +36,23 @@ def run_experiment(config = None, logger = None):
 
             multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
 
-            outfile = multi.define_outfile()
+            outfile = multi.define_outfile(hf = True)
 
     # evaluate
     evaluate_sent_order(outfile, config["framework"], logger)
 
     logger.store_run_data()
 
-def test_batch_size(split = "mini", device = "cpu"):
-    for fw in ["single", "multi"]:
+def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], frameworks = ["single", "multi"]):
+    for fw in frameworks:
         print("\n")
         print("-" * 30)
         print(f"Processing framework {fw}")
-        for batch_size in [1, 8, 64, 256, 1000]:
+        for batch_size in batch_sizes:
             print("\n")
             print(f"Processing batch size {batch_size}")
             config = {
                 "split": split,
-                "device": device,
                 "framework": fw,
                 "experiment_file": "",
                 "batch_size": batch_size,
@@ -62,7 +64,7 @@ def test_batch_size(split = "mini", device = "cpu"):
             print(f"Duration: {logger.run_data["duration"]}")
 
         print("\n")
-        logger.print_fastest_run(framework=fw)
+        logger.print_fastest_run(framework=fw, split = split)
 
 def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
     prompt_candidates = {
@@ -108,19 +110,22 @@ def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
     logger.print_best_run(framework = "single")
         
 if __name__ == "__main__":
-    # cli = CLI()
-    # run_experiment(cli.config)
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    #test_batch_size(split = "dev", device = device)
+    cli = CLI()
+
+    #run_experiment(cli.config)
+    
+    test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
+
+    #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
 
     # config = {
-    #     "split": "mini",
-    #     "device": "cuda:4",
-    #     "framework": "multi",
+    #     "split": "dev",
+    #     "device": device,
+    #     "framework": "single",
     #     "experiment_file": "",
-    #     "batch_size": 8,
-    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct"
+    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+    #     "batch_size": 8
     # }
     # run_experiment(config)
 
-    test_single_llm_rewritten_prompts(split = "mini", device="device")
+    #test_single_llm_rewritten_prompts(split = "mini", device="device")

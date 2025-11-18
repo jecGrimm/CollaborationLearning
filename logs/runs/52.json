@@ -1,0 +1,10 @@
+{
+    "split": "mini",
+    "device": "cuda:0",
+    "framework": "single",
+    "experiment_file": "outputs/single/Llama-3.2-1B-Instruct/mini/outputs_single_Llama-3.2-1B-Instruct_mini_2025-11-17_08:37:02.371877",
+    "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+    "batch_size": 256,
+    "mean_acc": 0.06666666666666667,
+    "run_idx": 52
+}

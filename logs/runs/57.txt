@@ -1,0 +1,33 @@
+
+
+------------------------------
+Processing framework single
+
+
+Processing batch size 512
+Mean accuracy: 0.10429168249145462
+Duration: 1591.0833892822266
+
+
+split                                                            dev
+device                                                        cuda:0
+framework                                                     single
+experiment_file                                                  NaN
+batch_size                                                       512
+model_id                            meta-llama/Llama-3.2-1B-Instruct
+user_prompt                    Please bring the following sentenc...
+task                                                 text-generation
+model              {'vocab_size': 128256, 'max_position_embedding...
+torch_dtype                                           torch.bfloat16
+device_map                                                      cuda
+shuffle_file                    ./data/ROCStories_shuffled_dev.jsonl
+instances                                                     5266.0
+duration                                                 1591.083389
+mean_acc                                                         NaN
+run_idx                                                           57
+system_prompt                                                    NaN
+start_prompt                                                     NaN
+mid_prompt                                                       NaN
+rules                                                            NaN
+names                                                            NaN
+Name: 55, dtype: object
