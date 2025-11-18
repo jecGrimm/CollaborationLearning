@@ -17,7 +17,6 @@ def run_experiment(config = None, logger = None):
 
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
-
         if config["framework"] == "single":
             single = SingleAgent(model_id=config["model_id"], split=config["split"])
 
@@ -66,7 +65,7 @@ def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], framewo
         print("\n")
         logger.print_fastest_run(framework=fw, split = split)
 
-def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
+def test_single_llm_rewritten_prompts(split = "mini", candidates = ["gemini-2.5-pro", "llama-3.3-70b-instruct"], run_idx = []):
     prompt_candidates = {
         "gemini-2.5-pro": """\
             Arrange the following sentences into a coherent paragraph, ordered by time and logic.\n\
@@ -88,33 +87,39 @@ def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
             '''
     }
 
-    for model, prompt in prompt_candidates.items():
+    for i, model in enumerate(candidates):
+        prompt = prompt_candidates[model]
+
         print("\n")
         print("-" * 30)
         print("Processing prompt written by ", model)
         config = {
                 "split": split,
-                "device": device,
                 "framework": "single",
                 "experiment_file": "",
-                "batch_size": 256,
+                "batch_size": 512,
                 "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-                "user_prompt": prompt
+                "user_prompt": prompt,
+                "desc": "This run tests the single prompt rewritten by llama-3.3-70b-instruct."
             }
         logger = ExperimentLog(config)
+
+        if run_idx != []:
+            logger.run_data["run_idx"] = run_idx[i]
+
         run_experiment(config, logger)
 
-        print("Accuracy:", logger.run_data["mean_acc"])
+        #print(f"Accuracy of prompt {model}:", logger.run_data["mean_acc"])
 
     print("\n")
-    logger.print_best_run(framework = "single")
+    logger.print_best_run(framework = "single", split=split)
         
 if __name__ == "__main__":
     cli = CLI()
 
     #run_experiment(cli.config)
     
-    test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
+    #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
     #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
 
@@ -128,4 +133,4 @@ if __name__ == "__main__":
     # }
     # run_experiment(config)
 
-    #test_single_llm_rewritten_prompts(split = "mini", device="device")
+    test_single_llm_rewritten_prompts(split = "dev", candidates=["llama-3.3-70b-instruct"], run_idx=[63, 64])
