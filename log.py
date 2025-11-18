@@ -50,7 +50,7 @@ class ExperimentLog:
             run_idx = max(run_files) + 1
             self.run_data.update({"run_idx": run_idx})
 
-        with open(f"{run_dir}/{self.run_data["run_idx"]}.json", "w", encoding="utf-8") as f:
+        with open(f"{run_dir}/{self.run_data['run_idx']}.json", "w", encoding="utf-8") as f:
             json.dump(self.run_data, f, indent=4)
 
         run_csv = "./logs/runs.csv"
@@ -67,13 +67,26 @@ class ExperimentLog:
                 writer.writeheader()
                 writer.writerow(self.run_data)
     
-    def print_best_run(self, framework = None):
+    def print_best_run(self, framework = None, split = None):
         df = pd.read_csv("./logs/runs.csv", sep = ";")
-        if framework == None:
-            max_df_idx = df.mean_acc.idxmax()
+
+        filtered_df = df
+        
+        if framework != None:
+            filtered_df = filtered_df.loc[df["framework"] == framework]
+        
+        if split != None: 
+            filtered_df = filtered_df.loc[df["split"] == split]
+
+        filtered_df = filtered_df.mean_acc.dropna()
+
+        if len(filtered_df) != 0:
+            df_idx = filtered_df.idxmax()
+
+            print(f"\nBest run for framework {framework} and split {split}:")
+            print(df.loc[df_idx])
         else:
-            max_df_idx = df.loc[df["framework"] == framework].mean_acc.idxmax()
-        print(df.loc[max_df_idx])
+            print(f"\nThere are no runs with framework {framework}, split {split} and a duration value!")
 
     def print_fastest_run(self, framework = None, split = None):
         df = pd.read_csv("./logs/runs.csv", sep = ";")
@@ -91,9 +104,10 @@ class ExperimentLog:
         if len(filtered_df) != 0:
             min_df_idx = filtered_df.idxmin()
 
+            print(f"\nFastest run for framework {framework} and split {split}:")
             print(df.loc[min_df_idx])
         else:
-            print(f"There are no runs with framework {framework}, split {split} and a duration value!")
+            print(f"\nThere are no runs with framework {framework}, split {split} and a duration value!")
 
 if __name__ == "__main__":
     # with open("configs/mini_cpu_multi_exp.json", "r", encoding="utf-8") as f:
@@ -104,4 +118,5 @@ if __name__ == "__main__":
     # logger.print_best_run()
 
     logger = ExperimentLog()
-    logger.print_fastest_run(framework="single", split = "dev")
+    logger.print_fastest_run(framework="multi", split = "dev")
+    logger.print_best_run(framework="multi", split = "dev")

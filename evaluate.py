@@ -49,7 +49,7 @@ def evaluate_order_answer_multi(batch):
     gold_sents = []
 
     for i in range(len(batch["storyid"])):
-        pred = extract_answer_list(batch["output"][i][-1]["answer"])
+        pred = extract_answer_list(batch["turns"][i][-1])
         pred_lists.append(pred)
         acc.append(compute_accuracy_order(pred, batch, i))
         gold_sents.append(get_sent_list(batch, i))
@@ -118,7 +118,7 @@ def compute_accuracy_order(pred, batch, i):
                 if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
                     acc += 1
         
-        return acc/len(pred) # 5 sentences
+        return acc/5 # 5 sentences
     else:
         return 0.0
 

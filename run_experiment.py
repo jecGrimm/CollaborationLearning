@@ -108,10 +108,12 @@ def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
     logger.print_best_run(framework = "single")
         
 if __name__ == "__main__":
-    # cli = CLI()
+    cli = CLI()
     # run_experiment(cli.config)
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    test_batch_size(split = "dev", device = device, batch_sizes=[64, 1000], frameworks=["single"])
+    test_batch_size(split = cli.config["split"], device = device, batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
+
+    #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
 
     # config = {
     #     "split": "dev",
