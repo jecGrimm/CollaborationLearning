@@ -112,9 +112,9 @@ def test_single_llm_rewritten_prompts(split = "mini", device = "cpu"):
 if __name__ == "__main__":
     cli = CLI()
 
-    run_experiment(cli.config)
+    #run_experiment(cli.config)
     
-    #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
+    test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
     #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
 
