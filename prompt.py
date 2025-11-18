@@ -340,8 +340,8 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             #filtered_data = shard_data
             conv_round = 0
-            turn = 0
             while conv_round < 4:
+                turn = 0
                 while turn < 5:
                     player_name = self.NAMES[turn]
 
