@@ -106,7 +106,7 @@ The sentences to be reordered are:
 Please provide the reordered list of sentences."
 
 -----------------------------------------------------------------------------------------------
-Multi prompt:
+Multi prompt (System):
 
 You are a prompt engineer. Your task is to formulate the system prompt to retrieve the best results from Llama-3.2-1B-Instruct. Do not include any examples in the system prompt!
 
@@ -140,3 +140,67 @@ You are a player in a conversational game. Your task is to collaborate with othe
 llama-3.3-70b-instruct
 
 You are a player in a conversational game with 4 other players. Each player has been given a sentence that is part of a short story, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes "STOP" in their response. If a consensus is reached on the correct order, provide the final answer in the format: "[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>] STOP".
+
+--------------------------------------------------------------------------------------------
+Multi prompt (Start):
+
+You are a prompt engineer. Your task is to formulate a user prompt to retrieve the best results from Llama-3.2-1B-Instruct. Do not include any examples in the user prompt!
+
+The model has the task to participate in a conversational game.
+
+Game description: 
+        - The game is played by 5 players.
+        - Each player receives one sentence that the other players do not know.
+        - All sentences together form a short story and are causally and temporally related to each other.
+        - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+        - The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
+        - The game ends when one player includes "STOP" in the answer.
+       - When the players agree on the order of the sentences, the model returns the final answer in the following format: "[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>] STOP"
+
+The game description is already included in the system prompt. The user prompt instructs the model to formulate a beginning statement for the conversation. What could be a good user prompt?
+
+----------------------------
+gemini-2.5-pro
+
+You are Player 1. Your secret sentence is: "[Insert sentence here]"
+
+The game starts now. Make your opening statement to the other players.
+
+----------------------------
+llama-3.3-70b-instruct
+
+To initiate the conversation, please share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.
+
+----------------------------------------------------------------------------------------------
+Multi prompt (Mid):
+
+You are a prompt engineer. Your task is to formulate a user prompt to retrieve the best results from Llama-3.2-1B-Instruct. Do not include any examples in the user prompt!
+
+The model has the task to participate in a conversational game.
+
+Game description: 
+        - The game is played by 5 players.
+        - Each player receives one sentence that the other players do not know.
+        - All sentences together form a short story and are causally and temporally related to each other.
+        - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+        - The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
+        - The game ends when one player includes "STOP" in the answer.
+       - When the players agree on the order of the sentences, the model returns the final answer in the following format: "[<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>] STOP"
+
+The game description is already included in the system prompt. The user prompt contains the conversation history and instructs the model to formulate a continuing statement for the conversation. What could be a good user prompt?
+
+----------------------------
+gemini-2.5-pro
+
+You are Player [X]. Your secret sentence is: "[Insert sentence here]"
+
+Below is the conversation that has happened so far:
+[Insert conversation history, with each turn clearly marked by player]
+
+It is now your turn to speak. Analyze the sentences discussed and your own secret sentence. Formulate your response to continue the discussion and help the group find the correct order.
+
+
+----------------------------
+llama-3.3-70b-instruct
+
+Given the current state of the conversation, please respond with your next statement, either by sharing your sentence, reacting to something another player has said, or proposing a potential order for the sentences.
