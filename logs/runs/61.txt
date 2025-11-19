@@ -1,0 +1,26 @@
+
+
+------------------------------
+Processing framework multi
+
+
+Processing batch size 512
+
+
+------------------------------
+Processing framework multi
+
+
+Processing batch size 256
+
+
+------------------------------
+Processing framework multi
+
+
+Processing batch size 64
+Mean accuracy: 7.59589821496392e-05
+Duration: 19710.19113087654
+
+
+Processing batch size 128
