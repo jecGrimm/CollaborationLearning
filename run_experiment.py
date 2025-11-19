@@ -65,7 +65,7 @@ def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], framewo
         print("\n")
         logger.print_fastest_run(framework=fw, split = split)
 
-def test_single_llm_rewritten_prompts(split = "mini", candidates = ["gemini-2.5-pro", "llama-3.3-70b-instruct"], run_idx = []):
+def test_single_llm_rewritten_prompts(config):
     prompt_candidates = {
         "gemini-2.5-pro": """\
             Arrange the following sentences into a coherent paragraph, ordered by time and logic.\n\
@@ -87,32 +87,24 @@ def test_single_llm_rewritten_prompts(split = "mini", candidates = ["gemini-2.5-
             '''
     }
 
-    for i, model in enumerate(candidates):
+    for i, model in enumerate(config["candidates"]):
         prompt = prompt_candidates[model]
 
         print("\n")
         print("-" * 30)
         print("Processing prompt written by ", model)
-        config = {
-                "split": split,
-                "framework": "single",
-                "experiment_file": "",
-                "batch_size": 512,
-                "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-                "user_prompt": prompt,
-                "desc": "This run tests the single prompt rewritten by llama-3.3-70b-instruct."
-            }
-        logger = ExperimentLog(config)
 
-        if run_idx != []:
-            logger.run_data["run_idx"] = run_idx[i]
+        config["user_prompt"]= prompt
+
+        logger = ExperimentLog(config)
+        logger.run_data["run_idx"] = config["run_idx"][i]
 
         run_experiment(config, logger)
 
         #print(f"Accuracy of prompt {model}:", logger.run_data["mean_acc"])
 
     print("\n")
-    logger.print_best_run(framework = "single", split=split)
+    logger.print_best_run(framework = "single", split=config["split"])
         
 if __name__ == "__main__":
     cli = CLI()
@@ -133,4 +125,4 @@ if __name__ == "__main__":
     # }
     # run_experiment(config)
 
-    test_single_llm_rewritten_prompts(split = "dev", candidates=["llama-3.3-70b-instruct"], run_idx=[63, 64])
+    test_single_llm_rewritten_prompts(config = cli.config)
