@@ -1,0 +1,58 @@
+
+    {
+        "storyid":"8bbe6d11-1e2e-413c-bf81-eaea05f4f1bd",
+        "storytitle":"David Drops the Weight",
+        "sentence1":"David noticed he had put on a lot of weight recently.",
+        "sentence2":"He examined his habits to try and figure out the reason.",
+        "sentence3":"He realized he'd been eating too much fast food lately.",
+        "sentence4":"He stopped going to burger places and started a vegetarian diet.",
+        "sentence5":"After a few weeks, he started to feel much better.",
+        "shuffled_sents":[
+            "He stopped going to burger places and started a vegetarian diet.",
+            "After a few weeks, he started to feel much better.",
+            "He realized he'd been eating too much fast food lately.",
+            "He examined his habits to try and figure out the reason.",
+            "David noticed he had put on a lot of weight recently."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['He stopped going to burger places and started a vegetarian diet.', 'After a few weeks, he started to feel much better.', \"He realized he'd been eating too much fast food lately.\", 'He examined his habits to try and figure out the reason.', 'David noticed he had put on a lot of weight recently.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             ['He realized he'd been eating too much fast food lately.', 'He stopped going to burger places and started a vegetarian diet.', \"He examined his habits to try and figure out the reason.\", 'He noticed he had put on a lot of weight recently.', 'He stopped going to burger places and started a vegetarian diet.']\n             ['He stopped going to burger places and started a vegetarian diet.', 'He examined his habits to try and figure out the reason.', \"He realized he'd been eating too much fast food lately.\", 'He noticed he had put on a lot of weight recently.', 'He stopped going to burger places and started a vegetarian diet.']\n             ['He examined his habits to try and figure out the reason.', 'He noticed he had put on a lot of weight recently.', \"He realized he'd been eating too much fast food lately.\", 'He stopped going to burger places and started a vegetarian diet.', 'He stopped going to burger places and started a vegetarian diet.']\n             ['He stopped going to burger places and started a vegetarian diet.', 'He examined his habits to try and figure out the reason.', 'He noticed he had put on a lot of weight recently.', \"He realized he'd been eating too much fast food lately.\", 'He stopped"
+    }
+
+    {
+        "storyid":"0beabab2-fb49-460e-a6e6-f35a202e3348",
+        "storytitle":"Frustration",
+        "sentence1":"Tom had a very short temper.",
+        "sentence2":"One day a guest made him very angry.",
+        "sentence3":"He punched a hole in the wall of his house.",
+        "sentence4":"Tom's guest became afraid and left quickly.",
+        "sentence5":"Tom sat on his couch filled with regret about his actions.",
+        "shuffled_sents":[
+            "Tom sat on his couch filled with regret about his actions.",
+            "Tom's guest became afraid and left quickly.",
+            "He punched a hole in the wall of his house.",
+            "Tom had a very short temper.",
+            "One day a guest made him very angry."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['Tom sat on his couch filled with regret about his actions.', \"Tom's guest became afraid and left quickly.\", 'He punched a hole in the wall of his house.', 'Tom had a very short temper.', 'One day a guest made him very angry.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             <[Tom had a very short temper., 'One day a guest made him very angry.'], \n             ['Tom sat on his couch filled with regret about his actions.', 'He punched a hole in the wall of his house.', \n              'Tom's guest became afraid and left quickly.'], \n             ['Tom's guest became afraid and left quickly.', 'Tom sat on his couch filled with regret about his actions.', \n              'He punched a hole in the wall of his house.', 'Tom had a very short temper.'], \n             ['Tom sat on his couch filled with regret about his actions.', 'Tom had a very short temper.', \n              'He punched a hole in the wall of his house.', 'Tom's guest became afraid and left quickly.']>\n            Explanation:\nThe sentences can be ordered in the following way based on their causal and temporal relations:\n1. The first sentence indicates that Tom had a very short temper.\n2. The second sentence describes an event that occurred as a result of Tom's short temper.\n3. The third sentence describes an event that occurred before the second sentence.\n4. The fourth sentence describes an event that occurred after the second sentence.\n5. The fifth sentence describes an event that occurred before the third sentence.\n\nTherefore,"
+    }
+
+    {
+        "storyid":"87da1a22-df0b-410c-b186-439700b70ba6",
+        "storytitle":"Marcus Buys Khakis",
+        "sentence1":"Marcus needed clothing for a business casual event.",
+        "sentence2":"All of his clothes were either too formal or too casual.",
+        "sentence3":"He decided to buy a pair of khakis.",
+        "sentence4":"The pair he bought fit him perfectly.",
+        "sentence5":"Marcus was happy to have the right clothes for the event.",
+        "shuffled_sents":[
+            "Marcus was happy to have the right clothes for the event.",
+            "The pair he bought fit him perfectly.",
+            "Marcus needed clothing for a business casual event.",
+            "All of his clothes were either too formal or too casual.",
+            "He decided to buy a pair of khakis."
+        ],
+        "prompt":"            Please bring the following sentences in the correct order based on their causal and temporal relations:\n                ['Marcus was happy to have the right clothes for the event.', 'The pair he bought fit him perfectly.', 'Marcus needed clothing for a business casual event.', 'All of his clothes were either too formal or too casual.', 'He decided to buy a pair of khakis.']\n            Return a list of the sentences in the correct order in the following format:\n                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n            Answer:\n            ",
+        "output":"             ['The pair he bought fit him perfectly.', 'Marcus needed clothing for a business casual event.', 'Marcus was happy to have the right clothes for the event.', 'All of his clothes were either too formal or too casual.', 'He decided to buy a pair of khakis.']\n\n                ['Marcus was happy to have the right clothes for the event.', 'He decided to buy a pair of khakis.', 'All of his clothes were either too formal or too casual.', 'Marcus needed clothing for a business casual event.', 'The pair he bought fit him perfectly.']\n```python\n# Your code here\n# Define the list of sentences\nsentences = [\n    'Marcus was happy to have the right clothes for the event.', \n    'The pair he bought fit him perfectly.', \n    'Marcus needed clothing for a business casual event.', \n    'All of his clothes were either too formal or too casual.', \n    'He decided to buy a pair of khakis.'\n]\n\n# Define the function to reorder the sentences\ndef reorder_sentences(sentences):\n    # Initialize the result list\n    result = []\n    \n    # Initialize the current list of sentences\n    current_sentences = []\n    \n    # Iterate over the sentences\n    for sentence in sentences:\n       "
+    }
+

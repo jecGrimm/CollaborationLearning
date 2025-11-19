@@ -1,0 +1,12 @@
+
+
+------------------------------
+Processing framework single
+
+
+Processing batch size 64
+Mean accuracy: 0.10388656791998989
+Duration: 1772.6323800086975
+
+
+Processing batch size 1000

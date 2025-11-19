@@ -1,0 +1,33 @@
+
+
+------------------------------
+Processing framework multi
+
+
+Processing batch size 256
+Mean accuracy: 0.00022787694644891757
+Duration: 23435.828557252884
+
+
+split                                                            dev
+device                                                        cuda:0
+framework                                                      multi
+experiment_file                                                  NaN
+batch_size                                                       256
+model_id                            meta-llama/Llama-3.2-1B-Instruct
+user_prompt                                                      NaN
+task                                                 text-generation
+model              {'vocab_size': 128256, 'max_position_embedding...
+torch_dtype                                           torch.bfloat16
+device_map                                                      cuda
+shuffle_file                    ./data/ROCStories_shuffled_dev.jsonl
+instances                                                    31596.0
+duration                                                23435.828557
+mean_acc                                                         NaN
+run_idx                                                           56
+system_prompt      \n        I am {player_name}, playing a game w...
+start_prompt       It is currently my ({player_name}) turn and my...
+mid_prompt         It is currently my ({player_name}) turn and my...
+rules              \n        - The game is played by 5 players.\n...
+names              ['Soraya', 'Nimrod', 'Odett', 'Wangui', 'Cyrene']
+Name: 62, dtype: object
