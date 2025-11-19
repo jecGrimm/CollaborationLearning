@@ -340,27 +340,31 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             #filtered_data = shard_data
             conv_round = 0
-            turn = 0
-            while conv_round < 4:
+            while conv_round < 3:
+                turn = 0
                 while turn < 5:
-                    player_name = self.NAMES[turn]
-
                     # filter out early stopping
                     filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
 
-                    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
+                    if len(filtered_data) > 0:
+                        player_name = self.NAMES[turn]
 
-                    # prompt 
-                    turn_outputs = tqdm([out for out in pipe(
-                            list(filtered_data["prompt"]),
-                            max_new_tokens=256,
-                            batch_size = batch_size
-                        )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
+                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
-                    # add model answer to conversation history
-                    filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
+                        # prompt 
+                        turn_outputs = tqdm([out for out in pipe(
+                                list(filtered_data["prompt"]),
+                                max_new_tokens=256,
+                                batch_size = batch_size
+                            )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
-                    shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+                        # add model answer to conversation history
+                        filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
+
+                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+                    else:
+                        turn = 5
+                        conv_round = 3
 
                     # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 

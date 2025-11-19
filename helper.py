@@ -1,6 +1,6 @@
 import csv 
 import json
-from datasets import load_dataset, Dataset
+from datasets import load_dataset, Dataset, load_from_disk
 import pandas as pd
 import os
 
@@ -54,7 +54,13 @@ def debug_json(input_file):
             except Exception as e:
                 print(f"Error processing line {i}: {e}")
 
+def check_left_insts(outdir):
+    exp_data = load_from_disk(outdir)
+
+    filtered_data = exp_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
+
+    print(len(filtered_data))
 
 if __name__ == "__main__":
     #check_SCT_ROC_overlap()
-    debug_json("full_test.jsonl")
+    check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
