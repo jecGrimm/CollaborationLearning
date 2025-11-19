@@ -3,7 +3,7 @@ import random
 import os
 
 def get_sent_list(batch, i):
-    return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i]]
+    return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i], batch["sentence5"][i]]
 
 class ROCStories:
     def __init__(self, shuffle = False, split = "mini"):

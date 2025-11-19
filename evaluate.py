@@ -10,8 +10,8 @@ from log import ExperimentLog
 import os
 
 def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
-    # TODO: test if save from disk works
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
+    #exp_data = load_from_disk(experiment_file).select([2191])
     exp_data = load_from_disk(experiment_file)
 
     if framework == "single":
@@ -68,9 +68,14 @@ def extract_answer_list(model_out):
         return clean_preds(model_pred)
     except:
         str_match = re.search(r"(\[.*?\])", model_answer) # only use first guess by the model
-
+        str_list = ""
+        # escape single quote strings
+        if str_match:
+            str_list = str_match.group(1)
+            str_list = re.sub(r"\b'", r"\\'", str_list)
+            str_list = fr"{str_list}"
         try:
-            return clean_preds(ast.literal_eval(str_match.group(1)))
+            return clean_preds(ast.literal_eval(str_list))
         except:
             return ["", "", "", "", ""]
         
@@ -131,6 +136,6 @@ if __name__ == "__main__":
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
-    outfile = "./outputs/multi/Llama-3.2-1B-Instruct/mini/outputs_multi_Llama-3.2-1B-Instruct_mini_2025-11-18_11:02:25.642317"
+    outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
     #evaluate_sent_order("test.jsonl", "single")
-    evaluate_sent_order(outfile, "multi")
+    evaluate_sent_order(outfile, "single")
