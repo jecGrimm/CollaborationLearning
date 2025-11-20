@@ -3,6 +3,13 @@ import json
 from datasets import load_dataset, Dataset, load_from_disk
 import pandas as pd
 import os
+from collections import defaultdict
+import random
+from evaluate import evaluate_sent_order
+
+# update evaluate
+import sys
+del sys.modules['evaluate']
 
 def check_SCT_ROC_overlap():
     val_sents = set()
@@ -27,33 +34,6 @@ def check_SCT_ROC_overlap():
     print("intersect:", len(test_sents.intersection(roc_sents)))
     print("intersect:", val_sents.intersection(roc_sents))
 
-def debug_json(input_file):
-    dataset = load_dataset(
-        "json", 
-        data_files=input_file, 
-        split="train",
-        streaming=True  # This prevents loading everything into memory
-    )
-
-    with open(input_file, 'r') as infile, open("test.json", 'w') as outfile:
-        for i, line in enumerate(infile):
-            try:
-                data = json.loads(line)
-                
-                # Convert all values to strings to ensure consistency
-                # Or apply specific conversions for known problematic fields
-                cleaned_data = {}
-                for key, value in data.items():
-                    if isinstance(value, (dict, list)):
-                        # Convert complex objects to JSON strings
-                        cleaned_data[key] = json.dumps(value)
-                    else:
-                        cleaned_data[key] = str(value)  # or keep as is
-                
-                outfile.write(json.dumps(cleaned_data) + '\n')
-            except Exception as e:
-                print(f"Error processing line {i}: {e}")
-
 def check_left_insts(outdir):
     exp_data = load_from_disk(outdir)
 
@@ -61,6 +41,49 @@ def check_left_insts(outdir):
 
     print(len(filtered_data))
 
+def inspect_instances(outdir, rand_idx = None):
+    exp_data = load_from_disk(outdir)
+    
+    eval_file = outdir.replace("outputs", "eval") + ".jsonl"
+    eval_data = load_dataset("json", data_files=eval_file, split="train")
+
+    if rand_idx == None:
+        rand_idx = random.randint(0, len(exp_data)-1)
+
+    out = exp_data.select([rand_idx])[0]
+    eval = eval_data.select([rand_idx])[0]
+
+    print("Output File: ", outdir)
+    print("IDX: ", rand_idx)
+    for k, v in out.items():
+        print(f"\n{k}:\n{v}")
+    for k,v in eval.items():
+        print(f"\n{k}:\n{v}")
+    # print(out)
+    # print(eval)
+
+def evaluate_all_outputs():
+    splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/"
+
+    outdirs = os.listdir(splitdir)
+
+    #evals = defaultdict()
+    for outdir in outdirs:
+        if outdir != "ckps" and not outdir.endswith("jsonl"):
+            #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
+            print(f"\n{outdir}: {evaluate_sent_order(splitdir + outdir, "single")}")
+
+    #print(evals)
+
 if __name__ == "__main__":
     #check_SCT_ROC_overlap()
-    check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
+    #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
+
+    #evaluate_all_outputs()
+
+    self_out = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
+    gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
+    llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
+    # evaluate_sent_order(outdir, "single")
+    inspect_instances(self_out, 4)
+    #inspect_instances(llama_out, 4)

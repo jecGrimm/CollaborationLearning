@@ -10,8 +10,8 @@ from log import ExperimentLog
 import os
 
 def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
-    # TODO: test if save from disk works
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
+    #exp_data = load_from_disk(experiment_file).select([2856])
     exp_data = load_from_disk(experiment_file)
 
     if framework == "single":
@@ -23,6 +23,7 @@ def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
         experiment_file = experiment_file + ".jsonl"
 
     eval_file = experiment_file.replace("outputs", "eval")
+
     os.makedirs(f"{"/".join(eval_file.split("/")[:-1])}", exist_ok = True)
     eval_data.to_json(eval_file)
 
@@ -32,6 +33,7 @@ def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
     print("Mean accuracy:", acc_mean)
     # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
     #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
+    return acc_mean
 
 
 def evaluate_order_answer_single(batch):
@@ -62,18 +64,32 @@ def evaluate_order_answer_multi(batch):
 
 def extract_answer_list(model_out):
     try:
-        model_answer = model_out.split("Answer:\n")[-1].strip()
+        model_answer = clean_out(model_out)
         model_pred = ast.literal_eval(model_answer)
         
         return clean_preds(model_pred)
     except:
         str_match = re.search(r"(\[.*?\])", model_answer) # only use first guess by the model
 
+        if str_match:
+            str_list = clean_match(str_match.group(1))
         try:
-            return clean_preds(ast.literal_eval(str_match.group(1)))
+            return clean_preds(ast.literal_eval(str_list))
         except:
             return ["", "", "", "", ""]
         
+def clean_out(model_out):
+    model_answer = model_out.split("Answer:\n")[-1].strip()
+    # remove newlines to make matching possible
+    model_answer = re.sub("\n", "", model_answer)
+    return model_answer
+
+def clean_match(str_list):
+    # escape single quote strings
+    str_list = re.sub(r"\b'\b", r"\\'", str_list)
+    str_list = fr"{str_list}"
+    return str_list
+
 def clean_preds(model_pred):
     pred_types = [(i, type(item)) for i, item in enumerate(model_pred) if type(item) != str]
     cleaned_pred = []
@@ -106,7 +122,6 @@ def clean_preds(model_pred):
             elif pred_type == int:
                 cleaned_pred = [""] * 5 # do not extract numbers due to wrong instruction following
             type_i += 1
-
     else:
         cleaned_pred = list(model_pred)
 
@@ -131,6 +146,10 @@ if __name__ == "__main__":
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
-    outfile = "./outputs/multi/Llama-3.2-1B-Instruct/mini/outputs_multi_Llama-3.2-1B-Instruct_mini_2025-11-18_11:02:25.642317"
-    #evaluate_sent_order("test.jsonl", "single")
-    evaluate_sent_order(outfile, "multi")
+    # outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
+    # #evaluate_sent_order("test.jsonl", "single")
+    # evaluate_sent_order(outfile, "single")
+
+    outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
+    #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
+    evaluate_sent_order(outdir, "single")
