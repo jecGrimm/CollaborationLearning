@@ -1,0 +1,4 @@
+experiment_name;candidates;experiment_file;mean_acc;max_acc;equal_acc;min_acc;wrong_format
+self;['self', 'gemini', 'llama'];./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl;0.1482719331560957;0.44948727687048995;0.15799468287124951;0.6412837067983289;0.23015571591340675
+gemini;['self', 'gemini', 'llama'];./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl;0.19715153816938855;0.5799468287124953;0.15799468287124951;0.5043676414736042;0.018799848082035702
+llama;['self', 'gemini', 'llama'];./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl;0.1647550322825674;0.49658184580326625;0.15799468287124951;0.5812761109001139;0.1036840106342575
