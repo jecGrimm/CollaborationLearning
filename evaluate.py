@@ -150,5 +150,6 @@ if __name__ == "__main__":
     # #evaluate_sent_order("test.jsonl", "single")
     # evaluate_sent_order(outfile, "single")
 
-    outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
+    outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
+    #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     evaluate_sent_order(outdir, "single")

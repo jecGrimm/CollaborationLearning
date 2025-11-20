@@ -4,8 +4,12 @@ from datasets import load_dataset, Dataset, load_from_disk
 import pandas as pd
 import os
 from collections import defaultdict
-from evaluate import evaluate_sent_order
 import random
+from evaluate import evaluate_sent_order
+
+# update evaluate
+import sys
+del sys.modules['evaluate']
 
 def check_SCT_ROC_overlap():
     val_sents = set()
@@ -37,13 +41,14 @@ def check_left_insts(outdir):
 
     print(len(filtered_data))
 
-def inspect_instances(outdir):
+def inspect_instances(outdir, rand_idx = None):
     exp_data = load_from_disk(outdir)
     
     eval_file = outdir.replace("outputs", "eval") + ".jsonl"
     eval_data = load_dataset("json", data_files=eval_file, split="train")
 
-    rand_idx = random.randint(0, len(exp_data)-1)
+    if rand_idx == None:
+        rand_idx = random.randint(0, len(exp_data)-1)
 
     out = exp_data.select([rand_idx])[0]
     eval = eval_data.select([rand_idx])[0]
@@ -76,6 +81,9 @@ if __name__ == "__main__":
 
     #evaluate_all_outputs()
 
-    outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
+    self_out = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
+    gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
+    llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     # evaluate_sent_order(outdir, "single")
-    inspect_instances(outdir)
+    inspect_instances(self_out, 4)
+    #inspect_instances(llama_out, 4)
