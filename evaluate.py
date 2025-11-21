@@ -88,7 +88,10 @@ def evaluate_order_answer_multi(batch):
     gold_sents = []
 
     for i in range(len(batch["storyid"])):
-        pred = extract_answer_list(batch["turns"][i][-1])
+        if "turns" in batch.keys():
+            pred = extract_answer_list(batch["turns"][i][-1])
+        else:
+            pred = extract_answer_list(batch["output"][i][-1]["answer"])
         pred_lists.append(pred)
         acc.append(compute_accuracy_order(pred, batch, i))
         gold_sents.append(get_sent_list(batch, i))
@@ -109,18 +112,46 @@ def extract_answer_list(model_out: str):
         # model only returned output list
         model_pred = ast.literal_eval(model_answer)
         
-        return clean_preds(model_pred)
+        if type(model_pred) in (list, tuple):
+            return clean_preds(model_pred)
+        elif type(model_pred) == str:
+            # extract list from model output
+            str_list = match_list(model_pred) # only use first guess by the model
+
+            try:
+                return clean_preds(ast.literal_eval(str_list))
+            except:
+                return ["", "", "", "", ""]
+        else:
+            return ["", "", "", "", ""]
     except:
         # extract list from model output
-        str_match = re.search(r"(\[.*?\])", model_answer) # only use first guess by the model
+        str_list = match_list(model_answer) # only use first guess by the model
 
-        if str_match:
-            str_list = clean_match(str_match.group(1))
         try:
             return clean_preds(ast.literal_eval(str_list))
         except:
             return ["", "", "", "", ""]
-        
+
+def match_list(model_answer: str):
+    """
+    This function matches a list in the model output.
+
+    @params
+        model_answer: model output
+    @returns
+        str_list: list as a string
+    """
+    # extract list from model output
+    str_match = re.search(r"(\[.*?\])", model_answer) # only use first guess by the model
+
+    if str_match:
+        str_list = clean_match(str_match.group(1))
+    
+        return str_list
+    else:
+        return None
+
 def clean_out(model_out: str):
     """
     This function prepares the model output for the extraction of the prediction list.
@@ -291,7 +322,7 @@ def compare_instance_acc(eval_files: dict):
                 "wrong_format": results[exp]["wrong_format"]/len(eval_data)
             })
 
-def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/"):
+def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/", framework = "single"):
     """
     This function evaluates all outputs in a directory.
 
@@ -305,7 +336,7 @@ def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/")
     for outdir in outdirs:
         if outdir != "ckps" and not outdir.endswith("jsonl"):
             #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
-            print(f"\n{outdir}: {evaluate_sent_order(splitdir + outdir, "single")}")
+            print(f"\n{outdir}: {evaluate_sent_order(splitdir + outdir, framework)}")
 
     #print(evals)
 
@@ -322,9 +353,18 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #evaluate_sent_order(outdir, "single")
 
-    prompt_dev_files = {
+    #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
+
+    # prompt_dev_files = {
+    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
+    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
+    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
+    # }
+    # compare_instance_acc(prompt_dev_files)
+
+    prompt_dev_files_multi = {
         "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
         "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
         "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
     }
-    compare_instance_acc(prompt_dev_files)
+    compare_instance_acc(prompt_dev_files_multi)
