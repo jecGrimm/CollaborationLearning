@@ -65,14 +65,29 @@ def evaluate_order_answer_single(batch):
     pred_lists = []
     acc = []
     gold_sents = []
+    prec_1 = []
+    prec_2 = []
+    prec_3 = []
+    prec_4 = []
+    prec_5 = []
 
     for i in range(len(batch["storyid"])):
         pred = extract_answer_list(batch["output"][i])
         pred_lists.append(pred)
+
+        gold = get_sent_list(batch, i)
+        gold_sents.append(gold)
+
         acc.append(compute_accuracy_order(pred, batch, i))
-        gold_sents.append(get_sent_list(batch, i))
+
+        prec_n = compute_precision(pred, gold)
+        prec_1.append(prec_n[0])
+        prec_2.append(prec_n[1])
+        prec_3.append(prec_n[2])
+        prec_4.append(prec_n[3])
+        prec_5.append(prec_n[4])
     
-    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents}
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5}
 
 def evaluate_order_answer_multi(batch):
     """
@@ -86,18 +101,35 @@ def evaluate_order_answer_multi(batch):
     pred_lists = []
     acc = []
     gold_sents = []
+    prec_1 = []
+    prec_2 = []
+    prec_3 = []
+    prec_4 = []
+    prec_5 = []
 
     for i in range(len(batch["storyid"])):
         if "turns" in batch.keys():
             pred = extract_answer_list(batch["turns"][i][-1])
         else:
             pred = extract_answer_list(batch["output"][i][-1]["answer"])
+        
         pred_lists.append(pred)
-        acc.append(compute_accuracy_order(pred, batch, i))
-        gold_sents.append(get_sent_list(batch, i))
-    
-    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents}
+        
+        gold = get_sent_list(batch, i)
+        gold_sents.append(gold)
 
+        # metrics
+        acc.append(compute_accuracy_order(pred, batch, i))
+
+        prec_n = compute_precision(pred, gold)
+        prec_1.append(prec_n[0])
+        prec_2.append(prec_n[1])
+        prec_3.append(prec_n[2])
+        prec_4.append(prec_n[3])
+        prec_5.append(prec_n[4])
+    
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5}
+    
 def extract_answer_list(model_out: str):
     """
     This function extract the list with predictions from the model output string. 
@@ -255,7 +287,32 @@ def compute_accuracy_order(pred: list, batch, i: int):
     else:
         return 0.0
     
-def compare_instance_acc(eval_files: dict):
+def compute_precision(pred: list, gold: list):
+    prec_n = []
+    for i in range(5):
+        prec_n.append(compute_n_precision(pred, gold, i+1))
+
+    return prec_n
+
+def compute_n_precision(pred: list, gold: list, n: int):
+    correct_ngrams = 0
+    gold_ngrams = create_gold_ngrams(gold, n)
+    for idx in range((len(pred)-n)+1):
+        n_pred = pred[idx:idx+n]
+        if n_pred in gold_ngrams:
+            correct_ngrams += 1 
+    
+    return correct_ngrams/len(gold_ngrams)
+
+def create_gold_ngrams(gold: list, n: int):
+    gold_ngrams = []
+
+    for i in range((len(gold)-n)+1):
+        gold_ngrams.append(gold[i:i+n]) 
+    
+    return gold_ngrams
+    
+def compare_instances(eval_files: dict):
     """
     This function compares a bunch of experiments against each other.
 
@@ -265,62 +322,82 @@ def compare_instance_acc(eval_files: dict):
     # load datasets
     eval_datasets = defaultdict()
     results = defaultdict(lambda: defaultdict(float))
+    metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5"]
     for exp_name, eval_file in eval_files.items():
         #eval_datasets[exp_name] = load_dataset("json", data_files=eval_file, split="train").select(range(10))
         eval_data = load_dataset("json", data_files=eval_file, split="train")
 
         # store mean accuracy per experiment
-        results[exp_name]["mean_acc"] = float(eval_data.with_format("pandas")["accuracy"].mean())
+        for metric in metrics:
+            # TODO: fix wrong accuracy
+            results[exp_name][f"mean_{metric}"] = float(eval_data.with_format("pandas")[metric].mean())
+
         eval_datasets[exp_name] = eval_data
 
     # compare evaluation on instance level
     for i in tqdm(range(len(eval_data)), desc="Processing instances", total = len(eval_data)):
-        all_acc = defaultdict()
-
-        # check if accuracy is the same for all experiments
-        same = True
-        comp_acc = eval_data["accuracy"][i]
-
-        for curr_exp, curr_eval_data in eval_datasets.items():
-            curr_acc = curr_eval_data["accuracy"][i]
-            all_acc[curr_exp] = curr_acc
-
-            if curr_acc != comp_acc:
-                same = False # accuracy between experiments differs
-
-            if curr_eval_data["predictions"][i] == ["", "", "", "", ""]:
-                # check whether model returned prediction in the correct format
-                results[curr_exp]["wrong_format"] += 1
-
-        # compare accuracies between experiments
-        for curr_exp in eval_datasets.keys():
-            if max(all_acc.values()) == all_acc[curr_exp]:
-                results[curr_exp]["max_acc"] += 1 # experiment has the best accuracy
-
-            if min(all_acc.values()) == all_acc[curr_exp]:
-                results[curr_exp]["min_acc"] += 1 # experiment has the worst accuracy
-
-            if same:
-                results[curr_exp]["equal_acc"] += 1 # instance is not affected by experiment
+        for metric in metrics:
+            results = compare_metrics(metric, eval_data, eval_datasets, results, i)
 
     # save comparison data in csv
     with open(f"{"/".join(eval_files[exp_name].split("/")[:-1])}/eval_compare.csv", 'w', encoding="utf-8") as csvfile:
-        fieldnames = ["experiment_name", "candidates", "experiment_file", "mean_acc", "max_acc", "equal_acc", "min_acc", "wrong_format"]
+        fieldnames = ["experiment_name", "candidates", "experiment_file", "wrong_format"]
+        for metric in metrics:
+            fieldnames.append(f"mean_{metric}")
+            fieldnames.append(f"max_{metric}")
+            fieldnames.append(f"min_{metric}")
+            fieldnames.append(f"equal_{metric}")
 
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=";")
         
         writer.writeheader()
         for exp, file in eval_files.items():
-            writer.writerow({
+            writing_dict = defaultdict()
+            writing_dict.update({
                 "experiment_name": exp, 
                 "candidates": list(eval_datasets.keys()), 
                 "experiment_file": file, 
-                "mean_acc": results[exp]["mean_acc"], 
-                "max_acc": results[exp]["max_acc"]/len(eval_data), 
-                "equal_acc": results[exp]["equal_acc"]/len(eval_data), 
-                "min_acc": results[exp]["min_acc"]/len(eval_data),
                 "wrong_format": results[exp]["wrong_format"]/len(eval_data)
             })
+
+            for metric in metrics:
+                writing_dict[f"mean_{metric}"] =  results[exp][f"mean_{metric}"]/len(eval_data)
+                writing_dict[f"max_{metric}"] =  results[exp][f"max_{metric}"]/len(eval_data)
+                writing_dict[f"min_{metric}"] =  results[exp][f"min_{metric}"]/len(eval_data)
+                writing_dict[f"equal_{metric}"] =  results[exp][f"equal_{metric}"]/len(eval_data)
+
+            writer.writerow(writing_dict)
+
+def compare_metrics(metric_name: str, eval_data, eval_datasets: defaultdict, results: defaultdict, i: int):
+    all_metrics = defaultdict()
+
+    # check if accuracy is the same for all experiments
+    same = True
+    comp_metric = eval_data[metric_name][i]
+
+    for curr_exp, curr_eval_data in eval_datasets.items():
+        curr_metric = curr_eval_data[metric_name][i]
+        all_metrics[curr_exp] = curr_metric
+
+        if curr_metric != comp_metric:
+            same = False # accuracy between experiments differs
+
+        if metric_name == "accuracy" and curr_eval_data["predictions"][i] == ["", "", "", "", ""]:
+            # check whether model returned prediction in the correct format
+            results[curr_exp]["wrong_format"] += 1
+
+    # compare accuracies between experiments
+    for curr_exp in eval_datasets.keys():
+        if max(all_metrics.values()) == all_metrics[curr_exp]:
+            results[curr_exp][f"max_{metric_name}"] += 1 # experiment has the best accuracy
+
+        if min(all_metrics.values()) == all_metrics[curr_exp]:
+            results[curr_exp][f"min_{metric_name}"] += 1 # experiment has the worst accuracy
+
+        if same:
+            results[curr_exp][f"equal_{metric_name}"] += 1 # instance is not affected by experiment
+        
+    return results
 
 def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/", framework = "single"):
     """
@@ -347,24 +424,25 @@ if __name__ == "__main__":
 
     # outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
     # #evaluate_sent_order("test.jsonl", "single")
-    # evaluate_sent_order(outfile, "single")
+    evaluate_sent_order("./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021", "single")
 
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #evaluate_sent_order(outdir, "single")
 
     #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
+    #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
 
     # prompt_dev_files = {
     #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
     #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
     #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
     # }
-    # compare_instance_acc(prompt_dev_files)
+    # compare_instances(prompt_dev_files)
 
-    prompt_dev_files_multi = {
-        "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
-        "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
-        "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
-    }
-    compare_instance_acc(prompt_dev_files_multi)
+    # prompt_dev_files_multi = {
+    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
+    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
+    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
+    # }
+    # compare_instance_acc(prompt_dev_files_multi)
