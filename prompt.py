@@ -8,7 +8,15 @@ from tqdm import tqdm
 from datasets import Dataset, concatenate_datasets
 
 class Agent:
-    def __init__(self, model_id, split, framework):
+    def __init__(self, model_id: str, split: str, framework: str):
+        """
+        This class provides functionalities that are shared by the single- and multi-agent frameworks.
+
+        @params
+            model_id: str with the model_id from Huggingface
+            split: data split
+            framework: multi or single agent
+        """
         self.model_id = model_id
         self.model_name = model_id.split("/")[-1]
         self.split = split
@@ -16,19 +24,47 @@ class Agent:
         self.date = str(datetime.now()).replace(" ", "_")
 
 
-    def save_outputs(self, outputs, shard_idx=None):
+    def save_outputs(self, outputs, shard_idx: int = None):
+        """
+        This function saves the model outputs in a json file.
+
+        @warning Huggingface load_dataset cannot load big json files.
+        @params
+            outputs: Huggingface dataset containing the model outputs
+            shard_idx: index of the current data shard
+        @returns
+            outfile: json file containing the output data
+        """
         outfile = self.define_outfile(shard_idx=shard_idx)
         outputs.to_json(outfile, indent=4)
 
         return outfile
 
-    def save_outputs_hf(self, outputs, shard_idx = None):
+    def save_outputs_hf(self, outputs, shard_idx: int = None):
+        """
+        This function saves the model outputs in a Huggingface directory.
+
+        @params
+            outputs: Huggingface dataset containing the model outputs
+            shard_idx: index of the current data shard
+        @returns
+            outfile: path to the Huggingface dataset
+        """
         outpath = self.define_outfile(shard_idx=shard_idx, hf = True)
         outputs.save_to_disk(outpath)
 
         return outpath
 
-    def define_outfile(self, shard_idx = None, hf = False):
+    def define_outfile(self, shard_idx: int = None, hf: bool = False):
+        """
+        This function returns the name of the output file.
+
+        @params
+            shard_idx: index of the current data shard
+            hf: True if output path should lead to a huggingface dataset, False for a json file
+        @returns
+            path to the output file
+        """
         if shard_idx == None:
             if hf == False:
                 os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
@@ -47,10 +83,18 @@ class Agent:
                 return path
 
 class SingleAgent(Agent):
-    def __init__(self, model_id, split):
+    def __init__(self, model_id: str, split: str):
+        """
+        This class defines single-agents.
+
+        @params
+            model_id: str with the model_id from Huggingface
+            split: data split
+        """
         self.model_id = model_id
         self.split = split
 
+        # initialize Agent
         super().__init__(model_id=model_id, split=split, framework="single")
 
         self.PROMPT = '''\
@@ -62,6 +106,14 @@ class SingleAgent(Agent):
             '''
 
     def create_message(self, batch):
+        """
+        This method creates a message for a Llama model.
+
+        @params
+            batch: batch of instances
+        @returns
+            dictionary containing the prompt
+        """
         messages = []
         for i in range(len(batch["storyid"])):
             #messages.append({"role": "user", "content": prompt.format(shuffled_sents = batch["shuffled_sents"][i])})
@@ -69,7 +121,16 @@ class SingleAgent(Agent):
 
         return {"prompt": messages}
     
-    def prompt_model(self, logger, device = "cpu", batch_size = 1):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1):
+        """
+        This method prompts the model.
+
+        @params
+            logger: experiment logger
+            device: cpu/cuda
+            batch_size: batch size
+        """
+        # initialize pipeline
         model_id = "meta-llama/Llama-3.2-1B-Instruct"
         pipe = pipeline(
             "text-generation",
@@ -82,6 +143,7 @@ class SingleAgent(Agent):
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
+        # prepare prompts
         roc_data = ROCStories(split = self.split)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
@@ -95,6 +157,8 @@ class SingleAgent(Agent):
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards", total = num_shards):
             # process shard
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
+
+            # prompt model
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
                     max_new_tokens=256,
@@ -105,7 +169,6 @@ class SingleAgent(Agent):
             output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
 
-            # TODO: store all current instances in ckp-file and not only the shard
             output_data = shard_data.add_column("output", output_list)
             
             outpath = self.save_outputs_hf(outputs=output_data, shard_idx=shard_idx)
@@ -138,9 +201,17 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id, split):
+    def __init__(self, model_id: str, split: str):
+        """
+        This class defines multi-agents.
+
+        @params
+            model_id: str with the model_id from Huggingface
+            split: data split
+        """
         super().__init__(model_id=model_id, split=split, framework="multi")
 
+        # define prompts
         self.SYSTEM_PROMPT = '''
         I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
         [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
@@ -166,13 +237,27 @@ class MultiAgent(Agent):
         My sentence: "{sentence}"
         '''
 
+        # define player names
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
-    def create_message(self, conv_round, turn, conversation, roles, player_name):
+    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str):
+        """
+        This method creates the prompt message.
+
+        @params
+            conv_round: current conversation round
+            turn: current turn in the conversation
+            roles: dictionary with the player names and sentences
+            player_name: name of the current player
+        @returns
+            message: list of system and user prompt
+        """
+        # define agent state
         other_players = [name for name in self.NAMES if name != player_name]
         player_sent = roles[player_name]
         rules = self.RULES.format(sentence = player_sent)
 
+        # define system prompt
         message = [
             {
                 "role": "system",
@@ -184,6 +269,7 @@ class MultiAgent(Agent):
             }
         ]
 
+        # define user prompt (start or mid conversation)
         if conv_round == 0 and turn == 0:
             message.append(
                 {
@@ -211,7 +297,16 @@ class MultiAgent(Agent):
         return message
 
     def play_games(self, batch, pipe):
-        '''@deprecated: Process conversations iteratively'''
+        '''
+        @deprecated
+        This function processes conversations iteratively.
+
+        @params
+            batch: batch of instances
+            pipe: pipeline object
+        @returns
+            dictionary with the conversational turns and player names
+        '''
         batch_turns = []
         batch_players = []
         for i in range(len(batch["storyid"])):
@@ -250,7 +345,18 @@ class MultiAgent(Agent):
 
         return {"turns": batch_turns, "players": batch_players}
     
-    def create_prompts(self, batch, conv_round, turn, player_name):
+    def create_prompts(self, batch, conv_round: int, turn: int, player_name: str):
+        """
+        This method creates the prompts for a batch of instances.
+
+        @params
+            batch: batch of instances
+            conv_round: iteration in the conversational round
+            turn: number of the turn in the conversation
+            player_name: name of the current player
+        @returns
+            dictionary with the prompts for the batch of instances
+        """
         messages = []
         for i in range(len(batch["storyid"])):
             if conv_round == 0 and turn == 0:
@@ -260,7 +366,16 @@ class MultiAgent(Agent):
 
         return {"prompt": messages}
 
-    def get_conversation_history(self, batch, outputs, player_name):
+    def get_conversation_history(self, batch, outputs, player_name: str):
+        """
+        This function saves the output in the dataset.
+
+        @params
+            batch: batch of instances
+            outputs: model outputs
+            player_name: name of the current player
+        @returns batch: updated batch of instances
+        """
         for i, model_out in enumerate(outputs):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
@@ -276,7 +391,7 @@ class MultiAgent(Agent):
             batch["player"][i].append(player_name)
 
             if "STOP" in model_answer:
-                batch["stop"][i] = True
+                batch["stop"][i] = True # model ended the conversation
         
         return batch
 
@@ -287,20 +402,32 @@ class MultiAgent(Agent):
         @params
             batch: batch of shard data instances
             filtered_data: processed instances
+        @returns
+            updated batch of instances 
         """
         for i in range(len(batch["storyid"])):
-            processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
+            if batch["stop"][i] == False:
+                processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance
 
-            if len(processed_inst) == 1:
-                batch["conversation_history"][i] = processed_inst["conversation_history"][0]
-                batch["turns"][i] = processed_inst["turns"][0]
-                batch["player"][i] = processed_inst["player"][0]
-                batch["roles"][i] = processed_inst["roles"][0]
-                batch["stop"][i] = processed_inst["stop"][0]
+                if len(processed_inst) == 1:
+                    batch["conversation_history"][i] = processed_inst["conversation_history"][0]
+                    batch["turns"][i] = processed_inst["turns"][0]
+                    batch["player"][i] = processed_inst["player"][0]
+                    batch["roles"][i] = processed_inst["roles"][0]
+                    batch["stop"][i] = processed_inst["stop"][0]
 
         return batch
 
-    def prompt_models(self, logger, device = "cpu", batch_size = 1):
+    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1):
+        """
+        This function prompts the multi-agent framework.
+
+        @params
+            logger: experiment logger
+            device: cpu/cuda
+            batch_size: batch size
+        """
+        # initialize pipeline
         pipe = pipeline(
             "text-generation",
             model=self.model_id,
@@ -311,7 +438,8 @@ class MultiAgent(Agent):
         pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
-    
+        
+        # prepare dataset
         roc_data = ROCStories(split = self.split)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
@@ -319,7 +447,7 @@ class MultiAgent(Agent):
         full_output = None
 
         start = time.time()
-
+        # process shards
         num_shards = int((len(prompt_data)/1000))+1
         processed_inst = 0
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
@@ -348,7 +476,7 @@ class MultiAgent(Agent):
 
                     if len(filtered_data) > 0:
                         player_name = self.NAMES[turn]
-
+                        
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                         # prompt 
@@ -363,6 +491,7 @@ class MultiAgent(Agent):
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
                     else:
+                        # stop when all conversations have been stopped by a model
                         turn = 5
                         conv_round = 3
 

@@ -7,7 +7,18 @@ import pandas as pd
 import torch
 import json
 
-def run_experiment(config = None, logger = None):
+def run_experiment(config: dict = None, logger: ExperimentLog = None):
+    """
+    This function runs the experiment.
+
+    @params
+        config: configurations for the experiment
+        logger: experiment logger
+    """
+    # prepare configuration
+    if "device" not in config.keys():
+        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+
     if logger == None:
         logger = ExperimentLog(config)
 
@@ -56,7 +67,15 @@ def run_experiment(config = None, logger = None):
 
     logger.store_run_data()
 
-def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], frameworks = ["single", "multi"]):
+def test_batch_size(split: str = "mini", batch_sizes: list = [1, 8, 64, 256, 1000], frameworks: list = ["single", "multi"]):
+    """
+    This function runs the experiment with different batch sizes.
+
+    @params
+        split: data split
+        batch_sizes: batch sizes
+        frameworks: single- or multi-agent setups
+    """
     for fw in frameworks:
         print("\n")
         print("-" * 30)
@@ -71,15 +90,22 @@ def test_batch_size(split = "mini", batch_sizes = [1, 8, 64, 256, 1000], framewo
                 "batch_size": batch_size,
                 "model_id": "meta-llama/Llama-3.2-1B-Instruct"
             }
-            logger = ExperimentLog(config)
+            logger = ExperimentLog(config) # one logger for each experiment
 
             run_experiment(config, logger)
             print(f"Duration: {logger.run_data["duration"]}")
 
         print("\n")
-        logger.print_fastest_run(framework=fw, split = split)
+        logger.print_fastest_run(framework=fw, split = split) # testing batch size for efficiency
 
-def test_llm_rewritten_prompts(config):
+def test_llm_rewritten_prompts(config: dict):
+    """
+    This function runs the experiment for different prompts rewritten by other LLMs.
+
+    @params 
+        config: experiment configuration
+    """
+    # file with rewritten prompts
     prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
     # prompt_candidates = {
     #     "gemini-2.5-pro": { 
@@ -112,6 +138,7 @@ def test_llm_rewritten_prompts(config):
         print("-" * 30)
         print("Processing prompt written by ", model)
 
+        # prepare configuration
         if framework == "single":
             config["user_prompt"]= prompt_candidates[model]["single"]
         else:

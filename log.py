@@ -6,7 +6,13 @@ import pandas as pd
 import re
 
 class ExperimentLog:
-    def __init__(self, config = None):
+    def __init__(self, config: dict = None):
+        """
+        This class logs the important information for an experiment run.
+
+        @params
+            config: configuration data that should be logged
+        """
         # self.run = wandb.init(
         #     # Set the wandb entity where your project will be logged (generally your team name).
         #     entity="j-grimm-ludwig-maximilian-university-of-munich",
@@ -18,15 +24,29 @@ class ExperimentLog:
 
         # self.output_artifact = wandb.Artifact(name="output", type="dataset")
         
+        # init logger
         self.run_data = defaultdict()
 
+        # log config data
         if config:
             self.run_data.update(config)
 
     def log_single(self, single):
+        """
+        This method loggs all attributes of an Single class object
+
+        @params
+            single: object of the class Single
+        """
         self.run_data.update({"user_prompt": single.PROMPT.replace("\n", "\\n")})
 
     def log_multi(self, multi):
+        """
+        This method loggs all attributes of an Multi class object
+
+        @params
+            multi: object of the class Multi
+        """
         self.run_data.update({"system_prompt": multi.SYSTEM_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"start_prompt": multi.START_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
@@ -34,6 +54,12 @@ class ExperimentLog:
         self.run_data.update({"names": multi.NAMES})
 
     def log_pipe(self, pipe):
+        """
+        This function logs all information of the Huggingface pipe.
+
+        @params
+            pipe: Huggingface pipeline object
+        """
         self.run_data.update({
             "task": pipe.task,
             "model": pipe.model.config.to_dict(),
@@ -42,17 +68,23 @@ class ExperimentLog:
         })
 
     def store_run_data(self):
+        """
+        This function saves the run data in a csv and json file.
+        """
         run_dir = "./logs/runs"
         os.makedirs(run_dir, exist_ok=True)
 
+        # assign run_idx
         if "run_idx" not in self.run_data.keys():
             run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
             run_idx = max(run_files) + 1
             self.run_data.update({"run_idx": run_idx})
 
+        # save run data in json file
         with open(f"{run_dir}/{self.run_data['run_idx']}.json", "w", encoding="utf-8") as f:
             json.dump(self.run_data, f, indent=4)
 
+        # save run data in overall csv
         run_csv = "./logs/runs.csv"
         if os.path.isfile(run_csv):
             prev_runs = pd.read_csv(run_csv, sep = ";")
@@ -67,7 +99,14 @@ class ExperimentLog:
                 writer.writeheader()
                 writer.writerow(self.run_data)
     
-    def print_best_run(self, framework = None, split = None):
+    def print_best_run(self, framework: str = None, split: str = None):
+        """
+        This function prints the run with the best evaluation result.
+
+        @params
+            framework: single- or multi-agent setup
+            split: data split
+        """
         df = pd.read_csv("./logs/runs.csv", sep = ";")
 
         filtered_df = df
@@ -89,6 +128,13 @@ class ExperimentLog:
             print(f"\nThere are no runs with framework {framework}, split {split} and a duration value!")
 
     def print_fastest_run(self, framework = None, split = None):
+        """
+        This function prints the fastest run.
+
+        @params
+            framework: single- or multi-agent setup
+            split: data split
+        """
         df = pd.read_csv("./logs/runs.csv", sep = ";")
 
         filtered_df = df
