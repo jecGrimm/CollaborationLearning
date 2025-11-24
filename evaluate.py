@@ -329,7 +329,6 @@ def compare_instances(eval_files: dict):
 
         # store mean accuracy per experiment
         for metric in metrics:
-            # TODO: fix wrong accuracy
             results[exp_name][f"mean_{metric}"] = float(eval_data.with_format("pandas")[metric].mean())
 
         eval_datasets[exp_name] = eval_data
@@ -361,7 +360,7 @@ def compare_instances(eval_files: dict):
             })
 
             for metric in metrics:
-                writing_dict[f"mean_{metric}"] =  results[exp][f"mean_{metric}"]/len(eval_data)
+                writing_dict[f"mean_{metric}"] =  results[exp][f"mean_{metric}"]
                 writing_dict[f"max_{metric}"] =  results[exp][f"max_{metric}"]/len(eval_data)
                 writing_dict[f"min_{metric}"] =  results[exp][f"min_{metric}"]/len(eval_data)
                 writing_dict[f"equal_{metric}"] =  results[exp][f"equal_{metric}"]/len(eval_data)
@@ -424,7 +423,7 @@ if __name__ == "__main__":
 
     # outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
     # #evaluate_sent_order("test.jsonl", "single")
-    evaluate_sent_order("./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021", "single")
+    #evaluate_sent_order("./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021", "single")
 
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
@@ -433,16 +432,16 @@ if __name__ == "__main__":
     #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
 
-    # prompt_dev_files = {
-    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
-    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
-    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
-    # }
-    # compare_instances(prompt_dev_files)
+    prompt_dev_files = {
+        "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
+        "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
+        "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
+    }
+    compare_instances(prompt_dev_files)
 
     # prompt_dev_files_multi = {
     #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
     #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
     #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
     # }
-    # compare_instance_acc(prompt_dev_files_multi)
+    #compare_instance_acc(prompt_dev_files_multi)
