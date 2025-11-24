@@ -52,6 +52,8 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
     return acc_mean
 
+    return acc_mean
+
 
 def evaluate_order_answer_single(batch):
     """

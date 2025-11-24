@@ -22,6 +22,10 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if logger == None:
         logger = ExperimentLog(config)
 
+    if "device" not in config.keys():
+        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+        logger["device"] = config["device"]
+
     outfile = config["experiment_file"]
 
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
