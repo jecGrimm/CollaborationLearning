@@ -1,11 +1,12 @@
 import torch
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, LogitsProcessorList
 from data import ROCStories
 import os
 import time
 from datetime import datetime
 from tqdm import tqdm
 from datasets import Dataset, concatenate_datasets
+from thinking_budget_processor import ThinkingTokenBudgetProcessor
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str):
@@ -201,13 +202,14 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2):
         """
         This class defines multi-agents.
 
         @params
             model_id: str with the model_id from Huggingface
             split: data split
+            conversation_rounds: round of conversations
         """
         super().__init__(model_id=model_id, split=split, framework="multi")
 
@@ -239,6 +241,8 @@ class MultiAgent(Agent):
 
         # define player names
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
+
+        self.conversation_rounds = conversation_rounds 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str):
         """
@@ -379,13 +383,13 @@ class MultiAgent(Agent):
         for i, model_out in enumerate(outputs):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
-            model_answer = model_out[0]["generated_text"][2]["content"]
+            model_answer = model_out[0]["generated_text"][2]["content"] # TODO: fix thinking stop
                 
             # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
             # shard_inst["turns"][0].append(model_answer)
             # shard_inst["player"][0].append(player_name)
             # shard_inst["roles"][0] = batch["roles"][i]
-
+            # TODO: Remove thinking part
             batch["conversation_history"][i] += f"\n{player_name}: {model_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
@@ -428,16 +432,25 @@ class MultiAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
+        torch.cuda.empty_cache()
         pipe = pipeline(
             "text-generation",
             model=self.model_id,
             dtype=torch.bfloat16,
             device_map=device,
+            max_new_tokens=256
+            # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
         )
-        pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe)
+        if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
+            pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
+            pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+            pipe.tokenizer.padding_side = "left"
+        elif "qwen" in self.model_id.lower():
+            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
+            pipe = pipeline(
+                "text-generation", model=self.model_id, max_new_tokens=int(256-256*0.1), logits_processor=LogitsProcessorList([processor]), device = device
+            )
+        logger.log_pipe(pipe) #TODO: log thinking budget
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
@@ -468,7 +481,7 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             #filtered_data = shard_data
             conv_round = 0
-            while conv_round < 3:
+            while conv_round < self.conversation_rounds:
                 turn = 0
                 while turn < 5:
                     # filter out early stopping
@@ -480,9 +493,10 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                         # prompt 
+                        # TODO: add best configuration for qwen
+                        # TODO: FIX cuda error
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
-                                max_new_tokens=256,
                                 batch_size = batch_size
                             )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
@@ -493,7 +507,7 @@ class MultiAgent(Agent):
                     else:
                         # stop when all conversations have been stopped by a model
                         turn = 5
-                        conv_round = 3
+                        conv_round = self.conversation_rounds
 
                     # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 

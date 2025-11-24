@@ -1,0 +1,8 @@
+{
+    "split": "mini",
+    "framework": "multi",
+    "experiment_file": "",
+    "batch_size": 64,
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests Qwen3-235B-A22B-Thinking-2507 in the multi-setup."
+}

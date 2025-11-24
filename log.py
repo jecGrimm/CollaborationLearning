@@ -52,6 +52,7 @@ class ExperimentLog:
         self.run_data.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"rules": multi.RULES.replace("\n", "\\n")})
         self.run_data.update({"names": multi.NAMES})
+        self.run_data.update({"conversation_rounds": multi.conversation_rounds})
 
     def log_pipe(self, pipe):
         """
