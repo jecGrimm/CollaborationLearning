@@ -8,11 +8,12 @@ import torch
 import json
 
 def run_experiment(config = None, logger = None):
-    if "device" not in config.keys():
-        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
-
     if logger == None:
         logger = ExperimentLog(config)
+
+    if "device" not in config.keys():
+        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+        logger["device"] = config["device"]
 
     outfile = config["experiment_file"]
 

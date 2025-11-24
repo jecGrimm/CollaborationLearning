@@ -10,10 +10,10 @@ from log import ExperimentLog
 import os
 
 def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
-    # TODO: test if save from disk works
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    exp_data = load_from_disk(experiment_file)
-
+    exp_data = load_from_disk(experiment_file).select([2191])
+    #exp_data = load_from_disk(experiment_file)
+    
     if framework == "single":
         eval_data = exp_data.map(evaluate_order_answer_single, batched=True, remove_columns=exp_data.column_names)
     else:
@@ -32,6 +32,8 @@ def evaluate_sent_order(experiment_file, framework, logger = ExperimentLog()):
     print("Mean accuracy:", acc_mean)
     # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
     #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
+
+    return acc_mean
 
 
 def evaluate_order_answer_single(batch):
@@ -128,9 +130,7 @@ def compute_accuracy_order(pred, batch, i):
 
 if __name__ == "__main__":
     cli = CLI()
-    #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
-    #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
-
-    outfile = "./outputs/multi/Llama-3.2-1B-Instruct/mini/outputs_multi_Llama-3.2-1B-Instruct_mini_2025-11-18_11:02:25.642317"
+    outfile = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
+    
     #evaluate_sent_order("test.jsonl", "single")
-    evaluate_sent_order(outfile, "multi")
+    evaluate_sent_order(outfile, "single")
