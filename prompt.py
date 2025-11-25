@@ -24,6 +24,41 @@ class Agent:
         self.framework = framework
         self.date = str(datetime.now()).replace(" ", "_")
 
+    def init_pipe(self, device, logger):
+        if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
+            pipe = pipeline(
+                "text-generation",
+                model=self.model_id,
+                dtype=torch.bfloat16,
+                device_map=device,
+                max_new_tokens=256
+                # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
+            )
+            pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
+            pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+        elif "qwen" in self.model_id.lower():
+            # ensures that the model stops generating thinking tokens after a while
+            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
+            logger.run_data["thinking_budget"] = int(256*0.1)
+
+            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
+            pipe = pipeline(
+                "text-generation", 
+                model=self.model_id, 
+                dtype=torch.bfloat16,
+                device_map=device,
+                max_new_tokens=int(256-256*0.1), 
+                logits_processor=LogitsProcessorList([processor]), 
+                temperature = 0.6,
+                top_p = 0.95,
+                top_k = 20,
+                min_p = 0
+            )
+            
+        pipe.tokenizer.padding_side = "left"
+        logger.log_pipe(pipe)
+    
+        return pipe, logger
 
     def save_outputs(self, outputs, shard_idx: int = None):
         """
@@ -132,17 +167,8 @@ class SingleAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
-        model_id = "meta-llama/Llama-3.2-1B-Instruct"
-        pipe = pipeline(
-            "text-generation",
-            model=model_id,
-            dtype=torch.bfloat16,
-            device_map=device
-        )
-        pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe)
+        torch.cuda.empty_cache()
+        pipe, logger = self.init_pipe(device, logger)
     
         # prepare prompts
         roc_data = ROCStories(split = self.split)
@@ -162,7 +188,6 @@ class SingleAgent(Agent):
             # prompt model
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
-                    max_new_tokens=256,
                     batch_size = batch_size
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
@@ -178,6 +203,8 @@ class SingleAgent(Agent):
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
 
             logger.store_run_data()
+
+            torch.cuda.empty_cache()
 
 
         end = time.time()
@@ -411,7 +438,7 @@ class MultiAgent(Agent):
         """
         for i in range(len(batch["storyid"])):
             if batch["stop"][i] == False:
-                processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance
+                processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance, TODO: make it faster
 
                 if len(processed_inst) == 1:
                     batch["conversation_history"][i] = processed_inst["conversation_history"][0]
@@ -433,34 +460,7 @@ class MultiAgent(Agent):
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe = pipeline(
-            "text-generation",
-            model=self.model_id,
-            dtype=torch.bfloat16,
-            device_map=device,
-            max_new_tokens=256
-            # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
-        )
-        if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
-            pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-            pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-        elif "qwen" in self.model_id.lower():
-            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
-            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
-            pipe = pipeline(
-                "text-generation", 
-                model=self.model_id, 
-                max_new_tokens=int(256-256*0.1), 
-                logits_processor=LogitsProcessorList([processor]), 
-                device = device,
-                temperature = 0.6,
-                top_p = 0.95,
-                top_k = 20,
-                min_p = 0
-            )
-        pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe)
-        logger.run_data["thinking_budget"] = int(256*0.1)
+        pipe, logger = self.init_pipe(device, logger)
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)

@@ -72,7 +72,7 @@ def evaluate_order_answer_single(batch):
     prec_5 = []
 
     for i in range(len(batch["storyid"])):
-        pred = extract_answer_list(batch["output"][i])
+        pred = extract_answer_list(batch["output"][i].split("</think>")[-1].strip())
         pred_lists.append(pred)
 
         gold = get_sent_list(batch, i)
@@ -109,9 +109,9 @@ def evaluate_order_answer_multi(batch):
 
     for i in range(len(batch["storyid"])):
         if "turns" in batch.keys():
-            pred = extract_answer_list(batch["turns"][i][-1])
+            pred = extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip())
         else:
-            pred = extract_answer_list(batch["output"][i][-1]["answer"])
+            pred = extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip())
         
         pred_lists.append(pred)
         
@@ -427,17 +427,18 @@ if __name__ == "__main__":
 
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
-    #evaluate_sent_order(outdir, "single")
+    outdir = "outputs/single/Qwen3-0.6B/mini/outputs_single_Qwen3-0.6B_mini_2025-11-25_11:27:17.446642"
+    evaluate_sent_order(outdir, "single")
 
     #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
 
-    prompt_dev_files = {
-        "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
-        "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
-        "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
-    }
-    compare_instances(prompt_dev_files)
+    # prompt_dev_files = {
+    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
+    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
+    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
+    # }
+    # compare_instances(prompt_dev_files)
 
     # prompt_dev_files_multi = {
     #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
