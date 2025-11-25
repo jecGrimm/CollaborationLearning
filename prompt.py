@@ -383,14 +383,13 @@ class MultiAgent(Agent):
         for i, model_out in enumerate(outputs):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
-            model_answer = model_out[0]["generated_text"][2]["content"] # TODO: fix thinking stop
+            model_answer = model_out[0]["generated_text"][2]["content"]
             conv_answer = model_answer.split("</think>")[-1].strip()
 
             # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
             # shard_inst["turns"][0].append(model_answer)
             # shard_inst["player"][0].append(player_name)
             # shard_inst["roles"][0] = batch["roles"][i]
-            # TODO: Remove thinking part
             batch["conversation_history"][i] += f"\n{player_name}: {conv_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
@@ -433,7 +432,7 @@ class MultiAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
-        torch.cuda.empty_cache() # TODO: add empty cache where possible
+        torch.cuda.empty_cache()
         pipe = pipeline(
             "text-generation",
             model=self.model_id,
@@ -447,11 +446,21 @@ class MultiAgent(Agent):
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
         elif "qwen" in self.model_id.lower():
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
+            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
             pipe = pipeline(
-                "text-generation", model=self.model_id, max_new_tokens=int(256-256*0.1), logits_processor=LogitsProcessorList([processor]), device = device
+                "text-generation", 
+                model=self.model_id, 
+                max_new_tokens=int(256-256*0.1), 
+                logits_processor=LogitsProcessorList([processor]), 
+                device = device,
+                temperature = 0.6,
+                top_p = 0.95,
+                top_k = 20,
+                min_p = 0
             )
         pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe) #TODO: log thinking budget
+        logger.log_pipe(pipe)
+        logger.run_data["thinking_budget"] = int(256*0.1)
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
@@ -494,8 +503,6 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                         # prompt 
-                        # TODO: add best configuration for qwen
-                        # TODO: FIX cuda error
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
                                 batch_size = batch_size
@@ -505,6 +512,8 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+
+                        torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
                         turn = 5

@@ -65,7 +65,15 @@ class ExperimentLog:
             "task": pipe.task,
             "model": pipe.model.config.to_dict(),
             "torch_dtype": str(pipe.torch_dtype),
-            "device_map": pipe.device.type
+            "device_map": pipe.device.type,
+            "do_sample": pipe.generation_config.do_sample,
+            "num_beams": pipe.generation_config.num_beams,
+            "temperature": pipe.generation_config.temperature,
+            "max_new_tokens": pipe.generation_config.max_new_tokens,
+            "length_penalty": pipe.generation_config.length_penalty,
+            "top_p": pipe.generation_config.top_p,
+            "top_k": pipe.generation_config.top_k,
+            "min_p": pipe.generation_config.min_p
         })
 
     def store_run_data(self):
