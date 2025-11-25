@@ -384,13 +384,14 @@ class MultiAgent(Agent):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"] # TODO: fix thinking stop
-                
+            conv_answer = model_answer.split("</think>")[-1].strip()
+
             # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
             # shard_inst["turns"][0].append(model_answer)
             # shard_inst["player"][0].append(player_name)
             # shard_inst["roles"][0] = batch["roles"][i]
             # TODO: Remove thinking part
-            batch["conversation_history"][i] += f"\n{player_name}: {model_answer}\n"
+            batch["conversation_history"][i] += f"\n{player_name}: {conv_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
@@ -432,7 +433,7 @@ class MultiAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
-        torch.cuda.empty_cache()
+        torch.cuda.empty_cache() # TODO: add empty cache where possible
         pipe = pipeline(
             "text-generation",
             model=self.model_id,
@@ -444,12 +445,12 @@ class MultiAgent(Agent):
         if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-            pipe.tokenizer.padding_side = "left"
         elif "qwen" in self.model_id.lower():
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
             pipe = pipeline(
                 "text-generation", model=self.model_id, max_new_tokens=int(256-256*0.1), logits_processor=LogitsProcessorList([processor]), device = device
             )
+        pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe) #TODO: log thinking budget
         
         # prepare dataset
