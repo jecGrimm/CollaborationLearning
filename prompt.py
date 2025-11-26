@@ -426,7 +426,7 @@ class MultiAgent(Agent):
         
         return batch
 
-    def update_shard(self, batch, filtered_data):
+    def update_shard(self, batch, filtered_data, dataset_len):
         """
         This method updates the instances in the shard data with the processed instances.
 
@@ -438,7 +438,10 @@ class MultiAgent(Agent):
         """
         for i in range(len(batch["storyid"])):
             if batch["stop"][i] == False:
-                processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance, TODO: make it faster
+                if len(filtered_data) != dataset_len:
+                    processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance, TODO: make it faster
+                else:
+                    processed_inst = filtered_data.select([i])
 
                 if len(processed_inst) == 1:
                     batch["conversation_history"][i] = processed_inst["conversation_history"][0]
@@ -511,7 +514,7 @@ class MultiAgent(Agent):
                         # add model answer to conversation history
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
 
-                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
 
                         torch.cuda.empty_cache()
                     else:

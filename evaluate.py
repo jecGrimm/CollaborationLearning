@@ -109,7 +109,7 @@ def evaluate_order_answer_multi(batch):
 
     for i in range(len(batch["storyid"])):
         if "turns" in batch.keys():
-            pred = extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip())
+            pred = extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip()) # exclude thinking to retrieve only the final result
         else:
             pred = extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip())
         
