@@ -193,7 +193,7 @@ def clean_out(model_out: str):
     @returns
         model_answer: model answer as single-line string
     """
-    model_answer = model_out.split("Answer:\n")[-1].strip()
+    model_answer = re.sub(r"Answer:[ \n]*", "", model_out).strip()
     # remove newlines to make matching possible
     model_answer = re.sub("\n", "", model_answer)
     return model_answer
@@ -312,7 +312,7 @@ def create_gold_ngrams(gold: list, n: int):
     
     return gold_ngrams
     
-def compare_instances(eval_files: dict):
+def compare_instances(eval_files: dict, output_file: str = None):
     """
     This function compares a bunch of experiments against each other.
 
@@ -339,7 +339,9 @@ def compare_instances(eval_files: dict):
             results = compare_metrics(metric, eval_data, eval_datasets, results, i)
 
     # save comparison data in csv
-    with open(f"{"/".join(eval_files[exp_name].split("/")[:-1])}/eval_compare.csv", 'w', encoding="utf-8") as csvfile:
+    if not output_file:
+        output_file = f"{"/".join(eval_files[exp_name].split("/")[:-1])}/eval_compare.csv"
+    with open(output_file, 'w', encoding="utf-8") as csvfile:
         fieldnames = ["experiment_name", "candidates", "experiment_file", "wrong_format"]
         for metric in metrics:
             fieldnames.append(f"mean_{metric}")
@@ -412,7 +414,7 @@ def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/",
     for outdir in outdirs:
         if outdir != "ckps" and not outdir.endswith("jsonl"):
             #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
-            print(f"\n{outdir}: {evaluate_sent_order(splitdir + outdir, framework)}")
+            print(f"\n{outdir}: {evaluate_sent_order(splitdir + outdir, framework)}\n")
 
     #print(evals)
 
@@ -427,10 +429,10 @@ if __name__ == "__main__":
 
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
-    outdir = "outputs/single/Qwen3-0.6B/mini/outputs_single_Qwen3-0.6B_mini_2025-11-25_11:27:17.446642"
-    evaluate_sent_order(outdir, "single")
+    # outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646"
+    # evaluate_sent_order(outdir, "multi")
 
-    #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
+    evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
 
     # prompt_dev_files = {
@@ -446,3 +448,12 @@ if __name__ == "__main__":
     #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
     # }
     #compare_instance_acc(prompt_dev_files_multi)
+
+    dev_multi_models = {
+        "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
+        "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
+        "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
+        "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
+        "Qwen3-8B_2rounds_agashe_1think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl"
+    } 
+    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")

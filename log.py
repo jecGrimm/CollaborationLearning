@@ -84,10 +84,7 @@ class ExperimentLog:
         os.makedirs(run_dir, exist_ok=True)
 
         # assign run_idx
-        if "run_idx" not in self.run_data.keys():
-            run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
-            run_idx = max(run_files) + 1
-            self.run_data.update({"run_idx": run_idx})
+        self.get_run_idx()
 
         # save run data in json file
         with open(f"{run_dir}/{self.run_data['run_idx']}.json", "w", encoding="utf-8") as f:
@@ -107,6 +104,18 @@ class ExperimentLog:
 
                 writer.writeheader()
                 writer.writerow(self.run_data)
+
+    def get_run_idx(self):
+        run_dir = "./logs/runs"
+        os.makedirs(run_dir, exist_ok=True)
+        if "run_idx" not in self.run_data.keys():
+            run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
+            run_idx = max(run_files) + 1
+            self.run_data.update({"run_idx": run_idx})
+        else: 
+            run_idx = self.run_data["run_idx"]
+        
+        return run_idx
     
     def print_best_run(self, framework: str = None, split: str = None):
         """

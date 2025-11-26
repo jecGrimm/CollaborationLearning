@@ -36,6 +36,7 @@ class Agent:
             )
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+            processor = None
         elif "qwen" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
@@ -58,9 +59,9 @@ class Agent:
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
-        return pipe, logger
+        return pipe, logger, processor
 
-    def save_outputs(self, outputs, shard_idx: int = None):
+    def save_outputs(self, logger, outputs, shard_idx: int = None):
         """
         This function saves the model outputs in a json file.
 
@@ -71,12 +72,12 @@ class Agent:
         @returns
             outfile: json file containing the output data
         """
-        outfile = self.define_outfile(shard_idx=shard_idx)
+        outfile = self.define_outfile(logger, shard_idx=shard_idx)
         outputs.to_json(outfile, indent=4)
 
         return outfile
 
-    def save_outputs_hf(self, outputs, shard_idx: int = None):
+    def save_outputs_hf(self, logger, outputs, shard_idx: int = None):
         """
         This function saves the model outputs in a Huggingface directory.
 
@@ -86,12 +87,12 @@ class Agent:
         @returns
             outfile: path to the Huggingface dataset
         """
-        outpath = self.define_outfile(shard_idx=shard_idx, hf = True)
+        outpath = self.define_outfile(logger, shard_idx=shard_idx, hf = True)
         outputs.save_to_disk(outpath)
 
         return outpath
 
-    def define_outfile(self, shard_idx: int = None, hf: bool = False):
+    def define_outfile(self, logger, shard_idx: int = None, hf: bool = False):
         """
         This function returns the name of the output file.
 
@@ -101,20 +102,31 @@ class Agent:
         @returns
             path to the output file
         """
+        # TODO: test run_idx files
+        run_idx = logger.get_run_idx()
+
+        output_path = f"./outputs/{self.framework}/{self.model_name}/{self.split}"
+
         if shard_idx == None:
             if hf == False:
-                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
-                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
+                os.makedirs(output_path, exist_ok = True)
+                return f"{output_path}/outputs_{run_idx}.jsonl"
+                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
             else:
-                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
+                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
+                path = f"{output_path}/outputs_{run_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
         else:
             if hf == False:
-                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
-                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
+                os.makedirs(f"{output_path}/ckps/", exist_ok = True)
+                return f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}.jsonl"
+                #os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
+                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
             else:
-                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
+                path = f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}"
+
+                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
 
@@ -168,7 +180,7 @@ class SingleAgent(Agent):
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger = self.init_pipe(device, logger)
+        pipe, logger, _ = self.init_pipe(device, logger) # processor not needed because models are only prompted once
     
         # prepare prompts
         roc_data = ROCStories(split = self.split)
@@ -192,12 +204,13 @@ class SingleAgent(Agent):
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
+            # TODO: re.split(pattern, string) statt Answer
             output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
 
             output_data = shard_data.add_column("output", output_list)
             
-            outpath = self.save_outputs_hf(outputs=output_data, shard_idx=shard_idx)
+            outpath = self.save_outputs_hf(logger, outputs=output_data, shard_idx=shard_idx)
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
@@ -223,7 +236,7 @@ class SingleAgent(Agent):
         # os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
         # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
         # output_data.to_json(outfile, indent=4)
-        outpath = self.save_outputs_hf(output_data)
+        outpath = self.save_outputs_hf(logger, output_data)
         logger.run_data.update({"instances": len(full_output_list), "experiment_file": outpath})
 
         logger.store_run_data()
@@ -463,7 +476,7 @@ class MultiAgent(Agent):
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger = self.init_pipe(device, logger)
+        pipe, logger, processor = self.init_pipe(device, logger)
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
@@ -516,6 +529,8 @@ class MultiAgent(Agent):
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
 
+                        if processor:
+                            processor.tokens_generated = 0 # allow thinking for the next answer
                         torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
@@ -538,7 +553,7 @@ class MultiAgent(Agent):
                 conv_round += 1
 
             # save ouput
-            outpath = self.save_outputs_hf(outputs=shard_data, shard_idx=shard_idx)
+            outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
 
             if full_output:
                 full_output = concatenate_datasets([full_output, shard_data])
@@ -555,6 +570,6 @@ class MultiAgent(Agent):
 
         #output_data = prompt_data.add_column("output", full_output_list)
         #outpath = self.save_outputs_hf(output_data)
-        outpath = self.save_outputs_hf(full_output)
+        outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()

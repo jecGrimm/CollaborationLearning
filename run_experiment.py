@@ -40,7 +40,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
 
-            outfile = single.define_outfile(hf = True)
+            outfile = single.define_outfile(logger, hf = True)
         else:
             multi = MultiAgent(model_id=config["model_id"], split=config["split"])
 
@@ -60,7 +60,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
 
-            outfile = multi.define_outfile(hf = True)
+            outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate
     evaluate_sent_order(outfile, config["framework"], logger)
