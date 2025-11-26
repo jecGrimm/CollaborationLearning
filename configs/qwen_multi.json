@@ -3,6 +3,6 @@
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 32,
-    "model_id": "Qwen/Qwen3-8B",
-    "desc": "This run tests Qwen3-8B in the multi-setup with the optimal generation configuration."
+    "model_id": "Qwen/Qwen3-14B",
+    "desc": "This run tests Qwen3-14B in the multi-setup with the optimal generation configuration."
 }
