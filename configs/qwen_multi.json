@@ -1,8 +1,9 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 32,
-    "model_id": "Qwen/Qwen3-8B",
-    "desc": "This run tests Qwen3-8B in the multi-setup with the optimal generation configuration."
+    "model_id": "Qwen/Qwen3-0.6B",
+    "candidates": ["gemini-2.5-pro_str"],
+    "desc": "This run tests Qwen3-0.6B in the multi-setup (Agashe with string format - no <>, 2 rounds)."
 }
