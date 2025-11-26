@@ -1,11 +1,12 @@
 import torch
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer, LogitsProcessorList
 from data import ROCStories
 import os
 import time
 from datetime import datetime
 from tqdm import tqdm
 from datasets import Dataset, concatenate_datasets
+from thinking_budget_processor import ThinkingTokenBudgetProcessor
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str):
@@ -23,8 +24,44 @@ class Agent:
         self.framework = framework
         self.date = str(datetime.now()).replace(" ", "_")
 
+    def init_pipe(self, device, logger):
+        if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
+            pipe = pipeline(
+                "text-generation",
+                model=self.model_id,
+                dtype=torch.bfloat16,
+                device_map=device,
+                max_new_tokens=256
+                # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
+            )
+            pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
+            pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
+            processor = None
+        elif "qwen" in self.model_id.lower():
+            # ensures that the model stops generating thinking tokens after a while
+            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
+            logger.run_data["thinking_budget"] = int(256*0.1)
 
-    def save_outputs(self, outputs, shard_idx: int = None):
+            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
+            pipe = pipeline(
+                "text-generation", 
+                model=self.model_id, 
+                dtype=torch.bfloat16,
+                device_map=device,
+                max_new_tokens=int(256-256*0.1), 
+                logits_processor=LogitsProcessorList([processor]), 
+                temperature = 0.6,
+                top_p = 0.95,
+                top_k = 20,
+                min_p = 0
+            )
+            
+        pipe.tokenizer.padding_side = "left"
+        logger.log_pipe(pipe)
+    
+        return pipe, logger, processor
+
+    def save_outputs(self, logger, outputs, shard_idx: int = None):
         """
         This function saves the model outputs in a json file.
 
@@ -35,12 +72,12 @@ class Agent:
         @returns
             outfile: json file containing the output data
         """
-        outfile = self.define_outfile(shard_idx=shard_idx)
+        outfile = self.define_outfile(logger, shard_idx=shard_idx)
         outputs.to_json(outfile, indent=4)
 
         return outfile
 
-    def save_outputs_hf(self, outputs, shard_idx: int = None):
+    def save_outputs_hf(self, logger, outputs, shard_idx: int = None):
         """
         This function saves the model outputs in a Huggingface directory.
 
@@ -50,12 +87,12 @@ class Agent:
         @returns
             outfile: path to the Huggingface dataset
         """
-        outpath = self.define_outfile(shard_idx=shard_idx, hf = True)
+        outpath = self.define_outfile(logger, shard_idx=shard_idx, hf = True)
         outputs.save_to_disk(outpath)
 
         return outpath
 
-    def define_outfile(self, shard_idx: int = None, hf: bool = False):
+    def define_outfile(self, logger, shard_idx: int = None, hf: bool = False):
         """
         This function returns the name of the output file.
 
@@ -65,20 +102,31 @@ class Agent:
         @returns
             path to the output file
         """
+        # TODO: test run_idx files
+        run_idx = logger.get_run_idx()
+
+        output_path = f"./outputs/{self.framework}/{self.model_name}/{self.split}"
+
         if shard_idx == None:
             if hf == False:
-                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/", exist_ok = True)
-                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
+                os.makedirs(output_path, exist_ok = True)
+                return f"{output_path}/outputs_{run_idx}.jsonl"
+                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
             else:
-                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
+                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
+                path = f"{output_path}/outputs_{run_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
         else:
             if hf == False:
-                os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
-                return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
+                os.makedirs(f"{output_path}/ckps/", exist_ok = True)
+                return f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}.jsonl"
+                #os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
+                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
             else:
-                path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
+                path = f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}"
+
+                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
 
@@ -131,17 +179,8 @@ class SingleAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
-        model_id = "meta-llama/Llama-3.2-1B-Instruct"
-        pipe = pipeline(
-            "text-generation",
-            model=model_id,
-            dtype=torch.bfloat16,
-            device_map=device
-        )
-        pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe)
+        torch.cuda.empty_cache()
+        pipe, logger, _ = self.init_pipe(device, logger) # processor not needed because models are only prompted once
     
         # prepare prompts
         roc_data = ROCStories(split = self.split)
@@ -161,22 +200,24 @@ class SingleAgent(Agent):
             # prompt model
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
-                    max_new_tokens=256,
                     batch_size = batch_size
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
+            # TODO: re.split(pattern, string) statt Answer
             output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
 
             output_data = shard_data.add_column("output", output_list)
             
-            outpath = self.save_outputs_hf(outputs=output_data, shard_idx=shard_idx)
+            outpath = self.save_outputs_hf(logger, outputs=output_data, shard_idx=shard_idx)
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
 
             logger.store_run_data()
+
+            torch.cuda.empty_cache()
 
 
         end = time.time()
@@ -195,19 +236,20 @@ class SingleAgent(Agent):
         # os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
         # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
         # output_data.to_json(outfile, indent=4)
-        outpath = self.save_outputs_hf(output_data)
+        outpath = self.save_outputs_hf(logger, output_data)
         logger.run_data.update({"instances": len(full_output_list), "experiment_file": outpath})
 
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2):
         """
         This class defines multi-agents.
 
         @params
             model_id: str with the model_id from Huggingface
             split: data split
+            conversation_rounds: round of conversations
         """
         super().__init__(model_id=model_id, split=split, framework="multi")
 
@@ -239,6 +281,8 @@ class MultiAgent(Agent):
 
         # define player names
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
+
+        self.conversation_rounds = conversation_rounds 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str):
         """
@@ -380,13 +424,13 @@ class MultiAgent(Agent):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"]
-                
+            conv_answer = model_answer.split("</think>")[-1].strip()
+
             # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
             # shard_inst["turns"][0].append(model_answer)
             # shard_inst["player"][0].append(player_name)
             # shard_inst["roles"][0] = batch["roles"][i]
-
-            batch["conversation_history"][i] += f"\n{player_name}: {model_answer}\n"
+            batch["conversation_history"][i] += f"\n{player_name}: {conv_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
@@ -395,7 +439,7 @@ class MultiAgent(Agent):
         
         return batch
 
-    def update_shard(self, batch, filtered_data):
+    def update_shard(self, batch, filtered_data, dataset_len):
         """
         This method updates the instances in the shard data with the processed instances.
 
@@ -407,7 +451,10 @@ class MultiAgent(Agent):
         """
         for i in range(len(batch["storyid"])):
             if batch["stop"][i] == False:
-                processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance
+                if len(filtered_data) != dataset_len:
+                    processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance, TODO: make it faster
+                else:
+                    processed_inst = filtered_data.select([i])
 
                 if len(processed_inst) == 1:
                     batch["conversation_history"][i] = processed_inst["conversation_history"][0]
@@ -428,16 +475,8 @@ class MultiAgent(Agent):
             batch_size: batch size
         """
         # initialize pipeline
-        pipe = pipeline(
-            "text-generation",
-            model=self.model_id,
-            dtype=torch.bfloat16,
-            device_map=device,
-        )
-        pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
-        pipe.tokenizer.padding_side = "left"
-        logger.log_pipe(pipe)
+        torch.cuda.empty_cache()
+        pipe, logger, processor = self.init_pipe(device, logger)
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
@@ -468,7 +507,7 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             #filtered_data = shard_data
             conv_round = 0
-            while conv_round < 3:
+            while conv_round < self.conversation_rounds:
                 turn = 0
                 while turn < 5:
                     # filter out early stopping
@@ -482,18 +521,21 @@ class MultiAgent(Agent):
                         # prompt 
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
-                                max_new_tokens=256,
                                 batch_size = batch_size
                             )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
                         # add model answer to conversation history
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
 
-                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data), batched = True)
+                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
+
+                        if processor:
+                            processor.tokens_generated = 0 # allow thinking for the next answer
+                        torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
                         turn = 5
-                        conv_round = 3
+                        conv_round = self.conversation_rounds
 
                     # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
@@ -511,7 +553,7 @@ class MultiAgent(Agent):
                 conv_round += 1
 
             # save ouput
-            outpath = self.save_outputs_hf(outputs=shard_data, shard_idx=shard_idx)
+            outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
 
             if full_output:
                 full_output = concatenate_datasets([full_output, shard_data])
@@ -528,6 +570,6 @@ class MultiAgent(Agent):
 
         #output_data = prompt_data.add_column("output", full_output_list)
         #outpath = self.save_outputs_hf(output_data)
-        outpath = self.save_outputs_hf(full_output)
+        outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()

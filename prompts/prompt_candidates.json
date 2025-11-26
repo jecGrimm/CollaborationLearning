@@ -1,4 +1,12 @@
 {
+    "adapted-agashe-2025":
+    {
+        "single": "",
+        "system": "",
+        "start": "",
+        "mid": "",
+        "rules": ""
+    },
     "gemini-2.5-pro": { 
         "single": "Arrange the following sentences into a coherent paragraph, ordered by time and logic.\n\nSentences to order:\n{shuffled_sents}\n\nReturn your answer as a single Python list of strings.\nAnswer:\n",
         "system": "You are a player in a conversational game. Your name is {player_name}. The names of the other players are {other_players}. Your task is to collaborate with other players to solve a puzzle.\n\n{rules}",

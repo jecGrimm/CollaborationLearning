@@ -52,6 +52,7 @@ class ExperimentLog:
         self.run_data.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
         self.run_data.update({"rules": multi.RULES.replace("\n", "\\n")})
         self.run_data.update({"names": multi.NAMES})
+        self.run_data.update({"conversation_rounds": multi.conversation_rounds})
 
     def log_pipe(self, pipe):
         """
@@ -64,7 +65,15 @@ class ExperimentLog:
             "task": pipe.task,
             "model": pipe.model.config.to_dict(),
             "torch_dtype": str(pipe.torch_dtype),
-            "device_map": pipe.device.type
+            "device_map": pipe.device.type,
+            "do_sample": pipe.generation_config.do_sample,
+            "num_beams": pipe.generation_config.num_beams,
+            "temperature": pipe.generation_config.temperature,
+            "max_new_tokens": pipe.generation_config.max_new_tokens,
+            "length_penalty": pipe.generation_config.length_penalty,
+            "top_p": pipe.generation_config.top_p,
+            "top_k": pipe.generation_config.top_k,
+            "min_p": pipe.generation_config.min_p
         })
 
     def store_run_data(self):
@@ -75,10 +84,7 @@ class ExperimentLog:
         os.makedirs(run_dir, exist_ok=True)
 
         # assign run_idx
-        if "run_idx" not in self.run_data.keys():
-            run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
-            run_idx = max(run_files) + 1
-            self.run_data.update({"run_idx": run_idx})
+        self.get_run_idx()
 
         # save run data in json file
         with open(f"{run_dir}/{self.run_data['run_idx']}.json", "w", encoding="utf-8") as f:
@@ -98,6 +104,18 @@ class ExperimentLog:
 
                 writer.writeheader()
                 writer.writerow(self.run_data)
+
+    def get_run_idx(self):
+        run_dir = "./logs/runs"
+        os.makedirs(run_dir, exist_ok=True)
+        if "run_idx" not in self.run_data.keys():
+            run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
+            run_idx = max(run_files) + 1
+            self.run_data.update({"run_idx": run_idx})
+        else: 
+            run_idx = self.run_data["run_idx"]
+        
+        return run_idx
     
     def print_best_run(self, framework: str = None, split: str = None):
         """

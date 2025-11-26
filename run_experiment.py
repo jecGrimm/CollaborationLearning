@@ -40,7 +40,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
 
-            outfile = single.define_outfile(hf = True)
+            outfile = single.define_outfile(logger, hf = True)
         else:
             multi = MultiAgent(model_id=config["model_id"], split=config["split"])
 
@@ -60,7 +60,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
 
-            outfile = multi.define_outfile(hf = True)
+            outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate
     evaluate_sent_order(outfile, config["framework"], logger)
@@ -93,7 +93,7 @@ def test_batch_size(split: str = "mini", batch_sizes: list = [1, 8, 64, 256, 100
             logger = ExperimentLog(config) # one logger for each experiment
 
             run_experiment(config, logger)
-            print(f"Duration: {logger.run_data["duration"]}")
+            print(f"Duration: {logger.run_data['duration']}")
 
         print("\n")
         logger.print_fastest_run(framework=fw, split = split) # testing batch size for efficiency
@@ -161,7 +161,7 @@ def test_llm_rewritten_prompts(config: dict):
 if __name__ == "__main__":
     cli = CLI()
 
-    #run_experiment(cli.config)
+    run_experiment(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
@@ -177,4 +177,4 @@ if __name__ == "__main__":
     # }
     # run_experiment(config)
 
-    test_llm_rewritten_prompts(config = cli.config)
+    #test_llm_rewritten_prompts(config = cli.config)
