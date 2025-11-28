@@ -204,3 +204,47 @@ It is now your turn to speak. Analyze the sentences discussed and your own secre
 llama-3.3-70b-instruct
 
 Given the current state of the conversation, please respond with your next statement, either by sharing your sentence, reacting to something another player has said, or proposing a potential order for the sentences.
+
+----------------------------------------------------------------------------------------------
+Multi prompt (Final):
+
+You are a prompt engineer. Your task is to formulate a user prompt to retrieve the best results from Qwen3-8B. Do not include any examples in the user prompt!
+
+The model has the task to generate the final answer for a conversational game.
+
+Game description: 
+        - The game is played by 5 players.
+        - Each player receives one sentence that the other players do not know.
+        - All sentences together form a short story and are causally and temporally related to each other.
+        - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
+        - The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
+        - The game ends when one player includes "STOP" in the answer.
+        - When the players agree on the order of the sentences, the model returns the final answer in the following format: "['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5'] STOP"
+
+The game description is already included in the system prompt. The user prompt contains the conversation history and instructs the model to generate the final answer from the conversation. The final answer should have the format ['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']. What could be a good user prompt?
+
+----------------------------
+gemini-3-pro (best on text leader board of lmarena.ai on 28.11.2025)
+
+Here is a precise and robust user prompt designed to force Qwen3-8B to output only the required format without hallucinating additional conversational text.
+
+***
+
+Analyze the conversation history provided below. Identify the five distinct sentences shared by the players and determine the chronological order agreed upon by the group to reconstruct the story.
+
+Your response must consist **strictly** of the Python-style list containing the ordered sentences, followed immediately by the keyword STOP. Ensure the sentences are quoted exactly as they appear in the conversation.
+
+Do not provide any reasoning, introduction, or additional text.
+
+**Output Format:**
+['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5'] STOP
+
+**Conversation History:**
+{{conversation_history}}
+
+----------------------------
+qwen3-235b-a22b-instruct-2507 (bigger model from the same model family)
+
+Based on the game rules and desired output format, here's an effective user prompt:
+
+"Analyze the conversation history and determine the correct chronological order of the five sentences that form the complete story. Return your final answer as a Python list with the sentences in their proper sequence, followed by 'STOP'. The format must be: ['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5'] STOP"

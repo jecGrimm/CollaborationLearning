@@ -1,9 +1,8 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 1,
-    "model_id": "Qwen/Qwen3-14B",
-    "candidates": ["gemini-2.5-pro_str"],
-    "desc": "This run tests Qwen3-14B in the multi-setup (gemini with string format - no <>, 2 rounds)."
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests Qwen3-0.6b on with a final answer agent."
 }

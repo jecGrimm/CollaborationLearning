@@ -7,6 +7,7 @@ from datetime import datetime
 from tqdm import tqdm
 from datasets import Dataset, concatenate_datasets
 from thinking_budget_processor import ThinkingTokenBudgetProcessor
+import json
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str):
@@ -23,6 +24,8 @@ class Agent:
         self.split = split
         self.framework = framework
         self.date = str(datetime.now()).replace(" ", "_")
+
+        self.prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
 
     def init_pipe(self, device, logger):
         if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
@@ -130,7 +133,7 @@ class Agent:
                 return path
 
 class SingleAgent(Agent):
-    def __init__(self, model_id: str, split: str):
+    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final"):
         """
         This class defines single-agents.
 
@@ -144,13 +147,7 @@ class SingleAgent(Agent):
         # initialize Agent
         super().__init__(model_id=model_id, split=split, framework="single")
 
-        self.PROMPT = '''\
-            Please bring the following sentences in the correct order based on their causal and temporal relations:\n\
-                {shuffled_sents}\n\
-            Return a list of the sentences in the correct order in the following format:\n\
-                [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n\
-            Answer:\n\
-            '''
+        self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
 
     def create_message(self, batch):
         """
@@ -242,7 +239,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final"):
         """
         This class defines multi-agents.
 
@@ -254,37 +251,24 @@ class MultiAgent(Agent):
         super().__init__(model_id=model_id, split=split, framework="multi")
 
         # define prompts
-        self.SYSTEM_PROMPT = '''
-        I am {player_name}, playing a game with my partners {other_players}. The game has the following rules: {rules}. At each time step, I will provide you with the relevant information of the game. I will also provide you with the conversation history up to this point. Please help me to formulate an adequate response to the conversation. If all five sentences have been collected during the conversation, assemble them in the correct order, include "STOP" in your answer and return a list of the sentences in the correct order in the following format:  
-        [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]
-        '''
+        self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
 
-        self.START_PROMPT = '''It is currently my ({player_name}) turn and my sentence is "{sentence}". I start the conversation with the other players ({other_players}). Please formulate a beginning statement for the conversation for me. Do not say anything else. Got it?
-        Answer:
-        '''
-        self.MID_PROMPT='''It is currently my ({player_name}) turn and my sentence is "{sentence}". I continue the conversation with the other players ({other_players}).
-        The conversation history: 
-        {conversation}
-        Please formulate a response to the conversation for me. Do not say anything else. Got it?
-        Answer:
-        '''
+        self.START_PROMPT = self.prompt_candidates[prompt_candidate]["start"]
 
-        self.RULES = '''
-        - The game is played by 5 players.
-        - Each player receives one sentence that the other players do not know.
-        - All sentences together form a short story and are causally and temporally related to each other.
-        - The goal of the game is to reassemble the original story by bringing all five sentences into the correct order.
-        - The players conduct a conversation where they exchange their sentences and discuss how they could be related to each other and how they could be ordered correctly.
-        
-        My sentence: "{sentence}"
-        '''
+        self.MID_PROMPT = self.prompt_candidates[prompt_candidate]["mid"] 
+
+        self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
+
+        self.SYSTEM_FINAL = self.prompt_candidates[prompt_candidate]["system_final"]
+
+        self.FINAL = self.prompt_candidates[prompt_candidate]["final"]
 
         # define player names
         self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
         self.conversation_rounds = conversation_rounds 
 
-    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str):
+    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool):
         """
         This method creates the prompt message.
 
@@ -300,40 +284,62 @@ class MultiAgent(Agent):
         other_players = [name for name in self.NAMES if name != player_name]
         player_sent = roles[player_name]
         rules = self.RULES.format(sentence = player_sent)
-
-        # define system prompt
-        message = [
-            {
-                "role": "system",
-                "content": self.SYSTEM_PROMPT.format(
-                    player_name = player_name,
-                    other_players = other_players,
-                    rules = rules
-                    )
-            }
-        ]
-
-        # define user prompt (start or mid conversation)
-        if conv_round == 0 and turn == 0:
-            message.append(
+        
+        if not final:
+            # define system prompt
+            message = [
                 {
-                    "role": "user",
-                    "content": self.START_PROMPT.format(
-                    player_name = player_name,
-                    other_players = other_players,
-                    sentence = player_sent
-                    )
-                }
-            )
-        else:
-            message.append(
-                {
-                    "role": "user",
-                    "content": self.MID_PROMPT.format(
+                    "role": "system",
+                    "content": self.SYSTEM_PROMPT.format(
                         player_name = player_name,
                         other_players = other_players,
-                        conversation = conversation,
+                        rules = rules
+                        )
+                }
+            ]
+
+            # define user prompt (start or mid conversation)
+            if conv_round == 0 and turn == 0:
+                message.append(
+                    {
+                        "role": "user",
+                        "content": self.START_PROMPT.format(
+                        player_name = player_name,
+                        other_players = other_players,
                         sentence = player_sent
+                        )
+                    }
+                )
+            else:
+                message.append(
+                    {
+                        "role": "user",
+                        "content": self.MID_PROMPT.format(
+                            player_name = player_name,
+                            other_players = other_players,
+                            conversation = conversation,
+                            sentence = player_sent
+                        )
+                    }
+                )
+        else:
+            # define system prompt
+            message = [
+                {
+                    "role": "system",
+                    "content": self.SYSTEM_FINAL.format(
+                        player_name = player_name,
+                        other_players = other_players,
+                        rules = rules
+                        )
+                }
+            ]
+
+            message.append(
+                {
+                    "role": "user",
+                    "content": self.FINAL.format(
+                        conversation = conversation
                     )
                 }
             )
@@ -389,7 +395,7 @@ class MultiAgent(Agent):
 
         return {"turns": batch_turns, "players": batch_players}
     
-    def create_prompts(self, batch, conv_round: int, turn: int, player_name: str):
+    def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False):
         """
         This method creates the prompts for a batch of instances.
 
@@ -406,11 +412,11 @@ class MultiAgent(Agent):
             if conv_round == 0 and turn == 0:
                 batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i])) #assing sentences to players
 
-            messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name))
+            messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name, final))
 
         return {"prompt": messages}
 
-    def get_conversation_history(self, batch, outputs, player_name: str):
+    def get_conversation_history(self, batch, outputs, player_name: str, final: bool = False):
         """
         This function saves the output in the dataset.
 
@@ -434,7 +440,7 @@ class MultiAgent(Agent):
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
-            if "STOP" in model_answer:
+            if not final and "STOP" in model_answer:
                 batch["stop"][i] = True # model ended the conversation
         
         return batch
@@ -520,7 +526,7 @@ class MultiAgent(Agent):
                     if len(filtered_data) > 0:
                         player_name = self.NAMES[turn]
                         
-                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
+                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False), batched = True)
 
                         # prompt 
                         # TODO: test if thinking tokens are set to 0 after each instance
@@ -534,8 +540,8 @@ class MultiAgent(Agent):
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
 
-                        if processor:
-                            processor.tokens_generated = 0 # allow thinking for the next answer
+                        # if processor:
+                        #     processor.tokens_generated = 0 # allow thinking for the next answer
                         torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
@@ -556,6 +562,9 @@ class MultiAgent(Agent):
 
                     turn += 1
                 conv_round += 1
+            
+            # get final answer
+            shard_data = self.get_final_answer(shard_data, player_name, pipe, batch_size)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -578,3 +587,15 @@ class MultiAgent(Agent):
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
+
+    def get_final_answer(self, shard_data, player_name, pipe, batch_size):
+        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = player_name, final = True), batched = True)
+
+        final_outputs = tqdm([out for out in pipe(
+            list(prompt_data["prompt"]),
+            batch_size = batch_size
+        )], desc = "Processing prompts", total = len(prompt_data["prompt"]))
+
+        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, player_name, final = True), batched = True)
+        
+        return shard_data

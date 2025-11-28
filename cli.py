@@ -31,3 +31,7 @@ class CLI:
 
         if self.config["framework"] == "multi" and "conversation_rounds" not in self.config.keys():
             self.config["conversation_rounds"] = 2
+
+        # prompt candidate
+        if "candidate" not in self.config.keys():
+            self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
