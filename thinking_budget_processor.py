@@ -21,7 +21,9 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
         self.neg_inf = float('-inf')
 
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
-        self.tokens_generated += 1
+        #self.tokens_generated += 1
+        # TODO: FIX thinking after one instance
+        self.tokens_generated = input_ids.size(1)
         
         for i in range(len(scores)):
             self.stopped_thinking = self.think_end_token in input_ids[i]

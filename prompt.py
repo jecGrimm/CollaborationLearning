@@ -198,6 +198,7 @@ class SingleAgent(Agent):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
             # prompt model
+            # TODO: test if generated_thinking tokens are set to 0 after each instance
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
                     batch_size = batch_size
@@ -523,6 +524,7 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                         # prompt 
+                        # TODO: test if thinking tokens are set to 0 after each instance
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
                                 batch_size = batch_size

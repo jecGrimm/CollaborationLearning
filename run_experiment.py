@@ -129,19 +129,19 @@ def test_llm_rewritten_prompts(config: dict):
     # }
 
     framework = config["framework"]
-    for i, prompt in enumerate(config["candidates"]):
+    for i, candidate in enumerate(config["candidates"]):
         print("\n")
         print("-" * 30)
-        print("Processing prompt: ", prompt)
+        print("Processing candidate: ", candidate)
 
         # prepare configuration
         if framework == "single":
-            config["user_prompt"]= prompt_candidates[prompt]["single"]
+            config["user_prompt"]= prompt_candidates[candidate]["single"]
         else:
-            config["system_prompt"] = prompt_candidates[prompt]["system"]
-            config["start_prompt"] = prompt_candidates[prompt]["start"]
-            config["mid_prompt"] = prompt_candidates[prompt]["mid"]
-            config["rules"] = prompt_candidates[prompt]["rules"]
+            config["system_prompt"] = prompt_candidates[candidate]["system"]
+            config["start_prompt"] = prompt_candidates[candidate]["start"]
+            config["mid_prompt"] = prompt_candidates[candidate]["mid"]
+            config["rules"] = prompt_candidates[candidate]["rules"]
 
         logger = ExperimentLog(config)
 

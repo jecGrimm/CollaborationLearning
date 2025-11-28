@@ -62,7 +62,7 @@ def inspect_instances(outdir: str, rand_idx: int = None):
     
     # assign random idx
     if rand_idx == None:
-        rand_idx = random.randint(0, len(exp_data)-1)
+        rand_idx = random.randint(0, 100-1)
 
     # select instances
     out = exp_data.select([rand_idx])[0]
@@ -82,9 +82,11 @@ if __name__ == "__main__":
     #check_SCT_ROC_overlap()
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
-    self_out = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646"
+    qwen14_out = "outputs/multi/Qwen3-14B/dev/ckps/outputs_75_0"
+    qwen8_out = "outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646"
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     # # evaluate_sent_order(outdir, "single")
-    inspect_instances(self_out, 510)
+    #inspect_instances(qwen14_out)
+    inspect_instances(qwen8_out, 40)
     #inspect_instances(llama_out, 4)
