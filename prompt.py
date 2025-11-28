@@ -102,7 +102,6 @@ class Agent:
         @returns
             path to the output file
         """
-        # TODO: test run_idx files
         run_idx = logger.get_run_idx()
 
         output_path = f"./outputs/{self.framework}/{self.model_name}/{self.split}"
@@ -191,7 +190,7 @@ class SingleAgent(Agent):
 
         start = time.time()
         # process data in smaller parts for checkpointing
-        num_shards = int((len(prompt_data)/1000))+1
+        num_shards = int((len(prompt_data)/300))+1
         processed_inst = 0 # track number of instances
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards", total = num_shards):
             # process shard
@@ -492,7 +491,7 @@ class MultiAgent(Agent):
 
         start = time.time()
         # process shards
-        num_shards = int((len(prompt_data)/1000))+1
+        num_shards = int((len(prompt_data)/300))+1
         processed_inst = 0
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
