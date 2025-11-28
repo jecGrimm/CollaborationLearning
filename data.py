@@ -24,9 +24,10 @@ class ROCStories:
             if split == "mini":
                 self.shuffled_dataset.select(range(3)).to_json(self.shuffle_file, indent=4)
             elif split == "dev":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(1500)).to_json(self.shuffle_file, indent=4)
+                #self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
             elif split == "test":
-                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)), len(self.orig_dataset))).to_json(self.shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(start = int(0.1 * len(self.orig_dataset)), stop = 1500)).to_json(self.shuffle_file, indent=4)
             else: 
                 self.shuffled_dataset.to_json(self.shuffle_file, indent=4) # jsonl because of missing ","
         else:

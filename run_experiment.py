@@ -15,16 +15,12 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
         config: configurations for the experiment
         logger: experiment logger
     """
-    # prepare configuration
-    if "device" not in config.keys():
-        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+    # # prepare configuration
+    # if "device" not in config.keys():
+    #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     if logger == None:
         logger = ExperimentLog(config)
-
-    if "device" not in config.keys():
-        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
-        logger["device"] = config["device"]
 
     outfile = config["experiment_file"]
 
@@ -42,7 +38,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id=config["model_id"], split=config["split"])
+            multi = MultiAgent(model_id=config["model_id"], split=config["split"], conversation_rounds=config["conversation_rounds"])
 
             if "system_prompt" in config.keys():
                 multi.SYSTEM_PROMPT = config["system_prompt"]
@@ -133,22 +129,24 @@ def test_llm_rewritten_prompts(config: dict):
     # }
 
     framework = config["framework"]
-    for i, model in enumerate(config["candidates"]):
+    for i, candidate in enumerate(config["candidates"]):
         print("\n")
         print("-" * 30)
-        print("Processing prompt written by ", model)
+        print("Processing candidate: ", candidate)
 
         # prepare configuration
         if framework == "single":
-            config["user_prompt"]= prompt_candidates[model]["single"]
+            config["user_prompt"]= prompt_candidates[candidate]["single"]
         else:
-            config["system_prompt"] = prompt_candidates[model]["system"]
-            config["start_prompt"] = prompt_candidates[model]["start"]
-            config["mid_prompt"] = prompt_candidates[model]["mid"]
-            config["rules"] = prompt_candidates[model]["rules"]
+            config["system_prompt"] = prompt_candidates[candidate]["system"]
+            config["start_prompt"] = prompt_candidates[candidate]["start"]
+            config["mid_prompt"] = prompt_candidates[candidate]["mid"]
+            config["rules"] = prompt_candidates[candidate]["rules"]
 
         logger = ExperimentLog(config)
-        logger.run_data["run_idx"] = config["run_idx"][i]
+
+        if "run_idx" in config.keys():
+            logger.run_data["run_idx"] = config["run_idx"][i]
 
         run_experiment(config, logger)
 
@@ -161,7 +159,7 @@ def test_llm_rewritten_prompts(config: dict):
 if __name__ == "__main__":
     cli = CLI()
 
-    run_experiment(cli.config)
+    #run_experiment(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
@@ -177,4 +175,4 @@ if __name__ == "__main__":
     # }
     # run_experiment(config)
 
-    #test_llm_rewritten_prompts(config = cli.config)
+    test_llm_rewritten_prompts(config = cli.config)

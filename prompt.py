@@ -40,7 +40,7 @@ class Agent:
         elif "qwen" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
-            logger.run_data["thinking_budget"] = int(256*0.1)
+            logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
             # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
             pipe = pipeline(
@@ -198,6 +198,7 @@ class SingleAgent(Agent):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
             # prompt model
+            # TODO: test if generated_thinking tokens are set to 0 after each instance
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
                     batch_size = batch_size
@@ -480,7 +481,11 @@ class MultiAgent(Agent):
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
-        logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
+        logger.run_data.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conversation_rounds": self.conversation_rounds
+        })
 
         prompt_data = roc_data.shuffled_dataset
         full_output = None
@@ -519,6 +524,7 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
 
                         # prompt 
+                        # TODO: test if thinking tokens are set to 0 after each instance
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
                                 batch_size = batch_size
