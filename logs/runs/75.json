@@ -1,7 +1,7 @@
 {
     "split": "dev",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-14B/dev/ckps/outputs_75_0",
+    "experiment_file": "./outputs/multi/Qwen3-14B/dev/outputs_75",
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-14B",
     "candidates": [
@@ -162,5 +162,7 @@
     "min_p": 0,
     "shuffle_file": "./data/ROCStories_shuffled_dev.jsonl",
     "run_idx": 75,
-    "instances": 878
+    "instances": 5266,
+    "duration": 330505.54372787476,
+    "mean_acc": 0.4141663501709077
 }
