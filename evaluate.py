@@ -456,6 +456,6 @@ if __name__ == "__main__":
         "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
         "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
         "Qwen3-8B_2rounds_agashe_0think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
-        "Qwen3-14B_2rounds_gemini-str_0think": "eval/multi/Qwen3-14B/dev/ckps/eval_75_0.jsonl"
+        "Qwen3-14B_2rounds_gemini-str_0think": "eval/multi/Qwen3-14B/dev/eval_75.jsonl"
     } 
     compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")
