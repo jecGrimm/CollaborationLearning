@@ -1,8 +1,8 @@
 {
     "split": "mini",
     "framework": "multi",
-    "experiment_file": "",
+    "experiment_file": "outputs/multi/Qwen3-0.6B/mini/ckps/outputs_78_0",
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-0.6B",
-    "desc": "This run tests Qwen3-0.6b on with a final answer agent."
+    "desc": "This run tests creating the run csv from the json files."
 }

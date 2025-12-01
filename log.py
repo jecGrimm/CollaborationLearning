@@ -91,19 +91,39 @@ class ExperimentLog:
             json.dump(self.run_data, f, indent=4)
 
         # save run data in overall csv
-        run_csv = "./logs/runs.csv"
-        if os.path.isfile(run_csv):
-            prev_runs = pd.read_csv(run_csv, sep = ";")
-            #curr_run = pd.Series(self.run_data)
-            all_runs = prev_runs._append(self.run_data, ignore_index = True)
-            all_runs.to_csv(run_csv, sep = ";", index = False)
-        else:
-            with open(run_csv, "w", encoding="utf-8") as f:
-                fieldnames = self.run_data.keys()
-                writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
+        run_dicts = []
+        fieldnames = set()
+        for run_file in os.listdir(run_dir):
+            if run_file.endswith(".json"):
+                try:
+                    run_dict = json.load(open(f"{run_dir}/{run_file}", 'r', encoding="utf-8"))
+                    run_dicts.append(run_dict)
+                    fieldnames = fieldnames.union(set(run_dict.keys()))
+                except:
+                    continue
 
-                writer.writeheader()
-                writer.writerow(self.run_data)
+        run_csv = "./logs/runs.csv"
+        with open(run_csv, "w", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
+
+            writer.writeheader()
+
+            for run_dict in sorted(run_dicts, key= lambda x: x["run_idx"]):
+                writer.writerow(run_dict)
+
+        # run_csv = "./logs/runs.csv"
+        # if os.path.isfile(run_csv):
+        #     prev_runs = pd.read_csv(run_csv, sep = ";")
+        #     #curr_run = pd.Series(self.run_data)
+        #     all_runs = prev_runs._append(self.run_data, ignore_index = True)
+        #     all_runs.to_csv(run_csv, sep = ";", index = False)
+        # else:
+        #     with open(run_csv, "w", encoding="utf-8") as f:
+        #         fieldnames = self.run_data.keys()
+        #         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
+
+        #         writer.writeheader()
+        #         writer.writerow(self.run_data)
 
     def get_run_idx(self):
         run_dir = "./logs/runs"
@@ -182,5 +202,7 @@ if __name__ == "__main__":
     # logger.print_best_run()
 
     logger = ExperimentLog()
-    logger.print_fastest_run(framework="multi", split = "dev")
-    logger.print_best_run(framework="multi", split = "dev")
+    with open("logs/runs/80.json", "r", encoding="utf-8") as f:
+        logger.run_data = json.load(f)
+
+    logger.store_run_data()
