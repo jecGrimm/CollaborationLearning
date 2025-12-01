@@ -1,8 +1,9 @@
 {
-    "split": "mini",
+    "split": "dev",
     "framework": "multi",
-    "experiment_file": "outputs/multi/Qwen3-0.6B/mini/ckps/outputs_78_0",
+    "experiment_file": "",
     "batch_size": 1,
-    "model_id": "Qwen/Qwen3-0.6B",
-    "desc": "This run tests creating the run csv from the json files."
+    "model_id": "Qwen/Qwen3-8B",
+    "desc": "This run tests the agashe-str prompt with a final answer agent for Qwen3-8B.",
+    "candidate": "adapted-agashe-2025_str_gemini-final"
 }
