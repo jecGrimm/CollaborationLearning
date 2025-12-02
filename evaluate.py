@@ -25,7 +25,7 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     """
     # load data
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    #exp_data = load_from_disk(experiment_file).select([2856])
+    #exp_data = load_from_disk(experiment_file).select([2188])
     exp_data = load_from_disk(experiment_file)
     
     # evaluate
@@ -208,7 +208,7 @@ def clean_match(str_list: str):
         str_list: string match with escaped quotation marks and as raw string
     """
     # escape single quote strings
-    str_list = re.sub(r"\b'\b", r"\\'", str_list)
+    str_list = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", str_list)
     str_list = fr"{str_list}"
     return str_list
 
@@ -280,7 +280,7 @@ def compute_accuracy_order(pred: list, batch, i: int):
         for sent_order in range(len(pred)):
             sent_lbl = f"sentence{sent_order+1}"
             if sent_lbl in batch.keys():
-                if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
+                if pred[sent_order].lower().strip('.') == batch[f"sentence{sent_order+1}"][i].lower().strip('.'):
                     acc += 1
         
         return acc/5 # 5 sentences
@@ -295,6 +295,9 @@ def compute_precision(pred: list, gold: list):
     return prec_n
 
 def compute_n_precision(pred: list, gold: list, n: int):
+    pred = [item.lower().strip('.') for item in pred]
+    gold = [item.lower().strip('.') for item in gold]
+
     correct_ngrams = 0
     gold_ngrams = create_gold_ngrams(gold, n)
     for idx in range((len(pred)-n)+1):
@@ -430,8 +433,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     # outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646"
-    # outdir = "outputs/multi/Qwen3-14B/dev/ckps/outputs_75_0"
-    # evaluate_sent_order(outdir, "multi")
+    outdir = "outputs/multi/Qwen3-8B/dev/outputs_81"
+    evaluate_sent_order(outdir, "multi")
 
     #evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
@@ -450,12 +453,12 @@ if __name__ == "__main__":
     # }
     #compare_instance_acc(prompt_dev_files_multi)
 
-    dev_multi_models = {
-        "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
-        "Qwen3-8B_2rounds_agashe_0think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
-        "Qwen3-14B_2rounds_gemini-str_0think": "eval/multi/Qwen3-14B/dev/eval_75.jsonl"
-    } 
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")
+    # dev_multi_models = {
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
+    #     "Qwen3-8B_2rounds_agashe_0think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
+    #     "Qwen3-14B_2rounds_gemini-str_0think": "eval/multi/Qwen3-14B/dev/eval_75.jsonl"
+    # } 
+    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")

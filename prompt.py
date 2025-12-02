@@ -1,3 +1,4 @@
+import re
 import torch
 from transformers import pipeline, AutoTokenizer, LogitsProcessorList
 from data import ROCStories
@@ -27,14 +28,19 @@ class Agent:
 
         self.prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
 
-    def init_pipe(self, device, logger):
+    def init_pipe(self, device, logger, thinking_budget):
+        if self.framework == "multi":
+            max_new_tokens = 256
+        else:
+            max_new_tokens = 256 * 10 # give both models same amount of compute
+
         if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
             pipe = pipeline(
                 "text-generation",
                 model=self.model_id,
                 dtype=torch.bfloat16,
                 device_map=device,
-                max_new_tokens=256
+                max_new_tokens = max_new_tokens
                 # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
             )
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
@@ -42,7 +48,7 @@ class Agent:
             processor = None
         elif "qwen" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
-            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(256*0.1))
+            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
             # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
@@ -51,7 +57,7 @@ class Agent:
                 model=self.model_id, 
                 dtype=torch.bfloat16,
                 device_map=device,
-                max_new_tokens=int(256-256*0.1), 
+                max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
                 logits_processor=LogitsProcessorList([processor]), 
                 temperature = 0.6,
                 top_p = 0.95,
@@ -165,7 +171,7 @@ class SingleAgent(Agent):
 
         return {"prompt": messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
         """
         This method prompts the model.
 
@@ -176,7 +182,7 @@ class SingleAgent(Agent):
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger, _ = self.init_pipe(device, logger) # processor not needed because models are only prompted once
+        pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
         roc_data = ROCStories(split = self.split)
@@ -202,7 +208,9 @@ class SingleAgent(Agent):
             
             # store shard output
             # TODO: re.split(pattern, string) statt Answer
-            output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
+            # re.sub(r"Answer:[ \n]*", "", model_out).strip()
+            output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).strip() for conv in outputs for turn in conv]
+            #output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
 
             output_data = shard_data.add_column("output", output_list)
@@ -367,7 +375,7 @@ class MultiAgent(Agent):
             players = []
 
             roles = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
-            while conv_round < 4:
+            while conv_round < self.conversation_rounds:
                 while turn < 5:
                     player_name = self.NAMES[turn]
 
@@ -382,8 +390,8 @@ class MultiAgent(Agent):
                     #turns.append({"player": player_name, "answer": model_answer, "system_prompt": model_out[0]["generated_text"][0]["content"], "turn_prompt": model_out[0]["generated_text"][1]["content"]})
                     turns.append(model_answer)
                     players.append(player_name)
-                    if "STOP" in model_answer:
-                        conv_round = 4
+                    if "STOP" in model_answer and self.conversation_rounds > 0:
+                        conv_round = self.conversation_rounds
                         turn = 5
                     else: 
                         turn += 1
@@ -431,6 +439,7 @@ class MultiAgent(Agent):
 
             model_answer = model_out[0]["generated_text"][2]["content"]
             conv_answer = model_answer.split("</think>")[-1].strip()
+            conv_answer = re.sub(r"Answer:[ \n]*", "", conv_answer).strip()
 
             # shard_inst["conversation_history"][0] += f"\n{player_name}: {model_answer}\n"
             # shard_inst["turns"][0].append(model_answer)
@@ -440,7 +449,7 @@ class MultiAgent(Agent):
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
-            if not final and "STOP" in model_answer:
+            if not final and "STOP" in model_answer and batch["turns"][i] < 5: # disable early stopping in first round
                 batch["stop"][i] = True # model ended the conversation
         
         return batch
@@ -471,7 +480,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1):
+    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
         """
         This function prompts the multi-agent framework.
 
@@ -479,10 +488,11 @@ class MultiAgent(Agent):
             logger: experiment logger
             device: cpu/cuda
             batch_size: batch size
+            thinking_budget: percentage of tokens allowed for "thinking" tokens
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger, processor = self.init_pipe(device, logger)
+        pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
         roc_data = ROCStories(split = self.split)
