@@ -322,7 +322,7 @@ def create_gold_ngrams(gold: list, n: int):
     
     return gold_ngrams
     
-def compare_instances(eval_files: dict, output_file: str = None):
+def compare_instances(eval_files: dict, output_file: str = None, insts: int = None):
     """
     This function compares a bunch of experiments against each other.
 
@@ -335,7 +335,7 @@ def compare_instances(eval_files: dict, output_file: str = None):
     metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5"]
     for exp_name, eval_file in eval_files.items():
         #eval_datasets[exp_name] = load_dataset("json", data_files=eval_file, split="train").select(range(10))
-        eval_data = load_dataset("json", data_files=eval_file, split="train")
+        eval_data = load_dataset("json", data_files=eval_file, split="train").select(range(insts))
 
         # store mean accuracy per experiment
         for metric in metrics:
@@ -428,6 +428,32 @@ def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/",
 
     #print(evals)
 
+def create_compare_dict(framework, split):
+    df = pd.read_csv("./logs/runs.csv", sep = ";")
+
+    filtered_df = df
+    
+    if framework != None:
+        filtered_df = filtered_df.loc[df["framework"] == framework]
+    
+    if split != None: 
+        filtered_df = filtered_df.loc[df["split"] == split]
+
+    files = filtered_df["experiment_file"].dropna()
+    min_insts = None
+    run2files = defaultdict(str)
+
+    for file in files:
+        if not file.endswith(".jsonl") and "ckps" not in file:
+            run_data = df.loc[df["experiment_file"] == file]
+            run2files[int(run_data["run_idx"].values[0])] = f"{file.replace("outputs", "eval")}.jsonl"
+
+            insts = int(run_data["instances"].values[0])
+            if min_insts == None or min_insts > insts:
+                min_insts = insts
+    
+    return run2files, min_insts
+
 if __name__ == "__main__":
     cli = CLI()
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
@@ -440,10 +466,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    # outdir = "outputs/multi/Qwen3-14B/dev/outputs_85"
-    # evaluate_sent_order(outdir, "multi")
+    outdir = "outputs/multi/Qwen3-14B/dev/outputs_85"
+    evaluate_sent_order(outdir, "multi")
 
-    evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
+    #evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
 
     # prompt_dev_files = {
@@ -465,8 +491,9 @@ if __name__ == "__main__":
     #     "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
     #     "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
     #     "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
-    #     "Qwen3-8B_2rounds_agashe_0think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
-    #     "Qwen3-14B_2rounds_gemini-str_0think": "eval/multi/Qwen3-14B/dev/eval_75.jsonl",
-    #     "Qwen3-8B_2rounds_agashe-str_gemini-final_0think": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
+    #     "73": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
+    #     "75": "eval/multi/Qwen3-14B/dev/eval_75.jsonl",
+    #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
-    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")
+    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)

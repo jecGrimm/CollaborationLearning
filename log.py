@@ -202,7 +202,8 @@ if __name__ == "__main__":
     # logger.print_best_run()
 
     logger = ExperimentLog()
-    with open("logs/runs/80.json", "r", encoding="utf-8") as f:
-        logger.run_data = json.load(f)
+    # with open("logs/runs/80.json", "r", encoding="utf-8") as f:
+    #     logger.run_data = json.load(f)
 
-    logger.store_run_data()
+    # logger.store_run_data()
+    logger.print_best_run(framework="multi", split = "dev")
