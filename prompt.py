@@ -32,7 +32,7 @@ class Agent:
         if self.framework == "multi":
             max_new_tokens = 256
         else:
-            max_new_tokens = 256 * 10 # give both models same amount of compute
+            max_new_tokens = 256 * 11 # give both frameworks the same amount of compute
 
         if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
             pipe = pipeline(
@@ -200,7 +200,6 @@ class SingleAgent(Agent):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
             # prompt model
-            # TODO: test if generated_thinking tokens are set to 0 after each instance
             outputs = tqdm([out for out in pipe(
                     list(shard_data["prompt"]),
                     batch_size = batch_size
@@ -390,7 +389,7 @@ class MultiAgent(Agent):
                     #turns.append({"player": player_name, "answer": model_answer, "system_prompt": model_out[0]["generated_text"][0]["content"], "turn_prompt": model_out[0]["generated_text"][1]["content"]})
                     turns.append(model_answer)
                     players.append(player_name)
-                    if "STOP" in model_answer and self.conversation_rounds > 0:
+                    if "STOP" in model_answer and conv_round > 0:
                         conv_round = self.conversation_rounds
                         turn = 5
                     else: 
@@ -449,7 +448,7 @@ class MultiAgent(Agent):
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
-            if not final and "STOP" in model_answer and batch["turns"][i] < 5: # disable early stopping in first round
+            if final == False and "STOP" in model_answer and len(batch["turns"][i]) >= 5: # disable early stopping in first round
                 batch["stop"][i] = True # model ended the conversation
         
         return batch
@@ -539,7 +538,6 @@ class MultiAgent(Agent):
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False), batched = True)
 
                         # prompt 
-                        # TODO: test if thinking tokens are set to 0 after each instance
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
                                 batch_size = batch_size

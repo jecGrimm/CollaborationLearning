@@ -35,3 +35,8 @@ class CLI:
         # prompt candidate
         if "candidate" not in self.config.keys():
             self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
+
+        # for grancir
+        if "device_id" in self.config.keys():
+            os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
+            self.config["device"] = f"cuda:{self.config["device_id"]}"

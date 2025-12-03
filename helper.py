@@ -83,10 +83,10 @@ if __name__ == "__main__":
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/multi/Qwen3-14B/dev/ckps/outputs_75_0"
-    qwen8_out = "outputs/multi/Qwen3-8B/dev/outputs_81" # instances start with 0
+    qwen8_out = "outputs/multi/Qwen3-14B/dev/outputs_83" # instances start with 0
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     # # evaluate_sent_order(outdir, "single")
     #inspect_instances(qwen14_out)
-    inspect_instances(qwen8_out, 3629)
+    inspect_instances(qwen8_out, 581)
     #inspect_instances(llama_out, 4)
