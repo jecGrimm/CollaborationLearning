@@ -73,7 +73,13 @@ def inspect_instances(outdir: str, rand_idx: int = None):
     print("Output File: ", outdir)
     print("IDX: ", rand_idx)
     for k, v in out.items():
-        print(f"\n{k}:\n{v}")
+        if k == "turns":
+            print(f"\n{k}:\n")
+            for turn in v:
+                print("\n")
+                print(turn)
+        else:
+            print(f"\n{k}:\n{v}")
     for k,v in eval.items():
         print(f"\n{k}:\n{v}")
     # print(out)
@@ -84,13 +90,13 @@ if __name__ == "__main__":
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/multi/Qwen3-14B/dev/ckps/outputs_75_0"
-    #qwen8_out = "outputs/multi/Qwen3-14B/dev/outputs_83" # instances start with 0
+    qwen8_out = "outputs/multi/Qwen3-14B/dev/outputs_86" # instances start with 0
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     # # evaluate_sent_order(outdir, "single")
     #inspect_instances(qwen14_out)
-    #inspect_instances(qwen8_out, 581)
+    inspect_instances(qwen8_out, 75)
     #inspect_instances(llama_out, 4)
 
-    outdir = "outputs/multi/Qwen3-14B/dev/outputs_85"
-    evaluate_sent_order(outdir, "multi")
+    # outdir = "outputs/multi/Qwen3-14B/dev/outputs_86"
+    # evaluate_sent_order(outdir, "multi")

@@ -271,7 +271,8 @@ class MultiAgent(Agent):
         self.FINAL = self.prompt_candidates[prompt_candidate]["final"]
 
         # define player names
-        self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
+        self.NAMES = self.prompt_candidates[prompt_candidate]["names"]
+        #self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
         self.conversation_rounds = conversation_rounds 
 
