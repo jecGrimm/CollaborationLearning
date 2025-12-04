@@ -2,9 +2,9 @@
     "split": "dev",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 128,
+    "batch_size": 64,
     "model_id": "Qwen/Qwen3-14B",
     "desc": "This run tests llama-str_gemini-final with Qwen-14b and abstract player names.",
     "candidate": "llama-str_gemini-final_abstract-names",
-    "device_id": "0"
+    "device_id": "2"
 }
