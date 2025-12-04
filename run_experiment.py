@@ -27,10 +27,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id=config["model_id"], split=config["split"])
-
-            if "user_prompt" in config.keys():
-                single.PROMPT = config["user_prompt"]
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"])
             
             logger.log_single(single)
 
@@ -38,19 +35,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id=config["model_id"], split=config["split"], conversation_rounds=config["conversation_rounds"])
-
-            if "system_prompt" in config.keys():
-                multi.SYSTEM_PROMPT = config["system_prompt"]
-
-            if "start_prompt" in config.keys():
-                multi.START_PROMPT = config["start_prompt"]
-
-            if "mid_prompt" in config.keys():
-                multi.MID_PROMPT = config["mid_prompt"]
-
-            if "rules" in config.keys():
-                multi.RULES = config["rules"]
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
 
             logger.log_multi(multi)
 
@@ -134,20 +119,12 @@ def test_llm_rewritten_prompts(config: dict):
         print("-" * 30)
         print("Processing candidate: ", candidate)
 
-        # prepare configuration
-        if framework == "single":
-            config["user_prompt"]= prompt_candidates[candidate]["single"]
-        else:
-            config["system_prompt"] = prompt_candidates[candidate]["system"]
-            config["start_prompt"] = prompt_candidates[candidate]["start"]
-            config["mid_prompt"] = prompt_candidates[candidate]["mid"]
-            config["rules"] = prompt_candidates[candidate]["rules"]
-
         logger = ExperimentLog(config)
 
         if "run_idx" in config.keys():
             logger.run_data["run_idx"] = config["run_idx"][i]
 
+        config["candidate"] = candidate
         run_experiment(config, logger)
 
         #print(f"Accuracy of prompt {model}:", logger.run_data["mean_acc"])
@@ -159,7 +136,7 @@ def test_llm_rewritten_prompts(config: dict):
 if __name__ == "__main__":
     cli = CLI()
 
-    #run_experiment(cli.config)
+    run_experiment(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 
@@ -175,4 +152,4 @@ if __name__ == "__main__":
     # }
     # run_experiment(config)
 
-    test_llm_rewritten_prompts(config = cli.config)
+    #test_llm_rewritten_prompts(config = cli.config)

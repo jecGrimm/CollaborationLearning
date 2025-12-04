@@ -11,7 +11,7 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
     a </think> token is added at the end to stop the thinking generation,
     and then it will continue to generate the response.
     """
-    def __init__(self, tokenizer, max_thinking_tokens=None):
+    def __init__(self, tokenizer, max_thinking_tokens=None, max_total_tokens = 256):
         self.tokenizer = tokenizer
         self.max_thinking_tokens = max_thinking_tokens
         self.think_end_token = self.tokenizer.encode("</think>", add_special_tokens=False)[0]
@@ -20,10 +20,13 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
         self.stopped_thinking = False
         self.neg_inf = float('-inf')
 
+        self.think_start_token = self.tokenizer.encode("<think>", add_special_tokens=False)[0]
+
     def __call__(self, input_ids: torch.LongTensor, scores: torch.FloatTensor) -> torch.FloatTensor:
-        #self.tokens_generated += 1
-        # TODO: FIX thinking after one instance
-        self.tokens_generated = input_ids.size(1)
+        if self.think_start_token not in input_ids[0]:
+            self.tokens_generated = 0 # new instance, set to 0 again
+        else:
+            self.tokens_generated += 1 # ongoing instance, count 1 up
         
         for i in range(len(scores)):
             self.stopped_thinking = self.think_end_token in input_ids[i]

@@ -24,14 +24,20 @@ class ROCStories:
             if split == "mini":
                 self.shuffled_dataset.select(range(3)).to_json(self.shuffle_file, indent=4)
             elif split == "dev":
-                self.shuffled_dataset.select(range(1500)).to_json(self.shuffle_file, indent=4)
-                #self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
+                #self.shuffled_dataset.select(range(1500)).to_json(self.shuffle_file, indent=4) #TODO: test if only the first 1500 are selected
+                self.shuffled_dataset.select(range(int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
             elif split == "test":
                 self.shuffled_dataset.select(range(start = int(0.1 * len(self.orig_dataset)), stop = 1500)).to_json(self.shuffle_file, indent=4)
             else: 
                 self.shuffled_dataset.to_json(self.shuffle_file, indent=4) # jsonl because of missing ","
         else:
             self.shuffled_dataset = load_dataset("json", data_files=self.shuffle_file, split="train")
+
+            if split == "dev":
+                #self.shuffled_dataset.select(range(1500)).to_json(self.shuffle_file, indent=4) #TODO: test if only the first 1500 are selected
+                self.shuffled_dataset = self.shuffled_dataset.select(range(1500))
+            elif split == "test":
+                self.shuffled_dataset = self.shuffled_dataset.select(range(start = int(0.1 * len(self.orig_dataset)), stop = int(0.1 * len(self.orig_dataset)) + 1500))
 
     def shuffle_sents(self, batch):
         '''
@@ -51,5 +57,6 @@ class ROCStories:
         return {"shuffled_sents":  batch_shuffled}
         
 if __name__ == "__main__":
-    roc_data = ROCStories(split = "test")
+    roc_data = ROCStories()
+    good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
     print("Done")
