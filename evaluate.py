@@ -25,8 +25,8 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     """
     # load data
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    #exp_data = load_from_disk(experiment_file).select([5])
-    exp_data = load_from_disk(experiment_file)
+    exp_data = load_from_disk(experiment_file).select([314])
+    #exp_data = load_from_disk(experiment_file)
     
     # evaluate
     if framework == "single":
@@ -488,8 +488,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    # outdir = "outputs/multi/Qwen3-14B/dev/outputs_85"
-    # evaluate_sent_order(outdir, "multi")
+    outdir = "outputs/multi/Qwen3-14B/dev/outputs_87"
+    evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -520,6 +520,6 @@ if __name__ == "__main__":
     # } 
 
     # update_evaluation_files()
-    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
