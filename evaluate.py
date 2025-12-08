@@ -429,8 +429,9 @@ if __name__ == "__main__":
 
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
-    # outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646"
-    # evaluate_sent_order(outdir, "multi")
+    #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
+    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_88_0"
+    evaluate_sent_order(outdir, "multi")
 
     evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
     #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
@@ -449,11 +450,17 @@ if __name__ == "__main__":
     # }
     #compare_instance_acc(prompt_dev_files_multi)
 
-    dev_multi_models = {
-        "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
-        "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
-        "Qwen3-8B_2rounds_agashe_1think": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl"
-    } 
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv")
+    # dev_multi_models = {
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
+    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
+    #     "73": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
+    #     "75": "eval/multi/Qwen3-14B/dev/eval_75.jsonl",
+    #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
+    # } 
+
+    # update_evaluation_files()
+    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+

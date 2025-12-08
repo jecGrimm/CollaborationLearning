@@ -2,7 +2,9 @@
     "split": "dev",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 32,
-    "model_id": "Qwen/Qwen3-14B",
-    "desc": "This run tests Qwen3-14B in the multi-setup with the optimal generation configuration."
+    "batch_size": 1,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests llama-str_gemini-final with Qwen-32b and abstract player names.",
+    "candidate": "llama-str_gemini-final_abstract-names",
+    "device_id": "0"
 }
