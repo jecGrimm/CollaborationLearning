@@ -11,6 +11,7 @@ import os
 from collections import defaultdict
 import csv
 from tqdm import tqdm
+from scipy import stats
 
 def evaluate_sent_order(experiment_file: str, framework: str, logger: ExperimentLog = ExperimentLog()):
     """
@@ -25,7 +26,7 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     """
     # load data
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    #exp_data = load_from_disk(experiment_file).select([2856])
+    #exp_data = load_from_disk(experiment_file).select([314])
     exp_data = load_from_disk(experiment_file)
     
     # evaluate
@@ -106,6 +107,8 @@ def evaluate_order_answer_multi(batch):
     prec_3 = []
     prec_4 = []
     prec_5 = []
+    spearman = []
+    kendalltau = []
 
     for i in range(len(batch["storyid"])):
         if "turns" in batch.keys():
@@ -127,8 +130,12 @@ def evaluate_order_answer_multi(batch):
         prec_3.append(prec_n[2])
         prec_4.append(prec_n[3])
         prec_5.append(prec_n[4])
+
+        correlations = compute_correlations(pred, gold)
+        spearman.append(correlations[0])
+        kendalltau.append(correlations[1])
     
-    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5}
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
     
 def extract_answer_list(model_out: str):
     """
@@ -139,10 +146,14 @@ def extract_answer_list(model_out: str):
     @returns
         list with the model prediction
     """
+    #print("model out", model_out)
     try:
         model_answer = clean_out(model_out)
+
+        #print("model answer", model_answer)
         # model only returned output list
         model_pred = ast.literal_eval(model_answer)
+        #print("model pred", model_pred)
         
         if type(model_pred) in (list, tuple):
             return clean_preds(model_pred)
@@ -207,8 +218,16 @@ def clean_match(str_list: str):
     @returns
         str_list: string match with escaped quotation marks and as raw string
     """
+    #print("str_list:", str_list)
     # escape single quote strings
-    str_list = re.sub(r"\b'\b", r"\\'", str_list)
+    str_list = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", str_list)
+    str_list = re.sub(r'(\b|\b )"(\b| )', r'\1\\"\2', str_list)
+
+    # remove double quotation marks
+    # str_list = re.sub(r"('|\"|\\\"){2,}(.*?)('|\"|\\)+([,\]])", r'"\2"\4', str_list)
+    #str_list = re.sub(r'("|\'){2,}', r'"', str_list)
+    str_list = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', str_list)
+
     str_list = fr"{str_list}"
     return str_list
 
@@ -259,7 +278,8 @@ def clean_preds(model_pred: list):
             type_i += 1
     else:
         # turn model prediction into list if the format is already correct
-        cleaned_pred = list(model_pred)
+        #print("returning list")
+        cleaned_pred = [sent.strip("\"'") for sent in model_pred]
 
     return cleaned_pred[:5] # only use first 5 sentences
 
@@ -280,12 +300,37 @@ def compute_accuracy_order(pred: list, batch, i: int):
         for sent_order in range(len(pred)):
             sent_lbl = f"sentence{sent_order+1}"
             if sent_lbl in batch.keys():
-                if pred[sent_order] == batch[f"sentence{sent_order+1}"][i]:
+                sent = clean_sent(pred[sent_order])
+                if sent == batch[f"sentence{sent_order+1}"][i].lower().strip('.'):
                     acc += 1
         
         return acc/5 # 5 sentences
     else:
         return 0.0
+    
+def compute_correlations(pred: list, gold: list):
+    pred = [clean_sent(item) for item in pred]
+    gold = [item.lower().strip('.') for item in gold]
+
+    spearman = 0.0 # 0.0 because it indicates no correlation and because Huggingface does not allow differing data formats (e.g., None)
+    kendall = 0.0
+
+    gold_ranks = [1, 2, 3, 4, 5]
+    pred_ranks = []
+
+    for gold_sent in gold:
+        if gold_sent in pred:
+            pred_ranks.append(pred.index(gold_sent)+1)
+
+    if len(pred_ranks) == 5:
+        spearman = stats.spearmanr(gold_ranks, pred_ranks).statistic
+        kendall = stats.kendalltau(gold_ranks, pred_ranks).statistic
+
+    return spearman, kendall
+
+def clean_sent(sent: str):
+    sent = sent.lower().strip(".")
+    return sent
     
 def compute_precision(pred: list, gold: list):
     prec_n = []
@@ -295,6 +340,9 @@ def compute_precision(pred: list, gold: list):
     return prec_n
 
 def compute_n_precision(pred: list, gold: list, n: int):
+    pred = [clean_sent(item) for item in pred]
+    gold = [item.lower().strip('.') for item in gold]
+
     correct_ngrams = 0
     gold_ngrams = create_gold_ngrams(gold, n)
     for idx in range((len(pred)-n)+1):
@@ -312,7 +360,7 @@ def create_gold_ngrams(gold: list, n: int):
     
     return gold_ngrams
     
-def compare_instances(eval_files: dict, output_file: str = None):
+def compare_instances(eval_files: dict, output_file: str = None, insts: int = None):
     """
     This function compares a bunch of experiments against each other.
 
@@ -322,10 +370,10 @@ def compare_instances(eval_files: dict, output_file: str = None):
     # load datasets
     eval_datasets = defaultdict()
     results = defaultdict(lambda: defaultdict(float))
-    metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5"]
+    metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
     for exp_name, eval_file in eval_files.items():
         #eval_datasets[exp_name] = load_dataset("json", data_files=eval_file, split="train").select(range(10))
-        eval_data = load_dataset("json", data_files=eval_file, split="train")
+        eval_data = load_dataset("json", data_files=eval_file, split="train").select(range(insts))
 
         # store mean accuracy per experiment
         for metric in metrics:
@@ -418,6 +466,43 @@ def evaluate_all_outputs(splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/",
 
     #print(evals)
 
+def create_compare_dict(framework, split):
+    df = pd.read_csv("./logs/runs.csv", sep = ";")
+
+    filtered_df = df
+    
+    if framework != None:
+        filtered_df = filtered_df.loc[df["framework"] == framework]
+    
+    if split != None: 
+        filtered_df = filtered_df.loc[df["split"] == split]
+
+    files = filtered_df["experiment_file"].dropna()
+    min_insts = None
+    run2files = defaultdict(str)
+
+    for file in files:
+        if not file.endswith(".jsonl") and "ckps" not in file:
+            run_data = df.loc[df["experiment_file"] == file]
+            run2files[int(run_data["run_idx"].values[0])] = f"{file.replace("outputs", "eval")}.jsonl"
+
+            insts = int(run_data["instances"].values[0])
+            if min_insts == None or min_insts > insts:
+                min_insts = insts
+    
+    return run2files, min_insts
+
+def update_evaluation_files():
+    for fw in ["multi"]: # TODO: add single
+        models = os.listdir(f"outputs/{fw}/")
+
+        for model in models:
+            for split in ["dev"]: # TODO: add test und mini
+                dir_path = f"outputs/{fw}/{model}/{split}/"
+                if os.path.isdir(dir_path):
+                    evaluate_all_outputs(dir_path, fw)
+
+
 if __name__ == "__main__":
     cli = CLI()
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
@@ -430,11 +515,12 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_88_0"
+    outdir = "outputs/multi/Qwen3-32B/dev/outputs_88"
     evaluate_sent_order(outdir, "multi")
 
-    evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
-    #evaluate_all_outputs(splitdir="outputs/single/Llama-3.2-1B-Instruct/dev/", framework="single")
+    # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
+    # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
+    # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
 
     # prompt_dev_files = {
     #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
@@ -460,7 +546,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    # update_evaluation_files()
-    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    #update_evaluation_files()
+    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 

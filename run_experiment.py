@@ -15,26 +15,19 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
         config: configurations for the experiment
         logger: experiment logger
     """
-    # prepare configuration
-    if "device" not in config.keys():
-        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+    # # prepare configuration
+    # if "device" not in config.keys():
+    #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     if logger == None:
         logger = ExperimentLog(config)
-
-    if "device" not in config.keys():
-        config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
-        logger["device"] = config["device"]
 
     outfile = config["experiment_file"]
 
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id=config["model_id"], split=config["split"])
-
-            if "user_prompt" in config.keys():
-                single.PROMPT = config["user_prompt"]
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"])
             
             logger.log_single(single)
 
@@ -42,19 +35,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id=config["model_id"], split=config["split"])
-
-            if "system_prompt" in config.keys():
-                multi.SYSTEM_PROMPT = config["system_prompt"]
-
-            if "start_prompt" in config.keys():
-                multi.START_PROMPT = config["start_prompt"]
-
-            if "mid_prompt" in config.keys():
-                multi.MID_PROMPT = config["mid_prompt"]
-
-            if "rules" in config.keys():
-                multi.RULES = config["rules"]
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
 
             logger.log_multi(multi)
 
@@ -133,23 +114,17 @@ def test_llm_rewritten_prompts(config: dict):
     # }
 
     framework = config["framework"]
-    for i, model in enumerate(config["candidates"]):
+    for i, candidate in enumerate(config["candidates"]):
         print("\n")
         print("-" * 30)
-        print("Processing prompt written by ", model)
-
-        # prepare configuration
-        if framework == "single":
-            config["user_prompt"]= prompt_candidates[model]["single"]
-        else:
-            config["system_prompt"] = prompt_candidates[model]["system"]
-            config["start_prompt"] = prompt_candidates[model]["start"]
-            config["mid_prompt"] = prompt_candidates[model]["mid"]
-            config["rules"] = prompt_candidates[model]["rules"]
+        print("Processing candidate: ", candidate)
 
         logger = ExperimentLog(config)
-        logger.run_data["run_idx"] = config["run_idx"][i]
 
+        if "run_idx" in config.keys():
+            logger.run_data["run_idx"] = config["run_idx"][i]
+
+        config["candidate"] = candidate
         run_experiment(config, logger)
 
         #print(f"Accuracy of prompt {model}:", logger.run_data["mean_acc"])

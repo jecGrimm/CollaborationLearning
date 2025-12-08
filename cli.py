@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+import torch
 
 class CLI:
     def __init__(self):
@@ -23,3 +24,19 @@ class CLI:
         #     self.split = parser.parse_args().split
         #     self.device = parser.parse_args().device
         #     self.framework = parser.parse_args().framework
+
+        # add default configurations
+        if "device" not in self.config.keys():
+            self.config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
+
+        if self.config["framework"] == "multi" and "conversation_rounds" not in self.config.keys():
+            self.config["conversation_rounds"] = 2
+
+        # prompt candidate
+        if "candidate" not in self.config.keys():
+            self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
+
+        # for grancir
+        if "device_id" in self.config.keys():
+            os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
+            self.config["device"] = f"cuda:{self.config["device_id"]}"

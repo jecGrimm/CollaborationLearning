@@ -1,7 +1,8 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 512,
-    "model_id": "meta-llama/Llama-3.2-1B-Instruct"
+    "batch_size": 1,
+    "model_id": "meta-llama/Llama-3.2-1B-Instruct",
+    "desc": "This run tests Llama1B on with a final answer agent."
 }
