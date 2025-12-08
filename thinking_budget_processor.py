@@ -54,4 +54,4 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
                         scores[i][self.think_end_token] = 0 # thinking token with very low logs
                         self.stopped_thinking = True
 
-        return scores # TODO: thinking is not stopped sometimes
+        return scores
