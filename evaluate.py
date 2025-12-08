@@ -71,6 +71,8 @@ def evaluate_order_answer_single(batch):
     prec_3 = []
     prec_4 = []
     prec_5 = []
+    spearman = []
+    kendalltau = []
 
     for i in range(len(batch["storyid"])):
         pred = extract_answer_list(batch["output"][i].split("</think>")[-1].strip())
@@ -87,8 +89,12 @@ def evaluate_order_answer_single(batch):
         prec_3.append(prec_n[2])
         prec_4.append(prec_n[3])
         prec_5.append(prec_n[4])
+
+        correlations = compute_correlations(pred, gold)
+        spearman.append(correlations[0])
+        kendalltau.append(correlations[1])
     
-    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5}
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
 
 def evaluate_order_answer_multi(batch):
     """
@@ -492,12 +498,12 @@ def create_compare_dict(framework, split):
     
     return run2files, min_insts
 
-def update_evaluation_files():
-    for fw in ["multi"]: # TODO: add single
+def update_evaluation_files(frameworks = ["single", "multi"], splits = ["mini", "dev", "test"]):
+    for fw in frameworks: 
         models = os.listdir(f"outputs/{fw}/")
 
         for model in models:
-            for split in ["dev"]: # TODO: add test und mini
+            for split in splits: 
                 dir_path = f"outputs/{fw}/{model}/{split}/"
                 if os.path.isdir(dir_path):
                     evaluate_all_outputs(dir_path, fw)
@@ -515,8 +521,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/outputs_88"
-    evaluate_sent_order(outdir, "multi")
+    # outdir = "outputs/multi/Qwen3-32B/dev/outputs_88"
+    # evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -546,7 +552,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    #update_evaluation_files()
-    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    update_evaluation_files(frameworks=["single"], splits=["dev"])
+    dev_multi_models, insts = create_compare_dict(framework="single", split="dev")
+    compare_instances(dev_multi_models, "./eval/single/eval_compare_models_dev.csv", insts)
 
