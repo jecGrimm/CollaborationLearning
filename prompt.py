@@ -698,6 +698,14 @@ class MultiAgent(Agent):
             batch["turns"][i] = batch["turns"][i][:-1]
             batch["player"][i] = batch["player"][i][:-1]
 
-            batch["conversation_history"][i].replace(f"\n{final_player}: {final_turn}\n", "")
+            batch["conversation_history"][i] = batch["conversation_history"][i].replace(f"\n{final_player}: {final_turn}\n", "")
 
         return batch
+    
+if __name__ == "__main__":
+    roc_data = ROCStories(split = "dev")
+    multi = MultiAgent(model_id = "Qwen/Qwen3-0.6B", split = "dev")
+
+    prompt_data = load_from_disk("outputs/multi/Qwen3-32B/dev/outputs_88")
+
+    prompt_data = prompt_data.map(multi.remove_final, batched=True)

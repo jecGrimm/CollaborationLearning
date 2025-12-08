@@ -1,10 +1,11 @@
 {
-    "split": "mini",
+    "split": "dev",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 1,
-    "model_id": "Qwen/Qwen3-0.6B",
-    "desc": "This run tests the reordering final answer agent with Qwen-0.6b.",
+    "batch_size": 8,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the reordering final answer agent with Qwen3-32b.",
     "candidate": "llama-str_gemini-final_llama-reorder_abstract-names",
-    "conv_file": "outputs/multi/Qwen3-0.6B/mini/outputs_84"
+    "conv_file": "outputs/multi/Qwen3-32B/dev/outputs_88",
+    "device_id": "0"
 }
