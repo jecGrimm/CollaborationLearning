@@ -11,6 +11,7 @@ import os
 from collections import defaultdict
 import csv
 from tqdm import tqdm
+from scipy import stats
 
 def evaluate_sent_order(experiment_file: str, framework: str, logger: ExperimentLog = ExperimentLog()):
     """
@@ -25,8 +26,8 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     """
     # load data
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    exp_data = load_from_disk(experiment_file).select([314])
-    #exp_data = load_from_disk(experiment_file)
+    #exp_data = load_from_disk(experiment_file).select([314])
+    exp_data = load_from_disk(experiment_file)
     
     # evaluate
     if framework == "single":
@@ -106,6 +107,8 @@ def evaluate_order_answer_multi(batch):
     prec_3 = []
     prec_4 = []
     prec_5 = []
+    spearman = []
+    kendalltau = []
 
     for i in range(len(batch["storyid"])):
         if "turns" in batch.keys():
@@ -127,8 +130,12 @@ def evaluate_order_answer_multi(batch):
         prec_3.append(prec_n[2])
         prec_4.append(prec_n[3])
         prec_5.append(prec_n[4])
+
+        correlations = compute_correlations(pred, gold)
+        spearman.append(correlations[0])
+        kendalltau.append(correlations[1])
     
-    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5}
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
     
 def extract_answer_list(model_out: str):
     """
@@ -301,6 +308,26 @@ def compute_accuracy_order(pred: list, batch, i: int):
     else:
         return 0.0
     
+def compute_correlations(pred: list, gold: list):
+    pred = [clean_sent(item) for item in pred]
+    gold = [item.lower().strip('.') for item in gold]
+
+    spearman = 0.0 # 0.0 because it indicates no correlation and because Huggingface does not allow differing data formats (e.g., None)
+    kendall = 0.0
+
+    gold_ranks = [1, 2, 3, 4, 5]
+    pred_ranks = []
+
+    for gold_sent in gold:
+        if gold_sent in pred:
+            pred_ranks.append(pred.index(gold_sent)+1)
+
+    if len(pred_ranks) == 5:
+        spearman = stats.spearmanr(gold_ranks, pred_ranks).statistic
+        kendall = stats.kendalltau(gold_ranks, pred_ranks).statistic
+
+    return spearman, kendall
+
 def clean_sent(sent: str):
     sent = sent.lower().strip(".")
     return sent
@@ -343,7 +370,7 @@ def compare_instances(eval_files: dict, output_file: str = None, insts: int = No
     # load datasets
     eval_datasets = defaultdict()
     results = defaultdict(lambda: defaultdict(float))
-    metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5"]
+    metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
     for exp_name, eval_file in eval_files.items():
         #eval_datasets[exp_name] = load_dataset("json", data_files=eval_file, split="train").select(range(10))
         eval_data = load_dataset("json", data_files=eval_file, split="train").select(range(insts))
@@ -488,8 +515,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-14B/dev/outputs_87"
-    evaluate_sent_order(outdir, "multi")
+    # outdir = "outputs/multi/Qwen3-14B/dev/outputs_87"
+    # evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -519,7 +546,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    # update_evaluation_files()
-    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    update_evaluation_files()
+    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
