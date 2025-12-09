@@ -41,7 +41,7 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
 
     eval_file = experiment_file.replace("outputs", "eval")
 
-    os.makedirs(f"{"/".join(eval_file.split("/")[:-1])}", exist_ok = True)
+    os.makedirs(f"{'/'.join(eval_file.split('/')[:-1])}", exist_ok = True)
     eval_data.to_json(eval_file)
 
     # report mean accuracy
@@ -394,7 +394,7 @@ def compare_instances(eval_files: dict, output_file: str = None, insts: int = No
 
     # save comparison data in csv
     if not output_file:
-        output_file = f"{"/".join(eval_files[exp_name].split("/")[:-1])}/eval_compare.csv"
+        output_file = f"{'/'.join(eval_files[exp_name].split('/')[:-1])}/eval_compare.csv"
     with open(output_file, 'w', encoding="utf-8") as csvfile:
         fieldnames = ["experiment_name", "candidates", "experiment_file", "wrong_format"]
         for metric in metrics:
@@ -490,7 +490,7 @@ def create_compare_dict(framework, split):
     for file in files:
         if not file.endswith(".jsonl") and "ckps" not in file:
             run_data = df.loc[df["experiment_file"] == file]
-            run2files[int(run_data["run_idx"].values[0])] = f"{file.replace("outputs", "eval")}.jsonl"
+            run2files[int(run_data["run_idx"].values[0])] = f"{file.replace('outputs', 'eval')}.jsonl"
 
             insts = int(run_data["instances"].values[0])
             if min_insts == None or min_insts > insts:
@@ -521,7 +521,7 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_90_0"
+    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_91_0"
     evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
