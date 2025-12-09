@@ -4,5 +4,6 @@
     "experiment_file": "",
     "batch_size": 64,
     "model_id": "Qwen/Qwen3-8B",
-    "desc": "This run tests Qwen3-8B in the single-setup with the optimal generation configuration."
+    "desc": "This run tests Qwen3-8B in the single-setup with the optimal generation configuration.",
+    "thinking_budget": 0
 }

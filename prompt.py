@@ -51,19 +51,34 @@ class Agent:
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
-            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
-            pipe = pipeline(
-                "text-generation", 
-                model=self.model_id, 
-                dtype=torch.bfloat16,
-                device_map=device,
-                max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
-                logits_processor=LogitsProcessorList([processor]), 
-                temperature = 0.6,
-                top_p = 0.95,
-                top_k = 20,
-                min_p = 0
-            )
+            if processor.max_thinking_tokens > 0:
+                # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
+                pipe = pipeline(
+                    "text-generation", 
+                    model=self.model_id, 
+                    dtype=torch.bfloat16,
+                    device_map=device,
+                    max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
+                    logits_processor=LogitsProcessorList([processor]), 
+                    temperature = 0.6,
+                    top_p = 0.95,
+                    top_k = 20,
+                    min_p = 0
+                )
+            else:
+                # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
+                pipe = pipeline(
+                    "text-generation", 
+                    model=self.model_id, 
+                    dtype=torch.bfloat16,
+                    device_map=device,
+                    max_new_tokens=max_new_tokens, 
+                    logits_processor=LogitsProcessorList([processor]), 
+                    temperature = 0.7,
+                    top_p = 0.8,
+                    top_k = 20,
+                    min_p = 0
+                )
             
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
@@ -154,6 +169,7 @@ class SingleAgent(Agent):
         super().__init__(model_id=model_id, split=split, framework="single")
 
         self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
+        #self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
 
     def create_message(self, batch):
         """
@@ -164,12 +180,19 @@ class SingleAgent(Agent):
         @returns
             dictionary containing the prompt
         """
-        messages = []
+        batch_messages = []
         for i in range(len(batch["storyid"])):
-            #messages.append({"role": "user", "content": prompt.format(shuffled_sents = batch["shuffled_sents"][i])})
-            messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
+            #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
+            #message = []
+            #batch_messages.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
+            batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
 
-        return {"prompt": messages}
+            # if not thinking:
+            #     message.append({"role": "assitant", "content": "<think>\n\n</think>\n\n"})
+            
+            #batch_messages.append(message)
+
+        return {"prompt": batch_messages}
     
     def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
         """
@@ -206,9 +229,7 @@ class SingleAgent(Agent):
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
-            # TODO: re.split(pattern, string) statt Answer
-            # re.sub(r"Answer:[ \n]*", "", model_out).strip()
-            output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).strip() for conv in outputs for turn in conv]
+            output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("</think>")[-1].strip() for conv in outputs for turn in conv]
             #output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
 
