@@ -521,8 +521,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_91_0"
-    evaluate_sent_order(outdir, "multi")
+    # outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_91_0"
+    # evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -552,7 +552,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    # update_evaluation_files(frameworks=["single"], splits=["dev"])
-    # dev_multi_models, insts = create_compare_dict(framework="single", split="dev")
-    # compare_instances(dev_multi_models, "./eval/single/eval_compare_models_dev.csv", insts)
+    #update_evaluation_files(frameworks=["multi"], splits=["dev"])
+    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
