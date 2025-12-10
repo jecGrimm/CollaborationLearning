@@ -1,11 +1,10 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "single",
     "experiment_file": "",
     "batch_size": 128,
-    "model_id": "Qwen/Qwen3-14B",
-    "desc": "This run tests the no thinking single agent with Qwen3-14b.",
-    "candidate": "gemini-final_llama-reorder_single",
-    "thinking_budget": 0.0,
-    "device_id": "0"
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests Qwen3-0.6B without thinking in the single-setup without variation.",
+    "thinking_budget": 0,
+    "variation": "False"
 }

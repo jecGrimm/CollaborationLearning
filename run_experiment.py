@@ -31,7 +31,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             
             logger.log_single(single)
 
-            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"]) 
+            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"]) 
 
             outfile = single.define_outfile(logger, hf = True)
         else:
@@ -39,7 +39,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             logger.log_multi(multi)
 
-            multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
+            multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"])
 
             outfile = multi.define_outfile(logger, hf = True)
 
@@ -152,7 +152,7 @@ def run_final_only(config: dict = None, logger: ExperimentLog = None):
             logger.log_multi(multi)
 
             #multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
-            multi.prompt_final_only(logger, device = config["device"], batch_size = config["batch_size"], conv_file= config["conv_file"])
+            multi.prompt_final_only(logger, device = config["device"], batch_size = config["batch_size"], conv_file = config["conv_file"], variation = config["variation"])
 
             outfile = multi.define_outfile(logger, hf = True)
 

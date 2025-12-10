@@ -194,7 +194,7 @@ class SingleAgent(Agent):
 
         return {"prompt": batch_messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False):
         """
         This method prompts the model.
 
@@ -208,7 +208,7 @@ class SingleAgent(Agent):
         pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
-        roc_data = ROCStories(split = self.split)
+        roc_data = ROCStories(split = self.split, variation = variation)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
@@ -233,7 +233,7 @@ class SingleAgent(Agent):
             output_list = []
             thinking_answer = []
             for model_out in outputs:
-                model_answer = model_out[0]["generated_text"][2]["content"]
+                model_answer = model_out[0]["generated_text"][-1]["content"]
                 final_answer = model_answer.split("</think>")[-1].strip()
 
                 output_list.append(final_answer)
@@ -531,7 +531,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
+    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False):
         """
         This function prompts the multi-agent framework.
 
@@ -546,7 +546,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split)
+        roc_data = ROCStories(split = self.split, variation = variation)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -663,7 +663,7 @@ class MultiAgent(Agent):
         
         return shard_data
 
-    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True):
+    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True, variation = False):
         """
         This function prompts the multi-agent framework.
 
@@ -678,7 +678,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split)
+        roc_data = ROCStories(split = self.split, variation = variation)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
