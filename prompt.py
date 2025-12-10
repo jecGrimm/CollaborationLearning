@@ -183,14 +183,14 @@ class SingleAgent(Agent):
         batch_messages = []
         for i in range(len(batch["storyid"])):
             #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
-            #message = []
-            #batch_messages.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
-            batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
+            message = []
+            message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
+            #batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
 
             # if not thinking:
             #     message.append({"role": "assitant", "content": "<think>\n\n</think>\n\n"})
             
-            #batch_messages.append(message)
+            batch_messages.append(message)
 
         return {"prompt": batch_messages}
     
@@ -213,6 +213,7 @@ class SingleAgent(Agent):
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
         full_output_list = []
+        full_thinking_answer = []
 
         start = time.time()
         # process data in smaller parts for checkpointing
@@ -229,11 +230,24 @@ class SingleAgent(Agent):
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
-            output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("</think>")[-1].strip() for conv in outputs for turn in conv]
+            output_list = []
+            thinking_answer = []
+            for model_out in outputs:
+                model_answer = model_out[0]["generated_text"][2]["content"]
+                final_answer = model_answer.split("</think>")[-1].strip()
+
+                output_list.append(final_answer)
+                thinking_answer.append(model_answer)
+
+            # output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("</think>")[-1].strip() for conv in outputs for turn in conv]
+            # thinking_answer = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("<think>")[-1].strip() for conv in outputs for turn in conv]
+
             #output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
+            full_thinking_answer += thinking_answer
 
             output_data = shard_data.add_column("output", output_list)
+            output_data = shard_data.add_column("thinking_output", thinking_answer)
             
             outpath = self.save_outputs_hf(logger, outputs=output_data, shard_idx=shard_idx)
 

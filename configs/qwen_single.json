@@ -2,8 +2,10 @@
     "split": "dev",
     "framework": "single",
     "experiment_file": "",
-    "batch_size": 64,
-    "model_id": "Qwen/Qwen3-8B",
-    "desc": "This run tests Qwen3-8B in the single-setup with the optimal generation configuration.",
-    "thinking_budget": 0
+    "batch_size": 128,
+    "model_id": "Qwen/Qwen3-14B",
+    "desc": "This run tests the no thinking single agent with Qwen3-14b.",
+    "candidate": "gemini-final_llama-reorder_single",
+    "thinking_budget": 0.0,
+    "device_id": "0"
 }
