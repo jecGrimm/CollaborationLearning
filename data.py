@@ -75,6 +75,10 @@ class ROCStories:
         return {"shuffled_sents":  batch_shuffled}
         
 if __name__ == "__main__":
-    roc_data = ROCStories()
+    roc_data = ROCStories(split = "dev", variation = False)
+    outpath = "outputs/random/dev_no_variation"
+
+    roc_data.shuffled_dataset.save_to_disk(outpath)
+
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
     print("Done")

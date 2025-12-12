@@ -32,8 +32,10 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     # evaluate
     if framework == "single":
         eval_data = exp_data.map(evaluate_order_answer_single, batched=True, remove_columns=exp_data.column_names)
-    else:
+    elif framework == "multi":
         eval_data = exp_data.map(evaluate_order_answer_multi, batched=True, remove_columns=exp_data.column_names)
+    else:
+        eval_data = exp_data.map(evaluate_order_answer_random, batched=True, remove_columns=exp_data.column_names)
     
     # save evaluation output
     if os.path.isdir(experiment_file):
@@ -143,6 +145,48 @@ def evaluate_order_answer_multi(batch):
     
     return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
     
+def evaluate_order_answer_random(batch):
+    """
+    This function collect the evaluation results for the shuffled random outputs.
+
+    @param
+        batch: batch of instances
+    @returns
+        dictionary with the storyids, accuracy per instance, model prediction, gold standard
+    """
+    pred_lists = []
+    acc = []
+    gold_sents = []
+    prec_1 = []
+    prec_2 = []
+    prec_3 = []
+    prec_4 = []
+    prec_5 = []
+    spearman = []
+    kendalltau = []
+
+    for i in range(len(batch["storyid"])):
+        pred = batch["shuffled_sents"][i]
+        pred_lists.append(pred)
+
+        gold = get_sent_list(batch, i)
+        gold_sents.append(gold)
+
+        acc.append(compute_accuracy_order(pred, batch, i))
+
+        prec_n = compute_precision(pred, gold)
+        prec_1.append(prec_n[0])
+        prec_2.append(prec_n[1])
+        prec_3.append(prec_n[2])
+        prec_4.append(prec_n[3])
+        prec_5.append(prec_n[4])
+
+        correlations = compute_correlations(pred, gold)
+        spearman.append(correlations[0])
+        kendalltau.append(correlations[1])
+    
+    return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
+
 def extract_answer_list(model_out: str):
     """
     This function extract the list with predictions from the model output string. 
@@ -521,8 +565,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    # outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_91_0"
-    # evaluate_sent_order(outdir, "multi")
+    outdir = "outputs/random/dev_no_variation"
+    evaluate_sent_order(outdir, "random")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -553,6 +597,6 @@ if __name__ == "__main__":
     # } 
 
     #update_evaluation_files(frameworks=["multi"], splits=["dev"])
-    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    # dev_multi_models, insts = create_compare_dict(framework="single", split="dev")
+    # compare_instances(dev_multi_models, "./eval/single/eval_compare_models_dev.csv", insts)
 
