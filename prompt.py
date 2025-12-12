@@ -6,7 +6,7 @@ import os
 import time
 from datetime import datetime
 from tqdm import tqdm
-from datasets import Dataset, concatenate_datasets
+from datasets import Dataset, concatenate_datasets, load_from_disk
 from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 
@@ -51,19 +51,34 @@ class Agent:
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
-            # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
-            pipe = pipeline(
-                "text-generation", 
-                model=self.model_id, 
-                dtype=torch.bfloat16,
-                device_map=device,
-                max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
-                logits_processor=LogitsProcessorList([processor]), 
-                temperature = 0.6,
-                top_p = 0.95,
-                top_k = 20,
-                min_p = 0
-            )
+            if processor.max_thinking_tokens > 0:
+                # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
+                pipe = pipeline(
+                    "text-generation", 
+                    model=self.model_id, 
+                    dtype=torch.bfloat16,
+                    device_map=device,
+                    max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
+                    logits_processor=LogitsProcessorList([processor]), 
+                    temperature = 0.6,
+                    top_p = 0.95,
+                    top_k = 20,
+                    min_p = 0
+                )
+            else:
+                # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
+                pipe = pipeline(
+                    "text-generation", 
+                    model=self.model_id, 
+                    dtype=torch.bfloat16,
+                    device_map=device,
+                    max_new_tokens=max_new_tokens, 
+                    logits_processor=LogitsProcessorList([processor]), 
+                    temperature = 0.7,
+                    top_p = 0.8,
+                    top_k = 20,
+                    min_p = 0
+                )
             
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
@@ -154,6 +169,7 @@ class SingleAgent(Agent):
         super().__init__(model_id=model_id, split=split, framework="single")
 
         self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
+        #self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
 
     def create_message(self, batch):
         """
@@ -164,14 +180,21 @@ class SingleAgent(Agent):
         @returns
             dictionary containing the prompt
         """
-        messages = []
+        batch_messages = []
         for i in range(len(batch["storyid"])):
-            #messages.append({"role": "user", "content": prompt.format(shuffled_sents = batch["shuffled_sents"][i])})
-            messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
+            #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
+            message = []
+            message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
+            #batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
 
-        return {"prompt": messages}
+            # if not thinking:
+            #     message.append({"role": "assitant", "content": "<think>\n\n</think>\n\n"})
+            
+            batch_messages.append(message)
+
+        return {"prompt": batch_messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False):
         """
         This method prompts the model.
 
@@ -185,11 +208,12 @@ class SingleAgent(Agent):
         pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
-        roc_data = ROCStories(split = self.split)
+        roc_data = ROCStories(split = self.split, variation = variation)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
         full_output_list = []
+        full_thinking_answer = []
 
         start = time.time()
         # process data in smaller parts for checkpointing
@@ -206,13 +230,24 @@ class SingleAgent(Agent):
                 )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
             
             # store shard output
-            # TODO: re.split(pattern, string) statt Answer
-            # re.sub(r"Answer:[ \n]*", "", model_out).strip()
-            output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).strip() for conv in outputs for turn in conv]
+            output_list = []
+            thinking_answer = []
+            for model_out in outputs:
+                model_answer = model_out[0]["generated_text"][-1]["content"]
+                final_answer = model_answer.split("</think>")[-1].strip()
+
+                output_list.append(final_answer)
+                thinking_answer.append(model_answer)
+
+            # output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("</think>")[-1].strip() for conv in outputs for turn in conv]
+            # thinking_answer = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("<think>")[-1].strip() for conv in outputs for turn in conv]
+
             #output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
+            full_thinking_answer += thinking_answer
 
             output_data = shard_data.add_column("output", output_list)
+            output_data = shard_data.add_column("thinking_output", thinking_answer)
             
             outpath = self.save_outputs_hf(logger, outputs=output_data, shard_idx=shard_idx)
 
@@ -276,7 +311,7 @@ class MultiAgent(Agent):
 
         self.conversation_rounds = conversation_rounds 
 
-    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool):
+    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None):
         """
         This method creates the prompt message.
 
@@ -289,11 +324,12 @@ class MultiAgent(Agent):
             message: list of system and user prompt
         """
         # define agent state
-        other_players = [name for name in self.NAMES if name != player_name]
-        player_sent = roles[player_name]
-        rules = self.RULES.format(sentence = player_sent)
+        other_players = [name for name in self.NAMES if name != player_name] 
+        # player_sent = roles[player_name]
+        # rules = self.RULES.format(sentence = player_sent)
         
         if not final:
+            player_sent = roles[player_name]
             # define system prompt
             message = [
                 {
@@ -301,7 +337,7 @@ class MultiAgent(Agent):
                     "content": self.SYSTEM_PROMPT.format(
                         player_name = player_name,
                         other_players = other_players,
-                        rules = rules
+                        rules = self.RULES
                         )
                 }
             ]
@@ -338,19 +374,31 @@ class MultiAgent(Agent):
                     "content": self.SYSTEM_FINAL.format(
                         player_name = player_name,
                         other_players = other_players,
-                        rules = rules
-                        )
+                        rules = self.RULES,
+                        num_players = len(other_players)
+                    )
                 }
             ]
 
-            message.append(
+            if shuffled_sents:
+                message.append(
                 {
                     "role": "user",
                     "content": self.FINAL.format(
+                        shuffled_sents = shuffled_sents,
                         conversation = conversation
-                    )
-                }
-            )
+                        )
+                    }
+                )
+            else:
+                message.append(
+                    {
+                        "role": "user",
+                        "content": self.FINAL.format(
+                            conversation = conversation
+                        )
+                    }
+                )
 
         return message
 
@@ -403,7 +451,7 @@ class MultiAgent(Agent):
 
         return {"turns": batch_turns, "players": batch_players}
     
-    def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False):
+    def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False):
         """
         This method creates the prompts for a batch of instances.
 
@@ -420,7 +468,10 @@ class MultiAgent(Agent):
             if conv_round == 0 and turn == 0:
                 batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i])) #assing sentences to players
 
-            messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name, final))
+            if shuffled_sents:
+                messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i]))
+            else:
+                messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name, final))
 
         return {"prompt": messages}
 
@@ -480,7 +531,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2):
+    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
         """
         This function prompts the multi-agent framework.
 
@@ -495,7 +546,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split)
+        roc_data = ROCStories(split = self.split, variation = variation)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -573,7 +624,7 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, player_name, pipe, batch_size)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -597,14 +648,99 @@ class MultiAgent(Agent):
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
 
-    def get_final_answer(self, shard_data, player_name, pipe, batch_size):
-        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = player_name, final = True), batched = True)
+    def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False):
+        if shuffled_sents:
+            prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = True), batched = True)
+        else:
+            prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True), batched = True)
 
         final_outputs = tqdm([out for out in pipe(
             list(prompt_data["prompt"]),
             batch_size = batch_size
-        )], desc = "Processing prompts", total = len(prompt_data["prompt"]))
+        )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
 
-        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, player_name, final = True), batched = True)
+        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, "Player 6", final = True), batched = True)
         
         return shard_data
+
+    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True, variation = False):
+        """
+        This function prompts the multi-agent framework.
+
+        @params
+            logger: experiment logger
+            device: cpu/cuda
+            batch_size: batch size
+            thinking_budget: percentage of tokens allowed for "thinking" tokens
+        """
+        # initialize pipeline
+        torch.cuda.empty_cache()
+        pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
+        
+        # prepare dataset
+        roc_data = ROCStories(split = self.split, variation = variation)
+        logger.run_data.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conv_file": conv_file,
+            "conv_final": conv_final
+        })
+
+        prompt_data = load_from_disk(conv_file)
+
+        if conv_final:
+            prompt_data = prompt_data.map(self.remove_final, batched=True)
+
+        full_output = None
+
+        start = time.time()
+        # process shards
+        num_shards = int((len(prompt_data)/300))+1
+        processed_inst = 0
+        for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
+            shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
+            
+            # get final answer
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents=True)
+
+            # save ouput
+            outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
+
+            if full_output:
+                full_output = concatenate_datasets([full_output, shard_data])
+            else:
+                full_output = shard_data
+
+            processed_inst += len(shard_data)
+            logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            
+            logger.store_run_data()
+
+        end = time.time()
+        logger.run_data.update({"duration": end - start})
+
+        outpath = self.save_outputs_hf(logger, full_output)
+        logger.run_data.update({"experiment_file": outpath})
+        logger.store_run_data()
+
+    def remove_final(self, batch):
+        for i in range(len(batch["storyid"])):
+            final_turn = batch["turns"][i][-1].split("</think>")[-1].strip()
+            final_turn = re.sub(r"Answer:[ \n]*", "", final_turn).strip()
+
+            final_player = batch["player"][i][-1]
+
+            batch["turns"][i] = batch["turns"][i][:-1]
+            batch["player"][i] = batch["player"][i][:-1]
+
+            batch["conversation_history"][i] = batch["conversation_history"][i].replace(f"\n{final_player}: {final_turn}\n", "")
+
+        return batch
+    
+if __name__ == "__main__":
+    roc_data = ROCStories(split = "dev")
+    multi = MultiAgent(model_id = "Qwen/Qwen3-0.6B", split = "dev")
+
+    prompt_data = load_from_disk("outputs/multi/Qwen3-32B/dev/outputs_88")
+
+    prompt_data = prompt_data.map(multi.remove_final, batched=True)

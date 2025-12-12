@@ -1,0 +1,451 @@
+
+    {
+        "storyid":"cba6ddf8-1d02-4c09-aa47-3ff7e469dd20",
+        "worker id":"A17J1CE7N49Z9D",
+        "story title":"Test",
+        "sentence1":"Jennifer has a big exam tomorrow.",
+        "sentence2":"She got so stressed, she pulled an all-nighter.",
+        "sentence3":"She went into class the next day, weary as can be.",
+        "sentence4":"Her teacher stated that the test is postponed for next week.",
+        "sentence5":"Jennifer felt bittersweet about it",
+        "shuffled_sents":[
+            "Jennifer felt bittersweet about it",
+            "Jennifer has a big exam tomorrow.",
+            "She went into class the next day, weary as can be.",
+            "She got so stressed, she pulled an all-nighter.",
+            "Her teacher stated that the test is postponed for next week."
+        ]
+    }
+
+    {
+        "storyid":"be6b1a5c-94e9-4527-af7a-9829b126f69a",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Hurricane",
+        "sentence1":"Morgan and her family lived in Florida.",
+        "sentence2":"They heard a hurricane was coming.",
+        "sentence3":"They decided to evacuate to a relative's house.",
+        "sentence4":"They arrived and learned from the news that it was a terrible storm.",
+        "sentence5":"They felt lucky they had evacuated when they did.",
+        "shuffled_sents":[
+            "They arrived and learned from the news that it was a terrible storm.",
+            "They decided to evacuate to a relative's house.",
+            "Morgan and her family lived in Florida.",
+            "They heard a hurricane was coming.",
+            "They felt lucky they had evacuated when they did."
+        ]
+    }
+
+    {
+        "storyid":"86fc3788-3610-45b0-b6fe-814ed6d7471f",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Spaghetti Sauce",
+        "sentence1":"Tina made spaghetti for her boyfriend.",
+        "sentence2":"It took a lot of work, but she was very proud.",
+        "sentence3":"Her boyfriend ate the whole plate and said it was good.",
+        "sentence4":"Tina tried it herself, and realized it was disgusting.",
+        "sentence5":"She was touched that he pretended it was good to spare her feelings.",
+        "shuffled_sents":[
+            "Tina made spaghetti for her boyfriend.",
+            "It took a lot of work, but she was very proud.",
+            "Her boyfriend ate the whole plate and said it was good.",
+            "Tina tried it herself, and realized it was disgusting.",
+            "She was touched that he pretended it was good to spare her feelings."
+        ]
+    }
+
+    {
+        "storyid":"e29bc99e-a7be-45bc-a36a-bf68c6ff5797",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Essay",
+        "sentence1":"My professor assigned my class an essay.",
+        "sentence2":"By the time I left the classroom, I had forgotten about it.",
+        "sentence3":"A few days later, my classmate messaged me to ask if I had done it.",
+        "sentence4":"I was so upset because I had totally forgotten!",
+        "sentence5":"I spent all night working on the essay, but it was done in time.",
+        "shuffled_sents":[
+            "My professor assigned my class an essay.",
+            "I spent all night working on the essay, but it was done in time.",
+            "I was so upset because I had totally forgotten!",
+            "A few days later, my classmate messaged me to ask if I had done it.",
+            "By the time I left the classroom, I had forgotten about it."
+        ]
+    }
+
+    {
+        "storyid":"75618520-d241-4ae6-a4b0-712638dbf654",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Holey Jeans",
+        "sentence1":"Kaitlyn thought jeans with holes were very stylish.",
+        "sentence2":"She wore them to school to show them off.",
+        "sentence3":"The principal told her they were against dress code.",
+        "sentence4":"She had to change her jeans.",
+        "sentence5":"Now, she only wears her holey jeans at home.",
+        "shuffled_sents":[
+            "She wore them to school to show them off.",
+            "She had to change her jeans.",
+            "Kaitlyn thought jeans with holes were very stylish.",
+            "The principal told her they were against dress code.",
+            "Now, she only wears her holey jeans at home."
+        ]
+    }
+
+    {
+        "storyid":"4ae42e28-4fb2-47eb-a166-4ae9fa72456b",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Earthquake!",
+        "sentence1":"James woke up in the middle of the night to find his bed shaking.",
+        "sentence2":"All the things in his room were shaking furiously.",
+        "sentence3":"He was scared, but then suddenly it stopped.",
+        "sentence4":"He got up and checked the news.",
+        "sentence5":"He found out there had been an earthquake!",
+        "shuffled_sents":[
+            "He found out there had been an earthquake!",
+            "He was scared, but then suddenly it stopped.",
+            "He got up and checked the news.",
+            "All the things in his room were shaking furiously.",
+            "James woke up in the middle of the night to find his bed shaking."
+        ]
+    }
+
+    {
+        "storyid":"6108a7ea-0056-44be-bd55-86e10cffb663",
+        "worker id":"A1V6CP5I0TOSAR",
+        "story title":"College",
+        "sentence1":"I was so nervous for my first day of school.",
+        "sentence2":"When I arrived at my first class, I was shaking.",
+        "sentence3":"I sat next the prettiest girl in class.",
+        "sentence4":"We talked the whole time during and after class.",
+        "sentence5":"We became best friends, and she made college so much easier!",
+        "shuffled_sents":[
+            "When I arrived at my first class, I was shaking.",
+            "I was so nervous for my first day of school.",
+            "I sat next the prettiest girl in class.",
+            "We became best friends, and she made college so much easier!",
+            "We talked the whole time during and after class."
+        ]
+    }
+
+    {
+        "storyid":"1bf0ec70-8a53-44bc-918d-bca2b8262c74",
+        "worker id":"A1Y9VZIJBKNNO9",
+        "story title":"Lost Phone",
+        "sentence1":"Uli was looking forward to her basketball game this afternoon.",
+        "sentence2":"She entered the gym and left her backpack on the bleachers.",
+        "sentence3":"After the game, she couldn't find her phone in her backpack.",
+        "sentence4":"She was sad all night and in the morning checked in the office.",
+        "sentence5":"She was happy to learn that someone had turned in her phone.",
+        "shuffled_sents":[
+            "After the game, she couldn't find her phone in her backpack.",
+            "She entered the gym and left her backpack on the bleachers.",
+            "She was sad all night and in the morning checked in the office.",
+            "She was happy to learn that someone had turned in her phone.",
+            "Uli was looking forward to her basketball game this afternoon."
+        ]
+    }
+
+    {
+        "storyid":"f8bd34a9-af2f-4d2d-bc9a-66f9a24d9d25",
+        "worker id":"A1YNDCJZHJR9HB",
+        "story title":"The Noisy Trumpet",
+        "sentence1":"Anna was a professional trumpet player.",
+        "sentence2":"She got a new apartment in the city.",
+        "sentence3":"Unfortunately, the walls were much thinner than her old place!",
+        "sentence4":"Soon the neighbors were complaining about her incessant practicing.",
+        "sentence5":"She placated them with free orchestra tickets and home-baked cookies.",
+        "shuffled_sents":[
+            "She placated them with free orchestra tickets and home-baked cookies.",
+            "Anna was a professional trumpet player.",
+            "Unfortunately, the walls were much thinner than her old place!",
+            "Soon the neighbors were complaining about her incessant practicing.",
+            "She got a new apartment in the city."
+        ]
+    }
+
+    {
+        "storyid":"41e61222-00cf-44ab-88c4-b8da1580ee6d",
+        "worker id":"A271BMHV42XZPU",
+        "story title":"Bill's Bicycle",
+        "sentence1":"Bill decided to ride his bicycle to school.",
+        "sentence2":"On the way there, he got a flat tire.",
+        "sentence3":"A man saw Bill's flat tire and stopped his car.",
+        "sentence4":"The driver offered to drive Bill to school.",
+        "sentence5":"Bill made it to school on time.",
+        "shuffled_sents":[
+            "On the way there, he got a flat tire.",
+            "Bill decided to ride his bicycle to school.",
+            "A man saw Bill's flat tire and stopped his car.",
+            "The driver offered to drive Bill to school.",
+            "Bill made it to school on time."
+        ]
+    }
+
+    {
+        "storyid":"be4cdf1c-efca-4f8b-9dac-1b2bb0ea9bb9",
+        "worker id":"A2ABSQBRUAUS4C",
+        "story title":"The Smell In the Fridge",
+        "sentence1":"While at home Robert smelled something terrible.",
+        "sentence2":"He went to the kitchen to investigate.",
+        "sentence3":"The source of the smell appeared to come from the refrigerator.",
+        "sentence4":"He opened it up and saw that there was rotting meat he forgot about.",
+        "sentence5":"After he took out the bad meat, his house began to smell fine.",
+        "shuffled_sents":[
+            "The source of the smell appeared to come from the refrigerator.",
+            "He opened it up and saw that there was rotting meat he forgot about.",
+            "He went to the kitchen to investigate.",
+            "After he took out the bad meat, his house began to smell fine.",
+            "While at home Robert smelled something terrible."
+        ]
+    }
+
+    {
+        "storyid":"eba4a12f-dbb4-4e4e-a5c0-c988ff5addc1",
+        "worker id":"A2AWBDW9V1E9KT",
+        "story title":"Slow Folk",
+        "sentence1":"Joe stopped at a traffic light.",
+        "sentence2":"The light was green but he didn't go.",
+        "sentence3":"The people behind him honked their horns.",
+        "sentence4":"They were getting frustrated, but Joe didn't budge.",
+        "sentence5":"He said that it was a beautiful day, and he was going to enjoy it.",
+        "shuffled_sents":[
+            "He said that it was a beautiful day, and he was going to enjoy it.",
+            "The light was green but he didn't go.",
+            "The people behind him honked their horns.",
+            "They were getting frustrated, but Joe didn't budge.",
+            "Joe stopped at a traffic light."
+        ]
+    }
+
+    {
+        "storyid":"dac3aa24-7092-427b-a7ce-b1d257e0a4b1",
+        "worker id":"A2S421V2HMNHQQ",
+        "story title":"Nacre vs. Enamel: The Ultimate Grudge Match",
+        "sentence1":"A man found a pearl in an oyster.",
+        "sentence2":"Unfortunately, he was eating the oyster at the time.",
+        "sentence3":"He chipped a tooth on the pearl.",
+        "sentence4":"Fortunately, the pearl covered the cost of dental work.",
+        "sentence5":"From then on, he made sure to inspect his seafood before biting.",
+        "shuffled_sents":[
+            "From then on, he made sure to inspect his seafood before biting.",
+            "Fortunately, the pearl covered the cost of dental work.",
+            "A man found a pearl in an oyster.",
+            "He chipped a tooth on the pearl.",
+            "Unfortunately, he was eating the oyster at the time."
+        ]
+    }
+
+    {
+        "storyid":"780d0172-a963-4dc8-8bd9-d3c984cbb89c",
+        "worker id":"A2S421V2HMNHQQ",
+        "story title":"Always Know the Date",
+        "sentence1":"A nuclear missile silo received a launch order.",
+        "sentence2":"The officer in charge opened the safe to verify the code.",
+        "sentence3":"He opened the envelope containing that day's code.",
+        "sentence4":"Inside was a coupon for half-off the price of a sandwich.",
+        "sentence5":"Belatedly, he realized it was April Fool's Day.",
+        "shuffled_sents":[
+            "He opened the envelope containing that day's code.",
+            "Belatedly, he realized it was April Fool's Day.",
+            "The officer in charge opened the safe to verify the code.",
+            "Inside was a coupon for half-off the price of a sandwich.",
+            "A nuclear missile silo received a launch order."
+        ]
+    }
+
+    {
+        "storyid":"ae51f7f7-8a2a-4962-aac2-863a3ce9b5b4",
+        "worker id":"A2S421V2HMNHQQ",
+        "story title":"Always Consult Your Local Planning Office",
+        "sentence1":"A family decided to build a new barbecue pit in their yard.",
+        "sentence2":"Rather than pay for an excavator, they decided to dig it themselves.",
+        "sentence3":"A few feet down, and one of them hit what he thought was a small root.",
+        "sentence4":"It turned out to be a fiber optic cable supplying internet and TV.",
+        "sentence5":"A protracted legal battle ensued over responsibility for the outage.",
+        "shuffled_sents":[
+            "A few feet down, and one of them hit what he thought was a small root.",
+            "A protracted legal battle ensued over responsibility for the outage.",
+            "It turned out to be a fiber optic cable supplying internet and TV.",
+            "A family decided to build a new barbecue pit in their yard.",
+            "Rather than pay for an excavator, they decided to dig it themselves."
+        ]
+    }
+
+    {
+        "storyid":"49fc5cc6-69cc-4628-8497-5677717095b5",
+        "worker id":"A31A4YKVSOYRVS",
+        "story title":"Briana's Accident.",
+        "sentence1":"Briana was riding a four wheeler with her brother.",
+        "sentence2":"They were going fast down a dirt road.",
+        "sentence3":"Suddenly, they hit a rock.",
+        "sentence4":"The four-wheeler flipped.",
+        "sentence5":"Briana hurt her head and needed stitches.",
+        "shuffled_sents":[
+            "Suddenly, they hit a rock.",
+            "Briana was riding a four wheeler with her brother.",
+            "They were going fast down a dirt road.",
+            "Briana hurt her head and needed stitches.",
+            "The four-wheeler flipped."
+        ]
+    }
+
+    {
+        "storyid":"88b63bc6-86fb-4a91-a5d3-f6d727c3bcb1",
+        "worker id":"A3DS5B06ZCD3E3",
+        "story title":"A Stinging Lesson",
+        "sentence1":"Jeff was playing outside one sunny day.",
+        "sentence2":"He heard a buzzing sound coming from the hedges.",
+        "sentence3":"When he reached into the hedges, a swarm of bees came flying out.",
+        "sentence4":"The bees chased him back into the house.",
+        "sentence5":"Jeff swore never to reach into the hedges again.",
+        "shuffled_sents":[
+            "The bees chased him back into the house.",
+            "Jeff was playing outside one sunny day.",
+            "He heard a buzzing sound coming from the hedges.",
+            "Jeff swore never to reach into the hedges again.",
+            "When he reached into the hedges, a swarm of bees came flying out."
+        ]
+    }
+
+    {
+        "storyid":"45293f96-6a36-4131-9617-0cfe660f626b",
+        "worker id":"AC4YC9D7M7XAH",
+        "story title":"Playing Basketball",
+        "sentence1":"Chelsea hurt her fingers playing basketball.",
+        "sentence2":"She was really scared to go to the doctor.",
+        "sentence3":"Chelsea's dad convinced her to go and get checked out.",
+        "sentence4":"It turns out the bones in the fingers were fractured.",
+        "sentence5":"The doctor was able to give her the needed care she would have missed.",
+        "shuffled_sents":[
+            "It turns out the bones in the fingers were fractured.",
+            "She was really scared to go to the doctor.",
+            "Chelsea's dad convinced her to go and get checked out.",
+            "The doctor was able to give her the needed care she would have missed.",
+            "Chelsea hurt her fingers playing basketball."
+        ]
+    }
+
+    {
+        "storyid":"9e45843a-2215-42e1-af53-1d0e262ca9c6",
+        "worker id":"AE861G0AY5RGT",
+        "story title":"The Baby Shower",
+        "sentence1":"Amy's friend Beth was having a baby.",
+        "sentence2":"Amy called her friends to come to a surprise baby shower.",
+        "sentence3":"Everyone waited quietly for Beth to enter.",
+        "sentence4":"She was shocked when she saw everyone.",
+        "sentence5":"Beth was so happy since she thought no one cared to give her a shower.",
+        "shuffled_sents":[
+            "Beth was so happy since she thought no one cared to give her a shower.",
+            "Amy's friend Beth was having a baby.",
+            "Amy called her friends to come to a surprise baby shower.",
+            "She was shocked when she saw everyone.",
+            "Everyone waited quietly for Beth to enter."
+        ]
+    }
+
+    {
+        "storyid":"3a23f7a7-e426-425f-a223-bfeda3d38c48",
+        "worker id":"AE861G0AY5RGT",
+        "story title":"The new phone",
+        "sentence1":"Tyler was excited to get the newly released cell phone.",
+        "sentence2":"He was surprised to see a long line when he arrived at the store.",
+        "sentence3":"He waited in line for an hour to purchase his phone.",
+        "sentence4":"When he arrived at the cashier she informed him they were sold out.",
+        "sentence5":"Tyler was upset as he drove home without a new phone.",
+        "shuffled_sents":[
+            "He waited in line for an hour to purchase his phone.",
+            "He was surprised to see a long line when he arrived at the store.",
+            "Tyler was upset as he drove home without a new phone.",
+            "When he arrived at the cashier she informed him they were sold out.",
+            "Tyler was excited to get the newly released cell phone."
+        ]
+    }
+
+    {
+        "storyid":"cd191579-88f6-4210-b0e6-e87241e4fe90",
+        "worker id":"AUQTHU5AOZVQC",
+        "story title":"The Big Swing",
+        "sentence1":"Andrew thought he was a good golfer.",
+        "sentence2":"He challenged his friend Dylan to see who was better.",
+        "sentence3":"Dylan accepted the challenge and worked hard to prepare.",
+        "sentence4":"Andrew was winning out of the gate, but things would soon change.",
+        "sentence5":"Dylan ended up winning the next few holes and the match.",
+        "shuffled_sents":[
+            "Dylan ended up winning the next few holes and the match.",
+            "Andrew thought he was a good golfer.",
+            "Dylan accepted the challenge and worked hard to prepare.",
+            "He challenged his friend Dylan to see who was better.",
+            "Andrew was winning out of the gate, but things would soon change."
+        ]
+    }
+
+    {
+        "storyid":"427ae6de-bddf-4a9c-bd81-ed18a9acd541",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Tuna Sandwich",
+        "sentence1":"I made myself a tuna sandwich for lunch.",
+        "sentence2":"As I was sitting down to eat, the phone rang.",
+        "sentence3":"I got up to answer the phone and had a short conversation.",
+        "sentence4":"When I returned, my sandwich was gone and my dog was looking happy.",
+        "sentence5":"I will never trust a sandwich alone in my house again.",
+        "shuffled_sents":[
+            "As I was sitting down to eat, the phone rang.",
+            "I got up to answer the phone and had a short conversation.",
+            "I made myself a tuna sandwich for lunch.",
+            "When I returned, my sandwich was gone and my dog was looking happy.",
+            "I will never trust a sandwich alone in my house again."
+        ]
+    }
+
+    {
+        "storyid":"0c38d810-9165-47c4-bc0c-96a11f1ab5f7",
+        "worker id":"A3DS5B06ZCD3E3",
+        "story title":"A Good Deed",
+        "sentence1":"Beth was leaving work on Tuesday.",
+        "sentence2":"She noticed a man dropped his wallet in the parking lot.",
+        "sentence3":"She ran all the way across the lot to give it back to him.",
+        "sentence4":"The man was so happy that his wallet was returned.",
+        "sentence5":"Because Beth was so honest, he gave her 20 dollars.",
+        "shuffled_sents":[
+            "Because Beth was so honest, he gave her 20 dollars.",
+            "She ran all the way across the lot to give it back to him.",
+            "She noticed a man dropped his wallet in the parking lot.",
+            "Beth was leaving work on Tuesday.",
+            "The man was so happy that his wallet was returned."
+        ]
+    }
+
+    {
+        "storyid":"363eeb24-91fe-4255-976c-5e4c934080ac",
+        "worker id":"A25S4JAEH0D1FT",
+        "story title":"Poker",
+        "sentence1":"Dan's friend introduced Dan to poker.",
+        "sentence2":"Dan realized he was very good at playing poker.",
+        "sentence3":"Dan decided to go to Las Vegas to test his skill.",
+        "sentence4":"Dan won millions of dollars at Las Vegas.",
+        "sentence5":"Eventually, Dan became the best poker player in the United States.",
+        "shuffled_sents":[
+            "Dan won millions of dollars at Las Vegas.",
+            "Dan realized he was very good at playing poker.",
+            "Eventually, Dan became the best poker player in the United States.",
+            "Dan decided to go to Las Vegas to test his skill.",
+            "Dan's friend introduced Dan to poker."
+        ]
+    }
+
+    {
+        "storyid":"8fa963a6-0bd3-44e7-9569-d7d20d9c6f95",
+        "worker id":"A25S4JAEH0D1FT",
+        "story title":"Harry's Swing",
+        "sentence1":"Harry's golf swing is terrible.",
+        "sentence2":"One day, Harry decided to seek out help to improve his swing.",
+        "sentence3":"He hired a private trainer.",
+        "sentence4":"The private trainer was able to improve Harry's swing.",
+        "sentence5":"Eventually, Harry had the best golf swing in the club.",
+        "shuffled_sents":[
+            "The private trainer was able to improve Harry's swing.",
+            "He hired a private trainer.",
+            "Harry's golf swing is terrible.",
+            "Eventually, Harry had the best golf swing in the club.",
+            "One day, Harry decided to seek out help to improve his swing."
+        ]
+    }
+

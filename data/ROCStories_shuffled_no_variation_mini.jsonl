@@ -1,0 +1,55 @@
+
+    {
+        "storyid":"cba6ddf8-1d02-4c09-aa47-3ff7e469dd20",
+        "worker id":"A17J1CE7N49Z9D",
+        "story title":"Test",
+        "sentence1":"Jennifer has a big exam tomorrow.",
+        "sentence2":"She got so stressed, she pulled an all-nighter.",
+        "sentence3":"She went into class the next day, weary as can be.",
+        "sentence4":"Her teacher stated that the test is postponed for next week.",
+        "sentence5":"Jennifer felt bittersweet about it",
+        "shuffled_sents":[
+            "Her teacher stated that the test is postponed for next week.",
+            "She went into class the next day, weary as can be.",
+            "Jennifer felt bittersweet about it",
+            "Jennifer has a big exam tomorrow.",
+            "She got so stressed, she pulled an all-nighter."
+        ]
+    }
+
+    {
+        "storyid":"be6b1a5c-94e9-4527-af7a-9829b126f69a",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Hurricane",
+        "sentence1":"Morgan and her family lived in Florida.",
+        "sentence2":"They heard a hurricane was coming.",
+        "sentence3":"They decided to evacuate to a relative's house.",
+        "sentence4":"They arrived and learned from the news that it was a terrible storm.",
+        "sentence5":"They felt lucky they had evacuated when they did.",
+        "shuffled_sents":[
+            "They felt lucky they had evacuated when they did.",
+            "They decided to evacuate to a relative's house.",
+            "They heard a hurricane was coming.",
+            "Morgan and her family lived in Florida.",
+            "They arrived and learned from the news that it was a terrible storm."
+        ]
+    }
+
+    {
+        "storyid":"86fc3788-3610-45b0-b6fe-814ed6d7471f",
+        "worker id":"A1TME35X5JK5O6",
+        "story title":"Spaghetti Sauce",
+        "sentence1":"Tina made spaghetti for her boyfriend.",
+        "sentence2":"It took a lot of work, but she was very proud.",
+        "sentence3":"Her boyfriend ate the whole plate and said it was good.",
+        "sentence4":"Tina tried it herself, and realized it was disgusting.",
+        "sentence5":"She was touched that he pretended it was good to spare her feelings.",
+        "shuffled_sents":[
+            "It took a lot of work, but she was very proud.",
+            "Tina made spaghetti for her boyfriend.",
+            "Her boyfriend ate the whole plate and said it was good.",
+            "Tina tried it herself, and realized it was disgusting.",
+            "She was touched that he pretended it was good to spare her feelings."
+        ]
+    }
+

@@ -40,3 +40,19 @@ class CLI:
         if "device_id" in self.config.keys():
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
             self.config["device"] = f"cuda:{self.config["device_id"]}"
+
+        if "variation" not in self.config.keys():
+            self.config["variation"] = False
+        else:
+            if self.config["variation"].lower() == "true":
+                self.config["variation"] = True
+            else:
+                self.config["variation"] = False
+
+        if "final_reorder" not in self.config.keys():
+            self.config["final_reorder"] = False
+        else:
+            if self.config["final_reorder"].lower() == "true":
+                self.config["final_reorder"] = True
+            else:
+                self.config["final_reorder"] = False
