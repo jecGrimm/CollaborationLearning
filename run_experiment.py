@@ -164,9 +164,9 @@ def run_final_only(config: dict = None, logger: ExperimentLog = None):
 if __name__ == "__main__":
     cli = CLI()
 
-    run_experiment(cli.config)
+    #run_experiment(cli.config)
 
-    #run_final_only(cli.config)
+    run_final_only(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 

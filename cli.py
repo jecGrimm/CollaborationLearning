@@ -48,3 +48,11 @@ class CLI:
                 self.config["variation"] = True
             else:
                 self.config["variation"] = False
+
+        if "final_reorder" not in self.config.keys():
+            self.config["final_reorder"] = False
+        else:
+            if self.config["final_reorder"].lower() == "true":
+                self.config["final_reorder"] = True
+            else:
+                self.config["final_reorder"] = False

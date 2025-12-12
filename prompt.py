@@ -531,7 +531,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False):
+    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
         """
         This function prompts the multi-agent framework.
 
@@ -624,7 +624,7 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
