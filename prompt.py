@@ -11,7 +11,7 @@ from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 
 class Agent:
-    def __init__(self, model_id: str, split: str, framework: str):
+    def __init__(self, model_id: str, split: str, framework: str, interactive = True):
         """
         This class provides functionalities that are shared by the single- and multi-agent frameworks.
 
@@ -24,13 +24,17 @@ class Agent:
         self.model_name = model_id.split("/")[-1]
         self.split = split
         self.framework = framework
+        self.interactive = interactive
         self.date = str(datetime.now()).replace(" ", "_")
 
         self.prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
 
     def init_pipe(self, device, logger, thinking_budget):
         if self.framework == "multi":
-            max_new_tokens = 256
+            if self.interactive:
+                max_new_tokens = 256
+            else:
+                max_new_tokens = int((256 * 11)/6)
         else:
             max_new_tokens = 256 * 11 # give both frameworks the same amount of compute
 
@@ -281,7 +285,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final"):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", interactive = True):
         """
         This class defines multi-agents.
 
@@ -290,7 +294,7 @@ class MultiAgent(Agent):
             split: data split
             conversation_rounds: round of conversations
         """
-        super().__init__(model_id=model_id, split=split, framework="multi")
+        super().__init__(model_id=model_id, split=split, framework="multi", interactive=interactive)
 
         # define prompts
         self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
@@ -310,6 +314,7 @@ class MultiAgent(Agent):
         #self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
         self.conversation_rounds = conversation_rounds 
+        self.interactive = interactive
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None):
         """
@@ -325,8 +330,6 @@ class MultiAgent(Agent):
         """
         # define agent state
         other_players = [name for name in self.NAMES if name != player_name] 
-        # player_sent = roles[player_name]
-        # rules = self.RULES.format(sentence = player_sent)
         
         if not final:
             player_sent = roles[player_name]
@@ -343,7 +346,7 @@ class MultiAgent(Agent):
             ]
 
             # define user prompt (start or mid conversation)
-            if conv_round == 0 and turn == 0:
+            if conv_round == 0 and turn == 0 or self.interactive == False:
                 message.append(
                     {
                         "role": "user",
@@ -465,8 +468,8 @@ class MultiAgent(Agent):
         """
         messages = []
         for i in range(len(batch["storyid"])):
-            if conv_round == 0 and turn == 0:
-                batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i])) #assing sentences to players
+            # if conv_round == 0 and turn == 0 or batch["roles"][i]:
+            #     batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i])) #assing sentences to players
 
             if shuffled_sents:
                 messages.append(self.create_message(conv_round, turn, batch["conversation_history"][i], batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i]))
@@ -525,13 +528,13 @@ class MultiAgent(Agent):
                 if len(processed_inst) == 1:
                     batch["conversation_history"][i] = processed_inst["conversation_history"][0]
                     batch["turns"][i] = processed_inst["turns"][0]
-                    batch["player"][i] = processed_inst["player"][0]
-                    batch["roles"][i] = processed_inst["roles"][0]
+                    batch["player"][i] = processed_inst["player"][0] 
+                    #batch["roles"][i] = processed_inst["roles"][0] # TODO: check whether role exists
                     batch["stop"][i] = processed_inst["stop"][0]
 
         return batch
 
-    def prompt_models(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
+    def prompt_debate(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
         """
         This function prompts the multi-agent framework.
 
@@ -576,6 +579,8 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("turns", [[]]*len(shard_data))
             shard_data = shard_data.add_column("player", [[]]*len(shard_data))
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
+            shard_data = shard_data.map(self.define_roles, batched=True)
+
             #filtered_data = shard_data
             conv_round = 0
             while conv_round < self.conversation_rounds:
@@ -647,6 +652,103 @@ class MultiAgent(Agent):
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
+
+    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
+        """
+        This function prompts the multi-agent framework.
+
+        @params
+            logger: experiment logger
+            device: cpu/cuda
+            batch_size: batch size
+            thinking_budget: percentage of tokens allowed for "thinking" tokens
+        """
+        # initialize pipeline
+        torch.cuda.empty_cache()
+        pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
+        
+        # prepare dataset
+        roc_data = ROCStories(split = self.split, variation = variation)
+        logger.run_data.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conversation_rounds": self.conversation_rounds
+        })
+
+        prompt_data = roc_data.shuffled_dataset
+        full_output = None
+
+        start = time.time()
+        # process shards
+        num_shards = int((len(prompt_data)/300))+1
+        processed_inst = 0
+        for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
+            shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
+
+            # single processing
+            # outputs = shard_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size)
+            # self.save_outputs_hf(outputs, shard_idx=shard_idx)
+
+            # full_output_list += outputs["output"]
+
+            # batch processing
+            # add conversation to data
+            shard_data = shard_data.add_column("stop", [False]*len(shard_data))
+            shard_data = shard_data.add_column("conversation_history", [""]*len(shard_data))
+            shard_data = shard_data.add_column("turns", [[]]*len(shard_data))
+            shard_data = shard_data.add_column("player", [[]]*len(shard_data))
+            shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
+            shard_data = shard_data.map(self.define_roles, batched=True)
+            #filtered_data = shard_data
+            turn = 0
+            while turn < 5:
+                player_name = self.NAMES[turn]
+                
+                filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, 0, 0, player_name, final = False, shuffled_sents = False), batched = True)
+
+                # prompt 
+                turn_outputs = tqdm([out for out in pipe(
+                        list(filtered_data["prompt"]),
+                        batch_size = batch_size
+                    )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
+
+                # add model answer to conversation history
+                shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False), batched = True)
+
+                torch.cuda.empty_cache()
+
+                turn += 1
+            
+            # get final answer
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
+
+            # save ouput
+            outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
+
+            if full_output:
+                full_output = concatenate_datasets([full_output, shard_data])
+            else:
+                full_output = shard_data
+
+            processed_inst += len(shard_data)
+            logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            
+            logger.store_run_data()
+
+        end = time.time()
+        logger.run_data.update({"duration": end - start})
+
+        #output_data = prompt_data.add_column("output", full_output_list)
+        #outpath = self.save_outputs_hf(output_data)
+        outpath = self.save_outputs_hf(logger, full_output)
+        logger.run_data.update({"experiment_file": outpath})
+        logger.store_run_data()
+
+    def define_roles(self, batch):
+        for i in range(len(batch["storyid"])):
+            batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
+        
+        return batch
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False):
         if shuffled_sents:

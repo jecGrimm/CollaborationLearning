@@ -37,7 +37,7 @@ class CLI:
             self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
 
         # for grancir
-        if "device_id" in self.config.keys():
+        if "device_id" in self.config.keys() and self.config["device_id"]!="":
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
             self.config["device"] = f"cuda:{self.config["device_id"]}"
 
@@ -56,3 +56,11 @@ class CLI:
                 self.config["final_reorder"] = True
             else:
                 self.config["final_reorder"] = False
+
+        if "interactive" not in self.config.keys():
+            self.config["interactive"] = False
+        else:
+            if self.config["interactive"].lower() == "true":
+                self.config["interactive"] = True
+            else:
+                self.config["interactive"] = False
