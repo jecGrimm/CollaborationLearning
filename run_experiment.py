@@ -35,11 +35,14 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], interactive = config["interactive"])
 
             logger.log_multi(multi)
 
-            multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"])
+            if config["interactive"] == True:
+                multi.prompt_debate(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+            else:
+                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
 
             outfile = multi.define_outfile(logger, hf = True)
 
@@ -164,9 +167,9 @@ def run_final_only(config: dict = None, logger: ExperimentLog = None):
 if __name__ == "__main__":
     cli = CLI()
 
-    #run_experiment(cli.config)
+    run_experiment(cli.config)
 
-    run_final_only(cli.config)
+    #run_final_only(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 

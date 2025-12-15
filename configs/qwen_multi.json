@@ -3,13 +3,14 @@
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 64,
-    "model_id": "Qwen/Qwen3-14B",
-    "desc": "This run tests the final agent with shuffled sentences with Qwen3-14b with variation based on output 87.",
-    "candidate": "llama-str_gemini-final_llama-reorder_abstract-names",
+    "model_id": "Qwen/Qwen3-8B",
+    "desc": "This run tests the panel setup with Qwen3-8B.",
+    "candidate": "panel_llama-str_gemini-final_llama-reorder",
     "thinking_budget": 0.2,
     "conversation_rounds": 2,
     "variation": "True",
     "device_id": "0",
     "final_reorder": "True",
-    "conv_file": "outputs/multi/Qwen3-14B/dev/outputs_87"
+    "conv_file": "",
+    "interactive": "False"
 }
