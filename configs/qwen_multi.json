@@ -1,16 +1,17 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 16,
-    "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the graph setup with rejecting statements with Qwen3-32B without variation.",
+    "batch_size": 8,
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests the graph setup with rejecting statements and 612 tokens with Qwen3-0.6B without variation.",
     "candidate": "du_llama-str_gemini-final_llama-reorder_reject",
     "thinking_budget": 0.2,
     "conversation_rounds": 2,
-    "variation": "True",
-    "device_id": "0",
+    "variation": "False",
+    "device_id": "3",
     "final_reorder": "True",
     "conv_file": "",
-    "topology": "graph"
+    "topology": "graph",
+    "max_new_tokens": 612
 }

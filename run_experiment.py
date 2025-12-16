@@ -27,7 +27,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"])
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"])
             
             logger.log_single(single)
 
@@ -35,7 +35,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"])
 
             logger.log_multi(multi)
 

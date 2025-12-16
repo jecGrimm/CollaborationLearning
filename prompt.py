@@ -11,7 +11,7 @@ from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 
 class Agent:
-    def __init__(self, model_id: str, split: str, framework: str, interactive = True):
+    def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
         """
         This class provides functionalities that are shared by the single- and multi-agent frameworks.
 
@@ -29,22 +29,23 @@ class Agent:
 
         self.prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
 
-    def init_pipe(self, device, logger, thinking_budget):
         if self.framework == "multi":
-            if self.interactive:
-                max_new_tokens = 256
+            if self.interactive: 
+                self.max_new_tokens = max_new_tokens # graph and chain
             else:
-                max_new_tokens = int((256 * 11)/6)
+                max_new_tokens = int((max_new_tokens * 11)/6) # panel
         else:
-            max_new_tokens = 256 * 11 # give both frameworks the same amount of compute
+            max_new_tokens = max_new_tokens * 11 # single, give both frameworks the same amount of compute
 
+
+    def init_pipe(self, device, logger, thinking_budget):
         if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
             pipe = pipeline(
                 "text-generation",
                 model=self.model_id,
                 dtype=torch.bfloat16,
                 device_map=device,
-                max_new_tokens = max_new_tokens
+                max_new_tokens = self.max_new_tokens
                 # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
             )
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
@@ -52,7 +53,7 @@ class Agent:
             processor = None
         elif "qwen" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
-            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(max_new_tokens * thinking_budget)) # increased thinking budget
+            processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(self.max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
             if processor.max_thinking_tokens > 0:
@@ -62,7 +63,7 @@ class Agent:
                     model=self.model_id, 
                     dtype=torch.bfloat16,
                     device_map=device,
-                    max_new_tokens=int(max_new_tokens-processor.max_thinking_tokens), 
+                    max_new_tokens=int(self.max_new_tokens-processor.max_thinking_tokens), 
                     logits_processor=LogitsProcessorList([processor]), 
                     temperature = 0.6,
                     top_p = 0.95,
@@ -76,7 +77,7 @@ class Agent:
                     model=self.model_id, 
                     dtype=torch.bfloat16,
                     device_map=device,
-                    max_new_tokens=max_new_tokens, 
+                    max_new_tokens=self.max_new_tokens, 
                     logits_processor=LogitsProcessorList([processor]), 
                     temperature = 0.7,
                     top_p = 0.8,
@@ -158,7 +159,7 @@ class Agent:
                 return path
 
 class SingleAgent(Agent):
-    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final"):
+    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", max_new_tokens = 256):
         """
         This class defines single-agents.
 
@@ -170,7 +171,7 @@ class SingleAgent(Agent):
         self.split = split
 
         # initialize Agent
-        super().__init__(model_id=model_id, split=split, framework="single", interactive = False)
+        super().__init__(model_id=model_id, split=split, framework="single", interactive = False, max_new_tokens=max_new_tokens)
 
         self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
         #self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
@@ -285,7 +286,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain"):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256):
         """
         This class defines multi-agents.
 
@@ -301,7 +302,7 @@ class MultiAgent(Agent):
         else:
             self.interactive = False
 
-        super().__init__(model_id=model_id, split=split, framework="multi", interactive=self.interactive)
+        super().__init__(model_id=model_id, split=split, framework="multi", interactive=self.interactive, max_new_tokens=max_new_tokens)
 
         # define prompts
         self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
@@ -424,55 +425,6 @@ class MultiAgent(Agent):
                 )
 
         return message
-
-    def play_games(self, batch, pipe):
-        '''
-        @deprecated
-        This function processes conversations iteratively.
-
-        @params
-            batch: batch of instances
-            pipe: pipeline object
-        @returns
-            dictionary with the conversational turns and player names
-        '''
-        batch_turns = []
-        batch_players = []
-        for i in range(len(batch["storyid"])):
-            conv_round = 0
-            turn = 0
-            conversation = ""
-            turns = []
-            players = []
-
-            roles = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
-            while conv_round < self.conversation_rounds:
-                while turn < 5:
-                    player_name = self.NAMES[turn]
-
-                    model_out = pipe(
-                            self.create_message(conv_round, turn, conversation, roles, player_name),
-                            max_new_tokens=256
-                    )
-                    
-                    model_answer = model_out[0]["generated_text"][2]["content"]
-                
-                    conversation += f"\n{player_name}: {model_answer}\n"
-                    #turns.append({"player": player_name, "answer": model_answer, "system_prompt": model_out[0]["generated_text"][0]["content"], "turn_prompt": model_out[0]["generated_text"][1]["content"]})
-                    turns.append(model_answer)
-                    players.append(player_name)
-                    if "STOP" in model_answer and conv_round > 0:
-                        conv_round = self.conversation_rounds
-                        turn = 5
-                    else: 
-                        turn += 1
-                conv_round += 1
-            
-            #batch_convs.append(turns)
-            batch_turns.append(turns)
-            batch_players.append(players)
-
-        return {"turns": batch_turns, "players": batch_players}
     
     def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False):
         """
