@@ -35,12 +35,14 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], interactive = config["interactive"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"])
 
             logger.log_multi(multi)
 
-            if config["interactive"] == True:
-                multi.prompt_debate(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+            if config["topology"] == "chain":
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+            elif config["topology"] == "graph":
+                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
             else:
                 multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
 

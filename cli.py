@@ -57,10 +57,10 @@ class CLI:
             else:
                 self.config["final_reorder"] = False
 
-        if "interactive" not in self.config.keys():
-            self.config["interactive"] = False
-        else:
-            if self.config["interactive"].lower() == "true":
-                self.config["interactive"] = True
-            else:
-                self.config["interactive"] = False
+        # if "interactive" not in self.config.keys():
+        #     self.config["interactive"] = False
+        # else:
+        #     if self.config["interactive"].lower() == "true":
+        #         self.config["interactive"] = True
+        #     else:
+        #         self.config["interactive"] = False
