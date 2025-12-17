@@ -1,7 +1,7 @@
 {
     "split": "dev",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/dev/ckps/outputs_119_0",
+    "experiment_file": "./outputs/multi/Qwen3-32B/dev/ckps/outputs_119_4",
     "batch_size": 16,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the graph setup with rejecting statements with Qwen3-32B with variation.",
@@ -189,5 +189,5 @@
     "min_p": 0,
     "shuffle_file": "./data/ROCStories_shuffled_dev.jsonl",
     "run_idx": 119,
-    "instances": 250
+    "instances": 1250
 }
