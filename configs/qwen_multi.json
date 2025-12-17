@@ -4,7 +4,7 @@
     "experiment_file": "",
     "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the graph setup with rejecting statements and 612 tokens with Qwen3-32B without variation.",
+    "desc": "This run tests the graph setup with 512 tokens with Qwen3-32B without variation.",
     "candidate": "du_llama-str_gemini-final_llama-reorder_reject",
     "thinking_budget": 0.2,
     "conversation_rounds": 2,
@@ -13,5 +13,5 @@
     "final_reorder": "True",
     "conv_file": "",
     "topology": "graph",
-    "max_new_tokens": 612
+    "max_new_tokens": 512
 }
