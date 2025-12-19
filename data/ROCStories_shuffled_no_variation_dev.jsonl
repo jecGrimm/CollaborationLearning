@@ -2,7 +2,7 @@
     {
         "storyid":"cba6ddf8-1d02-4c09-aa47-3ff7e469dd20",
         "worker id":"A17J1CE7N49Z9D",
-        "story title":"Test",
+        "storytitle":"Test",
         "sentence1":"Jennifer has a big exam tomorrow.",
         "sentence2":"She got so stressed, she pulled an all-nighter.",
         "sentence3":"She went into class the next day, weary as can be.",
@@ -20,7 +20,7 @@
     {
         "storyid":"be6b1a5c-94e9-4527-af7a-9829b126f69a",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Hurricane",
+        "storytitle":"Hurricane",
         "sentence1":"Morgan and her family lived in Florida.",
         "sentence2":"They heard a hurricane was coming.",
         "sentence3":"They decided to evacuate to a relative's house.",
@@ -38,7 +38,7 @@
     {
         "storyid":"86fc3788-3610-45b0-b6fe-814ed6d7471f",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Spaghetti Sauce",
+        "storytitle":"Spaghetti Sauce",
         "sentence1":"Tina made spaghetti for her boyfriend.",
         "sentence2":"It took a lot of work, but she was very proud.",
         "sentence3":"Her boyfriend ate the whole plate and said it was good.",
@@ -56,7 +56,7 @@
     {
         "storyid":"e29bc99e-a7be-45bc-a36a-bf68c6ff5797",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Essay",
+        "storytitle":"Essay",
         "sentence1":"My professor assigned my class an essay.",
         "sentence2":"By the time I left the classroom, I had forgotten about it.",
         "sentence3":"A few days later, my classmate messaged me to ask if I had done it.",
@@ -74,7 +74,7 @@
     {
         "storyid":"75618520-d241-4ae6-a4b0-712638dbf654",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Holey Jeans",
+        "storytitle":"Holey Jeans",
         "sentence1":"Kaitlyn thought jeans with holes were very stylish.",
         "sentence2":"She wore them to school to show them off.",
         "sentence3":"The principal told her they were against dress code.",
@@ -92,7 +92,7 @@
     {
         "storyid":"4ae42e28-4fb2-47eb-a166-4ae9fa72456b",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Earthquake!",
+        "storytitle":"Earthquake!",
         "sentence1":"James woke up in the middle of the night to find his bed shaking.",
         "sentence2":"All the things in his room were shaking furiously.",
         "sentence3":"He was scared, but then suddenly it stopped.",
@@ -110,7 +110,7 @@
     {
         "storyid":"6108a7ea-0056-44be-bd55-86e10cffb663",
         "worker id":"A1V6CP5I0TOSAR",
-        "story title":"College",
+        "storytitle":"College",
         "sentence1":"I was so nervous for my first day of school.",
         "sentence2":"When I arrived at my first class, I was shaking.",
         "sentence3":"I sat next the prettiest girl in class.",
@@ -128,7 +128,7 @@
     {
         "storyid":"1bf0ec70-8a53-44bc-918d-bca2b8262c74",
         "worker id":"A1Y9VZIJBKNNO9",
-        "story title":"Lost Phone",
+        "storytitle":"Lost Phone",
         "sentence1":"Uli was looking forward to her basketball game this afternoon.",
         "sentence2":"She entered the gym and left her backpack on the bleachers.",
         "sentence3":"After the game, she couldn't find her phone in her backpack.",
@@ -146,7 +146,7 @@
     {
         "storyid":"f8bd34a9-af2f-4d2d-bc9a-66f9a24d9d25",
         "worker id":"A1YNDCJZHJR9HB",
-        "story title":"The Noisy Trumpet",
+        "storytitle":"The Noisy Trumpet",
         "sentence1":"Anna was a professional trumpet player.",
         "sentence2":"She got a new apartment in the city.",
         "sentence3":"Unfortunately, the walls were much thinner than her old place!",
@@ -164,7 +164,7 @@
     {
         "storyid":"41e61222-00cf-44ab-88c4-b8da1580ee6d",
         "worker id":"A271BMHV42XZPU",
-        "story title":"Bill's Bicycle",
+        "storytitle":"Bill's Bicycle",
         "sentence1":"Bill decided to ride his bicycle to school.",
         "sentence2":"On the way there, he got a flat tire.",
         "sentence3":"A man saw Bill's flat tire and stopped his car.",
@@ -182,7 +182,7 @@
     {
         "storyid":"be4cdf1c-efca-4f8b-9dac-1b2bb0ea9bb9",
         "worker id":"A2ABSQBRUAUS4C",
-        "story title":"The Smell In the Fridge",
+        "storytitle":"The Smell In the Fridge",
         "sentence1":"While at home Robert smelled something terrible.",
         "sentence2":"He went to the kitchen to investigate.",
         "sentence3":"The source of the smell appeared to come from the refrigerator.",
@@ -200,7 +200,7 @@
     {
         "storyid":"eba4a12f-dbb4-4e4e-a5c0-c988ff5addc1",
         "worker id":"A2AWBDW9V1E9KT",
-        "story title":"Slow Folk",
+        "storytitle":"Slow Folk",
         "sentence1":"Joe stopped at a traffic light.",
         "sentence2":"The light was green but he didn't go.",
         "sentence3":"The people behind him honked their horns.",
@@ -218,7 +218,7 @@
     {
         "storyid":"dac3aa24-7092-427b-a7ce-b1d257e0a4b1",
         "worker id":"A2S421V2HMNHQQ",
-        "story title":"Nacre vs. Enamel: The Ultimate Grudge Match",
+        "storytitle":"Nacre vs. Enamel: The Ultimate Grudge Match",
         "sentence1":"A man found a pearl in an oyster.",
         "sentence2":"Unfortunately, he was eating the oyster at the time.",
         "sentence3":"He chipped a tooth on the pearl.",
@@ -236,7 +236,7 @@
     {
         "storyid":"780d0172-a963-4dc8-8bd9-d3c984cbb89c",
         "worker id":"A2S421V2HMNHQQ",
-        "story title":"Always Know the Date",
+        "storytitle":"Always Know the Date",
         "sentence1":"A nuclear missile silo received a launch order.",
         "sentence2":"The officer in charge opened the safe to verify the code.",
         "sentence3":"He opened the envelope containing that day's code.",
@@ -254,7 +254,7 @@
     {
         "storyid":"ae51f7f7-8a2a-4962-aac2-863a3ce9b5b4",
         "worker id":"A2S421V2HMNHQQ",
-        "story title":"Always Consult Your Local Planning Office",
+        "storytitle":"Always Consult Your Local Planning Office",
         "sentence1":"A family decided to build a new barbecue pit in their yard.",
         "sentence2":"Rather than pay for an excavator, they decided to dig it themselves.",
         "sentence3":"A few feet down, and one of them hit what he thought was a small root.",
@@ -272,7 +272,7 @@
     {
         "storyid":"49fc5cc6-69cc-4628-8497-5677717095b5",
         "worker id":"A31A4YKVSOYRVS",
-        "story title":"Briana's Accident.",
+        "storytitle":"Briana's Accident.",
         "sentence1":"Briana was riding a four wheeler with her brother.",
         "sentence2":"They were going fast down a dirt road.",
         "sentence3":"Suddenly, they hit a rock.",
@@ -290,7 +290,7 @@
     {
         "storyid":"88b63bc6-86fb-4a91-a5d3-f6d727c3bcb1",
         "worker id":"A3DS5B06ZCD3E3",
-        "story title":"A Stinging Lesson",
+        "storytitle":"A Stinging Lesson",
         "sentence1":"Jeff was playing outside one sunny day.",
         "sentence2":"He heard a buzzing sound coming from the hedges.",
         "sentence3":"When he reached into the hedges, a swarm of bees came flying out.",
@@ -308,7 +308,7 @@
     {
         "storyid":"45293f96-6a36-4131-9617-0cfe660f626b",
         "worker id":"AC4YC9D7M7XAH",
-        "story title":"Playing Basketball",
+        "storytitle":"Playing Basketball",
         "sentence1":"Chelsea hurt her fingers playing basketball.",
         "sentence2":"She was really scared to go to the doctor.",
         "sentence3":"Chelsea's dad convinced her to go and get checked out.",
@@ -326,7 +326,7 @@
     {
         "storyid":"9e45843a-2215-42e1-af53-1d0e262ca9c6",
         "worker id":"AE861G0AY5RGT",
-        "story title":"The Baby Shower",
+        "storytitle":"The Baby Shower",
         "sentence1":"Amy's friend Beth was having a baby.",
         "sentence2":"Amy called her friends to come to a surprise baby shower.",
         "sentence3":"Everyone waited quietly for Beth to enter.",
@@ -344,7 +344,7 @@
     {
         "storyid":"3a23f7a7-e426-425f-a223-bfeda3d38c48",
         "worker id":"AE861G0AY5RGT",
-        "story title":"The new phone",
+        "storytitle":"The new phone",
         "sentence1":"Tyler was excited to get the newly released cell phone.",
         "sentence2":"He was surprised to see a long line when he arrived at the store.",
         "sentence3":"He waited in line for an hour to purchase his phone.",
@@ -362,7 +362,7 @@
     {
         "storyid":"cd191579-88f6-4210-b0e6-e87241e4fe90",
         "worker id":"AUQTHU5AOZVQC",
-        "story title":"The Big Swing",
+        "storytitle":"The Big Swing",
         "sentence1":"Andrew thought he was a good golfer.",
         "sentence2":"He challenged his friend Dylan to see who was better.",
         "sentence3":"Dylan accepted the challenge and worked hard to prepare.",
@@ -380,7 +380,7 @@
     {
         "storyid":"427ae6de-bddf-4a9c-bd81-ed18a9acd541",
         "worker id":"A1TME35X5JK5O6",
-        "story title":"Tuna Sandwich",
+        "storytitle":"Tuna Sandwich",
         "sentence1":"I made myself a tuna sandwich for lunch.",
         "sentence2":"As I was sitting down to eat, the phone rang.",
         "sentence3":"I got up to answer the phone and had a short conversation.",
@@ -398,7 +398,7 @@
     {
         "storyid":"0c38d810-9165-47c4-bc0c-96a11f1ab5f7",
         "worker id":"A3DS5B06ZCD3E3",
-        "story title":"A Good Deed",
+        "storytitle":"A Good Deed",
         "sentence1":"Beth was leaving work on Tuesday.",
         "sentence2":"She noticed a man dropped his wallet in the parking lot.",
         "sentence3":"She ran all the way across the lot to give it back to him.",
@@ -416,7 +416,7 @@
     {
         "storyid":"363eeb24-91fe-4255-976c-5e4c934080ac",
         "worker id":"A25S4JAEH0D1FT",
-        "story title":"Poker",
+        "storytitle":"Poker",
         "sentence1":"Dan's friend introduced Dan to poker.",
         "sentence2":"Dan realized he was very good at playing poker.",
         "sentence3":"Dan decided to go to Las Vegas to test his skill.",
@@ -434,7 +434,7 @@
     {
         "storyid":"8fa963a6-0bd3-44e7-9569-d7d20d9c6f95",
         "worker id":"A25S4JAEH0D1FT",
-        "story title":"Harry's Swing",
+        "storytitle":"Harry's Swing",
         "sentence1":"Harry's golf swing is terrible.",
         "sentence2":"One day, Harry decided to seek out help to improve his swing.",
         "sentence3":"He hired a private trainer.",

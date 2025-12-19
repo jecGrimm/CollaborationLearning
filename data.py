@@ -6,7 +6,7 @@ def get_sent_list(batch, i):
     return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i], batch["sentence5"][i]]
 
 class ROCStories:
-    def __init__(self, shuffle = False, split = "mini", variation = False):
+    def __init__(self, shuffle = False, split = "mini", variation = False, distractor_title = False):
         '''
         This constructor loads the original ROCStories data and creates the shuffled dataset.
 
@@ -57,6 +57,9 @@ class ROCStories:
                 else:
                     self.shuffled_dataset = self.shuffled_dataset.select(range(start = 25, stop = 50))
 
+        if distractor_title:
+            self.shuffled_dataset = self.shuffled_dataset.map(self.add_distractor_title, batched=True)
+
     def shuffle_sents(self, batch):
         '''
         This method shuffles the first four sentences in the instance. 
@@ -73,10 +76,17 @@ class ROCStories:
             batch_shuffled.append(ordered_sents_copy)
 
         return {"shuffled_sents":  batch_shuffled}
+    
+    def add_distractor_title(self, batch):
+        batch_distractor_titles = list()
+        for i in range(len(batch["storyid"])):
+            batch_distractor_titles.append(batch["storytitle"][i-1])
+
+        return {"distractor_title":  batch_distractor_titles}
         
 if __name__ == "__main__":
-    roc_data = ROCStories(split = "dev", variation = False)
-    outpath = "outputs/random/dev_no_variation"
+    roc_data = ROCStories(split = "dev", variation = False, distractor_title=True)
+    outpath = "data/ROCStories_shuffled_no_variation_dev.jsonl"
 
     roc_data.shuffled_dataset.save_to_disk(outpath)
 
