@@ -597,6 +597,6 @@ if __name__ == "__main__":
     # } 
 
     #update_evaluation_files(frameworks=["multi"], splits=["dev"])
-    # dev_multi_models, insts = create_compare_dict(framework="single", split="dev")
-    # compare_instances(dev_multi_models, "./eval/single/eval_compare_models_dev.csv", insts)
+    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 

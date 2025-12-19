@@ -9,7 +9,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128G
 #SBATCH --time=2-00:00:00
-#SBATCH --comment="This run tests the graph setup with rejecting statements and 612 tokens with Qwen3-32B without variation. Idx: 120"
+#SBATCH --comment="This run tests the graph setup with rejecting statements and 512 tokens with Qwen3-32B without variation. Idx: 122"
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=jgrimm@cis.lmu.de
 #SBATCH --chdir=/dss/dsshome1/0F/di97pub/CollaborationLearning/
