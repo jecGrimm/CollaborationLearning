@@ -143,7 +143,7 @@
         "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
         "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
     },
-    "gemini-final_llama-reorder_single_du-reasoning_discract": {
+    "gemini-final_llama-reorder_single_du-reasoning_distract": {
         "single": "Reorder the following sentences of the short story with the title '{distractor_title}' to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nPlease explain your reasoning before providing the final answer.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']"
     },
     "gemini-final_llama-reorder_single_distract": {
