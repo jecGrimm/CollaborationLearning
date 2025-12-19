@@ -57,6 +57,14 @@ class CLI:
             else:
                 self.config["final_reorder"] = False
 
+        if "distract" not in self.config.keys():
+            self.config["distract"] = False
+        else:
+            if self.config["distract"].lower() == "true":
+                self.config["distract"] = True
+            else:
+                self.config["distract"] = False
+
         # if "interactive" not in self.config.keys():
         #     self.config["interactive"] = False
         # else:

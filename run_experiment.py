@@ -31,7 +31,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             
             logger.log_single(single)
 
-            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"]) 
+            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], distract = config["distract"]) 
 
             outfile = single.define_outfile(logger, hf = True)
         else:
@@ -40,11 +40,11 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             logger.log_multi(multi)
 
             if config["topology"] == "chain":
-                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"], distract=config["distract"])
             elif config["topology"] == "graph":
-                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"], distract=config["distract"])
             else:
-                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"], distract=config["distract"])
 
             outfile = multi.define_outfile(logger, hf = True)
 
