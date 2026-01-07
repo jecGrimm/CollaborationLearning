@@ -1,0 +1,63 @@
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:02<00:38,  2.40s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:04<00:35,  2.38s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:07<00:32,  2.34s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:09<00:30,  2.33s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:11<00:27,  2.33s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:14<00:25,  2.32s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:16<00:23,  2.33s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:18<00:21,  2.34s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:21<00:18,  2.34s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:23<00:16,  2.33s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:25<00:13,  2.33s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:27<00:11,  2.32s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:30<00:09,  2.33s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:32<00:06,  2.33s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:35<00:04,  2.34s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [00:37<00:02,  2.33s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:39<00:00,  2.19s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:39<00:00,  2.31s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Processing shards:   0%|          | 0/1 [00:00<?, ?it/s]
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2444.92 examples/s]
+
+Filter:   0%|          | 0/25 [00:00<?, ? examples/s][AFilter: 100%|██████████| 25/25 [00:00<00:00, 5126.01 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2637.73 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 733.82it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1910.01 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 25/25 [00:00<00:00, 137.13 examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 134.26 examples/s]
+
+Filter:   0%|          | 0/25 [00:00<?, ? examples/s][AFilter: 100%|██████████| 25/25 [00:00<00:00, 5745.62 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap:   0%|          | 0/25 [00:00<?, ? examples/s]
+Processing shards:   0%|          | 0/1 [00:37<?, ?it/s]
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 172, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 43, in run_experiment
+    multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"], distract=config["distract"])
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 578, in prompt_chain
+    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False), batched = True)
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3341, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+                               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3697, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3647, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3570, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 578, in <lambda>
+    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False), batched = True)
+                                                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 464, in create_prompts
+    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, init_answer = init_turn, distractor_title = distractor_title))
+                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 392, in create_message
+    "content": self.MID_PROMPT.format(
+               ~~~~~~~~~~~~~~~~~~~~~~^
+        player_name = player_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        sentence = player_sent
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+KeyError: 'other_solutions'
+srun: error: lrz-dgx-a100-005: task 0: Exited with exit code 1

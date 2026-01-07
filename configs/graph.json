@@ -4,16 +4,16 @@
     "experiment_file": "",
     "batch_size": 16,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests graph with the distractor title with Qwen3-32B without variation.",
+    "desc": "This run tests graph with the distractor title with Qwen3-32B with variation.",
     "candidate": "du_llama-str_gemini-final_llama-reorder_reject_distract",
     "thinking_budget": 0.2,
     "conversation_rounds": 2,
-    "variation": "False",
+    "variation": "True",
     "device_id": "",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "graph",
     "max_new_tokens": 256,
     "distract": "True",
-    "run_idx": 128
+    "run_idx": 133
 }

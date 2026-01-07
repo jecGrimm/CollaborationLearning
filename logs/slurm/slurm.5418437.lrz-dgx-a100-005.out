@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 170, in <module>
+    cli = CLI()
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/cli.py", line 29, in __init__
+    if "device" not in self.config.keys():
+                       ^^^^^^^^^^^
+AttributeError: 'CLI' object has no attribute 'config'
+srun: error: lrz-dgx-a100-005: task 0: Exited with exit code 1

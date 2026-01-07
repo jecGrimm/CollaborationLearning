@@ -1,0 +1,94 @@
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:15<04:08, 15.55s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:32<04:01, 16.08s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:46<03:35, 15.43s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [01:01<03:17, 15.22s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [01:16<03:01, 15.14s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [01:32<02:50, 15.47s/it]Loading checkpoint shards:  41%|████      | 7/17 [01:47<02:33, 15.39s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [02:04<02:21, 15.67s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [02:19<02:03, 15.48s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [02:34<01:47, 15.38s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [02:49<01:31, 15.17s/it]Loading checkpoint shards:  71%|███████   | 12/17 [03:04<01:16, 15.27s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [03:19<01:01, 15.26s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [03:36<00:46, 15.65s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [03:51<00:30, 15.39s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [04:06<00:15, 15.27s/it]Loading checkpoint shards: 100%|██████████| 17/17 [04:17<00:00, 14.21s/it]Loading checkpoint shards: 100%|██████████| 17/17 [04:17<00:00, 15.17s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 50 examples [00:00, 254.36 examples/s]Generating train split: 50 examples [00:00, 251.02 examples/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 25 examples [00:00, 280.56 examples/s]
+Map:   0%|          | 0/25 [00:00<?, ? examples/s]Map: 100%|██████████| 25/25 [00:00<00:00, 2799.79 examples/s]
+Processing shards:   0%|          | 0/1 [00:00<?, ?it/s]
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 640.08 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2273.68 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 716.44it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 2048.00 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2564.13 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 416.31it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1904.98 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2185.03 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 461.09it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 913.38 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2442.87 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 659.86it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 2151.37 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2524.50 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 414.53it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1853.10 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 1831.06 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 404.69it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1992.24 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 1816.79 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 389.29it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 768.05 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2057.56 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 404.25it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1914.93 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 1603.89 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 394.93it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1734.04 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 817.74 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 391.48it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1665.20 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 1312.85 examples/s]
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+
+Generating final answers:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AGenerating final answers: 100%|██████████| 25/25 [00:00<00:00, 397.82it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1471.77 examples/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/25 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3727.87 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3673.41 examples/s]
+Processing shards: 100%|██████████| 1/1 [10:46<00:00, 646.22s/it]Processing shards: 100%|██████████| 1/1 [10:46<00:00, 646.22s/it]
+Saving the dataset (0/1 shards):   0%|          | 0/25 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3865.15 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3809.82 examples/s]
+Map:   0%|          | 0/25 [00:00<?, ? examples/s]Map: 100%|██████████| 25/25 [00:00<00:00, 904.90 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 350.43ba/s]
+Mean accuracy: 0.84

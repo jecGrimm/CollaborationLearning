@@ -1,0 +1,42 @@
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:02<00:38,  2.43s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:04<00:36,  2.41s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:07<00:33,  2.38s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:09<00:30,  2.36s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:11<00:28,  2.36s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:14<00:25,  2.36s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:16<00:23,  2.36s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:18<00:21,  2.37s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:21<00:18,  2.36s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:23<00:16,  2.36s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:26<00:14,  2.36s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:28<00:11,  2.35s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:30<00:09,  2.35s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:33<00:07,  2.36s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:35<00:04,  2.36s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [00:37<00:02,  2.35s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:39<00:00,  2.21s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:39<00:00,  2.33s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 20000 examples [00:00, 176380.22 examples/s]Generating train split: 40000 examples [00:00, 163926.71 examples/s]Generating train split: 52665 examples [00:00, 174316.38 examples/s]
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 5266 examples [00:00, 103709.92 examples/s]
+Map:   0%|          | 0/1500 [00:00<?, ? examples/s]Map: 100%|██████████| 1500/1500 [00:00<00:00, 99635.06 examples/s]
+Map:   0%|          | 0/1500 [00:00<?, ? examples/s]Map: 100%|██████████| 1500/1500 [00:00<00:00, 43925.85 examples/s]
+Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 217682.37it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 27469.05 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 27101.29 examples/s]
+Processing shards:  17%|█▋        | 1/6 [25:09<2:05:45, 1509.20s/it]
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 143975.83it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 30456.19 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 30073.59 examples/s]
+Processing shards:  33%|███▎      | 2/6 [50:39<1:41:26, 1521.55s/it]
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 172491.53it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 33640.55 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 33134.55 examples/s]
+Processing shards:  50%|█████     | 3/6 [1:16:20<1:16:31, 1530.42s/it]
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 137032.93it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 41183.61 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 40362.45 examples/s]
+Processing shards:  67%|██████▋   | 4/6 [1:41:21<50:37, 1518.88s/it]  
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 154361.25it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 36491.25 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 35965.56 examples/s]
+Processing shards:  83%|████████▎ | 5/6 [2:06:11<25:08, 1508.52s/it]
+Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 150333.48it/s]
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 6146.29 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 6128.33 examples/s]
+Processing shards: 100%|██████████| 6/6 [2:29:52<00:00, 1478.70s/it]Processing shards: 100%|██████████| 6/6 [2:29:52<00:00, 1498.76s/it]
+Saving the dataset (0/1 shards):   0%|          | 0/1500 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 1500/1500 [00:00<00:00, 200505.32 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 1500/1500 [00:00<00:00, 197496.74 examples/s]
+Map:   0%|          | 0/1500 [00:00<?, ? examples/s]Map:  67%|██████▋   | 1000/1500 [00:00<00:00, 1375.65 examples/s]Map: 100%|██████████| 1500/1500 [00:01<00:00, 1401.99 examples/s]Map: 100%|██████████| 1500/1500 [00:01<00:00, 1391.62 examples/s]
+Creating json from Arrow format:   0%|          | 0/2 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 2/2 [00:00<00:00, 141.33ba/s]
+Mean accuracy: 0.836

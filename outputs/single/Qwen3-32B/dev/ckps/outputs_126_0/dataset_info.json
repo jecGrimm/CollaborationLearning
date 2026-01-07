@@ -1,0 +1,94 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "json",
+  "dataset_size": 15535,
+  "description": "",
+  "download_checksums": {
+    "/dss/dsshome1/0F/di97pub/CollaborationLearning/./data/ROCStories_shuffled_no_variation_dev.jsonl": {
+      "num_bytes": 22136,
+      "checksum": null
+    }
+  },
+  "download_size": 22136,
+  "features": {
+    "storyid": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "worker id": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "storytitle": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence1": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence2": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence3": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence4": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence5": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "shuffled_sents": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "distractor_title": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "prompt": {
+      "feature": {
+        "content": {
+          "dtype": "string",
+          "_type": "Value"
+        },
+        "role": {
+          "dtype": "string",
+          "_type": "Value"
+        }
+      },
+      "_type": "List"
+    },
+    "thinking_output": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 37671,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 15535,
+      "num_examples": 25,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
