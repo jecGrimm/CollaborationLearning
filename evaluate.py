@@ -77,11 +77,11 @@ def evaluate_order_answer_single(batch):
     kendalltau = []
 
     for i in range(len(batch["storyid"])):
-        pred = extract_answer_list(batch["output"][i].split("</think>")[-1].strip())
-        pred_lists.append(pred)
-
         gold = get_sent_list(batch, i)
         gold_sents.append(gold)
+
+        pred = extract_answer_list(batch["output"][i].split("</think>")[-1].strip(), gold)
+        pred_lists.append(pred)
 
         acc.append(compute_accuracy_order(pred, batch, i))
 
@@ -187,7 +187,7 @@ def evaluate_order_answer_random(batch):
     
     return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
 
-def extract_answer_list(model_out: str):
+def extract_answer_list(model_out: str, gold: list):
     """
     This function extract the list with predictions from the model output string. 
 
@@ -199,14 +199,14 @@ def extract_answer_list(model_out: str):
     #print("model out", model_out)
     try:
         model_answer = clean_out(model_out)
-
+        model_answer = clean_match(model_answer)
         #print("model answer", model_answer)
         # model only returned output list
         model_pred = ast.literal_eval(model_answer)
         #print("model pred", model_pred)
         
         if type(model_pred) in (list, tuple):
-            return clean_preds(model_pred)
+            return clean_preds(model_pred, gold)
         elif type(model_pred) == str:
             # extract list from model output
             str_list = match_list(model_pred) # only use first guess by the model
@@ -281,7 +281,7 @@ def clean_match(str_list: str):
     str_list = fr"{str_list}"
     return str_list
 
-def clean_preds(model_pred: list):
+def clean_preds(model_pred: list, gold: list):
     """
     This function extracts the predictions from the output list.
 
@@ -292,7 +292,7 @@ def clean_preds(model_pred: list):
     """
     # get types of items in the list
     pred_types = [(i, type(item)) for i, item in enumerate(model_pred) if type(item) != str]
-    cleaned_pred = []
+    cleaned_pred = [""] * 5
 
     if len(pred_types) != 0:
         # Prioritize tuples
@@ -323,8 +323,10 @@ def clean_preds(model_pred: list):
                     if type(model_pred[model_i][0]) == str and type(model_pred[model_i][1]) == str:
                         cleaned_pred = list(model_pred[0])
                         type_i = max_i
+            elif pred_type == dict and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
+                cleaned_pred[model_pred[model_i]["position"]-1] = model_pred[model_i]["sentence"]
             elif pred_type == int:
-                cleaned_pred = [""] * 5 # do not extract numbers due to wrong instruction following
+                cleaned_pred[model_i] = gold[model_i] # TODO: test
             type_i += 1
     else:
         # turn model prediction into list if the format is already correct

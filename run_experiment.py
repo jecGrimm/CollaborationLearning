@@ -27,7 +27,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"])
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"])
             
             logger.log_single(single)
 
@@ -35,16 +35,16 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"])
 
             logger.log_multi(multi)
 
             if config["topology"] == "chain":
-                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["output_format"])
             elif config["topology"] == "graph":
-                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"])
             else:
-                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], variation = config["variation"], final_reorder=config["final_reorder"])
+                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"])
 
             outfile = multi.define_outfile(logger, hf = True)
 

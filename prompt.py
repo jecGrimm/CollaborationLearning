@@ -9,6 +9,7 @@ from tqdm import tqdm
 from datasets import Dataset, concatenate_datasets, load_from_disk
 from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
+import ast
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
@@ -33,9 +34,9 @@ class Agent:
             if self.interactive: 
                 self.max_new_tokens = max_new_tokens # graph and chain
             else:
-                max_new_tokens = int((max_new_tokens * 11)/6) # panel
+                self.max_new_tokens = int((max_new_tokens * 11)/6) # panel
         else:
-            max_new_tokens = max_new_tokens * 11 # single, give both frameworks the same amount of compute
+            self.max_new_tokens = max_new_tokens * 11 # single, give both frameworks the same amount of compute
 
 
     def init_pipe(self, device, logger, thinking_budget):
@@ -159,7 +160,7 @@ class Agent:
                 return path
 
 class SingleAgent(Agent):
-    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", max_new_tokens = 256):
+    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", max_new_tokens = 256, structured = True, output_format = "full"):
         """
         This class defines single-agents.
 
@@ -174,7 +175,15 @@ class SingleAgent(Agent):
         super().__init__(model_id=model_id, split=split, framework="single", interactive = False, max_new_tokens=max_new_tokens)
 
         self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
-        #self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
+        self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
+        self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
+
+        if output_format == "hypo":
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the sentence>}},\n]" 
+        elif output_format == "full":
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>}},\n]" 
+
+        self.structured = structured
 
     def create_message(self, batch):
         """
@@ -188,8 +197,18 @@ class SingleAgent(Agent):
         batch_messages = []
         for i in range(len(batch["storyid"])):
             #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
-            message = []
-            message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
+            message = [] # TODO: Fix box
+
+            if self.structured:
+                message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
+
+                #sample_hypo = self.HYPO_FORMAT
+                #for sent_n, sent in enumerate(batch["shuffled_sents"][i], start=1):
+                sample = self.OUTPUT_FORMAT.format(**{f"sentence{n}": sent for n, sent in enumerate(batch["shuffled_sents"][i], start=1)})
+                message.append({"role": "user", "content": self.PROMPT.format(sample = sample)})
+            else:
+                message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
+                message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
             #batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
 
             # if not thinking:
@@ -286,7 +305,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True):
         """
         This class defines multi-agents.
 
@@ -323,6 +342,10 @@ class MultiAgent(Agent):
 
         self.conversation_rounds = conversation_rounds 
 
+        self.structured = structured
+        self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}}"
+
+
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, init_answer = None):
         """
         This method creates the prompt message.
@@ -354,17 +377,30 @@ class MultiAgent(Agent):
 
             # define user prompt (start or mid conversation)
             if self.interactive == False or (self.topology == "chain" and conv_round == 0 and turn == 0) or (self.topology == "graph" and conv_round == 0):
-                message.append(
-                    {
-                        "role": "user",
-                        "content": self.START_PROMPT.format(
-                        player_name = player_name,
-                        other_players = other_players,
-                        sentence = player_sent
-                        )
-                    }
-                )
+                # START prompts
+                if self.structured:
+                    sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.START_PROMPT.format(
+                            sample = sample
+                            )
+                        }
+                    )
+                else:
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.START_PROMPT.format(
+                            player_name = player_name,
+                            other_players = other_players,
+                            sentence = player_sent
+                            )
+                        }
+                    )
             else:
+                # MID prompts
                 if init_answer:
                     message.append(
                         {
@@ -375,6 +411,30 @@ class MultiAgent(Agent):
                                 other_solutions = conversation,
                                 sentence = player_sent,
                                 player_solution = init_answer
+                            )
+                        }
+                    )
+                elif self.structured:
+                    if conv_round == 0:
+                        max_sent_idx = turn + 1
+                    else: 
+                        max_sent_idx = len(shuffled_sents)
+
+                    sample = "[\n"
+                    for idx in range(max_sent_idx):
+                        sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
+
+                        if idx != max_sent_idx -1:
+                            sample += ",\n"
+
+                    sample += "\n]"
+
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.MID_PROMPT.format(
+                                sample = sample,
+                                conversation = conversation
                             )
                         }
                     )
@@ -411,6 +471,26 @@ class MultiAgent(Agent):
                     "content": self.FINAL.format(
                         shuffled_sents = shuffled_sents,
                         conversation = conversation
+                        )
+                    }
+                )
+            elif self.structured:
+                max_sent_idx = len(shuffled_sents)
+
+                sample = "[\n"
+                for idx in range(max_sent_idx):
+                    sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
+
+                    if idx != max_sent_idx -1:
+                        sample += ",\n"
+                sample += "\n]"
+
+                message.append(
+                    {
+                        "role": "user",
+                        "content": self.FINAL.format(
+                            sample = sample,
+                            conversation = conversation
                         )
                     }
                 )
@@ -453,7 +533,7 @@ class MultiAgent(Agent):
 
         return {"prompt": messages}
 
-    def get_conversation_history(self, batch, outputs, player_name: str, final: bool = False):
+    def get_conversation_history(self, batch, outputs, player_name: str, final: bool = False, conv_format: str = "hypo"):
         """
         This function saves the output in the dataset.
 
@@ -467,9 +547,8 @@ class MultiAgent(Agent):
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"]
-            conv_answer = model_answer.split("</think>")[-1].strip()
-            conv_answer = re.sub(r"Answer:[ \n]*", "", conv_answer).strip()
 
+            conv_answer = self.create_conv_answer(model_answer, conv_format)
             batch["conversation_history"][i] += f"\n{player_name}: {conv_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
@@ -478,6 +557,43 @@ class MultiAgent(Agent):
                 batch["stop"][i] = True # model ended the conversation
         
         return batch
+    
+    def create_conv_answer(self, model_answer, conv_format = "full"):
+        conv_str = model_answer.split("</think>")[-1].strip()
+        conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
+        # remove newlines to make matching possible
+        conv_str = re.sub("\n", "", conv_str)
+
+        # escape single quote strings
+        conv_str = re.sub(r'(\b|\b )"(\b| )', r'\1\\"\2', conv_str)
+        conv_str = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", conv_str)
+
+        # double quotes
+        conv_str = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', conv_str)
+        conv_str = fr"{conv_str}"
+
+        try:
+            conv_list = ast.literal_eval(conv_str)
+            conv_answer = ""
+            for conv_dir in conv_list:
+                if conv_format == "hypo":
+                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
+                elif conv_format == "reasons": # ToDo: Add good/bad und rejecting/accepting arguments
+                    conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                    for i in range(1, 6):
+                        key = f"reason_{i}"
+                        conv_answer += f" {conv_dir[key]}"
+                elif conv_format == "full": 
+                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
+                    for i in range(1, 6):
+                        key = f"reason_{i}"
+                        conv_answer += f" {conv_dir[key]}"
+                conv_answer += "\n"
+            return conv_answer
+        except:
+            return conv_str
+
+
 
     def update_shard(self, batch, filtered_data, dataset_len):
         """
@@ -505,7 +621,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
+    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo"):
         """
         This function prompts the multi-agent framework.
 
@@ -563,7 +679,7 @@ class MultiAgent(Agent):
                     if len(filtered_data) > 0:
                         player_name = self.NAMES[turn]
                         
-                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False), batched = True)
+                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured), batched = True)
 
                         # prompt 
                         turn_outputs = tqdm([out for out in pipe(
@@ -572,7 +688,7 @@ class MultiAgent(Agent):
                             )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
                         # add model answer to conversation history
-                        filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name), batched = True)
+                        filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
 
@@ -600,7 +716,7 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format=conv_format)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -809,18 +925,15 @@ class MultiAgent(Agent):
         
         return batch
 
-    def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False):
-        if shuffled_sents:
-            prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = True), batched = True)
-        else:
-            prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True), batched = True)
+    def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
+        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = shuffled_sents), batched = True)
 
         final_outputs = tqdm([out for out in pipe(
             list(prompt_data["prompt"]),
             batch_size = batch_size
         )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
 
-        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, "Player 6", final = True), batched = True)
+        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, "Player 6", final = True, conv_format=conv_format), batched = True)
         
         return shard_data
 

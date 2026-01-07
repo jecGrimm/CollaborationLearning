@@ -57,6 +57,14 @@ class CLI:
             else:
                 self.config["final_reorder"] = False
 
+        if "structured" not in self.config.keys():
+            self.config["structured"] = False
+        else:
+            if self.config["structured"].lower() == "true":
+                self.config["structured"] = True
+            else:
+                self.config["structured"] = False
+
         # if "interactive" not in self.config.keys():
         #     self.config["interactive"] = False
         # else:
