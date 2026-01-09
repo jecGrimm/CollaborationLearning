@@ -40,7 +40,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             logger.log_multi(multi)
 
             if config["topology"] == "chain":
-                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["output_format"])
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"])
             elif config["topology"] == "graph":
                 multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"])
             else:

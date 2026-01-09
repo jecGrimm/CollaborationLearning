@@ -179,9 +179,9 @@ class SingleAgent(Agent):
         self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
 
         if output_format == "hypo":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the sentence>}},\n]" 
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}},\n]" 
         elif output_format == "full":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>}},\n]" 
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}},\n]" 
 
         self.structured = structured
 
@@ -205,7 +205,7 @@ class SingleAgent(Agent):
                 #sample_hypo = self.HYPO_FORMAT
                 #for sent_n, sent in enumerate(batch["shuffled_sents"][i], start=1):
                 sample = self.OUTPUT_FORMAT.format(**{f"sentence{n}": sent for n, sent in enumerate(batch["shuffled_sents"][i], start=1)})
-                message.append({"role": "user", "content": self.PROMPT.format(sample = sample)})
+                message.append({"role": "user", "content": self.PROMPT.format(sample = sample, shuffled_sents = batch["shuffled_sents"][i])})
             else:
                 message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
                 message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
@@ -343,7 +343,9 @@ class MultiAgent(Agent):
         self.conversation_rounds = conversation_rounds 
 
         self.structured = structured
-        self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the sentence>\n}}"
+        # TODO: Add hypo instead of reasoning as output_format option
+        self.OUTPUT_FORMAT_FULL = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
+        self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, init_answer = None):
@@ -379,7 +381,7 @@ class MultiAgent(Agent):
             if self.interactive == False or (self.topology == "chain" and conv_round == 0 and turn == 0) or (self.topology == "graph" and conv_round == 0):
                 # START prompts
                 if self.structured:
-                    sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
+                    sample = f"[\n{self.OUTPUT_FORMAT_FULL.format(sentence = player_sent)}\n]"
                     message.append(
                         {
                             "role": "user",
@@ -422,7 +424,7 @@ class MultiAgent(Agent):
 
                     sample = "[\n"
                     for idx in range(max_sent_idx):
-                        sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
+                        sample += self.OUTPUT_FORMAT_FULL.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
 
                         if idx != max_sent_idx -1:
                             sample += ",\n"
@@ -464,7 +466,7 @@ class MultiAgent(Agent):
                 }
             ]
 
-            if shuffled_sents:
+            if shuffled_sents and not self.structured:
                 message.append(
                 {
                     "role": "user",
@@ -479,7 +481,7 @@ class MultiAgent(Agent):
 
                 sample = "[\n"
                 for idx in range(max_sent_idx):
-                    sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
+                    sample += self.OUTPUT_FORMAT_HYPO.format(sentence = shuffled_sents[idx])
 
                     if idx != max_sent_idx -1:
                         sample += ",\n"
@@ -575,7 +577,7 @@ class MultiAgent(Agent):
         try:
             conv_list = ast.literal_eval(conv_str)
             conv_answer = ""
-            for conv_dir in conv_list:
+            for n, conv_dir in enumerate(conv_list):
                 if conv_format == "hypo":
                     conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
                 elif conv_format == "reasons": # ToDo: Add good/bad und rejecting/accepting arguments
@@ -588,7 +590,8 @@ class MultiAgent(Agent):
                     for i in range(1, 6):
                         key = f"reason_{i}"
                         conv_answer += f" {conv_dir[key]}"
-                conv_answer += "\n"
+                if n < len(conv_list) - 1:
+                    conv_answer += "\n"
             return conv_answer
         except:
             return conv_str

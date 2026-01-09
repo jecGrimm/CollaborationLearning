@@ -119,15 +119,15 @@ def evaluate_order_answer_multi(batch):
     kendalltau = []
 
     for i in range(len(batch["storyid"])):
-        if "turns" in batch.keys():
-            pred = extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip()) # exclude thinking to retrieve only the final result
-        else:
-            pred = extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip())
-        
-        pred_lists.append(pred)
-        
         gold = get_sent_list(batch, i)
         gold_sents.append(gold)
+
+        if "turns" in batch.keys():
+            pred = extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip(), gold) # exclude thinking to retrieve only the final result
+        else:
+            pred = extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip(), gold)
+        
+        pred_lists.append(pred)
 
         # metrics
         acc.append(compute_accuracy_order(pred, batch, i))
@@ -212,7 +212,7 @@ def extract_answer_list(model_out: str, gold: list):
             str_list = match_list(model_pred) # only use first guess by the model
 
             try:
-                return clean_preds(ast.literal_eval(str_list))
+                return clean_preds(ast.literal_eval(str_list), gold = gold)
             except:
                 return ["", "", "", "", ""]
         else:
@@ -222,7 +222,7 @@ def extract_answer_list(model_out: str, gold: list):
         str_list = match_list(model_answer) # only use first guess by the model
 
         try:
-            return clean_preds(ast.literal_eval(str_list))
+            return clean_preds(ast.literal_eval(str_list), gold = gold)
         except:
             return ["", "", "", "", ""]
 
@@ -567,8 +567,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/random/dev_no_variation"
-    evaluate_sent_order(outdir, "random")
+    # outdir = "outputs/single/Qwen3-32B/dev/outputs_143"
+    # evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -598,7 +598,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    #update_evaluation_files(frameworks=["multi"], splits=["dev"])
-    dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
-    compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
+    update_evaluation_files(frameworks=["single"], splits=["dev"])
+    # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
+    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
