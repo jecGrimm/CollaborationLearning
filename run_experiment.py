@@ -168,7 +168,6 @@ def run_final_only(config: dict = None, logger: ExperimentLog = None):
 
 if __name__ == "__main__":
     cli = CLI()
-
     run_experiment(cli.config)
 
     #run_final_only(cli.config)

@@ -324,7 +324,8 @@ def clean_preds(model_pred: list, gold: list):
                         cleaned_pred = list(model_pred[0])
                         type_i = max_i
             elif pred_type == dict and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
-                cleaned_pred[model_pred[model_i]["position"]-1] = model_pred[model_i]["sentence"]
+                if model_pred[model_i]["position"] != 0:
+                    cleaned_pred[model_pred[model_i]["position"]-1] = model_pred[model_i]["sentence"]
             elif pred_type == int:
                 cleaned_pred[model_i] = gold[model_i] # TODO: test
             type_i += 1
@@ -567,8 +568,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    # outdir = "outputs/single/Qwen3-32B/dev/outputs_143"
-    # evaluate_sent_order(outdir, "multi")
+    outdir = "outputs/single/Qwen3-32B/dev/outputs_149"
+    evaluate_sent_order(outdir, "single")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -598,7 +599,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    update_evaluation_files(frameworks=["single"], splits=["dev"])
+    # update_evaluation_files(frameworks=["single"], splits=["dev"])
     # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
     # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
