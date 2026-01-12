@@ -387,7 +387,7 @@ class MultiAgent(Agent):
                             "role": "user",
                             "content": self.START_PROMPT.format(
                                 sample = sample,
-                                shuffled_sents = f"[{player_sent}]"
+                                shuffled_sents = f"['{player_sent}']"
                             )
                         }
                     )
@@ -590,12 +590,16 @@ class MultiAgent(Agent):
                     conv_answer += f"Sentence: '{conv_dir['sentence']}'."
                     for i in range(1, 6):
                         key = f"reason_{i}"
-                        conv_answer += f" {conv_dir[key]}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
                 elif conv_format == "full": 
                     conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
                     for i in range(1, 6):
                         key = f"reason_{i}"
-                        conv_answer += f" {conv_dir[key]}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
                 if n < len(conv_list) - 1:
                     conv_answer += "\n"
             return conv_answer
@@ -749,7 +753,7 @@ class MultiAgent(Agent):
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
 
-    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
+    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo"):
         """
         This function prompts the multi-agent framework.
 
@@ -809,14 +813,14 @@ class MultiAgent(Agent):
                     )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
                 # add model answer to conversation history
-                shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False), batched = True)
+                shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
 
                 torch.cuda.empty_cache()
 
                 turn += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -840,7 +844,7 @@ class MultiAgent(Agent):
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
 
-    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True):
+    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo"):
         """
         This function prompts the multi-agent framework.
 
@@ -897,7 +901,7 @@ class MultiAgent(Agent):
                         )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
 
                     # add model answer to conversation history
-                    shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False), batched = True)
+                    shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
 
                     torch.cuda.empty_cache()
 
@@ -906,7 +910,7 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -946,7 +950,7 @@ class MultiAgent(Agent):
         
         return shard_data
 
-    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True, variation = False):
+    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True, variation = False, conv_format = "hypo"):
         """
         This function prompts the multi-agent framework.
 
@@ -984,7 +988,7 @@ class MultiAgent(Agent):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents=True)
+            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents=True, conv_format = conv_format)
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
