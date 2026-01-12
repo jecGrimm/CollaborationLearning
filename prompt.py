@@ -386,7 +386,8 @@ class MultiAgent(Agent):
                         {
                             "role": "user",
                             "content": self.START_PROMPT.format(
-                            sample = sample
+                                sample = sample,
+                                shuffled_sents = f"[{player_sent}]"
                             )
                         }
                     )
@@ -436,7 +437,8 @@ class MultiAgent(Agent):
                             "role": "user",
                             "content": self.MID_PROMPT.format(
                                 sample = sample,
-                                conversation = conversation
+                                conversation = conversation,
+                                shuffled_sents = shuffled_sents[:max_sent_idx]
                             )
                         }
                     )
@@ -492,7 +494,8 @@ class MultiAgent(Agent):
                         "role": "user",
                         "content": self.FINAL.format(
                             sample = sample,
-                            conversation = conversation
+                            conversation = conversation,
+                            shuffled_sents = shuffled_sents
                         )
                     }
                 )
@@ -569,6 +572,9 @@ class MultiAgent(Agent):
         # escape single quote strings
         conv_str = re.sub(r'(\b|\b )"(\b| )', r'\1\\"\2', conv_str)
         conv_str = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", conv_str)
+
+        # remove json notation
+        conv_str = re.sub(r"```json(.*)```", r"\1", conv_str)
 
         # double quotes
         conv_str = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', conv_str)

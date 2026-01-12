@@ -176,5 +176,23 @@
         "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
         "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
         "single": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n"
+    },
+    "structured_chain_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGiven the current state of the conversation, think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_panel_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
     }
 }
