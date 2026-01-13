@@ -65,6 +65,14 @@ class CLI:
             else:
                 self.config["structured"] = False
 
+        if "final" not in self.config.keys():
+            self.config["final"] = True
+        else:
+            if self.config["final"].lower() == "true":
+                self.config["final"] = True
+            else:
+                self.config["final"] = False
+
         # if "interactive" not in self.config.keys():
         #     self.config["interactive"] = False
         # else:

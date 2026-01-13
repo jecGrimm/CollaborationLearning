@@ -26,7 +26,7 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     """
     # load data
     #exp_data = load_dataset("json", data_files=experiment_file, split="train")
-    #exp_data = load_from_disk(experiment_file).select([314])
+    #exp_data = load_from_disk(experiment_file).select([1408])
     exp_data = load_from_disk(experiment_file)
     
     # evaluate
@@ -50,7 +50,11 @@ def evaluate_sent_order(experiment_file: str, framework: str, logger: Experiment
     acc_mean = float(eval_data.with_format("pandas")["accuracy"].mean())
 
     logger.run_data.update({"mean_acc": acc_mean})
-    print(f"{logger.run_data["run_idx"]}: {acc_mean}")
+
+    if "run_idx" in logger.run_data.keys():
+        print(f"{logger.run_data["run_idx"]}: {acc_mean}")
+    else:
+        print(f"accuracy: {acc_mean}")
     # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
     #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
     return acc_mean
@@ -277,6 +281,10 @@ def clean_match(str_list: str):
     # str_list = re.sub(r"('|\"|\\\"){2,}(.*?)('|\"|\\)+([,\]])", r'"\2"\4', str_list)
     #str_list = re.sub(r'("|\'){2,}', r'"', str_list)
     str_list = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', str_list)
+
+    # remove escaped brackets
+    str_list = re.sub(r"\\{", r'{', str_list)
+    str_list = re.sub(r"\\}", r'}', str_list)
 
     str_list = fr"{str_list}"
     return str_list
@@ -568,8 +576,8 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/single/Qwen3-32B/dev/outputs_152"
-    evaluate_sent_order(outdir, "single")
+    outdir = "outputs/multi/Qwen3-32B/dev/outputs_158"
+    evaluate_sent_order(outdir, "multi")
 
     # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", framework="multi")
     # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", framework="multi")
@@ -599,7 +607,7 @@ if __name__ == "__main__":
     #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
     # } 
 
-    # update_evaluation_files(frameworks=["single"], splits=["dev"])
+    #update_evaluation_files(frameworks=["multi"], splits=["dev"])
     # dev_multi_models, insts = create_compare_dict(framework="multi", split="dev")
     # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 

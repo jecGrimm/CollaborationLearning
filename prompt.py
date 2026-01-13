@@ -405,19 +405,43 @@ class MultiAgent(Agent):
             else:
                 # MID prompts
                 if init_answer:
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.MID_PROMPT.format(
-                                player_name = player_name,
-                                other_players = other_players,
-                                other_solutions = conversation,
-                                sentence = player_sent,
-                                player_solution = init_answer
-                            )
-                        }
-                    )
-                elif self.structured:
+                    if self.structured:
+                        max_sent_idx = len(shuffled_sents)
+
+                        sample = "[\n"
+                        for idx in range(max_sent_idx):
+                            # TODO: add hypo format
+                            sample += self.OUTPUT_FORMAT_FULL.format(sentence = shuffled_sents[idx])
+
+                            if idx != max_sent_idx -1:
+                                sample += ",\n"
+                        sample += "\n]"
+
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    other_solutions = conversation,
+                                    shuffled_sents = shuffled_sents,
+                                    player_solution = init_answer,
+                                    sample = sample
+                                )
+                            }
+                        )
+                    else:
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    player_name = player_name,
+                                    other_players = other_players,
+                                    other_solutions = conversation,
+                                    sentence = player_sent,
+                                    player_solution = init_answer
+                                )
+                            }
+                        )
+                elif self.structured and not init_answer:
                     if conv_round == 0:
                         max_sent_idx = turn + 1
                     else: 
@@ -511,7 +535,7 @@ class MultiAgent(Agent):
 
         return message
     
-    def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False):
+    def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False, conv_format: str = "full"):
         """
         This method creates the prompts for a batch of instances.
 
@@ -526,7 +550,7 @@ class MultiAgent(Agent):
         messages = []
         for i in range(len(batch["storyid"])):
             if conv_round != 0 and self.topology == "graph" and final == False:
-                init_turn, conversation_history = self.get_other_conv(batch["player"][i], batch["turns"][i], turn, conv_round)
+                init_turn, conversation_history = self.get_other_conv(batch["player"][i], batch["turns"][i], turn, conv_round, conv_format= conv_format)
             else:
                 init_turn = None
                 conversation_history = batch["conversation_history"][i]
@@ -692,7 +716,7 @@ class MultiAgent(Agent):
                     if len(filtered_data) > 0:
                         player_name = self.NAMES[turn]
                         
-                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured), batched = True)
+                        filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
 
                         # prompt 
                         turn_outputs = tqdm([out for out in pipe(
@@ -804,7 +828,7 @@ class MultiAgent(Agent):
             while turn < 5:
                 player_name = self.NAMES[turn]
                 
-                filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, 0, 0, player_name, final = False, shuffled_sents = False), batched = True)
+                filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, 0, 0, player_name, final = False, shuffled_sents = False, conv_format = conv_format), batched = True)
 
                 # prompt 
                 turn_outputs = tqdm([out for out in pipe(
@@ -892,7 +916,7 @@ class MultiAgent(Agent):
                 while turn < 5:
                     player_name = self.NAMES[turn]
                     
-                    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = False), batched = True)
+                    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
 
                     # prompt 
                     turn_outputs = tqdm([out for out in pipe(
@@ -939,7 +963,7 @@ class MultiAgent(Agent):
         return batch
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
-        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = shuffled_sents), batched = True)
+        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
 
         final_outputs = tqdm([out for out in pipe(
             list(prompt_data["prompt"]),
@@ -959,6 +983,7 @@ class MultiAgent(Agent):
             device: cpu/cuda
             batch_size: batch size
             thinking_budget: percentage of tokens allowed for "thinking" tokens
+            conv_final: whether conv_file contains conversations with a final answer agent
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1024,18 +1049,19 @@ class MultiAgent(Agent):
 
         return batch
 
-    def get_other_conv(self, players, turns, player_turn, conv_round):
+    def get_other_conv(self, players, turns, player_turn, conv_round, conv_format = "full"):
         turn_idx = conv_round * len(turns) - len(turns) + player_turn # last guess
         conv_idx = conv_round * len(turns) 
         player = players[turn_idx]
 
-
-        init_turn = self.remove_thinking(turns[turn_idx])
+        init_turn = self.create_conv_answer(turns[turn_idx], conv_format)
+        #init_turn = self.remove_thinking(turns[turn_idx])
         
         other_conv = ""
         for i in range(len(turns[:conv_idx])):
             if player != players[i]: # remove all player turns
-                other_conv += f"\n{players[i]}: {self.remove_thinking(turns[i])}\n"
+                #other_conv += f"\n{players[i]}: {self.remove_thinking(turns[i])}\n"
+                other_conv += f"\n{players[i]}: {self.create_conv_answer(turns[i])}\n"
 
         return init_turn, other_conv
     

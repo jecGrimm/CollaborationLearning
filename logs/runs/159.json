@@ -1,0 +1,23 @@
+{
+    "split": "dev",
+    "framework": "multi",
+    "experiment_file": "outputs/multi/Qwen3-32B/dev/outputs_158",
+    "batch_size": 8,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the chain setup with 1024 tokens with Qwen3-32B with variation.",
+    "candidate": "structured_panel_short_pos-num_sents_output-format",
+    "thinking_budget": 0.0,
+    "conversation_rounds": 1,
+    "variation": true,
+    "device_id": "",
+    "final_reorder": true,
+    "conv_file": "",
+    "topology": "panel",
+    "max_new_tokens": 1024,
+    "structured": true,
+    "output_format": "",
+    "conv_format": "full",
+    "device": "cuda:0",
+    "mean_acc": 0.0,
+    "run_idx": 159
+}
