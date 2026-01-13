@@ -10,6 +10,7 @@ from datasets import Dataset, concatenate_datasets, load_from_disk
 from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 import ast
+from collections import defaultdict
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
@@ -606,31 +607,56 @@ class MultiAgent(Agent):
 
         try:
             conv_list = ast.literal_eval(conv_str)
-            conv_answer = ""
-            for n, conv_dir in enumerate(conv_list):
-                if conv_format == "hypo":
-                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
-                elif conv_format == "reasons": # ToDo: Add good/bad und rejecting/accepting arguments
-                    conv_answer += f"Sentence: '{conv_dir['sentence']}'."
-                    for i in range(1, 6):
-                        key = f"reason_{i}"
-
-                        if key in conv_dir.keys():
-                            conv_answer += f" {conv_dir[key]}"
-                elif conv_format == "full": 
-                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
-                    for i in range(1, 6):
-                        key = f"reason_{i}"
-
-                        if key in conv_dir.keys():
-                            conv_answer += f" {conv_dir[key]}"
-                if n < len(conv_list) - 1:
-                    conv_answer += "\n"
-            return conv_answer
+            return self.formulate_conv(conv_list, conv_format)
         except:
-            return conv_str
+            conv_list = []
+
+            sentences = [item[0] for item in re.findall(r"sentence\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            positions = re.findall(r"position\': (\d)", conv_str)
+            reason_1_list = [item[0] for item in re.findall(r"reason_1\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            reason_2_list = [item[0] for item in re.findall(r"reason_2\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            reason_3_list = [item[0] for item in re.findall(r"reason_3\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            reason_4_list = [item[0] for item in re.findall(r"reason_4\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            reason_5_list = [item[0] for item in re.findall(r"reason_5\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+
+            for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
+                conv_list.append({
+                    "sentence" : item[0],
+                    "position" : int(item[1]),
+                    "reason_1" : item[2],
+                    "reason_2" : item[3],
+                    "reason_3" : item[4],
+                    "reason_4" : item[5],
+                    "reason_5" : item[6]
+                })
 
 
+            
+            return self.formulate_conv(conv_list, conv_format)
+
+    def formulate_conv(self, conv_list, conv_format):
+        conv_answer = ""
+        for n, conv_dir in enumerate(conv_list):
+            if conv_format == "hypo":
+                conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
+            elif conv_format == "reasons": # TODO: Add good/bad und rejecting/accepting arguments
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                for i in range(1, 6):
+                    key = f"reason_{i}"
+
+                    if key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[key]}"
+            elif conv_format == "full": 
+                conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
+                for i in range(1, 6):
+                    key = f"reason_{i}"
+
+                    if key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[key]}"
+            if n < len(conv_list) - 1:
+                conv_answer += "\n"
+        
+        return conv_answer
 
     def update_shard(self, batch, filtered_data, dataset_len):
         """
