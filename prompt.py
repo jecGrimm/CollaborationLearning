@@ -619,16 +619,41 @@ class MultiAgent(Agent):
             reason_4_list = [item[0] for item in re.findall(r"reason_4\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
             reason_5_list = [item[0] for item in re.findall(r"reason_5\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
 
-            for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
-                conv_list.append({
-                    "sentence" : item[0],
-                    "position" : int(item[1]),
-                    "reason_1" : item[2],
-                    "reason_2" : item[3],
-                    "reason_3" : item[4],
-                    "reason_4" : item[5],
-                    "reason_5" : item[6]
-                })
+            for i, sent in enumerate(sentences):
+                conv_dict = defaultdict(str)
+
+                conv_dict["sentence"] = sent
+
+                if i < len(positions):
+                    conv_dict["positions"] = int(positions[i])
+                
+                if i < len(reason_1_list):
+                    conv_dict["reason_1"] = reason_1_list[i]
+
+                if i < len(reason_2_list):
+                    conv_dict["reason_2"] = reason_2_list[i]
+
+                if i < len(reason_3_list):
+                    conv_dict["reason_3"] = reason_3_list[i]
+
+                if i < len(reason_4_list):
+                    conv_dict["reason_4"] = reason_4_list[i]
+
+                if i < len(reason_5_list):
+                    conv_dict["reason_5"] = reason_5_list[i]
+
+                conv_list.append(conv_dict)
+
+            # for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
+            #     conv_list.append({
+            #         "sentence" : item[0],
+            #         "position" : int(item[1]),
+            #         "reason_1" : item[2],
+            #         "reason_2" : item[3],
+            #         "reason_3" : item[4],
+            #         "reason_4" : item[5],
+            #         "reason_5" : item[6]
+            #     })
 
 
             
