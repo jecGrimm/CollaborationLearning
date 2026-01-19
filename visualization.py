@@ -6,7 +6,8 @@ import os
 import re
 import ast
 from pySankey.sankey import sankey
-import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
+import numpy as np
+#import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 
 class Vis():
     def __init__(self, experiment_files: dict, variation: bool):
@@ -34,12 +35,15 @@ class Vis():
     def plot_performance(self):
         for metric in self.metrics:
             if self.variation:
-                self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: with variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
+                ax = self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: with variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
+
+                ax.bar_label(ax.containers[0])
 
                 plt.savefig(f"visualizations/variation/{metric}_var.png")
             else:
-                self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: without variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
-
+                ax = self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: without variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
+                ax.bar_label(ax.containers[0])
+                
                 plt.savefig(f"visualizations/no_variation/{metric}_no_var.png")
 
     def create_belief_instance(self, index: int, setup: str):
@@ -251,29 +255,30 @@ class Vis():
 
         
 if __name__ == "__main__":
-    # exp_files_no_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-    #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
-    # }
-
-    # vis_no_var = Vis(exp_files_no_var, variation = False)
-    # #vis_no_var.plot_performance()
-    # vis_no_var.plot_sankey_full("chain")
-    #vis_no_var.plot_sankey("star")
-
-
-    exp_files_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    exp_files_no_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
+        "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
     }
 
-    vis_var = Vis(exp_files_var, variation = True)
-    vis_var.plot_performance()
+    vis_no_var = Vis(exp_files_no_var, variation = False)
+    vis_no_var.plot_performance()
+    #vis_no_var.plot_sankey_full("graph")
+    vis_no_var.plot_sankey("graph")
+
+
+    # exp_files_var = {
+    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+    #     "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1",
+    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    # }
+
+    # vis_var = Vis(exp_files_var, variation = True)
+    # vis_var.plot_performance()
     # #vis_var.plot_instance(0, "star")
-    # vis_var.plot_sankey("star")
+    #vis_var.plot_sankey("chain_500")
 
     print("Done")
