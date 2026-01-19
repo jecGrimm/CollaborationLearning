@@ -1,7 +1,7 @@
 {
     "split": "dev",
     "framework": "multi",
-    "experiment_file": "outputs/multi/Qwen3-32B/dev/outputs_158",
+    "experiment_file": "",
     "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.",
@@ -16,5 +16,7 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "",
-    "conv_format": "full"
+    "conv_format": "full",
+    "start": 0,
+    "run_idx": 179
 }

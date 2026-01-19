@@ -2,7 +2,7 @@
 #
 # SLURM job script for running on mcml gpus.
 
-#SBATCH --job-name=collab_learn
+#SBATCH --job-name=panel_full_hypo_no_var
 #SBATCH --output=/dss/dsshome1/0F/di97pub/CollaborationLearning/logs/slurm/slurm.%j.%N.out
 #SBATCH --partition=lrz-dgx-a100-80x8
 #SBATCH --gres=gpu:1                 # change to 2/4 if a single run needs more GPUs

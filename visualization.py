@@ -312,12 +312,12 @@ if __name__ == "__main__":
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "chain": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0",
+        "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0",
     }
 
     vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo")
     vis_full_hypo_var.plot_performance()
-    vis_full_hypo_var.plot_sankey("chain")
+    vis_full_hypo_var.plot_sankey("chain_250")
 
     print("Done")
 

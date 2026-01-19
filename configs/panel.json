@@ -16,5 +16,7 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "",
-    "conv_format": "full"
+    "conv_format": "hypo",
+    "start": 0,
+    "run_idx": 179
 }
