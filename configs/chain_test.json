@@ -1,5 +1,5 @@
 {
-    "split": "mini",
+    "split": "dev",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 8,
@@ -16,5 +16,6 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "",
-    "conv_format": "hypo"
+    "conv_format": "full",
+    "start": 500
 }
