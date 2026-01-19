@@ -73,6 +73,9 @@ class CLI:
             else:
                 self.config["final"] = False
 
+        if "start" not in self.config.keys():
+            self.config["start"] = 0
+
         # if "interactive" not in self.config.keys():
         #     self.config["interactive"] = False
         # else:
