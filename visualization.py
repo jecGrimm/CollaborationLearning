@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import os
 import re
 import ast
-import dataframe_image as dfi
+from pySankey.sankey import sankey
+import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 
 class Vis():
     def __init__(self, experiment_files: dict, variation: bool):
@@ -41,7 +42,7 @@ class Vis():
 
                 plt.savefig(f"visualizations/no_variation/{metric}_no_var.png")
 
-    def plot_instance(self, index: int, setup: str):
+    def create_belief_instance(self, index: int, setup: str):
         out = self.exp_data_hf[setup].select([index])[0]
         eval = self.eval_data_hf[setup].select([index])[0]
 
@@ -53,22 +54,45 @@ class Vis():
             player = out["player"][i]
 
             for conv_dir in conv_list:
-                sent_idx = sent2gold[conv_dir["sentence"]]
+                if conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
+                    sent_idx = sent2gold[conv_dir["sentence"]]
+                    
                     # Player, sentence, position, time-step
-                beliefs.append({
-                    "turn": i+1,
-                    "agent": player,
-                    "gold_sent": sent_idx,
-                    "hypo": conv_dir["position"],
-                    "correct": sent_idx == conv_dir["position"],
-                    "label": f"<{player}, sentence {sent_idx}, hypothesis {conv_dir["position"]}>"
-                })
+                    if sent_idx == conv_dir["position"]:
+                        correct = "correct"
+                    else:
+                        correct = "incorrect"
 
+                    beliefs.append({
+                        "turn": i+1,
+                        "agent": player,
+                        "gold_sent": sent_idx,
+                        "hypo": conv_dir["position"],
+                        "correct": correct,
+                        "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir["position"]})"
+                    })
+
+        return beliefs
+        
+
+    def plot_instance(self, index: int, setup: str):
+
+        #vis_beliefs_df = pd.DataFrame(vis_beliefs)
+        beliefs = self.create_belief_instance(index, setup)
         belief_df = pd.DataFrame(beliefs)
+        belief_pivot = belief_df.pivot(columns = ["correct"], values=["turn", "label"])
 
-        styled_beliefs = pd.DataFrame(beliefs).style.hide(subset=["correct"], axis=1)
-        html = styled_beliefs.to_html()
-        with open("test.html", "w", encoding = "utf-8") as file:
+        styler = belief_pivot.style
+        styler.hide(axis = 0)\
+            .highlight_null(props="color: transparent;")\
+            .set_properties(props="color: transparent;")
+
+        # styled_beliefs = styled_beliefs.style.highlight_null(props="color: transparent;")
+        # styled_beliefs = styled_beliefs.hide_index()
+        #styled_beliefs = styled_beliefs.set_index("turn")
+
+        html = styler.to_html()
+        with open(f"visualizations/instance.html", "w", encoding = "utf-8") as file:
             file.write(html)
         #dfi.export(styled_beliefs, "test.png")
 
@@ -96,13 +120,13 @@ class Vis():
         except:
             conv_list = []
 
-            sentences = [item[0] for item in re.findall(r"sentence\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            positions = re.findall(r"position\': (\d)", conv_str)
-            reason_1_list = [item[0] for item in re.findall(r"reason_1\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_2_list = [item[0] for item in re.findall(r"reason_2\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_3_list = [item[0] for item in re.findall(r"reason_3\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_4_list = [item[0] for item in re.findall(r"reason_4\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_5_list = [item[0] for item in re.findall(r"reason_5\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            positions = re.findall(r"""position[\'"]: (\d)""", conv_str)
+            reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
 
             for i, sent in enumerate(sentences):
                 conv_dict = defaultdict(str)
@@ -131,26 +155,124 @@ class Vis():
             
             return conv_list
         
+    def plot_sankey(self, setup: str):
+        # last hypo == correct/incorrect -> final hypo == correct/incorrect 
+        self.sankey_inst = []
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_hf(x, idx, setup), with_indices=True)
+
+        #df = pd.read_csv(url, sep=" ", names=["true", "predicted"])
+        df = pd.DataFrame(self.sankey_inst, columns = ["last_hypo", "final_hypo"])
+
+        colors = {
+            "correct": "#f78c1b",
+            "incorrect": "#1b7ef7",
+        }
+
+        sankey(df["last_hypo"], df["final_hypo"], aspect=20, colorDict=colors, fontsize=12)
+
+        fig = plt.gcf()
+
+        if self.variation:
+            fig.savefig(f"visualizations/variation/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+        else:
+            fig.savefig(f"visualizations/no_variation/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+
+    def create_sankey_hf(self, x, idx, setup):
+        beliefs = self.create_belief_instance(idx, setup)
+
+        seen_sents = []
+        for belief in beliefs[::-1]:
+            if belief["agent"] != "Player 6" and belief["gold_sent"] not in seen_sents:
+                for final_sent_belief in beliefs[::-1]:
+                    if final_sent_belief["agent"] == "Player 6" and final_sent_belief["gold_sent"] == belief["gold_sent"]:
+                        self.sankey_inst.append([belief["correct"], final_sent_belief["correct"]])
+
+    def create_full_sankey_hf(self, x, idx, setup):
+        beliefs = self.create_belief_instance(idx, setup)
+
+        sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
+
+        turn_idx = 0
+        for belief in beliefs:
+            if setup == "chain":
+                turn_idx = belief["turn"]-1
+            elif setup == "star":
+                if belief["agent"] != "Player 6":
+                    turn_idx = 0
+                else:
+                    turn_idx = 1
+            elif setup == "graph":
+                if belief["turn"] < 6:
+                    turn_idx = 0
+                elif belief["turn"] > 6 and belief["agent"] != "Player 6":
+                    turn_idx = 1
+                else:
+                    turn_idx = 2
+
+            sent_beliefs[belief["gold_sent"]-1][turn_idx] = belief["correct"]
+
+            # TODO:graph
+        self.sankey_inst += sent_beliefs
+
+    def plot_sankey_full(self, setup: str):
+        # last hypo == correct/incorrect -> final hypo == correct/incorrect 
+
+        #df = pd.read_csv(url, sep=" ", names=["true", "predicted"])
+        self.num_turns = 0
+        if setup == "chain":
+            turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
+            self.num_turns = max(turn_lengths)
+        elif setup == "star":
+            self.num_turns = 2
+        elif setup == "graph":
+            self.num_turns = 3
+
+        columns = [f"Turn {i}" for i in range(1, self.num_turns+1)]
+        self.sankey_inst = []
+
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_full_sankey_hf(x, idx, setup), with_indices=True)
+        
+        df = pd.DataFrame(self.sankey_inst, columns = columns) # TODO: define column names
+
+        colors = {
+            "correct": "#f78c1b",
+            "incorrect": "#1b7ef7",
+            "not mentioned": "#f5ee27"
+        }
+
+        sankey(df["last_hypo"], df["final_hypo"], aspect=20, colorDict=colors, fontsize=12)
+
+        fig = plt.gcf()
+
+        if self.variation:
+            fig.savefig(f"visualizations/variation/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+        else:
+            fig.savefig(f"visualizations/no_variation/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+
+        
 if __name__ == "__main__":
-    # exp_files_no_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-    #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
-    # }
-
-    # vis_no_var = Vis(exp_files_no_var, variation = False)
-    #vis_no_var.plot_performance()
-
-
-    exp_files_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    exp_files_no_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
     }
 
-    vis_no_var = Vis(exp_files_var, variation = True)
+    vis_no_var = Vis(exp_files_no_var, variation = False)
     #vis_no_var.plot_performance()
-    vis_no_var.plot_instance(0, "star")
+    vis_no_var.plot_sankey_full("chain")
+    #vis_no_var.plot_sankey("star")
+
+
+    # exp_files_var = {
+    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    # }
+
+    # vis_var = Vis(exp_files_var, variation = True)
+    # #vis_var.plot_performance()
+    # #vis_var.plot_instance(0, "star")
+    # vis_var.plot_sankey("star")
 
     print("Done")

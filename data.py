@@ -30,17 +30,17 @@ class ROCStories:
             # JSON because of list of shuffled sentences
 
             if split == "mini":
-                self.shuffled_dataset.select(range(start, 3)).to_json(self.shuffle_file, indent=4)
+                self.shuffled_dataset.select(range(start, 3 - start)).to_json(self.shuffle_file, indent=4)
             elif split == "dev":
                 if variation:
-                    self.shuffled_dataset.select(range(start, int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
+                    self.shuffled_dataset.select(range(start, int(0.1 * len(self.orig_dataset)) - start)).to_json(self.shuffle_file, indent=4)
                 else:
-                    self.shuffled_dataset.select(range(start, 25)).to_json(self.shuffle_file, indent=4)
+                    self.shuffled_dataset.select(range(start, 25 - start)).to_json(self.shuffle_file, indent=4)
             elif split == "test":
                 if variation:
-                    self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = 1500)).to_json(self.shuffle_file, indent=4)
+                    self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = 1500 - start)).to_json(self.shuffle_file, indent=4)
                 else:
-                    self.shuffled_dataset.select(range(start = start + 25, stop = 50)).to_json(self.shuffle_file, indent=4)
+                    self.shuffled_dataset.select(range(start = start + 25, stop = 50 - start)).to_json(self.shuffle_file, indent=4)
             else: 
                 self.shuffled_dataset.to_json(self.shuffle_file, indent=4) # jsonl because of missing ","
         else:
@@ -48,14 +48,14 @@ class ROCStories:
 
             if split == "dev":
                 if variation:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 1500))
+                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 1500-start))
                 else:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 25))
+                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 25-start))
             elif split == "test":
                 if variation:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = int(0.1 * len(self.orig_dataset)) + 1500))
+                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = int(0.1 * len(self.orig_dataset)) + 1500 - start))
                 else:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + 25, stop = 50))
+                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + 25, stop = 50 - start))
 
     def shuffle_sents(self, batch):
         '''
