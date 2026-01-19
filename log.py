@@ -31,8 +31,10 @@ class ExperimentLog:
         if config:
             self.run_data.update(config)
 
-            if "run_idx" in self.run_data.keys():
-                print(f"Run: {self.run_data["run_idx"]}")
+            # Assign and print run_idx
+            self.store_run_data()
+            print(f"Batch size: {self.run_data["batch_size"]}")
+                
 
     def log_single(self, single):
         """
@@ -138,6 +140,7 @@ class ExperimentLog:
             print(f"Assigning run_idx: {run_idx}\n")
         else: 
             run_idx = self.run_data["run_idx"]
+            print(f"Current run_idx: {run_idx}\n")
         
         return run_idx
     

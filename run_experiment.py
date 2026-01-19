@@ -19,6 +19,9 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     # if "device" not in config.keys():
     #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
 
+    # saves computation time
+    torch.set_grad_enabled(False)
+
     if logger == None:
         logger = ExperimentLog(config)
 
