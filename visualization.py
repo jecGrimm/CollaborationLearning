@@ -251,27 +251,28 @@ class Vis():
 
         
 if __name__ == "__main__":
-    exp_files_no_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-        "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
-    }
+    # exp_files_no_var = {
+    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
+    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+    #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
+    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
+    # }
 
-    vis_no_var = Vis(exp_files_no_var, variation = False)
-    #vis_no_var.plot_performance()
-    vis_no_var.plot_sankey_full("chain")
+    # vis_no_var = Vis(exp_files_no_var, variation = False)
+    # #vis_no_var.plot_performance()
+    # vis_no_var.plot_sankey_full("chain")
     #vis_no_var.plot_sankey("star")
 
 
-    # exp_files_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
-    # }
+    exp_files_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+        "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    }
 
-    # vis_var = Vis(exp_files_var, variation = True)
-    # #vis_var.plot_performance()
+    vis_var = Vis(exp_files_var, variation = True)
+    vis_var.plot_performance()
     # #vis_var.plot_instance(0, "star")
     # vis_var.plot_sankey("star")
 
