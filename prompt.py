@@ -611,13 +611,13 @@ class MultiAgent(Agent):
         except:
             conv_list = []
 
-            sentences = [item[0] for item in re.findall(r"sentence\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            positions = re.findall(r"position\': (\d)", conv_str)
-            reason_1_list = [item[0] for item in re.findall(r"reason_1\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_2_list = [item[0] for item in re.findall(r"reason_2\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_3_list = [item[0] for item in re.findall(r"reason_3\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_4_list = [item[0] for item in re.findall(r"reason_4\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
-            reason_5_list = [item[0] for item in re.findall(r"reason_5\': \'([\w \.,]+(\\'[\w \.,]+)*)", conv_str)]
+            sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            positions = re.findall(r"""position\': (\d)""", conv_str)
+            reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+            reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
 
             for i, sent in enumerate(sentences):
                 conv_dict = defaultdict(str)

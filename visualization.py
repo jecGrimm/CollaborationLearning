@@ -7,12 +7,14 @@ import re
 import ast
 from pySankey.sankey import sankey
 import numpy as np
-from evaluate import evaluate_sent_order
+from evaluate import Evaluator
 #import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 
 class Vis():
-    def __init__(self, experiment_files: dict, variation: bool, conv_format: str):
+    def __init__(self, experiment_files: dict, variation: bool, conv_format: str, last: bool):
         self.experiment_files = experiment_files
+
+        self.last = last
 
         self.conv_format = conv_format
         self.variation = variation
@@ -24,7 +26,16 @@ class Vis():
 
         self.exp_data_hf = {k: load_from_disk(v) for k, v in experiment_files.items()}
 
-        eval_files = {k: f"{v.replace("outputs", "eval")}.jsonl" for k, v in experiment_files.items()}
+        if last:
+            eval_files = defaultdict(str)
+            for k, v in experiment_files.items():
+                if "single" in k:
+                    eval_files[k] = f"{v.replace("outputs", "eval")}.jsonl"
+                else:
+                    eval_files[k] = f"{v.replace("outputs", "eval")}_last.jsonl"
+            #eval_files = {k: f"{v.replace("outputs", "eval")}_last.jsonl" for k, v in experiment_files.items()}
+        else:
+            eval_files = {k: f"{v.replace("outputs", "eval")}.jsonl" for k, v in experiment_files.items()}
         self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
 
         mean_preds = defaultdict(list)
@@ -46,7 +57,12 @@ class Vis():
             else:
                 fw = "multi"
 
-            evaluate_sent_order(self.experiment_files[exp_name], fw)
+            evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last)
+            
+            if self.last and fw == "multi":
+                evaluator.evaluate_last_beliefs()
+            else:
+                evaluator.evaluate_sent_order()
             return load_dataset("json", data_files=eval_file, split="train")
 
     def plot_performance(self):
@@ -56,12 +72,18 @@ class Vis():
 
                 ax.bar_label(ax.containers[0])
 
-                plt.savefig(f"{self.vispath}/{metric}_var_{self.conv_format}.png")
+                if self.last:
+                    plt.savefig(f"{self.vispath}/{metric}_var_{self.conv_format}_last.png")
+                else:
+                    plt.savefig(f"{self.vispath}/{metric}_var_{self.conv_format}.png")
             else:
                 ax = self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: without variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
                 ax.bar_label(ax.containers[0])
                 
-                plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}.png")
+                if self.last:
+                    plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}_last.png")
+                else:
+                    plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}.png")
 
     def create_belief_instance(self, index: int, setup: str):
         out = self.exp_data_hf[setup].select([index])[0]
@@ -281,7 +303,7 @@ if __name__ == "__main__":
     #     "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
     # }
 
-    # vis_no_var = Vis(exp_files_no_var, variation = False)
+    # vis_no_var = Vis(exp_files_no_var, variation = False, conv_format = "full", last = False)
     # vis_no_var.plot_performance()
     # #vis_no_var.plot_sankey_full("graph")
     # vis_no_var.plot_sankey("graph")
@@ -294,7 +316,7 @@ if __name__ == "__main__":
     #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
     # }
 
-    # vis_var = Vis(exp_files_var, variation = True)
+    # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
     # vis_var.plot_performance()
     # #vis_var.plot_instance(0, "star")
     #vis_var.plot_sankey("chain_500")
@@ -305,19 +327,20 @@ if __name__ == "__main__":
     #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_163",
     # }
 
-    # vis_full_hypo_no_var = Vis(exp_files_full_hypo_no_var, variation = False, conv_format = "hypo")
+    # vis_full_hypo_no_var = Vis(exp_files_full_hypo_no_var, variation = False, conv_format = "hypo", last = False)
     # vis_full_hypo_no_var.plot_performance()
     # vis_full_hypo_no_var.plot_sankey("chain")
 
+    # var: full-hypo
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0",
     }
 
-    vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo")
+    vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo", last = False)
     vis_full_hypo_var.plot_performance()
-    vis_full_hypo_var.plot_sankey("chain_250")
+    # vis_full_hypo_var.plot_sankey("chain_250")
 
     print("Done")
 
