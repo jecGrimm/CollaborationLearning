@@ -309,17 +309,17 @@ if __name__ == "__main__":
     # vis_no_var.plot_sankey("graph")
 
     # full-full_var
-    # exp_files_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-    #     "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
-    # }
+    exp_files_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+        "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+    }
 
-    # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
-    # vis_var.plot_performance()
-    # #vis_var.plot_instance(0, "star")
-    #vis_var.plot_sankey("chain_500")
+    vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = True)
+    vis_var.plot_performance()
+    #vis_var.plot_instance(0, "star")
+    vis_var.plot_sankey("chain_750")
 
     # exp_files_full_hypo_no_var = {
     #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
@@ -332,14 +332,14 @@ if __name__ == "__main__":
     # vis_full_hypo_no_var.plot_sankey("chain")
 
     # var: full-hypo
-    exp_files_full_hypo_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0",
-    }
+    # exp_files_full_hypo_var = {
+    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+    #     "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0",
+    # }
 
-    vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo", last = False)
-    vis_full_hypo_var.plot_performance()
+    # vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo", last = False)
+    # vis_full_hypo_var.plot_performance()
     # vis_full_hypo_var.plot_sankey("chain_250")
 
     print("Done")

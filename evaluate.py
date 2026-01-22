@@ -665,13 +665,12 @@ class Evaluator:
         return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
-        eval_file = f"{self.experiment_file.replace("outputs", "eval")}.jsonl"
+        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".")[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
 
         exp_beliefs = self.exp_data.map(lambda x, idx: self.create_belief_instance(x, full_eval_data.select([idx])[0]), batched = False, with_indices=True)
 
-        # TODO: Finish evaluating the last beliefs instead of the final answer agent
         preds = exp_beliefs.map(self.create_pred_from_belief, batched = False)
 
         self.eval_data = preds.map(lambda batch: self.calculate_metrics(batch), batched = True)

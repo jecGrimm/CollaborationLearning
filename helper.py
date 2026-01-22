@@ -5,7 +5,8 @@ import pandas as pd
 import os
 from collections import defaultdict
 import random
-from evaluate import evaluate_sent_order
+from evaluate import Evaluator
+from log import ExperimentLog
 
 def check_SCT_ROC_overlap():
     """
@@ -91,19 +92,24 @@ def merge_outputs(outdirs: list, outpath: str, framework: str):
 
     full_data.save_to_disk(outpath)
 
-    evaluate_sent_order(outpath, framework)
+    evaluate(outpath, framework)
 
+def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
+    evaluator = Evaluator(outfile, framework, logger, last = False)
+    evaluator.evaluate_sent_order()
+    evaluator.last = True
+    evaluator.evaluate_last_beliefs()
 
 if __name__ == "__main__":
     #check_SCT_ROC_overlap()
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/single/Qwen3-8B/dev/outputs_single_Qwen3-8B_dev_2025-11-25_14:10:17.428416"
-    qwen8_out1 = "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0"
-    qwen8_out = "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_1" # instances start with 0
+    qwen8_out1 = "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1"
+    qwen8_out = "outputs/multi/Qwen3-32B/dev/ckps/outputs_173_0" # instances start with 0
     #outdir2 = "outputs/multi/Qwen3-32B/dev/ckps/outputs_166_0"
 
-    merge_outputs([qwen8_out1, qwen8_out], "outputs/multi/Qwen3-32B/dev/ckps/outputs__155_0_155_1", "multi")
+    merge_outputs([qwen8_out1, qwen8_out], "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0", "multi")
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"

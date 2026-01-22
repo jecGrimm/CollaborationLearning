@@ -1,7 +1,7 @@
 from prompt import SingleAgent, MultiAgent
 import os 
 from cli import CLI
-from evaluate import evaluate_sent_order
+from evaluate import Evaluator
 from log import ExperimentLog
 import pandas as pd
 import torch
@@ -52,7 +52,10 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate
-    evaluate_sent_order(outfile, config["framework"], logger)
+    evaluator = Evaluator(outfile, config["framework"], logger, last = False)
+    evaluator.evaluate_sent_order()
+    evaluator.last = True
+    evaluator.evaluate_last_beliefs()
 
     logger.store_run_data()
 
