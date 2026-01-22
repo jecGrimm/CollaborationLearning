@@ -313,13 +313,14 @@ if __name__ == "__main__":
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_158"
+        "graph_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_158",
     }
 
-    vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = True)
+    vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
     vis_var.plot_performance()
     #vis_var.plot_instance(0, "star")
-    vis_var.plot_sankey("chain_750")
+    vis_var.plot_sankey("graph_250")
 
     # exp_files_full_hypo_no_var = {
     #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
