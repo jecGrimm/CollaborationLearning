@@ -8,7 +8,7 @@ import ast
 from pySankey.sankey import sankey
 import numpy as np
 from evaluate import Evaluator
-#import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
+import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 
 class Vis():
     def __init__(self, experiment_files: dict, variation: bool, conv_format: str, last: bool):
@@ -84,6 +84,8 @@ class Vis():
                     plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}_last.png")
                 else:
                     plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}.png")
+            
+            plt.close()
 
     def create_belief_instance(self, index: int, setup: str):
         out = self.exp_data_hf[setup].select([index])[0]
@@ -216,9 +218,9 @@ class Vis():
         fig = plt.gcf()
 
         if self.variation:
-            fig.savefig(f"{self.vispath}/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+            fig.savefig(f"{self.vispath}/sankey_{setup}_var.png", bbox_inches="tight", dpi=150)
         else:
-            fig.savefig(f"{self.vispath}/sankey_{setup}.png", bbox_inches="tight", dpi=150)
+            fig.savefig(f"{self.vispath}/sankey_{setup}_no_var.png", bbox_inches="tight", dpi=150)
 
     def create_sankey_hf(self, x, idx, setup):
         beliefs = self.create_belief_instance(idx, setup)
@@ -231,6 +233,9 @@ class Vis():
                         self.sankey_inst.append([belief["correct"], final_sent_belief["correct"]])
 
     def create_full_sankey_hf(self, x, idx, setup):
+        """
+        @deprecated
+        """
         beliefs = self.create_belief_instance(idx, setup)
 
         sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
@@ -258,6 +263,9 @@ class Vis():
         self.sankey_inst += sent_beliefs
 
     def plot_sankey_full(self, setup: str):
+        """
+        @deprecated
+        """
         # last hypo == correct/incorrect -> final hypo == correct/incorrect 
 
         #df = pd.read_csv(url, sep=" ", names=["true", "predicted"])
@@ -292,46 +300,185 @@ class Vis():
         else:
             fig.savefig(f"{self.vispath}/sankey_{setup}_no_var__{self.conv_format}.png", bbox_inches="tight", dpi=150)
 
+    def plot_sankey_full_plotly(self, setup):
+        self.num_turns = 0
+        if "chain" in setup:
+            turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
+            self.num_turns = max(turn_lengths)
+        elif "star" in setup:
+            self.num_turns = 2
+        elif "graph" in setup:
+            self.num_turns = 3
+
+        # self.sources = []
+        # self.targets = []
+        # self.values = [] # sentence
+        self.lbls = [f"{lbl}_{i}" for i in range(self.num_turns) for lbl in ["correct", "incorrect"]]
+        colors = [color for i in range(self.num_turns) for color in ["#f78c1b", "#1b7ef7"]]
+        #positions = []
+
+        #self.lbls = [str(i) for i in range(self.num_turns)]
+        #colors = [color for i in range(self.num_turns) for color in ["orange", "blue"]]
         
+        self.links = defaultdict(int)
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup), with_indices=True)
+
+        self.sources = [src for src, _ in self.links.keys()]
+        self.targets = [tgt for _, tgt in self.links.keys()]
+        self.values = list(self.links.values())
+
+        link_color = []
+        for src in self.sources:
+            if self.lbls[src].startswith("correct"):
+                link_color.append("#f78c1b")
+            else:
+                link_color.append("#1b7ef7")
+
+        fig = go.Figure(data=[go.Sankey(
+            node = dict(
+                pad = 15,
+                thickness = 20,
+                line = dict(color = "black", width = 0.5),
+                label = self.lbls,
+                color = colors
+            ),
+            link = dict(
+                source = self.sources, # indices correspond to labels, eg A1, A2, A1, B1, ...
+                target = self.targets,
+                value = self.values,
+                color = link_color
+            ))])
+        
+        if self.variation:
+            fig.update_layout(title_text=f"{setup} with variation: {self.conv_format}", font_size=10)
+            fig.show()
+            fig.write_html(f"{self.vispath}/full_sankey_{setup}_var.html")
+        else:
+            fig.update_layout(title_text=f"{setup} without variation: {self.conv_format}", font_size=10)
+            fig.show()
+            fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var.html")
+        
+    def create_sankey_link(self, inst, idx, setup):
+        beliefs = self.create_belief_instance(idx, setup)
+
+        #sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
+        for sent_idx in range(1, 5):
+            sent_beliefs = [belief for belief in beliefs if belief["gold_sent"] == sent_idx]
+            turn_idxs = [(belief_idx, self.get_turn_idx(setup, belief)) for belief_idx, belief in enumerate(sent_beliefs)]
+
+            for belief_idx, turn_idx in turn_idxs:
+                curr_belief = sent_beliefs[belief_idx]
+
+                if turn_idx < turn_idxs[-1][1]:
+                    next_idx = [next_item[1] for next_item in turn_idxs if next_item[1] > turn_idx][0]
+
+                    next_targets = [item for item in turn_idxs if item[1] == next_idx]
+
+                    # start sources for next beliefs
+                    for target_idx, target_turn in next_targets:
+                        source_lbl = f"{curr_belief["correct"]}_{turn_idx}"
+                        #self.sources.append(self.lbls.index(source_lbl))
+                        #self.sources.append(turn_idx)
+
+                        # if curr_belief["correct"] == "correct":
+                        #     self.values.append("correct")
+                        # else:
+                        #     self.values.append("incorrect")
+
+                        target_belief = sent_beliefs[target_idx]
+                        target_lbl = f"{target_belief["correct"]}_{target_turn}"
+                        #self.targets.append(self.lbls.index(target_lbl))
+                        #self.targets.append(target_turn)
+
+                        self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl))] += 1
+
+    def get_target(self, belief_idx, curr_turn_idx, beliefs, setup):
+        curr_belief = beliefs[belief_idx]
+
+        next_belief = None
+        idx = belief_idx + 1
+        while idx < len(beliefs):
+            next_belief = beliefs[idx]
+            next_turn_idx = self.get_turn_idx(setup, next_belief)
+
+            if next_belief["gold_sent"] == curr_belief["gold_sent"] and next_turn_idx > curr_turn_idx:
+                target_lbl = f"{next_belief["correct"]}_{next_turn_idx}"
+                self.targets.append(self.lbls.index(target_lbl)) 
+
+                idx = len(beliefs)
+            else:
+                idx += 1
+
+    def get_turn_idx(self, setup, belief):
+        turn_idx = 0
+        if "chain" in setup:
+            turn_idx = belief["turn"]-1
+        elif "star" in setup:
+            if belief["agent"] != "Player 6":
+                turn_idx = 0
+            else:
+                turn_idx = 1
+        elif "graph" in setup:
+            if belief["turn"] < 6:
+                turn_idx = 0
+            elif belief["turn"] > 6 and belief["agent"] != "Player 6":
+                turn_idx = 1
+            else:
+                turn_idx = 2
+        
+        return turn_idx
+
 if __name__ == "__main__":
     # full-full-no_var
-    # exp_files_no_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-    #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
-    #     "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
-    # }
+    exp_files_no_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
+        "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
+    }
 
-    # vis_no_var = Vis(exp_files_no_var, variation = False, conv_format = "full", last = False)
+    vis_no_var = Vis(exp_files_no_var, variation = False, conv_format = "full", last = False)
     # vis_no_var.plot_performance()
-    # #vis_no_var.plot_sankey_full("graph")
+
+    # vis_no_var.plot_sankey_full_plotly("chain")
+    # vis_no_var.plot_sankey_full_plotly("graph")
+    # vis_no_var.plot_sankey_full_plotly("star")
     # vis_no_var.plot_sankey("graph")
 
     # full-full_var
-    # exp_files_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-    #     "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0",
-    #     "graph_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0",
-    #     "star": "outputs/multi/Qwen3-32B/dev/outputs_158",
-    # }
+    exp_files_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+        "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0",
+        "graph_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_158",
+    }
 
-    # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
-    # vis_var.plot_performance()
+    # # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = True)
+    # # vis_var.plot_performance()
+
+    vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
+    # #vis_var.plot_performance()
+    # vis_var.plot_sankey_full_plotly("chain_750")
+    # vis_var.plot_sankey_full_plotly("graph_250")
+    # vis_var.plot_sankey_full_plotly("star")
+
     # #vis_var.plot_instance(0, "star")
     # vis_var.plot_sankey("graph_250")
 
     # full-hypo: no_var
-    # exp_files_full_hypo_no_var = {
-    #     "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-    #     "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-    #     "chain": "outputs/multi/Qwen3-32B/dev/outputs_163"
-    # }
+    exp_files_full_hypo_no_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "chain": "outputs/multi/Qwen3-32B/dev/outputs_163"
+    }
 
-    # vis_full_hypo_no_var = Vis(exp_files_full_hypo_no_var, variation = False, conv_format = "hypo", last = True)
+    vis_full_hypo_no_var = Vis(exp_files_full_hypo_no_var, variation = False, conv_format = "hypo", last = False)
     # vis_full_hypo_no_var.plot_performance()
     # vis_full_hypo_no_var.plot_sankey("star")
+
+    vis_full_hypo_no_var.plot_sankey_full_plotly("chain")
 
     # var: full-hypo
     exp_files_full_hypo_var = {
@@ -342,8 +489,10 @@ if __name__ == "__main__":
     }
 
     vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo", last = False)
-    vis_full_hypo_var.plot_performance()
+    # vis_full_hypo_var.plot_performance()
     #vis_full_hypo_var.plot_sankey("star")
+    vis_full_hypo_var.plot_sankey_full_plotly("chain_500")
+    vis_full_hypo_var.plot_sankey_full_plotly("star")
 
     print("Done")
 
