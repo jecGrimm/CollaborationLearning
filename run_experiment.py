@@ -146,6 +146,7 @@ def test_llm_rewritten_prompts(config: dict):
         
 def run_final_only(config: dict = None, logger: ExperimentLog = None):
     """
+    @deprecated
     This function runs the experiment.
 
     @params

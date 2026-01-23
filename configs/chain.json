@@ -1,10 +1,10 @@
 {
     "split": "dev",
-    "framework": "multi",
+    "framework": "single",
     "experiment_file": "",
     "batch_size": 1,
-    "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the chain setup with 1024 tokens with Qwen3-32B with variation.",
+    "model_id": "google/gemma-3-270m-it",
+    "desc": "This run tests the chain setup with 1024 tokens with Gemma-3-270m-it with variation.",
     "candidate": "structured_chain_short_pos-num_sents_output-format",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
@@ -16,7 +16,7 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "",
-    "conv_format": "full",
-    "start": 750,
-    "run_idx": 180
+    "conv_format": "reasons",
+    "start": 0,
+    "run_idx": 187
 }

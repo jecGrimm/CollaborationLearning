@@ -1,19 +1,21 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "single",
     "experiment_file": "",
     "batch_size": 32,
-    "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the single setup without reasoning with 1024 tokens with Qwen3-32B with variation.",
+    "model_id": "google/gemma-3-270m-it",
+    "desc": "This run tests the single setup without reasoning with 1024 tokens with google/gemma-3-270m-it without variation.",
     "candidate": "structured_single_no_reasoning_pos-num_sents_output-format",
     "thinking_budget": 0.0,
     "conversation_rounds": 0,
-    "variation": "True",
-    "device_id": "0",
-    "final_reorder": "",
+    "variation": "False",
+    "device_id": "",
+    "final_reorder": "True",
     "conv_file": "",
     "topology": "",
     "max_new_tokens": 1024,
     "structured": "True",
-    "output_format": "hypo"
+    "output_format": "hypo",
+    "start": 0,
+    "run_idx": 187
 }

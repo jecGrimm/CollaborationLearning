@@ -692,7 +692,7 @@ class Evaluator:
         return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
-        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".")[0]}.jsonl"
+        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".jsonl")[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
 
