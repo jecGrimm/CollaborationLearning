@@ -183,6 +183,8 @@ class SingleAgent(Agent):
             self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}},\n]" 
         elif output_format == "full":
             self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}},\n]" 
+        elif output_format == "support":
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}},\n]" 
 
         self.structured = structured
 
@@ -625,7 +627,7 @@ class MultiAgent(Agent):
                 conv_dict["sentence"] = sent
 
                 if i < len(positions):
-                    conv_dict["positions"] = int(positions[i])
+                    conv_dict["position"] = int(positions[i])
                 
                 if i < len(reason_1_list):
                     conv_dict["reason_1"] = reason_1_list[i]
@@ -671,6 +673,12 @@ class MultiAgent(Agent):
 
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
+            elif conv_format == "support":
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                key = f"reason_{conv_dir['position']}"
+
+                if key in conv_dir.keys():
+                    conv_answer += f" {conv_dir[key]}"
             elif conv_format == "full": 
                 conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
                 for i in range(1, 6):
@@ -886,7 +894,7 @@ class MultiAgent(Agent):
                 turn_outputs = tqdm([out for out in pipe(
                         list(filtered_data["prompt"]),
                         batch_size = batch_size
-                    )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
+                    )], desc = f"Turn: {turn}", total = len(filtered_data["prompt"]))
 
                 # add model answer to conversation history
                 shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)

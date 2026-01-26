@@ -2,7 +2,7 @@
     "split": "dev",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 8,
+    "batch_size": 1,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the chain setup with 1024 tokens with Qwen3-32B without variation.",
     "candidate": "structured_chain_short_pos-num_sents_output-format",
@@ -16,5 +16,7 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "",
-    "conv_format": "hypo"
+    "conv_format": "support",
+    "start": 0,
+    "run_idx": 196
 }
