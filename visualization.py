@@ -300,7 +300,7 @@ class Vis():
         else:
             fig.savefig(f"{self.vispath}/sankey_{setup}_no_var__{self.conv_format}.png", bbox_inches="tight", dpi=150)
 
-    def plot_sankey_full_plotly(self, setup):
+    def plot_sankey_full_plotly(self, setup, sent_color):
         self.num_turns = 0
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
@@ -321,18 +321,24 @@ class Vis():
         #colors = [color for i in range(self.num_turns) for color in ["orange", "blue"]]
         
         self.links = defaultdict(int)
-        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup), with_indices=True)
+        self.sent_colors = {
+            1: "#ffc7a2",
+            2: "#e6adc0",
+            3: "#93c4d5",
+            4: "#bad0b9",
+            5: "#cbb2ff"
+        }
 
-        self.sources = [src for src, _ in self.links.keys()]
-        self.targets = [tgt for _, tgt in self.links.keys()]
+        self.correct_colors = {
+            "correct": "#f78c1b", 
+            "incorrect": "#1b7ef7"
+        }
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
+
+        self.sources = [src for src, _, _ in self.links.keys()]
+        self.targets = [tgt for _, tgt, _ in self.links.keys()]
         self.values = list(self.links.values())
-
-        link_color = []
-        for src in self.sources:
-            if self.lbls[src].startswith("correct"):
-                link_color.append("#f78c1b")
-            else:
-                link_color.append("#1b7ef7")
+        link_color = [col for _, _, col in self.links.keys()]
 
         fig = go.Figure(data=[go.Sankey(
             node = dict(
@@ -352,17 +358,24 @@ class Vis():
         if self.variation:
             fig.update_layout(title_text=f"{setup} with variation: {self.conv_format}", font_size=10)
             fig.show()
-            fig.write_html(f"{self.vispath}/full_sankey_{setup}_var.html")
+
+            if sent_color:
+                fig.write_html(f"{self.vispath}/full_sankey_{setup}_var_sent.html")
+            else:
+                fig.write_html(f"{self.vispath}/full_sankey_{setup}_var.html")
         else:
             fig.update_layout(title_text=f"{setup} without variation: {self.conv_format}", font_size=10)
             fig.show()
-            fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var.html")
+            if sent_color:
+                fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var.html")
+            else:
+                fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var_sent.html")
         
-    def create_sankey_link(self, inst, idx, setup):
+    def create_sankey_link(self, inst, idx, setup, sent_color):
         beliefs = self.create_belief_instance(idx, setup)
 
         #sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
-        for sent_idx in range(1, 5):
+        for sent_idx in range(1, 6):
             sent_beliefs = [belief for belief in beliefs if belief["gold_sent"] == sent_idx]
             turn_idxs = [(belief_idx, self.get_turn_idx(setup, belief)) for belief_idx, belief in enumerate(sent_beliefs)]
 
@@ -390,7 +403,10 @@ class Vis():
                         #self.targets.append(self.lbls.index(target_lbl))
                         #self.targets.append(target_turn)
 
-                        self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl))] += 1
+                        if sent_color:
+                            self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl), self.sent_colors[sent_idx])] += 1
+                        else: 
+                            self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl), self.correct_colors[curr_belief["correct"]])] += 1
 
     def get_target(self, belief_idx, curr_turn_idx, beliefs, setup):
         curr_belief = beliefs[belief_idx]
@@ -475,15 +491,15 @@ if __name__ == "__main__":
 
     args = {
         "variation": False,
-        "conv_format": "full",
+        "conv_format": "reasons",
         "last": False
     }
 
-    vis = Vis(exp_files_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-    vis.plot_performance()
-    # vis.plot_sankey_full_plotly("chain")
-    # vis.plot_sankey_full_plotly("graph")
-    # vis.plot_sankey_full_plotly("star"
+    vis = Vis(exp_files_full_reasons_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+    #vis.plot_performance()
+    vis.plot_sankey_full_plotly("chain", sent_color = True)
+    #vis.plot_sankey_full_plotly("graph")
+    #vis.plot_sankey_full_plotly("star")
 
     print("Done")
 
