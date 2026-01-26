@@ -447,7 +447,6 @@ class Vis():
 if __name__ == "__main__":
     # full-full-no_var
     exp_files_no_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
@@ -456,7 +455,6 @@ if __name__ == "__main__":
 
     # full-full_var
     exp_files_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
         "graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
@@ -466,7 +464,6 @@ if __name__ == "__main__":
     # full-hypo: no_var
     exp_files_full_hypo_no_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_163",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_186",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_184",
@@ -475,29 +472,33 @@ if __name__ == "__main__":
     # var: full-hypo
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_179"
     }
 
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
     }
 
+    # no var: full-support
+    exp_files_full_support_no_var = {
+        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
+        "star": "outputs/multi/Qwen3-32B/dev/outputs_198"
+    }
+
     args = {
         "variation": False,
-        "conv_format": "reasons",
+        "conv_format": "support",
         "last": False
     }
 
-    vis = Vis(exp_files_full_reasons_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-    #vis.plot_performance()
-    vis.plot_sankey_full_plotly("chain", sent_color = True)
+    vis = Vis(exp_files_full_support_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+    vis.plot_performance()
+    #vis.plot_sankey_full_plotly("chain", sent_color = True)
     #vis.plot_sankey_full_plotly("graph")
     #vis.plot_sankey_full_plotly("star")
 
