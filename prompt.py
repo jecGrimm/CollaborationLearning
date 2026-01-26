@@ -774,7 +774,7 @@ class MultiAgent(Agent):
                         turn_outputs = tqdm([out for out in pipe(
                                 list(filtered_data["prompt"]),
                                 batch_size = batch_size
-                            )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
+                            )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
 
                         # add model answer to conversation history
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
@@ -886,7 +886,7 @@ class MultiAgent(Agent):
                 turn_outputs = tqdm([out for out in pipe(
                         list(filtered_data["prompt"]),
                         batch_size = batch_size
-                    )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
+                    )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
 
                 # add model answer to conversation history
                 shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
@@ -947,8 +947,8 @@ class MultiAgent(Agent):
 
         start = time.time()
         # process shards
-        #num_shards = int((len(prompt_data)/300))+1
-        num_shards = int((len(prompt_data)/1))+1
+        num_shards = int((len(prompt_data)/300))+1
+        #num_shards = int((len(prompt_data)/1))+1
         processed_inst = 0
         
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
@@ -975,7 +975,7 @@ class MultiAgent(Agent):
                     turn_outputs = tqdm([out for out in pipe(
                             list(filtered_data["prompt"]),
                             batch_size = batch_size
-                        )], desc = "Processing prompts", total = len(filtered_data["prompt"]))
+                        )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
 
                     # add model answer to conversation history
                     shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
