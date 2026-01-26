@@ -448,6 +448,7 @@ if __name__ == "__main__":
     # full-full-no_var
     exp_files_no_var = {
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
@@ -479,6 +480,7 @@ if __name__ == "__main__":
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
