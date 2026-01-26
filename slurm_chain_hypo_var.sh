@@ -2,7 +2,7 @@
 #
 # SLURM job script for running on mcml gpus.
 
-#SBATCH --job-name=chain_var_hypo_169
+#SBATCH --job-name=chain_var_hypo_169_177
 #SBATCH --output=/dss/dsshome1/0F/di97pub/CollaborationLearning/logs/slurm/slurm.%j.%N.out
 #SBATCH --partition=lrz-hgx-h100-94x4
 #SBATCH --gres=gpu:1                 # change to 2/4 if a single run needs more GPUs
