@@ -13,6 +13,15 @@ import csv
 from tqdm import tqdm
 from scipy import stats
 
+def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
+    evaluator = Evaluator(outfile, framework, logger, last = False)
+    evaluator.evaluate_sent_order()
+    evaluator.last = True
+    evaluator.zero_counter = 0
+    evaluator.double_counter = 0
+    evaluator.wrong_format = 0
+    evaluator.evaluate_last_beliefs()
+
 class Evaluator:
     def __init__(self, experiment_file: str, framework: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
         self.experiment_file = experiment_file
@@ -28,6 +37,11 @@ class Evaluator:
         self.initiate_metric_lists()
 
         self.last = last
+
+        # check evaluation results
+        self.zero_counter = 0
+        self.double_counter = 0
+        self.wrong_format = 0
         
     def initiate_metric_lists(self):
         self.pred_lists = []
@@ -64,6 +78,10 @@ class Evaluator:
             print(f"accuracy: {acc_mean}")
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
+
+        print("zero percentage:", self.zero_counter/(len(self.eval_data)*5))
+        print("double percentage:", self.double_counter/(len(self.eval_data)*5))
+        print("wrong format:", self.wrong_format/(len(self.eval_data)*5))
         return acc_mean
 
     def evaluate_sent_order(self):
@@ -291,7 +309,8 @@ class Evaluator:
                     conv_dict["positions"] = int(positions[i])
                 
                 conv_list.append(conv_dict)
-        
+        if conv_list == []:
+            self.wrong_format += 1
         return conv_list
 
     def match_list(self, model_answer: str):
@@ -396,8 +415,16 @@ class Evaluator:
                             cleaned_pred = list(model_pred[0])
                             type_i = max_i
                 elif pred_type == dict and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
-                    if model_pred[model_i]["position"] != 0:
-                        cleaned_pred[model_pred[model_i]["position"]-1] = model_pred[model_i]["sentence"]
+                    hypo = model_pred[model_i]["position"]
+
+                    if cleaned_pred[hypo-1] != "":
+                        self.double_counter += 1
+
+                    if hypo != 0:
+                        cleaned_pred[hypo-1] = model_pred[model_i]["sentence"]
+                    else:
+                        self.zero_counter += 1
+
                 elif pred_type == int:
                     cleaned_pred[model_i] = gold[model_i] # TODO: test
                 type_i += 1
@@ -665,7 +692,7 @@ class Evaluator:
         return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
-        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".")[0]}.jsonl"
+        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".jsonl")[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
 
@@ -736,11 +763,13 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0"
+    outdir = "outputs/single/Qwen3-32B/dev/outputs_146"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluator = Evaluator(outdir, "multi", last = True)
-    evaluator.evaluate_sent_order()
+    evaluate(outdir, "single")
+
+    # evaluator = Evaluator(outdir, "single", last = True)
+    # evaluator.evaluate_sent_order()
     #evaluator.update_evaluation_files(frameworks=["multi"], splits = ["dev"])
     #evaluator.evaluate_sent_order(turn_idx = -2)
     #evaluator.evaluate_last_beliefs()
