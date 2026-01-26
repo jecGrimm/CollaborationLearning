@@ -438,14 +438,6 @@ if __name__ == "__main__":
         "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
     }
 
-    vis_no_var = Vis(exp_files_no_var, variation = False, conv_format = "full", last = False)
-    # vis_no_var.plot_performance()
-
-    # vis_no_var.plot_sankey_full_plotly("chain")
-    # vis_no_var.plot_sankey_full_plotly("graph")
-    # vis_no_var.plot_sankey_full_plotly("star")
-    # vis_no_var.plot_sankey("graph")
-
     # full-full_var
     exp_files_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
@@ -454,18 +446,6 @@ if __name__ == "__main__":
         "graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_158",
     }
-
-    # # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = True)
-    #vis_var.plot_performance()
-
-    # vis_var = Vis(exp_files_var, variation = True, conv_format = "full", last = False)
-    # vis_var.plot_performance()
-    # #vis_var.plot_sankey_full_plotly("chain_1000")
-    # vis_var.plot_sankey_full_plotly("graph_500")
-    # vis_var.plot_sankey_full_plotly("star")
-
-    # #vis_var.plot_instance(0, "star")
-    # vis_var.plot_sankey("graph_250")
 
     # full-hypo: no_var
     exp_files_full_hypo_no_var = {
@@ -476,13 +456,6 @@ if __name__ == "__main__":
         "star": "outputs/multi/Qwen3-32B/dev/outputs_184",
     }
 
-    vis_full_hypo_no_var = Vis(exp_files_full_hypo_no_var, variation = False, conv_format = "hypo", last = True)
-    # vis_full_hypo_no_var.plot_performance()
-    # # vis_full_hypo_no_var.plot_sankey("star")
-
-    # vis_full_hypo_no_var.plot_sankey_full_plotly("graph")
-    # vis_full_hypo_no_var.plot_sankey_full_plotly("star")
-
     # var: full-hypo
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
@@ -490,12 +463,6 @@ if __name__ == "__main__":
         "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_179"
     }
-
-    vis_full_hypo_var = Vis(exp_files_full_hypo_var, variation = True, conv_format = "hypo", last = True)
-    # vis_full_hypo_var.plot_performance()
-    # # #vis_full_hypo_var.plot_sankey("star")
-    # vis_full_hypo_var.plot_sankey_full_plotly("chain_750")
-    # vis_full_hypo_var.plot_sankey_full_plotly("star")
 
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
@@ -505,11 +472,18 @@ if __name__ == "__main__":
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
     }
-    vis = Vis(exp_files_full_reasons_no_var, variation = False, conv_format = "reason", last = False)
+
+    args = {
+        "variation": False,
+        "conv_format": "full",
+        "last": False
+    }
+
+    vis = Vis(exp_files_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
     vis.plot_performance()
-    vis.plot_sankey_full_plotly("chain")
-    vis.plot_sankey_full_plotly("graph")
-    vis.plot_sankey_full_plotly("star")
+    # vis.plot_sankey_full_plotly("chain")
+    # vis.plot_sankey_full_plotly("graph")
+    # vis.plot_sankey_full_plotly("star"
 
     print("Done")
 
