@@ -480,7 +480,6 @@ if __name__ == "__main__":
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
@@ -489,20 +488,23 @@ if __name__ == "__main__":
     # no var: full-support
     exp_files_full_support_no_var = {
         "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
+        "chain": "outputs/multi/Qwen3-32B/dev/outputs_196",
+        "graph": "outputs/multi/Qwen3-32B/dev/outputs_197",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_198"
     }
 
-    args = {
-        "variation": False,
-        "conv_format": "support",
-        "last": False
-    }
+    for last in [False, True]:
+        args = {
+            "variation": False,
+            "conv_format": "support",
+            "last": last
+        }
 
-    vis = Vis(exp_files_full_support_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-    vis.plot_performance()
-    #vis.plot_sankey_full_plotly("chain", sent_color = True)
-    #vis.plot_sankey_full_plotly("graph")
-    #vis.plot_sankey_full_plotly("star")
+        vis = Vis(exp_files_full_support_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis.plot_performance()
+    # vis.plot_sankey_full_plotly("chain", sent_color = False)
+    # vis.plot_sankey_full_plotly("graph", sent_color = False)
+       #vis.plot_sankey_full_plotly("star", sent_color = True)
 
     print("Done")
 
