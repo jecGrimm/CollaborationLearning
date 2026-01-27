@@ -493,6 +493,11 @@ if __name__ == "__main__":
         "star": "outputs/multi/Qwen3-32B/dev/outputs_198"
     }
 
+    #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
+    exp_files_full_support_var = {
+        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0"
+    }
+
     for last in [False, True]:
         args = {
             "variation": False,
