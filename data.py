@@ -6,7 +6,7 @@ def get_sent_list(batch, i):
     return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i], batch["sentence5"][i]]
 
 class ROCStories:
-    def __init__(self, shuffle = False, split = "mini", variation = False, start = 0):
+    def __init__(self, shuffle = False, split = "mini", variation = False, start = 0, end = None):
         '''
         This constructor loads the original ROCStories data and creates the shuffled dataset.
 
@@ -24,38 +24,31 @@ class ROCStories:
             # load shuffled data
             self.shuffle_file = "./data/ROCStories_shuffled_no_variation_" + split + ".jsonl"
 
+        if not end:
+            if split == "mini":
+                    end = 3
+            elif split == "dev":
+                if variation:
+                    end = int(0.1 * len(self.orig_dataset))
+                else:
+                    end = 25
+            elif split == "test":
+                if variation:
+                    start = start + int(0.1 * len(self.orig_dataset))
+                    end = int(0.1 * len(self.orig_dataset)) + 1500
+                else:
+                    start = start + 25
+                    end = 50
 
         if not os.path.exists(self.shuffle_file) or shuffle == True:
             self.shuffled_dataset = self.orig_dataset.map(self.shuffle_sents, batched = True)
             # JSON because of list of shuffled sentences
 
-            if split == "mini":
-                self.shuffled_dataset.select(range(start, 3)).to_json(self.shuffle_file, indent=4)
-            elif split == "dev":
-                if variation:
-                    self.shuffled_dataset.select(range(start, int(0.1 * len(self.orig_dataset)))).to_json(self.shuffle_file, indent=4)
-                else:
-                    self.shuffled_dataset.select(range(start, 25)).to_json(self.shuffle_file, indent=4)
-            elif split == "test":
-                if variation:
-                    self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = 1500)).to_json(self.shuffle_file, indent=4)
-                else:
-                    self.shuffled_dataset.select(range(start = start + 25, stop = 50)).to_json(self.shuffle_file, indent=4)
-            else: 
-                self.shuffled_dataset.to_json(self.shuffle_file, indent=4) # jsonl because of missing ","
+            self.shuffled_dataset.select(range(start, end)).to_json(self.shuffle_file, indent=4)
         else:
             self.shuffled_dataset = load_dataset("json", data_files=self.shuffle_file, split="train")
 
-            if split == "dev":
-                if variation:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 1500))
-                else:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start, 25))
-            elif split == "test":
-                if variation:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + int(0.1 * len(self.orig_dataset)), stop = int(0.1 * len(self.orig_dataset)) + 1500))
-                else:
-                    self.shuffled_dataset = self.shuffled_dataset.select(range(start = start + 25, stop = 50))
+            self.shuffled_dataset = self.shuffled_dataset.select(range(start, end))
 
     def shuffle_sents(self, batch):
         '''

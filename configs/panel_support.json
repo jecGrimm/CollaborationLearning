@@ -1,15 +1,15 @@
 {
-    "split": "dev",
+    "split": "mini",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 1,
-    "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the panel setup with 1024 tokens with Qwen3-32B without variation.",
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests the panel setup with 1024 tokens with Qwen3-0.6B with variation.",
     "candidate": "structured_panel_short_pos-num_sents_output-format",
     "thinking_budget": 0.0,
     "conversation_rounds": 1,
-    "variation": "False",
-    "device_id": "2",
+    "variation": "True",
+    "device_id": "0",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "panel",
@@ -18,5 +18,6 @@
     "output_format": "",
     "conv_format": "support",
     "start": 0,
-    "run_idx": 198
+    "end": 2, 
+    "run_idx": 202
 }

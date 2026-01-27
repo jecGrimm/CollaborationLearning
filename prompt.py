@@ -221,7 +221,7 @@ class SingleAgent(Agent):
 
         return {"prompt": batch_messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None):
         """
         This method prompts the model.
 
@@ -235,7 +235,7 @@ class SingleAgent(Agent):
         pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
-        roc_data = ROCStories(split = self.split, variation = variation)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
         logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
         prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
@@ -717,7 +717,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0):
+    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
         """
         This function prompts the multi-agent framework.
 
@@ -732,7 +732,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -837,7 +837,7 @@ class MultiAgent(Agent):
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
 
-    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0):
+    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
         """
         This function prompts the multi-agent framework.
 
@@ -852,7 +852,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -928,7 +928,7 @@ class MultiAgent(Agent):
         logger.run_data.update({"experiment_file": outpath})
         logger.store_run_data()
 
-    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: str = 0):
+    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: str = 0, end = None):
         """
         This function prompts the multi-agent framework.
 
@@ -943,7 +943,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
