@@ -474,7 +474,7 @@ if __name__ == "__main__":
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
-        "graph_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_191_0",
+        "graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_179"
     }
 
@@ -496,6 +496,7 @@ if __name__ == "__main__":
 
     #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
     exp_files_full_support_var = {
+        "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
         "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0"
     }
 
