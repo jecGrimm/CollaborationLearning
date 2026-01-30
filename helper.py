@@ -108,11 +108,11 @@ if __name__ == "__main__":
     qwen8_out1 = "outputs/multi/Qwen3-32B/dev/outputs_203"
     qwen8_out2 = "outputs/multi/Qwen3-32B/dev/outputs_204"
     qwen8_out3 = "outputs/multi/Qwen3-32B/dev/outputs_205"
-    qwen8_out = "outputs/multi/Qwen3-32B/dev/ckps/outputs_206_0" # instances start with 0
+    qwen8_out = "outputs/multi/Qwen3-32B/dev/outputs_206" # instances start with 0
 
     #evaluate(qwen8_out1, "single")
 
-    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, qwen8_out], "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0", "multi")
+    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, qwen8_out], "outputs/multi/Qwen3-32B/dev/outputs_203_204_205_206", "multi")
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
