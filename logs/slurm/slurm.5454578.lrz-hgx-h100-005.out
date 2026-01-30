@@ -4750,3 +4750,6 @@ Current run_idx: 183
 Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 46213.13 examples/s]
 
 Map:   0%|          | 0/246 [00:00<?, ? examples/s][AMap: 100%|██████████| 246/246 [00:00<00:00, 3633.18 examples/s]
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 5454578.0 ON lrz-hgx-h100-005 CANCELLED AT 2026-01-26T12:28:32 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 5454578 ON lrz-hgx-h100-005 CANCELLED AT 2026-01-26T12:28:32 DUE TO TIME LIMIT ***

@@ -8,7 +8,7 @@
     "candidate": "structured_graph_short_pos-num_sents_output-format",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
-    "variation": "False",
+    "variation": "True",
     "device_id": "",
     "final_reorder": "True",
     "conv_file": "",

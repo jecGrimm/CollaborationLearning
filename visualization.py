@@ -474,6 +474,7 @@ if __name__ == "__main__":
     exp_files_full_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
         "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
+        "graph_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_191_0",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_179"
     }
 

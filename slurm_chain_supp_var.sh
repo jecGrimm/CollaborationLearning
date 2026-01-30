@@ -2,7 +2,7 @@
 #
 # SLURM job script for running on mcml gpus.
 
-#SBATCH --job-name=chain_var_hypo_169_177
+#SBATCH --job-name=chain_var_support
 #SBATCH --output=/dss/dsshome1/0F/di97pub/CollaborationLearning/logs/slurm/slurm.%j.%N.out
 #SBATCH --partition=lrz-hgx-h100-94x4
 #SBATCH --gres=gpu:1                 # change to 2/4 if a single run needs more GPUs
@@ -18,4 +18,4 @@
 source ~/.bashrc
 conda activate collab_learn
 
-srun python3 -u run_experiment.py -c ./configs/chain_hypo_var.json
+srun python3 -u run_experiment.py -c ./configs/chain_support_var.json
