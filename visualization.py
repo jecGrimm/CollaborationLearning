@@ -446,7 +446,7 @@ class Vis():
         
         return turn_idx
     
-    def perform_ttest(self, comparison = "single", setup = ""):
+    def perform_ttest(self, comparison = "single", exp_name = ""):
         first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
 
         stats_dict = defaultdict(list)
@@ -471,8 +471,8 @@ class Vis():
         stats_df = pd.DataFrame(stats_dict)
 
         outfile = f"{self.vispath}/significance_{comparison}"
-        if setup != "":
-            outfile += f"_{setup}"
+        if exp_name != "":
+            outfile += f"_{exp_name}"
 
         if self.last:
             outfile += f"_last"
@@ -517,7 +517,7 @@ if __name__ == "__main__":
 
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
@@ -538,9 +538,17 @@ if __name__ == "__main__":
 
     #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
     exp_files_full_support_var = {
+        "single_support": "outputs/single/Qwen3-32B/dev/outputs_214",
         "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
         "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209"
+    }
+
+    # single: var - full - anything
+    exp_files_single_var = {
+        "hypo_single": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "full_single": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "support_single": "outputs/single/Qwen3-32B/dev/outputs_214",
     }
 
     # chain: var - full - anything
@@ -570,14 +578,14 @@ if __name__ == "__main__":
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "support",
+            "conv_format": "",
             "last": last,
-            "comparison": "chain"
+            "comparison": "hypo"
         }
 
-        vis = Vis(exp_files_full_support_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(exp_files_single_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
         #vis.plot_performance()
-        vis.perform_ttest(comparison = args["comparison"], setup = "chain")
+        vis.perform_ttest(comparison = args["comparison"], exp_name = "single")
 
     # vis.plot_sankey_full_plotly("chain", sent_color = False)
     #vis.plot_sankey_full_plotly("graph_250", sent_color = False)
