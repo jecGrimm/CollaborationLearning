@@ -481,6 +481,7 @@ class Vis():
         stats_df.to_csv(outfile, sep = ";")
 
 
+
 if __name__ == "__main__":
     # full-full-no_var
     exp_files_no_var = {

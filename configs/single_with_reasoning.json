@@ -4,12 +4,12 @@
     "experiment_file": "",
     "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests the single setup with reasoning with 1024 tokens with Qwen3-32B witout variation.",
+    "desc": "This run tests the single setup with reasoning with 1024 tokens with Qwen3-32B with variation.",
     "candidate": "structured_single_reasoning_support",
     "thinking_budget": 0.0,
     "conversation_rounds": 0,
-    "variation": "False",
-    "device_id": "3",
+    "variation": "True",
+    "device_id": "0",
     "final_reorder": "",
     "conv_file": "",
     "topology": "",
@@ -18,5 +18,6 @@
     "output_format": "support",
     "conv_format": "",
     "start": 0,
-    "run_idx": 200
+    "end": 1500,
+    "run_idx": 214
 }
