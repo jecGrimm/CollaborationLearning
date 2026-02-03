@@ -9,6 +9,8 @@ from pySankey.sankey import sankey
 import numpy as np
 from evaluate import Evaluator
 import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
+import statistics
+from scipy.stats.mstats import ttest_ind
 
 class Vis():
     def __init__(self, experiment_files: dict, variation: bool, conv_format: str, last: bool):
@@ -443,12 +445,47 @@ class Vis():
                 turn_idx = 2
         
         return turn_idx
+    
+    def perform_ttest(self, comparison = "single", exp_name = ""):
+        first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
+
+        stats_dict = defaultdict(list)
+        for setup, eval_data in self.eval_data_hf.items():
+            if comparison not in setup:
+                second_accs = list(eval_data['accuracy'])
+                
+                stats = ttest_ind(first_accs, second_accs, equal_var=False, alternative="less")
+
+                stats_dict["first_setup"].append(comparison)
+                stats_dict["first_mean"].append(np.mean(first_accs))
+                stats_dict["second_setup"].append(setup)
+                stats_dict["second_mean"].append(np.mean(second_accs))
+                stats_dict["Welch's t-test"].append(stats.statistic)
+                stats_dict["p-value"].append(stats.pvalue)
+
+                if stats.pvalue < 0.05:
+                    stats_dict["significant"] = True
+                else:
+                    stats_dict["significant"] = False
+
+        stats_df = pd.DataFrame(stats_dict)
+
+        outfile = f"{self.vispath}/significance_{comparison}"
+        if exp_name != "":
+            outfile += f"_{exp_name}"
+
+        if self.last:
+            outfile += f"_last"
+
+        outfile += ".csv"
+        stats_df.to_csv(outfile, sep = ";")
+
+
 
 if __name__ == "__main__":
     # full-full-no_var
     exp_files_no_var = {
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
@@ -480,10 +517,15 @@ if __name__ == "__main__":
 
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
+    }
+
+    exp_files_full_reasons_var = {
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev"
     }
 
     # no var: full-support
@@ -496,22 +538,58 @@ if __name__ == "__main__":
 
     #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
     exp_files_full_support_var = {
+        "single_support": "outputs/single/Qwen3-32B/dev/outputs_214",
         "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
-        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0"
+        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
+        "graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209"
     }
 
+    # single: var - full - anything
+    exp_files_single_var = {
+        "hypo_single": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "full_single": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "support_single": "outputs/single/Qwen3-32B/dev/outputs_214",
+    }
+
+    # chain: var - full - anything
+    exp_files_chain_var = {
+        "hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
+        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
+        "support_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
+    }
+
+    # graph: var - full - anything
+    exp_files_graph_var = {
+        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
+        "full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
+        "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
+    }
+
+    # star: var - full - anything
+    exp_files_star_var = {
+        "hypo_star": "outputs/multi/Qwen3-32B/dev/outputs_179",
+        "full_star": "outputs/multi/Qwen3-32B/dev/outputs_158",
+        "reasons_star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev",
+        "support_star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
+    }
+
+
     for last in [False, True]:
+        print("last: ", last)
         args = {
-            "variation": False,
-            "conv_format": "support",
-            "last": last
+            "variation": True,
+            "conv_format": "",
+            "last": last,
+            "comparison": "hypo"
         }
 
-        vis = Vis(exp_files_full_support_no_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-        vis.plot_performance()
+        vis = Vis(exp_files_single_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        #vis.plot_performance()
+        vis.perform_ttest(comparison = args["comparison"], exp_name = "single")
+
     # vis.plot_sankey_full_plotly("chain", sent_color = False)
+    #vis.plot_sankey_full_plotly("graph_250", sent_color = False)
     # vis.plot_sankey_full_plotly("graph", sent_color = False)
-       #vis.plot_sankey_full_plotly("star", sent_color = True)
 
     print("Done")
 

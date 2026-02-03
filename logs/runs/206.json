@@ -1,7 +1,7 @@
 {
     "split": "dev",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/dev/ckps/outputs_206_0",
+    "experiment_file": "./outputs/multi/Qwen3-32B/dev/outputs_206",
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.",
@@ -195,5 +195,7 @@
     "top_k": 20,
     "min_p": 0,
     "shuffle_file": "./data/ROCStories_shuffled_dev.jsonl",
-    "instances": 250
+    "instances": 750,
+    "duration": 58268.26131105423,
+    "mean_acc": 0.08586666666666667
 }
