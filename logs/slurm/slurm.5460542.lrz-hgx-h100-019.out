@@ -204,3 +204,37 @@ Current run_idx: 194
 Filter:   0%|          | 0/293 [00:00<?, ? examples/s][AFilter: 100%|██████████| 293/293 [00:00<00:00, 52854.98 examples/s]
 
 Map:   0%|          | 0/293 [00:00<?, ? examples/s][AMap: 100%|██████████| 293/293 [00:00<00:00, 9989.04 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/293 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   0%|          | 1/293 [00:00<00:51,  5.71it/s][ARound 0, Turn: 1: 100%|██████████| 293/293 [00:00<00:00, 1199.62it/s]
+
+
+Map: 100%|██████████| 293/293 [00:00<00:00, 2095.53 examples/s][A[AMap: 100%|██████████| 293/293 [00:00<00:00, 1995.04 examples/s]
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 293/293 [00:01<00:00, 147.21 examples/s][AMap: 100%|██████████| 293/293 [00:01<00:00, 146.89 examples/s]
+
+Filter:   0%|          | 0/293 [00:00<?, ? examples/s][AFilter: 100%|██████████| 293/293 [00:00<00:00, 54836.07 examples/s]
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][AMap: 100%|██████████| 293/293 [00:00<00:00, 8977.38 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/293 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   0%|          | 1/293 [00:00<00:44,  6.52it/s][A
+Round 0, Turn: 2:  98%|█████████▊| 286/293 [00:00<00:00, 1376.22it/s][ARound 0, Turn: 2: 100%|██████████| 293/293 [00:00<00:00, 1142.53it/s]
+
+
+Map: 100%|██████████| 293/293 [00:00<00:00, 1879.88 examples/s][A[AMap: 100%|██████████| 293/293 [00:00<00:00, 1506.32 examples/s]
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 293/293 [00:02<00:00, 145.60 examples/s][AMap: 100%|██████████| 293/293 [00:02<00:00, 145.24 examples/s]
+
+Filter:   0%|          | 0/293 [00:00<?, ? examples/s][AFilter: 100%|██████████| 293/293 [00:00<00:00, 59377.26 examples/s]
+
+Map:   0%|          | 0/293 [00:00<?, ? examples/s][AMap: 100%|██████████| 293/293 [00:00<00:00, 3765.23 examples/s]
+slurmstepd: error: *** JOB 5460542 ON lrz-hgx-h100-019 CANCELLED AT 2026-01-30T14:47:41 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 5460542.0 ON lrz-hgx-h100-019 CANCELLED AT 2026-01-30T14:47:41 DUE TO TIME LIMIT ***
