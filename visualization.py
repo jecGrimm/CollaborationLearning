@@ -28,16 +28,21 @@ class Vis():
 
         self.exp_data_hf = {k: load_from_disk(v) for k, v in experiment_files.items()}
 
-        if last:
+        self.create_eval_dfs()
+
+    def create_eval_dfs(self):
+        if self.last:
             eval_files = defaultdict(str)
-            for k, v in experiment_files.items():
+            for k, v in self.experiment_files.items():
                 if "single" in k:
+                    print("Setup is single, not performing last evaluation!")
                     eval_files[k] = f"{v.replace("outputs", "eval")}.jsonl"
                 else:
                     eval_files[k] = f"{v.replace("outputs", "eval")}_last.jsonl"
             #eval_files = {k: f"{v.replace("outputs", "eval")}_last.jsonl" for k, v in experiment_files.items()}
         else:
-            eval_files = {k: f"{v.replace("outputs", "eval")}.jsonl" for k, v in experiment_files.items()}
+            eval_files = {k: f"{v.replace("outputs", "eval")}.jsonl" for k, v in self.experiment_files.items()}
+
         self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
 
         mean_preds = defaultdict(list)
@@ -48,6 +53,7 @@ class Vis():
                 mean_preds[setup].append(float(eval_data.with_format("pandas")[metric].mean()))
 
         self.mean_preds_df = pd.DataFrame(mean_preds.values(), index=mean_preds.keys(), columns=self.metrics) 
+
 
     def load_eval_data(self, eval_file, exp_name):
         try:
@@ -480,6 +486,21 @@ class Vis():
         outfile += ".csv"
         stats_df.to_csv(outfile, sep = ";")
 
+    def correlate_last_final(self):
+        if self.last:
+            mean_last = self.mean_preds_df
+            
+            self.last = False
+            self.create_eval_dfs()
+            mean_final = self.mean_preds_df
+        else:
+            mean_final = self.mean_preds_df
+            
+            self.last = True
+            self.create_eval_dfs()
+            mean_last = self.mean_preds_df
+
+
 
 
 if __name__ == "__main__":
@@ -517,14 +538,14 @@ if __name__ == "__main__":
 
     # no var: full-reasons
     exp_files_full_reasons_no_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
         "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
         "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
         "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
     }
 
     exp_files_full_reasons_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
         "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
         "graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
         "star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev"
@@ -582,14 +603,15 @@ if __name__ == "__main__":
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "full",
+            "conv_format": "",
             "last": last,
             "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-        vis.plot_performance()
+        vis = Vis(exp_files_chain_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        #vis.plot_performance()
         #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
+    vis.correlate_last_final()
 
     #vis.plot_sankey_full_plotly("chain_500", sent_color = False)
     # vis.plot_sankey_full_plotly("graph_293", sent_color = False)
