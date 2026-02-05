@@ -180,11 +180,11 @@ class SingleAgent(Agent):
         self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
 
         if output_format == "hypo":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}},\n]" 
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}}\n]" 
         elif output_format == "full":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}},\n]" 
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}}\n]" 
         elif output_format == "support":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}},\n]" 
+            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}}\n]" 
 
         self.structured = structured
 
@@ -308,7 +308,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full"):
         """
         This class defines multi-agents.
 
@@ -347,8 +347,14 @@ class MultiAgent(Agent):
 
         self.structured = structured
         # TODO: Add hypo instead of reasoning as output_format option
-        self.OUTPUT_FORMAT_FULL = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
+
         self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
+        if output_format == "full":
+            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
+        elif output_format == "hypo":
+            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
+        elif output_format == "support":
+            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}}" 
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, init_answer = None):
@@ -384,7 +390,7 @@ class MultiAgent(Agent):
             if self.interactive == False or (self.topology == "chain" and conv_round == 0 and turn == 0) or (self.topology == "graph" and conv_round == 0):
                 # START prompts
                 if self.structured:
-                    sample = f"[\n{self.OUTPUT_FORMAT_FULL.format(sentence = player_sent)}\n]"
+                    sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
                     message.append(
                         {
                             "role": "user",
@@ -414,7 +420,7 @@ class MultiAgent(Agent):
                         sample = "[\n"
                         for idx in range(max_sent_idx):
                             # TODO: add hypo format
-                            sample += self.OUTPUT_FORMAT_FULL.format(sentence = shuffled_sents[idx])
+                            sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
 
                             if idx != max_sent_idx -1:
                                 sample += ",\n"
@@ -452,7 +458,7 @@ class MultiAgent(Agent):
 
                     sample = "[\n"
                     for idx in range(max_sent_idx):
-                        sample += self.OUTPUT_FORMAT_FULL.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
+                        sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
 
                         if idx != max_sent_idx -1:
                             sample += ",\n"

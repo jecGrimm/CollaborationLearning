@@ -80,8 +80,14 @@ class Evaluator:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
         print("zero percentage:", self.zero_counter/(len(self.eval_data)*5))
+        self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*5)})
+
         print("double percentage:", self.double_counter/(len(self.eval_data)*5))
+        self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*5)})
+
         print("wrong format:", self.wrong_format/(len(self.eval_data)*5))
+        self.logger.run_data.update({"wrong_format": self.wrong_format/(len(self.eval_data)*5)})
+
         return acc_mean
 
     def evaluate_sent_order(self):

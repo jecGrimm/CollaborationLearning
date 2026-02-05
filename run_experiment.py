@@ -38,7 +38,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"])
 
             logger.log_multi(multi)
 
