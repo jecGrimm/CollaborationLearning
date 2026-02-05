@@ -525,6 +525,8 @@ if __name__ == "__main__":
 
     exp_files_full_reasons_var = {
         "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
+        "graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
         "star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev"
     }
 
@@ -539,9 +541,9 @@ if __name__ == "__main__":
     #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
     exp_files_full_support_var = {
         "single_support": "outputs/single/Qwen3-32B/dev/outputs_214",
-        "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
-        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209"
+        "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
+        "graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
+        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0"
     }
 
     # single: var - full - anything
@@ -555,13 +557,15 @@ if __name__ == "__main__":
     exp_files_chain_var = {
         "hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
         "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "support_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0",
+        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
+        "support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
     }
 
     # graph: var - full - anything
     exp_files_graph_var = {
         "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
         "full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
+        "reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
         "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
     }
 
@@ -578,17 +582,17 @@ if __name__ == "__main__":
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "",
+            "conv_format": "full",
             "last": last,
-            "comparison": "hypo"
+            "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_single_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-        #vis.plot_performance()
-        vis.perform_ttest(comparison = args["comparison"], exp_name = "single")
+        vis = Vis(exp_files_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis.plot_performance()
+        #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
 
-    # vis.plot_sankey_full_plotly("chain", sent_color = False)
-    #vis.plot_sankey_full_plotly("graph_250", sent_color = False)
+    #vis.plot_sankey_full_plotly("chain_500", sent_color = False)
+    # vis.plot_sankey_full_plotly("graph_293", sent_color = False)
     # vis.plot_sankey_full_plotly("graph", sent_color = False)
 
     print("Done")
