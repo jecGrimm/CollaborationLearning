@@ -11,6 +11,7 @@ from evaluate import Evaluator
 import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 import statistics
 from scipy.stats.mstats import ttest_ind
+from matplotlib import colors
 
 class Vis():
     def __init__(self, experiment_files: dict, variation: bool, conv_format: str, last: bool):
@@ -500,6 +501,37 @@ class Vis():
             self.create_eval_dfs()
             mean_last = self.mean_preds_df
 
+        # fig, ax = plt.subplots()
+        # #colors = ["#ffc7a2", "#e6adc0", "#93c4d5", "#bad0b9"]
+        label = ["hypo", "full", "reasons", "support"]*2
+        df = pd.concat([mean_final["accuracy"].rename("final"), mean_last["accuracy"].rename("last")], axis = 1)
+
+        print(df.corr())
+        # nrof_labels = len(label)  
+        # colors = colors = cm.rainbow(np.linspace(0, 1, len(d['f']))) # create a bunch of colors
+
+        # for i, r in df.iterrows():
+        #     ax.plot(r['last'], r['final'], 'o', markersize=10, color=colors[i], linewidth=0.1, label=label[i])
+
+        # #ax = df.plot.scatter(x="last", y = "final", c = ["#ffc7a2", "#e6adc0", "#93c4d5", "#bad0b9"], label = ["hypo", "full", "reasons", "support"])
+        # plt.legend(loc = "best")
+
+        colorlist = list(colors.ColorConverter.colors.keys())
+        fig, ax = plt.subplots()
+        [df.iloc[[i]].plot.scatter('last', 'final', ax=ax, s=50, label=l,
+                                color=colorlist[i % len(colorlist)])
+        for i,l in enumerate(label)]
+        
+        ax.set_ylim(0, 1)
+        ax.set_xlim(0, 1)
+        #setup = mean_final.index[0].split("_")[1]
+        setup = "all"
+        ax.set_title(f"Correlation between MAS and final performance: {setup}")
+
+        plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
+        plt.close()
+
+        
 
 
 
@@ -598,6 +630,17 @@ if __name__ == "__main__":
         "support_star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
     }
 
+    exp_files_corr = {
+        "hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
+        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
+        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
+        "support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
+        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
+        "full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
+        "reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
+        "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
+    }
+
 
     for last in [False, True]:
         print("last: ", last)
@@ -608,7 +651,7 @@ if __name__ == "__main__":
             "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_chain_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(exp_files_corr, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
         #vis.plot_performance()
         #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
     vis.correlate_last_final()
