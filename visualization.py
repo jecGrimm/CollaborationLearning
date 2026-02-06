@@ -641,6 +641,11 @@ if __name__ == "__main__":
         "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
     }
 
+    # hypo-hypo
+    exp_files_hypo_hypo_var = {
+        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
+        "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_216"
+    }
 
     for last in [False, True]:
         print("last: ", last)

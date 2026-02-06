@@ -9,16 +9,16 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "",
+    "device_id": "0",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "graph",
     "max_new_tokens": 1024,
     "structured": "True",
-    "output_format": "",
+    "output_format": "hypo",
     "conv_format": "hypo",
     "final": "True",
-    "start": 250,
-    "end": 500,
-    "run_idx": 210
+    "start": 0,
+    "end": 250,
+    "run_idx": 217
 }

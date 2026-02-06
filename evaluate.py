@@ -421,7 +421,7 @@ class Evaluator:
                             cleaned_pred = list(model_pred[0])
                             type_i = max_i
                 elif pred_type == dict and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
-                    hypo = model_pred[model_i]["position"]
+                    hypo = int(model_pred[model_i]["position"])
                     
                     if hypo <= len(cleaned_pred): 
                         if cleaned_pred[hypo-1] != "":
@@ -723,7 +723,7 @@ class Evaluator:
 
         for belief in beliefs["beliefs"][::-1]:
             if belief["agent"] != "Player 6" and belief["sentence"] not in pred:
-                pred[belief["hypo"]-1] = belief["sentence"]
+                pred[int(belief["hypo"])-1] = belief["sentence"]
 
         return {"pred": pred}
     
@@ -770,10 +770,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/single/Qwen3-32B/dev/outputs_200"
+    outdir = "outputs/multi/Qwen3-32B/dev/outputs_216"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outdir, "single")
+    evaluate(outdir, "multi")
 
     # evaluator = Evaluator(outdir, "single", last = True)
     # evaluator.evaluate_sent_order()

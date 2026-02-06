@@ -1,15 +1,15 @@
 {
-    "split": "mini",
+    "split": "dev",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 32,
-    "model_id": "Qwen/Qwen3-0.6B",
-    "desc": "This run tests the chain setup with 1024 tokens with Qwen3-0.6B with variation.",
+    "batch_size": 1,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the chain setup with 1024 tokens with Qwen3-32B with variation.",
     "candidate": "structured_chain_short_pos-num_sents_output-format",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "",
+    "device_id": "0",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
@@ -18,6 +18,6 @@
     "output_format": "hypo",
     "conv_format": "hypo",
     "start": 0,
-    "end": 3, 
-    "run_idx": 215
+    "end": 250, 
+    "run_idx": 216
 }
