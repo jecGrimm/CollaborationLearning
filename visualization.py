@@ -487,7 +487,7 @@ class Vis():
         outfile += ".csv"
         stats_df.to_csv(outfile, sep = ";")
 
-    def correlate_last_final(self):
+    def correlate_last_final(self, setup):
         if self.last:
             mean_last = self.mean_preds_df
             
@@ -503,7 +503,8 @@ class Vis():
 
         # fig, ax = plt.subplots()
         # #colors = ["#ffc7a2", "#e6adc0", "#93c4d5", "#bad0b9"]
-        label = ["hypo", "full", "reasons", "support"]*2
+        label = [mean_final.index[i].split("_")[1] for i in range(len(mean_final.index))]
+        #label = ["hypo", "full", "reasons", "support"]*2
         df = pd.concat([mean_final["accuracy"].rename("final"), mean_last["accuracy"].rename("last")], axis = 1)
 
         print(df.corr())
@@ -525,7 +526,7 @@ class Vis():
         ax.set_ylim(0, 1)
         ax.set_xlim(0, 1)
         #setup = mean_final.index[0].split("_")[1]
-        setup = "all"
+        #setup = "all"
         ax.set_title(f"Correlation between MAS and final performance: {setup}")
 
         plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
@@ -630,38 +631,48 @@ if __name__ == "__main__":
         "support_star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
     }
 
-    exp_files_corr = {
-        "hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
-        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
-        "support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
-        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
-        "full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
-        "reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
-        "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
+    exp_files_corr_all = {
+        "full_hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
+        "full_full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
+        "full_reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
+        "full_support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
+        "full_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
+        "full_full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
+        "full_reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
+        "full_support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
+        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
+    }
+
+    exp_files_corr_same = {
+        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
     }
 
     # hypo-hypo
     exp_files_hypo_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "chain_250": "outputs/multi/Qwen3-32B/dev/ckps/outputs_216"
+        "chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
+    }
+
+    # chain x-x
+    exp_files_same_chain_var = {
+        "hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
     }
 
     for last in [False, True]:
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "",
+            "conv_format": "hypo_hypo",
             "last": last,
-            "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
+            "comparison": "single" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_corr, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(exp_files_hypo_hypo_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
         #vis.plot_performance()
-        #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
-    vis.correlate_last_final()
+        vis.perform_ttest(comparison = args["comparison"], exp_name = "")
+    #vis.correlate_last_final(setup = "all")
 
-    #vis.plot_sankey_full_plotly("chain_500", sent_color = False)
+    #vis.plot_sankey_full_plotly("chain_250", sent_color = False)
     # vis.plot_sankey_full_plotly("graph_293", sent_color = False)
     # vis.plot_sankey_full_plotly("graph", sent_color = False)
 

@@ -9,14 +9,15 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 1,
     "variation": "True",
-    "device_id": "",
+    "device_id": "1",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "panel",
     "max_new_tokens": 1024,
     "structured": "True",
-    "output_format": "",
-    "conv_format": "reasons",
+    "output_format": "hypo",
+    "conv_format": "hypo",
     "start": 0,
-    "run_idx": 193
+    "end": 250,
+    "run_idx": 218
 }
