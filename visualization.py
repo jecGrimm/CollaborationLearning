@@ -640,17 +640,21 @@ if __name__ == "__main__":
         "full_full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
         "full_reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
         "full_support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
-        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
+        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216",
+        "hypo_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_217",
     }
 
     exp_files_corr_same = {
-        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
+        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216",
+        "hypo_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_217",
     }
 
     # hypo-hypo
     exp_files_hypo_hypo_var = {
         "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
+        "chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216",
+        "graph_250": "outputs/multi/Qwen3-32B/dev/outputs_217",
+        "star_250": "outputs/multi/Qwen3-32B/dev/outputs_218"
     }
 
     # chain x-x
@@ -658,23 +662,33 @@ if __name__ == "__main__":
         "hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_216"
     }
 
+    # graph x-x
+    exp_files_same_chain_var = {
+        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_217"
+    }
+
+    # star x-x
+    exp_files_same_chain_var = {
+        "hypo_star_250": "outputs/multi/Qwen3-32B/dev/outputs_218"
+    }
+
     for last in [False, True]:
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "hypo_hypo",
+            "conv_format": "",
             "last": last,
-            "comparison": "single" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
+            "comparison": "chain" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_hypo_hypo_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(exp_files_corr_all, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
         #vis.plot_performance()
-        vis.perform_ttest(comparison = args["comparison"], exp_name = "")
-    #vis.correlate_last_final(setup = "all")
+        #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
+    vis.correlate_last_final(setup = "all")
 
     #vis.plot_sankey_full_plotly("chain_250", sent_color = False)
-    # vis.plot_sankey_full_plotly("graph_293", sent_color = False)
-    # vis.plot_sankey_full_plotly("graph", sent_color = False)
+    # vis.plot_sankey_full_plotly("graph_250", sent_color = False)
+    # vis.plot_sankey_full_plotly("star_250", sent_color = False)
 
     print("Done")
 
