@@ -5,11 +5,11 @@
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the graph setup with 1024 tokens with Qwen3-32B with variation.",
-    "candidate": "structured_graph_short_pos-num_sents_output-format",
+    "candidate": "structured_graph_hypo",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "0",
+    "device_id": "1",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "graph",
@@ -20,5 +20,5 @@
     "final": "True",
     "start": 0,
     "end": 250,
-    "run_idx": 217
+    "run_idx": 221
 }

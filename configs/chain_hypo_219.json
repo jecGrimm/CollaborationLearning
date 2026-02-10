@@ -5,7 +5,7 @@
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the chain setup with 1024 tokens with Qwen3-32B with variation.",
-    "candidate": "structured_chain_short_pos-num_sents_output-format",
+    "candidate": "structured_chain_hypo",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
@@ -19,5 +19,5 @@
     "conv_format": "hypo",
     "start": 0,
     "end": 250, 
-    "run_idx": 216
+    "run_idx": 219
 }
