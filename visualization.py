@@ -672,13 +672,13 @@ if __name__ == "__main__":
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "",
+            "conv_format": "hypo_hypo",
             "last": last,
-            "comparison": "chain" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
+            "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_corr_all, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-        #vis.plot_performance()
+        vis = Vis(exp_files_hypo_hypo_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis.plot_performance()
         #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
     vis.correlate_last_final(setup = "all")
 
