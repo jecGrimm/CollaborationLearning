@@ -5,11 +5,11 @@
     "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.",
-    "candidate": "structured_panel_short_pos-num_sents_output-format",
+    "candidate": "structured_panel_hypo",
     "thinking_budget": 0.0,
     "conversation_rounds": 1,
     "variation": "True",
-    "device_id": "1",
+    "device_id": "2",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "panel",
@@ -19,5 +19,5 @@
     "conv_format": "hypo",
     "start": 0,
     "end": 250,
-    "run_idx": 218
+    "run_idx": 222
 }
