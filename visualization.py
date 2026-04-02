@@ -605,6 +605,7 @@ if __name__ == "__main__":
         "hypo_single": "outputs/single/Qwen3-32B/dev/outputs_147",
         "full_single": "outputs/single/Qwen3-32B/dev/outputs_149",
         "support_single": "outputs/single/Qwen3-32B/dev/outputs_214",
+        "reject_single": "outputs/single/Qwen3-32B/dev/outputs_226"
     }
 
     # chain: var - full - anything
@@ -695,12 +696,12 @@ if __name__ == "__main__":
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "full_support",
-            "last": last,
+            "conv_format": "single",
+            "last": False,
             "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_full_support_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(exp_files_single_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
         vis.plot_performance()
         #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
     #vis.correlate_last_final(setup = "x-x")
