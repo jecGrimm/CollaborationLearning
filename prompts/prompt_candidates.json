@@ -276,5 +276,14 @@
         "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
         "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
         "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_graph_reject":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{other_solutions}\n\n**Your Initial Suggestion:**{player_solution}\n\nThink of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
     }
 }
