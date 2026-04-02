@@ -31,6 +31,11 @@ class Vis():
 
         self.create_eval_dfs()
 
+        if self.last:
+            self.last_app = "_last"
+        else:
+            self.last_app = ""
+
     def create_eval_dfs(self):
         if self.last:
             eval_files = defaultdict(str)
@@ -532,9 +537,28 @@ class Vis():
         plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
         plt.close()
 
+    def plot_all_table(self):
+        df_experiment_files = pd.read_csv("eval/all_runs.csv", delimiter = ";").set_index("Format")
+
+        df_acc = df_experiment_files.map(self.get_avg_acc)
+
+        df_acc.to_csv(f"./visualizations/all{self.last_app}.csv", sep = ";")
         
+    def get_avg_acc(self, exp_file):
+        if self.last and "single" not in exp_file:
+            eval_file = f"{exp_file.replace("outputs", "eval")}_last.jsonl"
+        else:
+            eval_file = f"{exp_file.replace("outputs", "eval")}.jsonl"
+        
+        try:
+            eval_data = load_dataset("json", data_files=eval_file, split="train")
+            acc = float(eval_data.with_format("pandas")["accuracy"].mean())
+        except:
+            evaluator = Evaluator(exp_file, "multi", last = self.last)
 
+            acc = evaluator.evaluate_last_beliefs()
 
+        return round(acc*100, 2)
 
 if __name__ == "__main__":
     # full-full-no_var
@@ -603,9 +627,9 @@ if __name__ == "__main__":
     # single: var - full - anything
     exp_files_single_var = {
         "hypo_single": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "full_single": "outputs/single/Qwen3-32B/dev/outputs_149",
+        "full_single": "outputs/single/Qwen3-32B/dev/outputs_152",
         "support_single": "outputs/single/Qwen3-32B/dev/outputs_214",
-        "reject_single": "outputs/single/Qwen3-32B/dev/outputs_226"
+        "reject_single_250": "outputs/single/Qwen3-32B/dev/outputs_226"
     }
 
     # chain: var - full - anything
@@ -692,23 +716,32 @@ if __name__ == "__main__":
         "support_star_250": "outputs/multi/Qwen3-32B/dev/outputs_225"
     }
 
+    # chain: hypo-hypo, full-full, full-reasons
+    chain_args_hypo = {
+        "hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
+        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
+        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0"
+    }
+
     for last in [False, True]:
         print("last: ", last)
         args = {
             "variation": True,
-            "conv_format": "single",
-            "last": False,
-            "comparison": "" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
+            "conv_format": "args_hypos",
+            "last": last,
+            "comparison": "hypo" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
         }
 
-        vis = Vis(exp_files_single_var, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
-        vis.plot_performance()
+        vis = Vis(chain_args_hypo, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis.plot_all_table()
+
+        #vis.plot_performance()
         #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
     #vis.correlate_last_final(setup = "x-x")
 
-    vis.plot_sankey_full_plotly("chain_500", sent_color = False)
-    vis.plot_sankey_full_plotly("graph", sent_color = False)
-    vis.plot_sankey_full_plotly("star_1000", sent_color = False)
+    # vis.plot_sankey_full_plotly("chain_500", sent_color = False)
+    # vis.plot_sankey_full_plotly("graph", sent_color = False)
+    # vis.plot_sankey_full_plotly("star_1000", sent_color = False)
 
     print("Done")
 
