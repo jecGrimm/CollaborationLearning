@@ -9,15 +9,15 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "2",
+    "device_id": "1",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "correct",
+    "conv_format": "incorrect",
     "start": 0,
     "end": 3,
-    "run_idx": 230
+    "run_idx": 236
 }
