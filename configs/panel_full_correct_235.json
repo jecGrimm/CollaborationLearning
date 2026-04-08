@@ -9,15 +9,15 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 1,
     "variation": "True",
-    "device_id": "1",
+    "device_id": "",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "panel",
     "max_new_tokens": 1024,
     "structured": "True",
-    "output_format": "",
-    "conv_format": "support",
-    "start": 250,
-    "end": 500, 
-    "run_idx": 204
+    "output_format": "full",
+    "conv_format": "correct",
+    "start": 0,
+    "end": 250,
+    "run_idx": 235
 }
