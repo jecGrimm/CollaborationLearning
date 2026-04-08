@@ -11,6 +11,7 @@ from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 import ast
 from collections import defaultdict
+from data import get_sent_list
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
@@ -585,6 +586,8 @@ class MultiAgent(Agent):
         @returns batch: updated batch of instances
         """
         for i, model_out in enumerate(outputs):
+            if conv_format in ["correct", "incorrect"]:
+                self.gold = get_sent_list(batch, i)
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"]
@@ -702,6 +705,23 @@ class MultiAgent(Agent):
 
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
+            elif conv_format == "correct":
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                
+                if conv_dir["sentence"] in self.gold:
+                    correct_key = f"reason_{self.gold.index(conv_dir["sentence"])+1}"
+
+                    if correct_key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[correct_key]}"
+            elif conv_format == "incorrect":
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                
+                if conv_dir["sentence"] in self.gold:
+                    correct_key = f"reason_{self.gold.index(conv_dir["sentence"])+1}"
+
+                    for k, v in conv_dir.items():
+                        if k != correct_key and k.startswith("reason"):
+                            conv_answer += f" {v}"
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
