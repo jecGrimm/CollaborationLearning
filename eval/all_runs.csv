@@ -1,5 +1,5 @@
-Format;Single;Chain;Layered;Star
-full_hypo;outputs/single/Qwen3-32B/dev/outputs_152;outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0;outputs/multi/Qwen3-32B/dev/outputs_191;outputs/multi/Qwen3-32B/dev/outputs_179
-full_full;outputs/single/Qwen3-32B/dev/outputs_152;outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0;outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0;outputs/multi/Qwen3-32B/dev/outputs_158
-full_reasons;outputs/single/Qwen3-32B/dev/outputs_152;outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0;outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0;outputs/multi/Qwen3-32B/dev/outputs_193
-full_support;outputs/single/Qwen3-32B/dev/outputs_152;outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211;outputs/multi/Qwen3-32B/dev/outputs_207_208_209;outputs/multi/Qwen3-32B/dev/outputs_203_204_205_206
+Format;Single_full;Single_hypo;Chain;Layered;Star
+full_hypo;outputs/single/Qwen3-32B/dev/outputs_152;outputs/single/Qwen3-32B/dev/outputs_147;outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0;outputs/multi/Qwen3-32B/dev/outputs_191;outputs/multi/Qwen3-32B/dev/outputs_179
+full_full;outputs/single/Qwen3-32B/dev/outputs_152;outputs/single/Qwen3-32B/dev/outputs_147;outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0;outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0;outputs/multi/Qwen3-32B/dev/outputs_158
+full_reasons;outputs/single/Qwen3-32B/dev/outputs_152;outputs/single/Qwen3-32B/dev/outputs_147;outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0;outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0;outputs/multi/Qwen3-32B/dev/outputs_193
+full_support;outputs/single/Qwen3-32B/dev/outputs_152;outputs/single/Qwen3-32B/dev/outputs_147;outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211;outputs/multi/Qwen3-32B/dev/outputs_207_208_209;outputs/multi/Qwen3-32B/dev/outputs_203_204_205_206
