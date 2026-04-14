@@ -114,10 +114,12 @@ if __name__ == "__main__":
     qwen8_out1 = "outputs/multi/Qwen3-32B/test/outputs_241"
     qwen8_out2 = "outputs/multi/Qwen3-32B/test/outputs_242"
     qwen8_out3 = "outputs/multi/Qwen3-32B/test/outputs_243"
+    r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_249"
 
+    inspect_instances(r1_out, 2)
     #evaluate(qwen8_out1, "single")
 
-    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3], "outputs/multi/Qwen3-32B/test/ckps/outputs_241_242_243", "multi")
+    #merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3], "outputs/multi/Qwen3-32B/test/ckps/outputs_241_242_243", "multi")
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"

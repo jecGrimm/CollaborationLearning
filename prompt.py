@@ -54,7 +54,7 @@ class Agent:
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
             processor = None
-        elif "qwen" in self.model_id.lower():
+        elif "qwen" or "r1" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(self.max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
@@ -409,9 +409,7 @@ class MultiAgent(Agent):
                         {
                             "role": "user",
                             "content": self.START_PROMPT.format(
-                            player_name = player_name,
-                            other_players = other_players,
-                            sentence = player_sent
+                                sentence = player_sent
                             )
                         }
                     )
@@ -484,8 +482,6 @@ class MultiAgent(Agent):
                         {
                             "role": "user",
                             "content": self.MID_PROMPT.format(
-                                player_name = player_name,
-                                other_players = other_players,
                                 conversation = conversation,
                                 sentence = player_sent
                             )
@@ -593,7 +589,15 @@ class MultiAgent(Agent):
             model_answer = model_out[0]["generated_text"][2]["content"]
 
             conv_answer = self.create_conv_answer(model_answer, conv_format)
-            batch["conversation_history"][i] += f"\n{player_name}: {conv_answer}\n"
+            
+            if player_name.startswith("a ") or player_name.startswith("an "):
+                conv_name = player_name.replace("a ", "")
+                conv_name = conv_name.replace("an ", "")
+                conv_name = conv_name[0].upper() + conv_name[1:]
+            else:
+                conv_name = player_name
+
+            batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
@@ -619,59 +623,62 @@ class MultiAgent(Agent):
         conv_str = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', conv_str)
         conv_str = fr"{conv_str}"
 
-        try:
-            conv_list = ast.literal_eval(conv_str)
-            return self.formulate_conv(conv_list, conv_format)
-        except:
-            conv_list = []
+        if not self.structured:
+            return conv_str
+        else:
+            try:
+                conv_list = ast.literal_eval(conv_str)
+                return self.formulate_conv(conv_list, conv_format)
+            except:
+                conv_list = []
 
-            sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            positions = re.findall(r"""position\': (\d)""", conv_str)
-            reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                positions = re.findall(r"""position\': (\d)""", conv_str)
+                reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
 
-            for i, sent in enumerate(sentences):
-                conv_dict = defaultdict(str)
+                for i, sent in enumerate(sentences):
+                    conv_dict = defaultdict(str)
 
-                conv_dict["sentence"] = sent
+                    conv_dict["sentence"] = sent
 
-                if i < len(positions):
-                    conv_dict["position"] = int(positions[i])
+                    if i < len(positions):
+                        conv_dict["position"] = int(positions[i])
+                    
+                    if i < len(reason_1_list):
+                        conv_dict["reason_1"] = reason_1_list[i]
+
+                    if i < len(reason_2_list):
+                        conv_dict["reason_2"] = reason_2_list[i]
+
+                    if i < len(reason_3_list):
+                        conv_dict["reason_3"] = reason_3_list[i]
+
+                    if i < len(reason_4_list):
+                        conv_dict["reason_4"] = reason_4_list[i]
+
+                    if i < len(reason_5_list):
+                        conv_dict["reason_5"] = reason_5_list[i]
+
+                    conv_list.append(conv_dict)
+
+                # for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
+                #     conv_list.append({
+                #         "sentence" : item[0],
+                #         "position" : int(item[1]),
+                #         "reason_1" : item[2],
+                #         "reason_2" : item[3],
+                #         "reason_3" : item[4],
+                #         "reason_4" : item[5],
+                #         "reason_5" : item[6]
+                #     })
+
+
                 
-                if i < len(reason_1_list):
-                    conv_dict["reason_1"] = reason_1_list[i]
-
-                if i < len(reason_2_list):
-                    conv_dict["reason_2"] = reason_2_list[i]
-
-                if i < len(reason_3_list):
-                    conv_dict["reason_3"] = reason_3_list[i]
-
-                if i < len(reason_4_list):
-                    conv_dict["reason_4"] = reason_4_list[i]
-
-                if i < len(reason_5_list):
-                    conv_dict["reason_5"] = reason_5_list[i]
-
-                conv_list.append(conv_dict)
-
-            # for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
-            #     conv_list.append({
-            #         "sentence" : item[0],
-            #         "position" : int(item[1]),
-            #         "reason_1" : item[2],
-            #         "reason_2" : item[3],
-            #         "reason_3" : item[4],
-            #         "reason_4" : item[5],
-            #         "reason_5" : item[6]
-            #     })
-
-
-            
-            return self.formulate_conv(conv_list, conv_format)
+                return self.formulate_conv(conv_list, conv_format)
 
     def formulate_conv(self, conv_list, conv_format):
         conv_answer = ""
@@ -1060,14 +1067,14 @@ class MultiAgent(Agent):
         return batch
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
-        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = "Player 6", final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
+        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = self.NAMES[-1], final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
 
         final_outputs = tqdm([out for out in pipe(
             list(prompt_data["prompt"]),
             batch_size = batch_size
         )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
 
-        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, "Player 6", final = True, conv_format=conv_format), batched = True)
+        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, self.NAMES[-1], final = True, conv_format=conv_format), batched = True)
         
         return shard_data
 
