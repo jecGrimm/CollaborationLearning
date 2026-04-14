@@ -1,6 +1,6 @@
 import re
 import torch
-from transformers import pipeline, AutoTokenizer, LogitsProcessorList
+from transformers import pipeline, AutoTokenizer, LogitsProcessorList, BitsAndBytesConfig
 from data import ROCStories
 import os
 import time
@@ -71,7 +71,8 @@ class Agent:
                     temperature = 0.6,
                     top_p = 0.95,
                     top_k = 20,
-                    min_p = 0
+                    min_p = 0,
+                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             else:
                 # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
@@ -85,7 +86,8 @@ class Agent:
                     temperature = 0.7,
                     top_p = 0.8,
                     top_k = 20,
-                    min_p = 0
+                    min_p = 0,
+                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             
         pipe.tokenizer.padding_side = "left"
