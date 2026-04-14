@@ -314,7 +314,7 @@ class Vis():
         else:
             fig.savefig(f"{self.vispath}/sankey_{setup}_no_var__{self.conv_format}.png", bbox_inches="tight", dpi=150)
 
-    def plot_sankey_full_plotly(self, setup, sent_color):
+    def plot_sankey_full_plotly(self, setup, sent_color):        
         self.num_turns = 0
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
@@ -354,12 +354,53 @@ class Vis():
         self.values = list(self.links.values())
         link_color = [col for _, _, col in self.links.keys()]
 
+        percentage_lbls = []
+        last_perc_a = 0.0
+        last_perc_b = 0.0
+        for i in range(0, len(self.lbls)-2, 2):
+            sum_a = sum([v for k, v in self.links.items() if k[0] == i])
+            sum_b = sum([v for k, v in self.links.items() if k[0] == i+1])
+            total_beliefs = sum_a + sum_b
+            
+            perc_a = round((sum_a/total_beliefs)*100, 2)
+            perc_b = round((sum_b/total_beliefs)*100, 2)
+
+            if i == 0:
+                percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: {perc_a}%")
+                percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: {perc_b}%")   
+            else:
+                if perc_a > last_perc_a:
+                    percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
+                else:
+                    percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
+
+                if perc_b > last_perc_b:
+                    percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: +{round(perc_b - last_perc_b, 2)}")
+                else:
+                    percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: -{round(last_perc_b - perc_b, 2)}%")
+
+            last_perc_a = perc_a
+            last_perc_b = perc_b
+
+        perc_a = round(float(self.mean_preds_df.loc[setup]["accuracy"])*100, 2)
+        perc_b = 100-perc_a
+        if perc_a > last_perc_a:
+            percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
+        else:
+            percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
+
+        if perc_b > last_perc_b:
+            percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: +{round(perc_b - last_perc_b, 2)}")
+        else:
+            percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: -{round(last_perc_b - perc_b, 2)}%")
+
+
         fig = go.Figure(data=[go.Sankey(
             node = dict(
                 pad = 15,
                 thickness = 20,
                 line = dict(color = "black", width = 0.5),
-                label = self.lbls,
+                label = percentage_lbls,
                 color = colors
             ),
             link = dict(
@@ -538,11 +579,29 @@ class Vis():
         plt.close()
 
     def plot_all_table(self):
-        df_experiment_files = pd.read_csv("eval/all_runs.csv", delimiter = ";").set_index("Format")
+        df_experiment_files = pd.read_csv("eval/all_runs.csv", delimiter = ";").set_index("format")
 
         df_acc = df_experiment_files.map(self.get_avg_acc)
 
+        acc_changes = defaultdict(list)
+
+        # plot sankeys
+        if self.last == False:
+            df_dict = df_experiment_files.T.to_dict()
+            for conv_format, exp_files in df_dict.items():
+                self.__init__(experiment_files = exp_files, variation = self.variation, conv_format = conv_format, last = self.last)
+                
+                for setup in exp_files.keys():
+                    if "single" not in setup and "random" not in setup and "du" not in setup:
+                        #self.plot_sankey_full_plotly(setup, sent_color=False)
+
+                        acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup)
+                    else:
+                        acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
+        
         df_acc.to_csv(f"./visualizations/all{self.last_app}.csv", sep = ";")
+        df_acc_changes = pd.DataFrame(acc_changes)
+        df_acc_changes.plot()
         
     def get_avg_acc(self, exp_file):
         if self.last and "single" not in exp_file:
@@ -559,6 +618,55 @@ class Vis():
             acc = evaluator.evaluate_last_beliefs()
 
         return round(acc*100, 2)
+    
+    def get_acc_changes(self, setup, sent_color = False):        
+        self.num_turns = 0
+        if "chain" in setup:
+            turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
+            self.num_turns = max(turn_lengths)
+        elif "star" in setup:
+            self.num_turns = 2
+        elif "graph" in setup:
+            self.num_turns = 3
+
+        self.lbls = [f"{lbl}_{i}" for i in range(self.num_turns) for lbl in ["correct", "incorrect"]]
+
+        self.links = defaultdict(int)
+        self.sent_colors = {
+            1: "#ffc7a2",
+            2: "#e6adc0",
+            3: "#93c4d5",
+            4: "#bad0b9",
+            5: "#cbb2ff"
+        }
+
+        self.correct_colors = {
+            "correct": "#f78c1b", 
+            "incorrect": "#1b7ef7"
+        }
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
+
+        self.sources = [src for src, _, _ in self.links.keys()]
+        self.targets = [tgt for _, tgt, _ in self.links.keys()]
+        self.values = list(self.links.values())
+
+        acc_per_turn = []
+        for i in range(0, len(self.lbls)-2, 2):
+            sum_a = sum([v for k, v in self.links.items() if k[0] == i])
+            sum_b = sum([v for k, v in self.links.items() if k[0] == i+1])
+            total_beliefs = sum_a + sum_b
+            
+            perc_correct = round((sum_a/total_beliefs)*100, 2)
+
+            acc_per_turn.append(perc_correct)       
+
+        avg_acc = round(float(self.mean_preds_df.loc[setup]["accuracy"])*100, 2)
+        acc_per_turn.append(avg_acc)
+
+        while len(acc_per_turn) < 11:
+            acc_per_turn.append(None)
+        
+        return acc_per_turn
 
 if __name__ == "__main__":
     # full-full-no_var
