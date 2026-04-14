@@ -1,0 +1,23 @@
+{
+    "split": "dev",
+    "framework": "single",
+    "experiment_file": "outputs/single/Qwen3-32B/dev/outputs_149",
+    "batch_size": 8,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the single setup with reasoning with 1024 tokens with Qwen3-32B without variation.",
+    "candidate": "structured_single_reasoning_short_pos-num_sents_output-format",
+    "thinking_budget": 0.0,
+    "conversation_rounds": 0,
+    "variation": false,
+    "device_id": "1",
+    "final_reorder": false,
+    "conv_file": "",
+    "topology": "",
+    "max_new_tokens": 1024,
+    "structured": true,
+    "output_format": "full",
+    "conv_format": "",
+    "device": "cuda:1",
+    "mean_acc": 0.544,
+    "run_idx": 151
+}

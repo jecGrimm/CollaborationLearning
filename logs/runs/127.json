@@ -1,0 +1,21 @@
+{
+    "split": "mini",
+    "framework": "single",
+    "experiment_file": "outputs/single/Qwen3-0.6B/mini/outputs_126",
+    "batch_size": 8,
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests the single setup without reasoning with 512 tokens with Qwen3-0.6B without variation.",
+    "candidate": "structured_single_no_reasoning",
+    "thinking_budget": 0.0,
+    "conversation_rounds": 0,
+    "variation": false,
+    "device_id": "",
+    "final_reorder": false,
+    "conv_file": "",
+    "topology": "",
+    "max_new_tokens": 512,
+    "structured": true,
+    "device": "cpu",
+    "mean_acc": 0.26666666666666666,
+    "run_idx": 127
+}

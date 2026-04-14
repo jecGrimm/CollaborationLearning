@@ -31,14 +31,14 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
         for i in range(len(scores)):
             self.stopped_thinking = self.think_end_token in input_ids[i]
 
-            if self.max_thinking_tokens == 0 and not self.stopped_thinking and self.tokens_generated > 0: # no thinking
-                scores[i][:] = self.neg_inf
-                scores[i][self.nl_token] = 0
-                scores[i][self.think_end_token] = 0
-                self.stopped_thinking = True
-                return scores
+            # if self.max_thinking_tokens == 0 and not self.stopped_thinking and self.tokens_generated > 0: # no thinking
+            #     scores[i][:] = self.neg_inf
+            #     scores[i][self.nl_token] = 0
+            #     scores[i][self.think_end_token] = 0
+            #     self.stopped_thinking = True
+            #     return scores
 
-            if self.max_thinking_tokens is not None and not self.stopped_thinking:
+            if self.max_thinking_tokens != None and not self.stopped_thinking:
                 # if (self.tokens_generated / self.max_thinking_tokens) > .95 and (self.tokens_generated / self.max_thinking_tokens) <= 1: # approaching max thinking -> stop thinking and nl to same value 
                 #     # make sure to increase values
                 #     positive = 1
@@ -59,4 +59,4 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
                         scores[i][self.think_end_token] = 0 # thinking token with very low logs
                         self.stopped_thinking = True
 
-        return scores
+        return scores 

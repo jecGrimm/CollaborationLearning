@@ -1,7 +1,7 @@
 from prompt import SingleAgent, MultiAgent
 import os 
 from cli import CLI
-from evaluate import evaluate_sent_order
+from evaluate import Evaluator
 from log import ExperimentLog
 import pandas as pd
 import torch
@@ -19,6 +19,9 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     # if "device" not in config.keys():
     #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
 
+    # saves computation time
+    torch.set_grad_enabled(False)
+
     if logger == None:
         logger = ExperimentLog(config)
 
@@ -27,24 +30,32 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"])
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"])
             
             logger.log_single(single)
 
-            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"]) 
+            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], start = config["start"], end = config["end"]) 
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"])
 
             logger.log_multi(multi)
 
-            multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
+            if config["topology"] == "chain":
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
+            elif config["topology"] == "graph":
+                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
+            else:
+                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
 
             outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate
-    evaluate_sent_order(outfile, config["framework"], logger)
+    evaluator = Evaluator(outfile, config["framework"], logger, last = False)
+    evaluator.evaluate_sent_order()
+    evaluator.last = True
+    evaluator.evaluate_last_beliefs()
 
     logger.store_run_data()
 
@@ -133,10 +144,40 @@ def test_llm_rewritten_prompts(config: dict):
     logger.print_fastest_run(framework=framework, split = config["split"])
     logger.print_best_run(framework = framework, split=config["split"])
         
+def run_final_only(config: dict = None, logger: ExperimentLog = None):
+    """
+    @deprecated
+    This function runs the experiment.
+
+    @params
+        config: configurations for the experiment
+        logger: experiment logger
+    """
+    if logger == None:
+        logger = ExperimentLog(config)
+
+    outfile = config["experiment_file"]
+
+    if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
+
+            logger.log_multi(multi)
+
+            #multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
+            multi.prompt_final_only(logger, device = config["device"], batch_size = config["batch_size"], conv_file = config["conv_file"], variation = config["variation"])
+
+            outfile = multi.define_outfile(logger, hf = True)
+
+    # evaluate
+    evaluate_sent_order(outfile, config["framework"], logger)
+
+    logger.store_run_data()
+
 if __name__ == "__main__":
     cli = CLI()
-
     run_experiment(cli.config)
+
+    #run_final_only(cli.config)
     
     #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
 

@@ -1,0 +1,178 @@
+Current run_idx: 184
+
+Batch size: 16
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:06<01:50,  6.94s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:13<01:44,  6.94s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:20<01:36,  6.90s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:27<01:29,  6.90s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:34<01:22,  6.84s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:41<01:15,  6.83s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:48<01:08,  6.84s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:54<01:01,  6.82s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:01<00:54,  6.83s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:08<00:47,  6.82s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:15<00:40,  6.80s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:21<00:33,  6.78s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:28<00:27,  6.81s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:35<00:20,  6.78s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:42<00:13,  6.80s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:49<00:06,  6.79s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:54<00:00,  6.38s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:54<00:00,  6.74s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Processing shards:   0%|          | 0/1 [00:00<?, ?it/s]
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 25/25 [00:00<00:00, 232.03 examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 224.41 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 600.98 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 664.19it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 2105.70 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2934.97 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 397.11it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 2032.05 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2829.40 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 389.51it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1794.65 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2498.81 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 438.34it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1630.78 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2726.12 examples/s]
+
+Processing prompts:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AProcessing prompts: 100%|██████████| 25/25 [00:00<00:00, 363.59it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 686.58 examples/s]
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][AMap: 100%|██████████| 25/25 [00:00<00:00, 2261.67 examples/s]
+
+Generating final answers:   0%|          | 0/25 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s][A[AGenerating final answers: 100%|██████████| 25/25 [00:00<00:00, 403.03it/s]
+Map: 100%|██████████| 25/25 [00:00<00:00, 1727.36 examples/s]
+Current run_idx: 184
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/25 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3702.08 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 3641.65 examples/s]
+Current run_idx: 184
+
+Current run_idx: 184
+
+Processing shards: 100%|██████████| 1/1 [04:34<00:00, 274.36s/it]Processing shards: 100%|██████████| 1/1 [04:34<00:00, 274.36s/it]
+Saving the dataset (0/1 shards):   0%|          | 0/25 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 4107.55 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 25/25 [00:00<00:00, 4046.84 examples/s]
+Current run_idx: 184
+
+Current run_idx: 184
+
+Map:   0%|          | 0/25 [00:00<?, ? examples/s]Map: 100%|██████████| 25/25 [00:00<00:00, 141.50 examples/s]Map: 100%|██████████| 25/25 [00:00<00:00, 139.26 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 20.50ba/s]
+184: 0.7440000000000001
+Map:   0%|          | 0/25 [00:00<?, ? examples/s]Map: 100%|██████████| 25/25 [00:00<00:00, 1074.87 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 1073.26ba/s]
+184: 0.7440000000000001
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/evaluate.py", line 721, in load_eval_data
+    return load_dataset("json", data_files=eval_file, split="train")
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 1397, in load_dataset
+    builder_instance = load_dataset_builder(
+        path=path,
+    ...<10 lines>...
+        **config_kwargs,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 1137, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+        path,
+    ...<5 lines>...
+        cache_dir=cache_dir,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 913, in dataset_module_factory
+    ).get_module()
+      ~~~~~~~~~~^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 527, in get_module
+    data_files = DataFilesDict.from_patterns(
+        patterns,
+        download_config=self.download_config,
+        base_path=base_path,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 705, in from_patterns
+    else DataFilesList.from_patterns(
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        patterns_for_key,
+        ^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        download_config=download_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 598, in from_patterns
+    resolve_pattern(
+    ~~~~~~~~~~~~~~~^
+        pattern,
+        ^^^^^^^^
+    ...<2 lines>...
+        download_config=download_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 387, in resolve_pattern
+    raise FileNotFoundError(error_msg)
+FileNotFoundError: Unable to find '/dss/dsshome1/0F/di97pub/CollaborationLearning/.jsonl'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 177, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 58, in run_experiment
+    evaluator.evaluate_last_beliefs()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/evaluate.py", line 670, in evaluate_last_beliefs
+    full_eval_data = self.load_eval_data(eval_file)
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/evaluate.py", line 724, in load_eval_data
+    return load_dataset("json", data_files=eval_file, split="train")
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 1397, in load_dataset
+    builder_instance = load_dataset_builder(
+        path=path,
+    ...<10 lines>...
+        **config_kwargs,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 1137, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+        path,
+    ...<5 lines>...
+        cache_dir=cache_dir,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 913, in dataset_module_factory
+    ).get_module()
+      ~~~~~~~~~~^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/load.py", line 527, in get_module
+    data_files = DataFilesDict.from_patterns(
+        patterns,
+        download_config=self.download_config,
+        base_path=base_path,
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 705, in from_patterns
+    else DataFilesList.from_patterns(
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        patterns_for_key,
+        ^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        download_config=download_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 598, in from_patterns
+    resolve_pattern(
+    ~~~~~~~~~~~~~~~^
+        pattern,
+        ^^^^^^^^
+    ...<2 lines>...
+        download_config=download_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/data_files.py", line 387, in resolve_pattern
+    raise FileNotFoundError(error_msg)
+FileNotFoundError: Unable to find '/dss/dsshome1/0F/di97pub/CollaborationLearning/.jsonl'
+srun: error: lrz-dgx-a100-004: task 0: Exited with exit code 1

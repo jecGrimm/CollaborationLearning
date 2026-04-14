@@ -1,0 +1,22 @@
+Current run_idx: 191
+
+Batch size: 1
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<01:59,  7.48s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:14<01:51,  7.41s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:22<01:43,  7.40s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:29<01:36,  7.39s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:36<01:28,  7.37s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:44<01:20,  7.36s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:51<01:13,  7.32s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:58<01:05,  7.31s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:06<00:58,  7.30s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:13<00:51,  7.30s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:20<00:43,  7.27s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:27<00:36,  7.25s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:35<00:29,  7.26s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:42<00:21,  7.24s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:49<00:14,  7.25s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:56<00:07,  7.23s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:02<00:00,  6.89s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:02<00:00,  7.22s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2406.06 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2281.02 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8352.66 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   0%|          | 1/250 [00:00<00:27,  8.98it/s][ARound 0, Turn: 0: 100%|██████████| 250/250 [00:00<00:00, 1354.86it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 2817.37 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 14263.43 examples/s]
+slurmstepd: error: *** STEP 5459165.0 ON lrz-hgx-h100-007 CANCELLED AT 2026-01-27T09:51:57 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 5459165 ON lrz-hgx-h100-007 CANCELLED AT 2026-01-27T09:51:57 DUE TO TIME LIMIT ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

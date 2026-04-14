@@ -37,6 +37,52 @@ class CLI:
             self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
 
         # for grancir
-        if "device_id" in self.config.keys():
+        if "device_id" in self.config.keys() and self.config["device_id"]!="":
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
             self.config["device"] = f"cuda:{self.config["device_id"]}"
+
+        if "variation" not in self.config.keys():
+            self.config["variation"] = False
+        else:
+            if self.config["variation"].lower() == "true":
+                self.config["variation"] = True
+            else:
+                self.config["variation"] = False
+
+        if "final_reorder" not in self.config.keys():
+            self.config["final_reorder"] = False
+        else:
+            if self.config["final_reorder"].lower() == "true":
+                self.config["final_reorder"] = True
+            else:
+                self.config["final_reorder"] = False
+
+        if "structured" not in self.config.keys():
+            self.config["structured"] = False
+        else:
+            if self.config["structured"].lower() == "true":
+                self.config["structured"] = True
+            else:
+                self.config["structured"] = False
+
+        if "final" not in self.config.keys():
+            self.config["final"] = True
+        else:
+            if self.config["final"].lower() == "true":
+                self.config["final"] = True
+            else:
+                self.config["final"] = False
+
+        if "start" not in self.config.keys():
+            self.config["start"] = 0
+
+        if "end" not in self.config.keys():
+            self.config["end"] = None
+
+        # if "interactive" not in self.config.keys():
+        #     self.config["interactive"] = False
+        # else:
+        #     if self.config["interactive"].lower() == "true":
+        #         self.config["interactive"] = True
+        #     else:
+        #         self.config["interactive"] = False

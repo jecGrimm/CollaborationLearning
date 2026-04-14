@@ -1,0 +1,94 @@
+Assigning run_idx: 165
+
+Batch size: 1
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<02:01,  7.57s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:15<01:52,  7.51s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:22<01:44,  7.49s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:29<01:36,  7.45s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:37<01:28,  7.36s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:44<01:19,  7.26s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:51<01:12,  7.21s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:58<01:04,  7.19s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:05<00:57,  7.17s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:12<00:49,  7.13s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:19<00:42,  7.12s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:26<00:35,  7.10s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:33<00:28,  7.09s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:40<00:21,  7.06s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:47<00:14,  7.03s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:54<00:07,  7.03s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:00<00:00,  6.58s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:00<00:00,  7.08s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11937.75 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 12799.53 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   8%|▊         | 19/250 [00:00<00:01, 189.94it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1936.55it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 5002.53 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11928.11 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.86it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1891.17it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 5175.80 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11909.55 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   8%|▊         | 21/250 [00:00<00:01, 209.85it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1941.94it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4972.74 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11000.01 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   1%|          | 2/250 [00:00<00:12, 19.98it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1909.96it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4797.15 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10203.03 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   3%|▎         | 8/250 [00:00<00:03, 79.99it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1916.70it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 2455.30 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap:   0%|          | 0/250 [00:00<?, ? examples/s]
+Processing shards:   0%|          | 0/6 [4:21:55<?, ?it/s]
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 174, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 48, in run_experiment
+    multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"])
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 970, in prompt_graph
+    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3341, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+                               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3697, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3647, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3570, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 970, in <lambda>
+    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
+                                                 ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 560, in create_prompts
+    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i], init_answer = init_turn))
+                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 463, in create_message
+    "content": self.MID_PROMPT.format(
+               ~~~~~~~~~~~~~~~~~~~~~~^
+        sample = sample,
+        ^^^^^^^^^^^^^^^^
+        conversation = conversation,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        shuffled_sents = shuffled_sents[:max_sent_idx]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+KeyError: 'other_solutions'
+srun: error: lrz-hgx-h100-015: task 0: Exited with exit code 1

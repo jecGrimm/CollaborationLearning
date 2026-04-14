@@ -31,6 +31,11 @@ class ExperimentLog:
         if config:
             self.run_data.update(config)
 
+            # Assign and print run_idx
+            self.store_run_data()
+            print(f"Batch size: {self.run_data["batch_size"]}")
+                
+
     def log_single(self, single):
         """
         This method loggs all attributes of an Single class object
@@ -132,8 +137,10 @@ class ExperimentLog:
             run_files = [int(file.split(".json")[0]) for file in os.listdir(run_dir) if file.endswith(".json")]
             run_idx = max(run_files) + 1
             self.run_data.update({"run_idx": run_idx})
+            print(f"Assigning run_idx: {run_idx}\n")
         else: 
             run_idx = self.run_data["run_idx"]
+            print(f"Current run_idx: {run_idx}\n")
         
         return run_idx
     

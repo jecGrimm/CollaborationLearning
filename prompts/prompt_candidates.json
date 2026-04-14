@@ -90,5 +90,200 @@
         "final": "Analyze the conversation history provided below. Identify the five distinct sentences shared by the players and determine the chronological order agreed upon by the group to reconstruct the story.\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the conversation.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\n\n**Conversation History:**\n{conversation}",  
         "system_final": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
         "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "llama-str_gemini-final_llama-reorder_abstract-names": {
+        "single": "Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence. The reordered sentences should be returned as a list in the format:\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\nwhere 'sentence1' is the first event in the sequence, 'sentence2' is the second event, and so on.\nThe sentences to be reordered are:\n{shuffled_sents}\nPlease provide the reordered list of sentences.\nAnswer:\n",
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "start": "You are {player_name}. Your sentence is: '{sentence}'. To initiate the conversation, please share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n",
+        "mid": "You are {player_name}. Your sentence is: '{sentence}'. The conversation history:\n{conversation}\nGiven the current state of the conversation, please respond with your next statement, either by sharing your sentence, reacting to something another player has said, or proposing a potential order for the sentences.",
+        "rules": "Each player has been given a sentence that is part of a short story, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response. If a consensus is reached on the correct order, provide the final answer in the format: '['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5'] STOP'.",
+        "final": "Analyze the conversation history provided below. Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\n\n**Conversation History:**\n{conversation}",  
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "gemini-final_llama-reorder_single": {
+        "single": "Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']"
+    },
+    "gemini-final_llama-reorder_single_du-reasoning": {
+        "single": "Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nPlease explain your reasoning before providing the final answer.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']"
+    },
+    "panel_llama-str_gemini-final_llama-reorder": {
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "start": "You are {player_name}. Your sentence is: '{sentence}'. Please share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n",
+        "mid": "",
+        "rules": "Each player has been given a sentence that is part of a short story, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences.",
+        "final": "Analyze the statements provided below. Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\n\n**Statements:**\n{conversation}",  
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "du_llama-str_gemini-final_llama-reorder": {
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "start": "You are {player_name}. Your sentence is: '{sentence}'. Please share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n",
+        "mid": "You are {player_name}. Your sentence is: '{sentence}'. These are the suggestions from other agents:\n\n{other_solutions}\n\nThis is your initial suggestion:\n\n{player_solution}\n\nUsing the suggestions from other agents as additional information, please provide your final answer of the correct order of the sentences.\nAnswer:\n",
+        "rules": "Each player has been given a sentence that is part of a short story, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences.",
+        "final": "Analyze the statements provided below. Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\n\n**Statements:**\n{conversation}",  
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "du_llama-str_gemini-final_llama-reorder_reject": {
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "start": "You are {player_name}. Your sentence is: '{sentence}'. Please share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n",
+        "mid": "You are {player_name}. Your sentence is: '{sentence}'. These are the suggestions from other agents:\n\n{other_solutions}\n\nThis is your initial suggestion:\n\n{player_solution}\n\nUsing the suggestions from other agents as additional information, please provide your final answer of the correct order of the sentences. First list the previous statements that should be rejected, then the statements that should accepted. Provide reasons for the rejection or acceptence of a statement. Your response must have the form:\n\nReject: <rejected statements>\n\nAccept: <accepted statements>\n\nSuggestion: <your updated suggestion>\n",
+        "rules": "Each player has been given a sentence that is part of a short story, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences.",
+        "final": "Analyze the statements provided below. Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence.\nThe sentences to be reordered are:\n{shuffled_sents}\n\nYour response must consist **strictly** of the Python-style list containing the ordered sentences. Ensure the sentences are quoted exactly as they appear in the instruction.\n\nDo not provide any reasoning, introduction, or additional text.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\n\n**Statements:**\n{conversation}",  
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_single_no_reasoning":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Return the answer as a list in the format:\n\n{sample}\nAnswer:\n"
+    },
+    "structured_single_reasoning":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Think of convincing reasons for ALL possible positions of the following sentences. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n"
+    },
+    "structured_single_reasoning_short":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n"
+    },
+    "structured_chain":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGiven the current state of the conversation, think of convincing reasons for ALL possible positions of the following sentences. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\nReturn the final answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_chain_short":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGiven the current state of the conversation, think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason. Return the answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\nReturn the final answer as a list in the format:\n\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_single_no_reasoning_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n"
+    },
+    "structured_single_reasoning_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n"
+    },
+    "structured_chain_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGiven the current state of the conversation, think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_panel_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_graph_short_pos-num_sents_output-format":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Conversation History:**\n{other_solutions}\n\n**Your Initial Suggestion:**{player_solution}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_single_reasoning_support":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Think of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n"
+    },
+    "structured_chain_hypo":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_graph_hypo":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{other_solutions}\n\n**Your Initial Suggestion:**{player_solution}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_panel_hypo":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_chain_support":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{conversation}\n\nThink of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_graph_support":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{other_solutions}\n\n**Your Initial Suggestion:**{player_solution}\n\nThink of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_panel_support":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing reasons for possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_single_reasoning_reject":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is Player 1. The names of the other players are ['Player 2', 'Player 3', 'Player 4', 'Player 5']. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "single": "Think of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n"
+    },
+    "structured_chain_reject":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{conversation}\n\nThink of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
+    },
+    "structured_graph_reject":{
+        "system": "You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
+        "start": "Think of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below to predict the position of the following sentences.\n\n**Conversation History:**\n{other_solutions}\n\n**Your Initial Suggestion:**{player_solution}\n\nThink of convincing counterarguments for your hypothesis. Provide one sentence per argument.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with {num_players} other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n",
+        "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
     }
 }
