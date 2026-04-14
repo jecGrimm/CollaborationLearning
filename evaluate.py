@@ -770,7 +770,7 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/outputs_219"
+    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_119_0"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
     evaluate(outdir, "multi")
