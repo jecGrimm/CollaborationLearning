@@ -1,7 +1,7 @@
 {
     "split": "test",
     "framework": "single",
-    "experiment_file": "./outputs/single/Qwen3-32B/test/ckps/outputs_254_0",
+    "experiment_file": "./outputs/single/Qwen3-32B/test/outputs_254",
     "batch_size": 1,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the single setup without reasoning with 1024 tokens with Qwen/Qwen3-32B with variation.",
@@ -147,5 +147,10 @@
     "top_k": 20,
     "min_p": 0,
     "shuffle_file": "./data/ROCStories_shuffled_test.jsonl",
-    "instances": 250
+    "instances": 1000,
+    "duration": 6021.7232530117035,
+    "mean_acc": 0.0,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.0008
 }

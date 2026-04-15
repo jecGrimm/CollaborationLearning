@@ -1,0 +1,86 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "json",
+  "dataset_size": 25295779,
+  "description": "",
+  "download_checksums": {
+    "/nfs/gdata/jgrimm/CollaborationLearning/./data/ROCStories_shuffled_test.jsonl": {
+      "num_bytes": 29467286,
+      "checksum": null
+    }
+  },
+  "download_size": 29467286,
+  "features": {
+    "storyid": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "storytitle": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence1": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence2": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence3": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence4": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence5": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "shuffled_sents": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "prompt": {
+      "feature": {
+        "content": {
+          "dtype": "string",
+          "_type": "Value"
+        },
+        "role": {
+          "dtype": "string",
+          "_type": "Value"
+        }
+      },
+      "_type": "List"
+    },
+    "thinking_output": {
+      "dtype": "string",
+      "_type": "Value"
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 54763065,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 25295779,
+      "num_examples": 47399,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
