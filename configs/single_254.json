@@ -1,5 +1,5 @@
 {
-    "split": "dev",
+    "split": "test",
     "framework": "single",
     "experiment_file": "",
     "batch_size": 1,
@@ -17,6 +17,6 @@
     "structured": "False",
     "output_format": "",
     "start": 0,
-    "end": 250,
-    "run_idx": 251
+    "end": 1000,
+    "run_idx": 254
 }
