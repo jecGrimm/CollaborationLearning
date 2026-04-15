@@ -1,15 +1,15 @@
 {
-    "split": "dev",
+    "split": "test",
     "framework": "single",
     "experiment_file": "",
-    "batch_size": 1,
-    "model_id": "deepseek-ai/DeepSeek-R1-Distill-Llama-8B",
-    "desc": "This run tests the single setup without reasoning with 1024 tokens with deepseek-ai/DeepSeek-R1-Distill-Llama-8B with variation.",
+    "batch_size": 64,
+    "model_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "desc": "This run tests the single setup without reasoning with 1024 tokens with meta-llama/Llama-3.1-8B-Instruct without quantization.",
     "candidate": "single_unstructured",
     "thinking_budget": 0.0,
     "conversation_rounds": 0,
     "variation": "True",
-    "device_id": "",
+    "device_id": "1",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "",
@@ -17,6 +17,6 @@
     "structured": "False",
     "output_format": "",
     "start": 0,
-    "end": 250,
-    "run_idx": 248
+    "end": 1000,
+    "run_idx": 253
 }

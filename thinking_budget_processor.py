@@ -15,6 +15,7 @@ class ThinkingTokenBudgetProcessor(LogitsProcessor):
         self.tokenizer = tokenizer
         self.max_thinking_tokens = max_thinking_tokens
         self.think_end_token = self.tokenizer.encode("</think>", add_special_tokens=False)[0]
+        #print(self.tokenizer.encode("\n"))
         self.nl_token = self.tokenizer.encode("\n", add_special_tokens=False)[0]
         self.tokens_generated = 0
         self.stopped_thinking = False

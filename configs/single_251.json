@@ -1,0 +1,22 @@
+{
+    "split": "dev",
+    "framework": "single",
+    "experiment_file": "",
+    "batch_size": 1,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the single setup without reasoning with 1024 tokens with Qwen/Qwen3-32B with variation.",
+    "candidate": "single_unstructured",
+    "thinking_budget": 0.0,
+    "conversation_rounds": 0,
+    "variation": "True",
+    "device_id": "0",
+    "final_reorder": "True",
+    "conv_file": "",
+    "topology": "",
+    "max_new_tokens": 1024,
+    "structured": "False",
+    "output_format": "",
+    "start": 0,
+    "end": 250,
+    "run_idx": 251
+}

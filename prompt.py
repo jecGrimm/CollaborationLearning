@@ -12,6 +12,7 @@ import json
 import ast
 from collections import defaultdict
 from data import get_sent_list
+from transformers.utils import logging
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
@@ -23,6 +24,9 @@ class Agent:
             split: data split
             framework: multi or single agent
         """
+        # surpresses unneccessary warnings
+        logging.set_verbosity_error()
+
         self.model_id = model_id
         self.model_name = model_id.split("/")[-1]
         self.split = split
@@ -42,19 +46,20 @@ class Agent:
 
 
     def init_pipe(self, device, logger, thinking_budget):
-        if self.model_id == "meta-llama/Llama-3.2-1B-Instruct":
+        if "llama" in self.model_id.lower():
             pipe = pipeline(
                 "text-generation",
                 model=self.model_id,
                 dtype=torch.bfloat16,
                 device_map=device,
-                max_new_tokens = self.max_new_tokens
+                max_new_tokens = self.max_new_tokens,
+                #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
             )
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
             processor = None
-        elif "qwen" or "r1" in self.model_id.lower():
+        elif "qwen" in self.model_id.lower():
             # ensures that the model stops generating thinking tokens after a while
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(self.max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
@@ -72,7 +77,7 @@ class Agent:
                     top_p = 0.95,
                     top_k = 20,
                     min_p = 0,
-                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             else:
                 # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
@@ -87,7 +92,7 @@ class Agent:
                     top_p = 0.8,
                     top_k = 20,
                     min_p = 0,
-                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             
         pipe.tokenizer.padding_side = "left"
