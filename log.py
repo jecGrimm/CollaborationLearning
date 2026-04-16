@@ -33,7 +33,7 @@ class ExperimentLog:
 
             # Assign and print run_idx
             self.store_run_data()
-            print(f"Batch size: {self.run_data["batch_size"]}")
+            print(f"Batch size: {self.run_data['batch_size']}")
                 
 
     def log_single(self, single):

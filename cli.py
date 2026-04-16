@@ -39,7 +39,7 @@ class CLI:
         # for grancir
         if "device_id" in self.config.keys() and self.config["device_id"]!="":
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
-            self.config["device"] = f"cuda:{self.config["device_id"]}"
+            self.config["device"] = f"cuda:{self.config['device_id']}"
 
         if "variation" not in self.config.keys():
             self.config["variation"] = False

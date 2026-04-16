@@ -361,7 +361,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full"):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full", task: str = "rocstories"):
         """
         This class defines multi-agents.
 
@@ -377,7 +377,7 @@ class MultiAgent(Agent):
         else:
             self.interactive = False
 
-        super().__init__(model_id=model_id, split=split, framework="multi", interactive=self.interactive, max_new_tokens=max_new_tokens)
+        super().__init__(model_id=model_id, split=split, framework="multi", interactive=self.interactive, max_new_tokens=max_new_tokens, task=task)
 
         # define prompts
         self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
@@ -399,19 +399,25 @@ class MultiAgent(Agent):
         self.conversation_rounds = conversation_rounds 
 
         self.structured = structured
-        # TODO: Add hypo instead of reasoning as output_format option
 
-        self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
-        if output_format == "full":
-            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
-        elif output_format == "hypo":
-            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
-        elif output_format == "support":
-            self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}}" 
-        elif output_format == "reject":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
+        if self.task == "rocstories":
+            self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
+            if output_format == "full":
+                self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
+            elif output_format == "hypo":
+                self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
+            elif output_format == "support":
+                self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}}" 
+            elif output_format == "reject":
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
+        else:
+            if output_format == "hypo":
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title3}',\n'label': <label odd-one>\n}}\n]" 
+            elif output_format == "full":
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
 
-    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, init_answer = None):
+
+    def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
         """
         This method creates the prompt message.
 
@@ -427,7 +433,12 @@ class MultiAgent(Agent):
         other_players = [name for name in self.NAMES if name != player_name] 
         
         if not final:
-            player_sent = roles[player_name]
+            player_sent = ""
+            if self.task == "rocstories":
+                player_sent = roles[player_name]
+            else:
+                player_sent = f"title: {roles[player_name][0]}\n"
+                player_sent += f"summary: {roles[player_name][1]}\n"
             # define system prompt
             message = [
                 {
@@ -442,27 +453,50 @@ class MultiAgent(Agent):
 
             # define user prompt (start or mid conversation)
             if self.interactive == False or (self.topology == "chain" and conv_round == 0 and turn == 0) or (self.topology == "graph" and conv_round == 0):
-                # START prompts
-                if self.structured:
-                    sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.START_PROMPT.format(
-                                sample = sample,
-                                shuffled_sents = f"['{player_sent}']"
-                            )
-                        }
-                    )
+                if self.task == "rocstories":
+                    # START prompts
+                    if self.structured:
+                        sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.START_PROMPT.format(
+                                    sample = sample,
+                                    shuffled_sents = f"['{player_sent}']"
+                                )
+                            }
+                        )
+                    else:
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.START_PROMPT.format(
+                                    sentence = player_sent
+                                )
+                            }
+                        )
                 else:
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.START_PROMPT.format(
-                                sentence = player_sent
-                            )
-                        }
-                    )
+                    # START prompts
+                    if self.structured:
+                        sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.START_PROMPT.format(
+                                    sample = sample,
+                                    shuffled_sents = f"['{player_sent}']"
+                                )
+                            }
+                        )
+                    else:
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.START_PROMPT.format(
+                                    input_samples = player_sent
+                                )
+                            }
+                        )
             else:
                 # MID prompts
                 if init_answer:
@@ -528,15 +562,26 @@ class MultiAgent(Agent):
                         }
                     )
                 else: 
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.MID_PROMPT.format(
-                                conversation = conversation,
-                                sentence = player_sent
-                            )
-                        }
-                    )
+                    if self.task == "rocstories":
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    conversation = conversation,
+                                    sentence = player_sent
+                                )
+                            }
+                        )
+                    else:
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    conversation = conversation,
+                                    input_samples = player_sent
+                                )
+                            }
+                        )
         else:
             # define system prompt
             message = [
@@ -583,14 +628,30 @@ class MultiAgent(Agent):
                     }
                 )
             else:
-                message.append(
-                    {
-                        "role": "user",
-                        "content": self.FINAL.format(
-                            conversation = conversation
-                        )
-                    }
-                )
+                if self.task == "rocstories":
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.FINAL.format(
+                                conversation = conversation
+                            )
+                        }
+                    )
+                else:
+                    input_samples = ""
+                    for v in roles.values():
+                        input_samples = f"title: {v[0]}\n"
+                        input_samples += f"summary: {v[1]}\n"
+
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.FINAL.format(
+                                conversation = conversation,
+                                input_samples = input_samples
+                            )
+                        }
+                    )
 
         return message
     
@@ -607,17 +668,28 @@ class MultiAgent(Agent):
             dictionary with the prompts for the batch of instances
         """
         messages = []
-        for i in range(len(batch["storyid"])):
-            if conv_round != 0 and self.topology == "graph" and final == False:
-                init_turn, conversation_history = self.get_other_conv(batch["player"][i], batch["turns"][i], turn, conv_round, conv_format= conv_format)
-            else:
-                init_turn = None
-                conversation_history = batch["conversation_history"][i]
 
-            if shuffled_sents:
-                messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i], init_answer = init_turn))
-            else:
-                messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, init_answer = init_turn))
+        if self.task == "rocstories":
+            for i in range(len(batch["storyid"])):
+                if conv_round != 0 and self.topology == "graph" and final == False:
+                    init_turn, conversation_history = self.get_other_conv(batch["player"][i], batch["turns"][i], turn, conv_round, conv_format= conv_format)
+                else:
+                    init_turn = None
+                    conversation_history = batch["conversation_history"][i]
+
+                if shuffled_sents:
+                    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i], init_answer = init_turn))
+                else:
+                    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, init_answer = init_turn))
+        else:
+            for i in range(len(batch["id"])):
+                if conv_round != 0 and self.topology == "graph" and final == False:
+                    init_turn, conversation_history = self.get_other_conv(batch["player"][i], batch["turns"][i], turn, conv_round, conv_format= conv_format)
+                else:
+                    init_turn = None
+                    conversation_history = batch["conversation_history"][i]
+
+                messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, init_answer = init_turn))    
 
         return {"prompt": messages}
 
@@ -794,10 +866,16 @@ class MultiAgent(Agent):
         @returns
             updated batch of instances 
         """
-        for i in range(len(batch["storyid"])):
+        id_name = ""
+        if self.task == "rocstories":
+            id_name = "storyid"
+        else:
+            id_name = "id"
+
+        for i in range(len(batch[id_name])):
             if batch["stop"][i] == False:
                 if len(filtered_data) != dataset_len:
-                    processed_inst = filtered_data.filter(lambda x: x["storyid"] == batch["storyid"][i]) # find instance, TODO: make it faster
+                    processed_inst = filtered_data.filter(lambda x: x[id_name] == batch[id_name][i]) # find instance, TODO: make it faster
                 else:
                     processed_inst = filtered_data.select([i])
 
@@ -825,14 +903,25 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
-        logger.run_data.update({
-            "shuffle_file": roc_data.shuffle_file, 
-            "batch_size": batch_size, 
-            "conversation_rounds": self.conversation_rounds
-        })
+        if self.task == "rocstories":
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+            logger.run_data.update({
+                "shuffle_file": roc_data.shuffle_file, 
+                "batch_size": batch_size, 
+                "conversation_rounds": self.conversation_rounds
+            })
 
-        prompt_data = roc_data.shuffled_dataset
+            prompt_data = roc_data.shuffled_dataset
+        else:
+            cmu_data = CMUBookSum(split = self.split, start = start, end = end)
+            logger.run_data.update({
+                "arranged_file": cmu_data.arranged_file, 
+                "batch_size": batch_size, 
+                "conversation_rounds": self.conversation_rounds
+            })
+
+            prompt_data = cmu_data.arranged_data
+
         full_output = None
 
         start = time.time()
@@ -862,9 +951,12 @@ class MultiAgent(Agent):
             conv_round = 0
             while conv_round < self.conversation_rounds:
                 turn = 0
-                while turn < 5:
+                while turn < (len(self.NAMES)-1):
                     # filter out early stopping
-                    filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
+                    if self.task == "rocstories":
+                        filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
+                    else:
+                        filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["id"]))], batched = True)
 
                     if len(filtered_data) > 0:
                         player_name = self.NAMES[turn]
@@ -887,7 +979,7 @@ class MultiAgent(Agent):
                         torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
-                        turn = 5
+                        turn = len(self.NAMES)-1
                         conv_round = self.conversation_rounds
 
                     # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
@@ -1111,8 +1203,12 @@ class MultiAgent(Agent):
         logger.store_run_data()
 
     def define_roles(self, batch):
-        for i in range(len(batch["storyid"])):
-            batch["roles"][i] = dict(zip(self.NAMES, batch["shuffled_sents"][i]))
+        if self.task == "rocstories":
+            for i in range(len(batch["storyid"])):
+                batch["roles"][i] = dict(zip(self.NAMES[:-1], batch["shuffled_sents"][i]))
+        else:
+            for i in range(len(batch["id"])):
+                batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i]))))
         
         return batch
 

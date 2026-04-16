@@ -13,21 +13,26 @@ import csv
 from tqdm import tqdm
 from scipy import stats
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog()):
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False):
     evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task)
 
+    acc_mean = 0.0
+
     if task == "rocstories":
-        evaluator.evaluate_sent_order()
+        acc_mean = evaluator.evaluate_sent_order()
     else:
-        evaluator.evaluate_odd_one()
+        acc_mean = evaluator.evaluate_odd_one()
 
     evaluator.last = True
     evaluator.zero_counter = 0
     evaluator.double_counter = 0
     evaluator.wrong_format = 0
 
-    if logger.run_data["structured"]:
-        evaluator.evaluate_last_beliefs()
+    acc_last = 0.0
+    if structured:
+        acc_last = evaluator.evaluate_last_beliefs()
+    
+    return acc_mean, acc_last
 
 class Evaluator:
     def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
@@ -87,7 +92,7 @@ class Evaluator:
         self.logger.run_data.update({"mean_acc": acc_mean})
 
         if "run_idx" in self.logger.run_data.keys():
-            print(f"{self.logger.run_data["run_idx"]}: {acc_mean}")
+            print(f"{self.logger.run_data['run_idx']}: {acc_mean}")
         else:
             print(f"accuracy: {acc_mean}")
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
@@ -247,7 +252,22 @@ class Evaluator:
         return {"storyid": batch["storyid"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": self.gold_sents, "prec_1": self.prec_1, "prec_2": self.prec_2, "prec_3": self.prec_3, "prec_4": self.prec_4, "prec_5": self.prec_5, "spearman": self.spearman, "kendalltau": self.kendalltau}
         
     def evaluate_odd_answer_multi(self, batch):
-        pass
+        self.initiate_metric_lists()
+        for i in range(len(batch["id"])):
+            gold = batch["gold_title"][i]
+
+            if "turns" in batch.keys():
+                pred = batch["turns"][i][-1].split("</think>")[-1].strip() # exclude thinking to retrieve only the final result
+            else:
+                pred = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
+            
+            self.pred_lists.append(pred)
+
+            # metrics
+            self.acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
+        
+        return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
+        
 
     def evaluate_order_answer_random(self, batch):
         """
@@ -784,13 +804,13 @@ class Evaluator:
                             "gold_sent_idx": sent_idx,
                             "hypo": conv_dir["position"],
                             "correct": correct,
-                            "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir["position"]})"
+                            "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir['position']})"
                         })
 
         return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
-        eval_file = f"{self.experiment_file.replace("outputs", "eval").split(".jsonl")[0]}.jsonl"
+        eval_file = f"{self.experiment_file.replace('outputs', 'eval').split('.jsonl')[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
 
@@ -800,7 +820,7 @@ class Evaluator:
 
         self.eval_data = preds.map(lambda batch: self.calculate_metrics(batch), batched = True)
 
-        self.save_eval_data(f"{self.experiment_file.replace("outputs", "eval")}_last.jsonl")
+        self.save_eval_data(f"{self.experiment_file.replace('outputs', 'eval')}_last.jsonl")
 
         acc_mean = self.report_accuracy()
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:

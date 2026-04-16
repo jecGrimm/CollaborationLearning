@@ -7,34 +7,45 @@ import re
 import ast
 from pySankey.sankey import sankey
 import numpy as np
-from evaluate import Evaluator
+from evaluate import Evaluator, evaluate
 import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
 import statistics
 from scipy.stats.mstats import ttest_ind
 from matplotlib import colors
 
 class Vis():
-    def __init__(self, experiment_files: dict, variation: bool, conv_format: str, last: bool):
+    def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories"):
         self.experiment_files = experiment_files
 
         self.last = last
 
         self.conv_format = conv_format
+
+        self.task = task
         self.variation = variation
-        if self.variation:
-            self.vispath = f"visualizations/variation/{conv_format}"
+
+        if task == "rocstories":
+            if self.variation:
+                self.vispath = f"visualizations/{self.task}/variation/{conv_format}"
+            else:
+                self.vispath = f"visualizations/{self.task}/no_variation/{conv_format}"
         else:
-            self.vispath = f"visualizations/no_variation/{conv_format}"
+            self.vispath = f"visualizations/{self.task}/{conv_format}"
         os.makedirs(self.vispath, exist_ok = True)
-
-        self.exp_data_hf = {k: load_from_disk(v) for k, v in experiment_files.items()}
-
-        self.create_eval_dfs()
 
         if self.last:
             self.last_app = "_last"
         else:
             self.last_app = ""
+
+        if experiment_files != {}:
+            self.initialize_experiment_files()
+
+    def initialize_experiment_files(self):
+        self.exp_data_hf = {k: load_from_disk(v) for k, v in self.experiment_files.items()}
+
+        self.create_eval_dfs()
+
 
     def create_eval_dfs(self):
         if self.last:
@@ -42,12 +53,12 @@ class Vis():
             for k, v in self.experiment_files.items():
                 if "single" in k:
                     print("Setup is single, not performing last evaluation!")
-                    eval_files[k] = f"{v.replace("outputs", "eval")}.jsonl"
+                    eval_files[k] = f"{v.replace('outputs', 'eval')}.jsonl"
                 else:
-                    eval_files[k] = f"{v.replace("outputs", "eval")}_last.jsonl"
+                    eval_files[k] = f"{v.replace('outputs', 'eval')}_last.jsonl"
             #eval_files = {k: f"{v.replace("outputs", "eval")}_last.jsonl" for k, v in experiment_files.items()}
         else:
-            eval_files = {k: f"{v.replace("outputs", "eval")}.jsonl" for k, v in self.experiment_files.items()}
+            eval_files = {k: f"{v.replace('outputs', 'eval')}.jsonl" for k, v in self.experiment_files.items()}
 
         self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
 
@@ -128,7 +139,7 @@ class Vis():
                         "gold_sent": sent_idx,
                         "hypo": conv_dir["position"],
                         "correct": correct,
-                        "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir["position"]})"
+                        "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir['position']})"
                     })
 
         return beliefs
@@ -366,28 +377,30 @@ class Vis():
             perc_b = round((sum_b/total_beliefs)*100, 2)
 
             if i == 0:
-                percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: {perc_a}%")
-                percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: {perc_b}%")   
+                percentage_lbls.append(f"{self.lbls[i]}: {perc_a}%")
+                percentage_lbls.append(f"{self.lbls[i+1]}: {perc_b}%")   
             else:
-                if perc_a > last_perc_a:
-                    percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
-                else:
-                    percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
+                percentage_lbls.append(f"{self.lbls[i]}: {perc_a}%")
+                # if perc_a > last_perc_a:
+                #     percentage_lbls.append(f"{self.lbls[i]}: +{round(perc_a - last_perc_a, 2)}")
+                # else:
+                #     percentage_lbls.append(f"{self.lbls[i]}: -{round(last_perc_a - perc_a, 2)}%")
 
                 if perc_b > last_perc_b:
-                    percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: +{round(perc_b - last_perc_b, 2)}")
+                    percentage_lbls.append(f"{self.lbls[i+1]}: +{round(perc_b - last_perc_b, 2)}")
                 else:
-                    percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: -{round(last_perc_b - perc_b, 2)}%")
+                    percentage_lbls.append(f"{self.lbls[i+1]}: -{round(last_perc_b - perc_b, 2)}%")
 
             last_perc_a = perc_a
             last_perc_b = perc_b
 
         perc_a = round(float(self.mean_preds_df.loc[setup]["accuracy"])*100, 2)
         perc_b = 100-perc_a
-        if perc_a > last_perc_a:
-            percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
-        else:
-            percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
+        percentage_lbls.append(f"{self.lbls[i]}: {perc_a}%")
+        # if perc_a > last_perc_a:
+        #     percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
+        # else:
+        #     percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
 
         if perc_b > last_perc_b:
             percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: +{round(perc_b - last_perc_b, 2)}")
@@ -444,7 +457,7 @@ class Vis():
 
                     # start sources for next beliefs
                     for target_idx, target_turn in next_targets:
-                        source_lbl = f"{curr_belief["correct"]}_{turn_idx}"
+                        source_lbl = f"{curr_belief['correct']}_{turn_idx}"
                         #self.sources.append(self.lbls.index(source_lbl))
                         #self.sources.append(turn_idx)
 
@@ -454,7 +467,7 @@ class Vis():
                         #     self.values.append("incorrect")
 
                         target_belief = sent_beliefs[target_idx]
-                        target_lbl = f"{target_belief["correct"]}_{target_turn}"
+                        target_lbl = f"{target_belief['correct']}_{target_turn}"
                         #self.targets.append(self.lbls.index(target_lbl))
                         #self.targets.append(target_turn)
 
@@ -473,7 +486,7 @@ class Vis():
             next_turn_idx = self.get_turn_idx(setup, next_belief)
 
             if next_belief["gold_sent"] == curr_belief["gold_sent"] and next_turn_idx > curr_turn_idx:
-                target_lbl = f"{next_belief["correct"]}_{next_turn_idx}"
+                target_lbl = f"{next_belief['correct']}_{next_turn_idx}"
                 self.targets.append(self.lbls.index(target_lbl)) 
 
                 idx = len(beliefs)
@@ -579,43 +592,47 @@ class Vis():
         plt.close()
 
     def plot_all_table(self):
-        df_experiment_files = pd.read_csv("eval/all_runs.csv", delimiter = ";").set_index("format")
+        df_experiment_files = pd.read_csv(f"eval/all_runs_{self.task}.csv", delimiter = ";").set_index("format")
 
         df_acc = df_experiment_files.map(self.get_avg_acc)
-
-        acc_changes = defaultdict(list)
 
         # plot sankeys
         if self.last == False:
             df_dict = df_experiment_files.T.to_dict()
+            acc_changes = defaultdict(list)
             for conv_format, exp_files in df_dict.items():
                 self.__init__(experiment_files = exp_files, variation = self.variation, conv_format = conv_format, last = self.last)
                 
                 for setup in exp_files.keys():
                     if "single" not in setup and "random" not in setup and "du" not in setup:
-                        #self.plot_sankey_full_plotly(setup, sent_color=False)
+                        self.plot_sankey_full_plotly(setup, sent_color=False)
 
                         acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup)
                     else:
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
+
+            df_acc_changes = pd.DataFrame(acc_changes)
+            df_acc_changes.plot()
         
-        df_acc.to_csv(f"./visualizations/all{self.last_app}.csv", sep = ";")
-        df_acc_changes = pd.DataFrame(acc_changes)
-        df_acc_changes.plot()
+        df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
+
         
     def get_avg_acc(self, exp_file):
         if self.last and "single" not in exp_file:
-            eval_file = f"{exp_file.replace("outputs", "eval")}_last.jsonl"
+            eval_file = f"{exp_file.replace('outputs', 'eval')}_last.jsonl"
         else:
-            eval_file = f"{exp_file.replace("outputs", "eval")}.jsonl"
+            eval_file = f"{exp_file.replace('outputs', 'eval')}.jsonl"
         
         try:
             eval_data = load_dataset("json", data_files=eval_file, split="train")
             acc = float(eval_data.with_format("pandas")["accuracy"].mean())
         except:
-            evaluator = Evaluator(exp_file, "multi", last = self.last)
-
-            acc = evaluator.evaluate_last_beliefs()
+            if self.last and "single" not in exp_file:
+                acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
+                acc = acc_last
+            else:
+                acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = False)
+                acc = acc_mean
 
         return round(acc*100, 2)
     
@@ -669,188 +686,9 @@ class Vis():
         return acc_per_turn
 
 if __name__ == "__main__":
-    # full-full-no_var
-    exp_files_no_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-        "chain": "outputs/multi/Qwen3-32B/dev/outputs_154",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_167",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_157"
-    }
-
-    # full-full_var
-    exp_files_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_158",
-    }
-
-    # full-hypo: no_var
-    exp_files_full_hypo_no_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_146",
-        "chain": "outputs/multi/Qwen3-32B/dev/outputs_163",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_186",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_184",
-    }
-
-    # var: full-hypo
-    exp_files_full_hypo_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
-        "graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_179"
-    }
-
-    # no var: full-reasons
-    exp_files_full_reasons_no_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_149",
-        "chain": "outputs/multi/Qwen3-32B/dev/outputs_188",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_190",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_189"
-    }
-
-    exp_files_full_reasons_var = {
-        "single_full": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
-        "graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
-        "star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev"
-    }
-
-    # no var: full-support
-    exp_files_full_support_no_var = {
-        "single_support": "outputs/single/Qwen3-32B/dev/outputs_200",
-        "chain": "outputs/multi/Qwen3-32B/dev/outputs_196",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_197",
-        "star": "outputs/multi/Qwen3-32B/dev/outputs_198"
-    }
-
-    #outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0
-    exp_files_full_support_var = {
-        "single_support": "outputs/single/Qwen3-32B/dev/outputs_214",
-        "chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
-        "graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
-        "star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0"
-    }
-
-    # single: var - full - anything
-    exp_files_single_var = {
-        "hypo_single": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "full_single": "outputs/single/Qwen3-32B/dev/outputs_152",
-        "support_single": "outputs/single/Qwen3-32B/dev/outputs_214",
-        "reject_single_250": "outputs/single/Qwen3-32B/dev/outputs_226"
-    }
-
-    # chain: var - full - anything
-    exp_files_chain_var = {
-        "hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
-        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
-        "support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
-    }
-
-    # graph: var - full - anything
-    exp_files_graph_var = {
-        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
-        "full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
-        "reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
-        "support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
-    }
-
-    # star: var - full - anything
-    exp_files_star_var = {
-        "hypo_star": "outputs/multi/Qwen3-32B/dev/outputs_179",
-        "full_star": "outputs/multi/Qwen3-32B/dev/outputs_158",
-        "reasons_star": "outputs/multi/Qwen3-32B/dev/ckps/outputs_193_dev",
-        "support_star_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_203_204_205_206_0",
-    }
-
-    exp_files_corr_all = {
-        "full_hypo_chain_750": "outputs/multi/Qwen3-32B/dev/ckps/outputs_169_0_177_0_183_0",
-        "full_full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "full_reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0",
-        "full_support_chain_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_201_0_211",
-        "full_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_191",
-        "full_full_graph_500": "outputs/multi/Qwen3-32B/dev/ckps/outputs_176_0_182_0",
-        "full_reasons_graph_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_192_0",
-        "full_support_graph": "outputs/multi/Qwen3-32B/dev/outputs_207_208_209",
-        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
-        "hypo_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_221",
-        "hypo_hypo_star_250": "outputs/multi/Qwen3-32B/dev/outputs_222",
-        "support_support_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_223",
-        "support_support_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_224",
-        "support_support_star_250": "outputs/multi/Qwen3-32B/dev/outputs_225"  
-    }
-
-    exp_files_corr_same = {
-        "hypo_hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
-        "hypo_hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_221",
-        "hypo_hypo_star_250": "outputs/multi/Qwen3-32B/dev/outputs_222",
-        "support_support_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_223",
-        "support_support_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_224",
-        "support_support_star_250": "outputs/multi/Qwen3-32B/dev/outputs_225"    
-    }
-
-    # hypo-hypo
-    exp_files_hypo_hypo_var = {
-        "single_hypo": "outputs/single/Qwen3-32B/dev/outputs_147",
-        "chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
-        "graph_250": "outputs/multi/Qwen3-32B/dev/outputs_221",
-        "star_250": "outputs/multi/Qwen3-32B/dev/outputs_222"
-    }
-
-    # hypo-hypo
-    exp_files_support_support_var = {
-        "single_support": "outputs/single/Qwen3-32B/dev/outputs_214",
-        "chain_250": "outputs/multi/Qwen3-32B/dev/outputs_223",
-        "graph_250": "outputs/multi/Qwen3-32B/dev/outputs_224",
-        "star_250": "outputs/multi/Qwen3-32B/dev/outputs_225"
-    }
-
-    # chain x-x
-    exp_files_same_chain_var = {
-        "hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
-        "support_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_223"
-    }
-
-    # graph x-x
-    exp_files_same_graph_var = {
-        "hypo_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_221",
-        "support_graph_250": "outputs/multi/Qwen3-32B/dev/outputs_224"
-    }
-
-    # star x-x
-    exp_files_same_star_var = {
-        "hypo_star_250": "outputs/multi/Qwen3-32B/dev/outputs_222",
-        "support_star_250": "outputs/multi/Qwen3-32B/dev/outputs_225"
-    }
-
-    # chain: hypo-hypo, full-full, full-reasons
-    chain_args_hypo = {
-        "hypo_chain_250": "outputs/multi/Qwen3-32B/dev/outputs_219",
-        "full_chain_1000": "outputs/multi/Qwen3-32B/dev/ckps/outputs_155_0_1_173_0_180_0",
-        "reasons_chain_293": "outputs/multi/Qwen3-32B/dev/ckps/outputs_194_0"
-    }
 
     for last in [False, True]:
-        print("last: ", last)
-        args = {
-            "variation": True,
-            "conv_format": "args_hypos",
-            "last": last,
-            "comparison": "hypo" # single vs. multi: more compute == better?, chain vs. graph/star: decentralization == better?, last vs. no last: MAS collaboration or reasoning context?, hypo vs. arguments: real reasoning or collection of hypothesis?
-        }
-
-        vis = Vis(chain_args_hypo, variation = args["variation"], conv_format = args["conv_format"], last = args["last"])
+        vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
         vis.plot_all_table()
 
-        #vis.plot_performance()
-        #vis.perform_ttest(comparison = args["comparison"], exp_name = "")
-    #vis.correlate_last_final(setup = "x-x")
-
-    # vis.plot_sankey_full_plotly("chain_500", sent_color = False)
-    # vis.plot_sankey_full_plotly("graph", sent_color = False)
-    # vis.plot_sankey_full_plotly("star_1000", sent_color = False)
-
     print("Done")
-
-
