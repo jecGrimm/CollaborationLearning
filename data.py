@@ -1,6 +1,7 @@
 from datasets import load_dataset
 import random
 import os
+from collections import defaultdict
 
 def get_sent_list(batch, i):
     return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i], batch["sentence5"][i]]
@@ -14,15 +15,15 @@ class ROCStories:
             shuffle: False -> Do not create shuffled data else True
         '''
         if variation:
-            self.orig_dataset = load_dataset("csv", data_files="data/ROCStories_winter2017 - ROCStories_winter2017.csv", split="train")
+            self.orig_dataset = load_dataset("csv", data_files="data/rocstories/ROCStories_winter2017 - ROCStories_winter2017.csv", split="train")
 
             # load shuffled data
-            self.shuffle_file = "./data/ROCStories_shuffled_" + split + ".jsonl"
+            self.shuffle_file = "./data/rocstories/ROCStories_shuffled_" + split + ".jsonl"
         else:
-            self.orig_dataset = load_dataset("csv", data_files="data/example_good_short_stories - story_modeling_full_scale_123_hits.csv", split="train")
+            self.orig_dataset = load_dataset("csv", data_files="data/rocstories/example_good_short_stories - story_modeling_full_scale_123_hits.csv", split="train")
 
             # load shuffled data
-            self.shuffle_file = "./data/ROCStories_shuffled_no_variation_" + split + ".jsonl"
+            self.shuffle_file = "./data/rocstories/ROCStories_shuffled_no_variation_" + split + ".jsonl"
 
         if not end:
             if split == "mini":
@@ -67,11 +68,99 @@ class ROCStories:
 
         return {"shuffled_sents":  batch_shuffled}
         
-if __name__ == "__main__":
-    roc_data = ROCStories(split = "dev", variation = False)
-    outpath = "outputs/random/dev_no_variation"
+class CMUBookSum:
+    def __init__(self, arrange = False, split = "mini", start = 0, end = None):
+        '''
+        This constructor loads the original ROCStories data and creates the shuffled dataset.
 
-    roc_data.shuffled_dataset.save_to_disk(outpath)
+        @param
+            shuffle: False -> Do not create shuffled data else True
+        '''
+        self.orig_dataset = load_dataset("Iliasselyaa/CMUBookSummaryDataset", split = "train")
+
+        self.split = split
+
+        # load arranged data
+        self.arranged_file = "./data/cmu_booksum/CMU_BookSum_arranged_" + split + ".jsonl"
+        os.makedirs("./data/cmu_booksum/", exist_ok=True)
+
+        if not end:
+            if split == "mini":
+                    end = 3
+            elif split == "dev":
+                    end = 1000
+            elif split == "test":
+                    start = 1000
+                    end = 2000
+
+        if not os.path.exists(self.arranged_file) or arrange == True:
+            self.genre_data = self.orig_dataset.filter(lambda x: x["genres"] != None)
+            self.arranged_data = self.genre_data.map(lambda x: self.arrange_data(x))
+
+            self.arranged_data.select(range(start, end)).to_json(self.arranged_file, indent=4)
+        else:
+            self.arranged_data = load_dataset("json", data_files=self.arranged_file, split="train")
+
+            self.arranged_data = self.arranged_data.select(range(start, end))
+
+    def arrange_data(self, instance):
+        genres = instance["genres"].split(", ")
+
+        # find instance with same genre
+        found = False
+        i = 0
+        while not found:
+            same_genre = genres[i].lower()
+            same_insts = self.genre_data.filter(lambda x: same_genre in x["genres"].lower())
+
+            if len(same_insts) > 0:
+                found = True
+            else:
+                i += 1
+
+        rand_idx = random.randint(0, len(same_insts)-1)
+        same_inst = same_insts.select([rand_idx])[0]
+
+        # find instance with different genre
+        odd_insts = self.genre_data.filter(lambda x: same_genre not in x["genres"].lower())
+
+        odd_rand_idx = random.randint(0, len(odd_insts)-1)
+        odd_inst = odd_insts.select([odd_rand_idx])[0]
+
+        orig_pos = [0, 1, 2] # 0: same inst, 1: same inst, 2: odd inst
+        #ids_orig = [instance["id"], same_inst["id"], odd_inst["id"]]
+        random.shuffle(orig_pos)
+        arranged_ids = []
+        arranged_titles = []
+        arranged_genres = []
+        arranged_summaries = []
+        for pos in orig_pos:
+            if pos == 0:
+                arranged_ids.append(instance["id"])
+                arranged_titles.append(instance["title"])
+                arranged_genres.append(instance["genres"])
+                arranged_summaries.append(instance["summary"])
+            elif pos == 1:
+                arranged_ids.append(same_inst["id"])
+                arranged_titles.append(same_inst["title"])
+                arranged_genres.append(same_inst["genres"])
+                arranged_summaries.append(same_inst["summary"])
+            else:
+                arranged_ids.append(odd_inst["id"])
+                arranged_titles.append(odd_inst["title"])
+                arranged_genres.append(odd_inst["genres"])
+                arranged_summaries.append(odd_inst["summary"])
+
+        return {"ids": arranged_ids, "gold_title": odd_inst["title"], "titles": arranged_titles, "same_genre": same_genre, "genres": arranged_genres, "summaries": arranged_summaries}
+
+
+if __name__ == "__main__":
+    # roc_data = ROCStories(split = "dev", variation = True, start=0, end=1000)
+    # outpath = "outputs/random/dev"
+
+    # roc_data.shuffled_dataset.save_to_disk(outpath)
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
+
+    book_data = CMUBookSum(arrange=True)
     print("Done")

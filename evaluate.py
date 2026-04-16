@@ -13,17 +13,24 @@ import csv
 from tqdm import tqdm
 from scipy import stats
 
-def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
-    evaluator = Evaluator(outfile, framework, logger, last = False)
-    evaluator.evaluate_sent_order()
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog()):
+    evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task)
+
+    if task == "rocstories":
+        evaluator.evaluate_sent_order()
+    else:
+        evaluator.evaluate_odd_one()
+
     evaluator.last = True
     evaluator.zero_counter = 0
     evaluator.double_counter = 0
     evaluator.wrong_format = 0
-    evaluator.evaluate_last_beliefs()
+
+    if logger.run_data["structured"]:
+        evaluator.evaluate_last_beliefs()
 
 class Evaluator:
-    def __init__(self, experiment_file: str, framework: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
+    def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
         self.experiment_file = experiment_file
         if idx:
             self.exp_data = load_from_disk(experiment_file).select([idx])
@@ -31,7 +38,7 @@ class Evaluator:
             self.exp_data = load_from_disk(experiment_file)
 
         self.framework = framework
-        
+        self.task = task
         self.logger = logger
 
         self.initiate_metric_lists()
@@ -42,18 +49,25 @@ class Evaluator:
         self.zero_counter = 0
         self.double_counter = 0
         self.wrong_format = 0
+
+        if self.task == "rocstories":
+            self.pred_len = 5
+        else:
+            self.pred_len = 3
         
     def initiate_metric_lists(self):
         self.pred_lists = []
         self.acc = []
-        self.gold_sents = []
-        self.prec_1 = []
-        self.prec_2 = []
-        self.prec_3 = []
-        self.prec_4 = []
-        self.prec_5 = []
-        self.spearman = []
-        self.kendalltau = []
+
+        if self.task == "rocstories":
+            self.gold_sents = []
+            self.prec_1 = []
+            self.prec_2 = []
+            self.prec_3 = []
+            self.prec_4 = []
+            self.prec_5 = []
+            self.spearman = []
+            self.kendalltau = []
 
     def save_eval_data(self, eval_file = None):
         if eval_file == None:
@@ -115,6 +129,39 @@ class Evaluator:
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
         return acc_mean
+
+    def evaluate_odd_one(self):
+        if self.framework == "single":
+            self.eval_data = self.exp_data.map(self.evaluate_odd_answer_single, batched=True, remove_columns=self.exp_data.column_names)
+        elif self.framework == "multi":
+            self.eval_data = self.exp_data.map(lambda batch: self.evaluate_odd_answer_multi(batch), batched=True, remove_columns=self.exp_data.column_names)
+        else:
+            self.eval_data = self.exp_data.map(self.evaluate_odd_answer_random, batched=True, remove_columns=self.exp_data.column_names)
+        
+        self.save_eval_data()
+
+        acc_mean = self.report_accuracy()
+        # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
+        #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
+        return acc_mean
+
+    def evaluate_odd_answer_single(self, batch):
+        pred_lists = []
+        acc = []
+        gold_lbls = list(batch["gold_title"])
+
+        for i in range(len(batch["id"])):
+            gold = batch["gold_title"][i]
+
+            if "turns" in batch.keys():
+                pred = self.extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip(), gold)
+            else:
+                pred = self.extract_answer_list(batch["output"][i].split("</think>")[-1].strip(), gold)
+            pred_lists.append(pred)
+        
+            acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
+        
+        return {"id": batch["id"], "accuracy": acc, "predictions": pred_lists, "gold": gold_lbls}
 
 
     def evaluate_order_answer_single(self, batch):
@@ -199,6 +246,9 @@ class Evaluator:
         
         return {"storyid": batch["storyid"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": self.gold_sents, "prec_1": self.prec_1, "prec_2": self.prec_2, "prec_3": self.prec_3, "prec_4": self.prec_4, "prec_5": self.prec_5, "spearman": self.spearman, "kendalltau": self.kendalltau}
         
+    def evaluate_odd_answer_multi(self, batch):
+        pass
+
     def evaluate_order_answer_random(self, batch):
         """
         This function collect the evaluation results for the shuffled random outputs.
@@ -241,6 +291,9 @@ class Evaluator:
         
         return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
 
+    def evaluate_odd_answer_random(self, batch):
+        pass
+
     def extract_answer_list(self, model_out: str, gold: list):
         """
         This function extract the list with predictions from the model output string. 
@@ -273,12 +326,15 @@ class Evaluator:
                 return self.clean_preds(self.extract_structured_answer(model_answer), gold)
         except:
             # extract list from model output
-            str_list = self.match_list(model_answer) # only use first guess by the model
+            if self.task == "rocstories":
+                str_list = self.match_list(model_answer) # only use first guess by the model
 
-            try:
-                return self.clean_preds(ast.literal_eval(str_list), gold = gold)
-            except:
-                return self.clean_preds(self.extract_structured_answer(model_answer), gold)
+                try:
+                    return self.clean_preds(ast.literal_eval(str_list), gold = gold)
+                except:
+                    return self.clean_preds(self.extract_structured_answer(model_answer), gold)
+            else:
+                return model_answer
             
     def extract_structured_answer(self, model_answer):
         conv_str = model_answer.split("</think>")[-1].strip()
@@ -303,18 +359,33 @@ class Evaluator:
         except:
             conv_list = []
 
-            sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            positions = re.findall(r"""position[\'"]: (\d)""", conv_str)
+            if self.task == "rocstories":
+                sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                positions = re.findall(r"""position[\'"]: (\d)""", conv_str)
 
-            for i, sent in enumerate(sentences):
-                conv_dict = defaultdict(str)
+                for i, sent in enumerate(sentences):
+                    conv_dict = defaultdict(str)
 
-                conv_dict["sentence"] = sent
+                    conv_dict["sentence"] = sent
 
-                if i < len(positions):
-                    conv_dict["position"] = int(positions[i])
-                
-                conv_list.append(conv_dict)
+                    if i < len(positions):
+                        conv_dict["position"] = int(positions[i])
+                    
+                    conv_list.append(conv_dict)
+            else:
+                titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                labels = re.findall(r"""label[\'"]: (\d)""", conv_str)
+
+                for i, title in enumerate(titles):
+                    conv_dict = defaultdict(str)
+
+                    conv_dict["titles"] = title
+
+                    if i < len(labels):
+                        conv_dict["labels"] = int(labels[i])
+                    
+                    conv_list.append(conv_dict)
+
         if conv_list == []:
             self.wrong_format += 1
         return conv_list
@@ -389,7 +460,11 @@ class Evaluator:
         """
         # get types of items in the list
         pred_types = [(i, type(item)) for i, item in enumerate(model_pred) if type(item) != str]
-        cleaned_pred = [""] * 5
+        
+        if self.task == "rocstories":
+            cleaned_pred = [""] * self.pred_len
+        else:
+            cleaned_pred = [-1] * self.pred_len
 
         if len(pred_types) != 0:
             # Prioritize tuples
@@ -431,16 +506,22 @@ class Evaluator:
                             cleaned_pred[hypo-1] = model_pred[model_i]["sentence"]
                         else:
                             self.zero_counter += 1
-
                 elif pred_type == int:
                     cleaned_pred[model_i] = gold[model_i] # TODO: test
+                elif pred_type == dict and "label" in model_pred[model_i].keys() and "title" in model_pred[model_i].keys():
+                    hypo = int(model_pred[model_i]["label"])
+
+                    if hypo in [0, 1]:
+                        cleaned_pred[model_i] = hypo
+                    else:
+                        print("Found instance with wrong label")
                 type_i += 1
         else:
             # turn model prediction into list if the format is already correct
             #print("returning list")
             cleaned_pred = [sent.strip("\"'") for sent in model_pred]
 
-        return cleaned_pred[:5] # only use first 5 sentences
+        return cleaned_pred[:self.pred_len] # only use first 5 sentences
 
     def compute_accuracy_order(self, pred: list, batch, i: int):
         """
@@ -463,9 +544,19 @@ class Evaluator:
                     if sent == batch[f"sentence{sent_order+1}"][i].lower().strip('.'):
                         acc += 1
             
-            return acc/5 # 5 sentences
+            return acc/self.pred_len # 5 sentences
         else:
             return 0.0
+        
+    def compute_accuracy_odd(self, pred: str, gold_title: str, gold_title_id: str):
+        num_correct = 0
+
+        if gold_title.lower() in pred.lower() or str(gold_title_id) in pred.lower():
+            num_correct = 1
+        else:
+            print("incorrect prediction")
+        
+        return num_correct
         
     def compute_correlations(self, pred: list, gold: list):
         pred = [self.clean_sent(item) for item in pred]
@@ -770,10 +861,13 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/dev/ckps/outputs_119_0"
+    outdir = "outputs/random/rocstories/dev"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outdir, "multi")
+    #evaluate(outfile = outdir,framework= "random", task = "rocstories")
+
+    bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
+    evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
 
     # evaluator = Evaluator(outdir, "single", last = True)
     # evaluator.evaluate_sent_order()
