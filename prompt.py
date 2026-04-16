@@ -1,7 +1,7 @@
 import re
 import torch
 from transformers import pipeline, AutoTokenizer, LogitsProcessorList, BitsAndBytesConfig
-from data import ROCStories
+from data import ROCStories, CMUBookSum
 import os
 import time
 from datetime import datetime
@@ -15,7 +15,7 @@ from data import get_sent_list
 from transformers.utils import logging
 
 class Agent:
-    def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, interactive = True):
+    def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, task: str, interactive = True):
         """
         This class provides functionalities that are shared by the single- and multi-agent frameworks.
 
@@ -33,6 +33,7 @@ class Agent:
         self.framework = framework
         self.interactive = interactive
         self.date = str(datetime.now()).replace(" ", "_")
+        self.task = task
 
         self.prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
 
@@ -143,7 +144,7 @@ class Agent:
         """
         run_idx = logger.get_run_idx()
 
-        output_path = f"./outputs/{self.framework}/{self.model_name}/{self.split}"
+        output_path = f"./outputs/{self.framework}/{self.model_name}/{self.task}/{self.split}"
 
         if shard_idx == None:
             if hf == False:
@@ -169,7 +170,7 @@ class Agent:
                 return path
 
 class SingleAgent(Agent):
-    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", max_new_tokens = 256, structured = True, output_format = "full"):
+    def __init__(self, model_id: str, split: str, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", max_new_tokens = 256, structured = True, output_format = "full", task = "rocstories"):
         """
         This class defines single-agents.
 
@@ -181,20 +182,26 @@ class SingleAgent(Agent):
         self.split = split
 
         # initialize Agent
-        super().__init__(model_id=model_id, split=split, framework="single", interactive = False, max_new_tokens=max_new_tokens)
+        super().__init__(model_id=model_id, split=split, framework="single", task = task, interactive = False, max_new_tokens=max_new_tokens)
 
         self.PROMPT = self.prompt_candidates[prompt_candidate]["single"]
         self.SYSTEM_PROMPT = self.prompt_candidates[prompt_candidate]["system"]
         self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
 
-        if output_format == "hypo":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}}\n]" 
-        elif output_format == "full":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}}\n]" 
-        elif output_format == "support":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}}\n]" 
-        elif output_format == "reject":
-            self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
+        if self.task == "rocstories":
+            if output_format == "hypo":
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}}\n]" 
+            elif output_format == "full":
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}}\n]" 
+            elif output_format == "support":
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}}\n]" 
+            elif output_format == "reject":
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
+        else:
+            if output_format == "hypo":
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title3}',\n'label': <label odd-one>\n}}\n]" 
+            elif output_format == "full":
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
 
         self.structured = structured
 
@@ -231,6 +238,35 @@ class SingleAgent(Agent):
 
         return {"prompt": batch_messages}
     
+    def create_message_booksum(self, batch):
+        """
+        This method creates a message for a Llama model.
+
+        @params
+            batch: batch of instances
+        @returns
+            dictionary containing the prompt
+        """
+        batch_messages = []
+        for i in range(len(batch["id"])):
+            #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
+            message = [] # TODO: Fix box
+
+            message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
+
+            #sample = self.OUTPUT_FORMAT.format(**{f"title{n}": title for n, title in enumerate(batch["titles"][i], start=1)})
+            
+            input_samples = ""
+            for n in range(len(batch["ids"][i])):
+                input_samples += f"title{n+1}: {batch["titles"][i][n]}\n"
+                input_samples += f"summary{n+1}: {batch["summaries"][i][n]}\n"
+
+            message.append({"role": "user", "content": self.PROMPT.format(input_samples = input_samples)})
+
+            batch_messages.append(message)
+
+        return {"prompt": batch_messages}
+    
     def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None):
         """
         This method prompts the model.
@@ -245,10 +281,17 @@ class SingleAgent(Agent):
         pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
-        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
-        logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
+        if self.task == "rocstories":
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+            logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
-        prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
+            prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
+        else:
+            booksum_data = CMUBookSum(split = self.split, start = start, end = end)
+            logger.run_data.update({"arranged_file": booksum_data.arranged_file, "batch_size": batch_size})
+
+            prompt_data = booksum_data.arranged_data.map(self.create_message_booksum, batched=True)
+
         full_output_list = []
         full_thinking_answer = []
 

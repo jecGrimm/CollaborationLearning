@@ -287,7 +287,7 @@
         "names": ["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"]
     },
     "chain_improved":{
-        "system": "You are a player in a conversational game with 5 other players. Your are {player_name}. The other players are {other_players}. {rules}",
+        "system": "You are a player in a conversational game with 5 other players. You are {player_name}. The other players are {other_players}. {rules}",
         "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
         "start": "**Sentence:**\n{sentence}\n\nPlease share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n",
         "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nReflect critically on the suggestions of other players and generate an answer to continue the current discussion.\n\n**Sentence:**\n{sentence}\nAnswer:\n",
@@ -296,8 +296,13 @@
         "names": ["a novelist", "a journalist", "a literary scholar", "a linguistic expert", "a critic", "an expert"]
     },
     "single_unstructured":{
-        "system": "You are a player in a conversational game with 5 other players. Your are an expert. {rules}",
+        "system": "You are a player in a conversational game with 5 other players. You are an expert. {rules}",
         "rules": "Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.",
         "single": "**Sentences:**\n{shuffled_sents}\n\nOrder the sentences to create the final answer.\n\n**Output Format:**\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\nAnswer:\n"
+    },
+    "cmu_single_unstructured":{
+        "system": "You are a player in a conversational game with 3 other players. You are an expert. {rules}",
+        "rules": "Each player has been given a book summary. One of the books is in a different genre than the other two. Your goal is to work together by discussing which book is in a different genre than the other two. The game will end when a player includes 'STOP' in their response.",
+        "single": "**Books:**\n{input_samples}\n\nDecide which book is in a different genre than the other two. Please return only the title of the book with the different genre.\nAnswer:\n"
     }
 }

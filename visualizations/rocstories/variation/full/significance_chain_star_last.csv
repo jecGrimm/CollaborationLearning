@@ -1,0 +1,4 @@
+;first_setup;first_mean;second_setup;second_mean;Welch's t-test;p-value;significant
+0;chain;0.3214;single_full;0.3844000000000001;-5.304349895773731;6.19908672087889e-08;False
+1;chain;0.3214;graph_500;0.3344;-0.7971567859598945;0.21278307224158755;False
+2;chain;0.3214;star;0.08826666666666667;24.88523594700567;1.0;False

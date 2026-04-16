@@ -1,7 +1,7 @@
 from prompt import SingleAgent, MultiAgent
 import os 
 from cli import CLI
-from evaluate import Evaluator
+from evaluate import Evaluator, evaluate
 from log import ExperimentLog
 import pandas as pd
 import torch
@@ -30,7 +30,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
         # prompt
         if config["framework"] == "single":
-            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"])
+            single = SingleAgent(model_id = config["model_id"], split = config["split"], prompt_candidate = config["candidate"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"], task=config["task"])
             
             logger.log_single(single)
 
@@ -51,11 +51,12 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = multi.define_outfile(logger, hf = True)
 
-    # evaluate
-    evaluator = Evaluator(outfile, config["framework"], logger, last = False)
-    evaluator.evaluate_sent_order()
-    evaluator.last = True
-    evaluator.evaluate_last_beliefs()
+    # evaluate 
+    evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"])
+    # evaluator = Evaluator(outfile, config["framework"], logger, last = False, task = config["task"])
+    # evaluator.evaluate_sent_order()
+    # evaluator.last = True
+    # evaluator.evaluate_last_beliefs()
 
     logger.store_run_data()
 
