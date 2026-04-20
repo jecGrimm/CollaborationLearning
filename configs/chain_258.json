@@ -1,10 +1,10 @@
 {
-    "split": "dev",
+    "split": "test",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 2,
-    "model_id": "meta-llama/Llama-3.1-8B-Instruct",
-    "desc": "This run tests the chain setup with 1024 tokens with Llama-3.1-8B-Instruct with variation.",
+    "batch_size": 1,
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the chain setup with 1024 tokens with Qwen/Qwen3-32B with variation.",
     "candidate": "chain_improved",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
@@ -19,5 +19,5 @@
     "conv_format": "",
     "start": 0,
     "end": 250,
-    "run_idx": 255
+    "run_idx": 258
 }
