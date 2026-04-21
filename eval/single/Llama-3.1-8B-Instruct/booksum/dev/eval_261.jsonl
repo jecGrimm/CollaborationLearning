@@ -1,0 +1,250 @@
+{"id":0,"accuracy":1,"predictions":"Legacy of the Daleks","gold":"Legacy of the Daleks"}
+{"id":1,"accuracy":1,"predictions":"title3: Blood Secret","gold":"Blood Secret"}
+{"id":2,"accuracy":1,"predictions":"Indiana Jones and the Dance of the Giants","gold":"Indiana Jones and the Dance of the Giants"}
+{"id":4,"accuracy":0,"predictions":"Between the Strokes of Night","gold":"The Scarlatti Inheritance"}
+{"id":5,"accuracy":0,"predictions":"All Quiet on the Western Front","gold":"Five on Finniston Farm"}
+{"id":6,"accuracy":0,"predictions":"Dot and the Kangaroo","gold":"River of Fortune"}
+{"id":8,"accuracy":0,"predictions":"title1: The Currents of Space","gold":"Nostromo"}
+{"id":9,"accuracy":0,"predictions":"Blade Runner 2: The Edge of Human","gold":"The Lions of Al-Rassan"}
+{"id":15,"accuracy":1,"predictions":"The White Rabbit","gold":"The White Rabbit"}
+{"id":20,"accuracy":1,"predictions":"title3: Tom Swift and His Sky Racer","gold":"Tom Swift and His Sky Racer"}
+{"id":21,"accuracy":0,"predictions":"Galaxy of Fear: Ghost of the Jedi","gold":"The Help"}
+{"id":22,"accuracy":1,"predictions":"Love, Stargirl","gold":"Love, Stargirl"}
+{"id":23,"accuracy":1,"predictions":"Fancy Nancy","gold":"Fancy Nancy"}
+{"id":24,"accuracy":0,"predictions":"Fingersmith","gold":"Imperium: A Novel of Ancient Rome"}
+{"id":25,"accuracy":1,"predictions":"By Night In Chile","gold":"By Night In Chile"}
+{"id":26,"accuracy":0,"predictions":"Dracula","gold":"Wayside School is Falling Down"}
+{"id":27,"accuracy":0,"predictions":"Don Quixote","gold":"Darkhouse"}
+{"id":29,"accuracy":0,"predictions":"Dune Messiah","gold":"Appley Dapply's Nursery Rhymes"}
+{"id":30,"accuracy":1,"predictions":"The White Tiger","gold":"The White Tiger"}
+{"id":31,"accuracy":1,"predictions":"Based on the summaries, I would say that the book \\\"Heartbeat\\\" is in a different genre than the other two. It appears to be a Young Adult (YA) novel, focusing on the personal growth and experiences of a young girl, whereas \\\"Star Maker\\\" and \\\"Death of a Hero\\\" are Science Fiction and War Fiction, respectively.","gold":"Heartbeat"}
+{"id":32,"accuracy":1,"predictions":"title2: Deep Storm","gold":"Deep Storm"}
+{"id":33,"accuracy":0,"predictions":"The Trial","gold":"Sweeping Up Glass"}
+{"id":34,"accuracy":1,"predictions":"Based on the summaries provided, I believe that \\\"Tersias\\\" is in a different genre than the other two.The other two books, \"The Game-Players of Titan\\\" and \\\"The Metamorphosis\", appear to be Science Fiction and Magical Realism, respectively. They both deal with themes of transformation, societal commentary, and the human condition, which are common in these genres.On the other hand, \"Tersias\\\" appears to be a work of Fantasy, specifically a tale of a blind prophet with magical abilities. The presence of a magician, a zealot, and a keeper of mysterious powers suggests a more fantastical and supernatural world, which is distinct from the other two books.Therefore, I would say that \\\"Tersias\\\" is the book in a different genre than the other two.","gold":"The Game-Players of Titan"}
+{"id":35,"accuracy":0,"predictions":"The Difference Engine","gold":"Bath Tangle"}
+{"id":36,"accuracy":1,"predictions":"title1: The Shadow Speaker","gold":"The Shadow Speaker"}
+{"id":37,"accuracy":1,"predictions":"Proteus in the Underworld (This book appears to be in the science fiction genre, while the other two books appear to be in the mystery and historical fiction genres.)","gold":"Proteus in the Underworld"}
+{"id":39,"accuracy":0,"predictions":"God Emperor of Dune","gold":"At Lady Molly's"}
+{"id":40,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is \\\"Book of Job\". The other two books, \"Tempest-Tost\\\" and \\\"Genesis\", seem to be in the genre of literature or historical fiction, while \\\"Book of Job\\\" appears to be in the genre of religious or biblical text.","gold":"Tempest-Tost"}
+{"id":41,"accuracy":1,"predictions":"title2: The Knife of Never Letting Go","gold":"The Knife of Never Letting Go"}
+{"id":42,"accuracy":0,"predictions":"Secret Servant: The Moneypenny Diaries","gold":"Starlight"}
+{"id":44,"accuracy":0,"predictions":"Star Wars Republic Commando: Triple Zero","gold":"The Armourer's House"}
+{"id":45,"accuracy":0,"predictions":"Adventures of Huckleberry Finn","gold":"Kingdom of Shadows"}
+{"id":46,"accuracy":0,"predictions":"The Letter of Marque","gold":"Behold the Man"}
+{"id":47,"accuracy":0,"predictions":"Johnny Got His Gun","gold":"A Prayer for Owen Meany"}
+{"id":48,"accuracy":1,"predictions":"Who Will Run the Frog Hospital?","gold":"Who Will Run the Frog Hospital?"}
+{"id":52,"accuracy":0,"predictions":"Microserfs","gold":"Jewels"}
+{"id":53,"accuracy":1,"predictions":"title3: Dance of Death","gold":"Dance of Death"}
+{"id":54,"accuracy":0,"predictions":"I Want to Go Home","gold":"Prince of Foxes"}
+{"id":55,"accuracy":1,"predictions":"The Perfect Storm","gold":"The Perfect Storm"}
+{"id":56,"accuracy":1,"predictions":"title3: A Time for George Stavros","gold":"A Time for George Stavros"}
+{"id":57,"accuracy":0,"predictions":"title1","gold":"Where Are You Now?"}
+{"id":61,"accuracy":0,"predictions":"title3: The False Peace","gold":"Wide Is the Gate"}
+{"id":62,"accuracy":0,"predictions":"Truesight","gold":"The Saint in New York"}
+{"id":63,"accuracy":0,"predictions":"title2: A Scanner Darkly","gold":"Halfway House"}
+{"id":64,"accuracy":1,"predictions":"title2: Joe Gould\\'s Secret","gold":"Joe Gould's Secret"}
+{"id":65,"accuracy":0,"predictions":"His Master\\'s Voice","gold":"Tears of the Oracle"}
+{"id":66,"accuracy":1,"predictions":"Las pel\u00edculas de mi vida","gold":"Las pel\u00edculas de mi vida"}
+{"id":69,"accuracy":0,"predictions":"The Vile Village","gold":"The Tin Drum"}
+{"id":70,"accuracy":0,"predictions":"Ringworld","gold":"Elusive Isabel"}
+{"id":72,"accuracy":0,"predictions":"Rendezvous with Rama (Science Fiction)","gold":"Part of the Furniture"}
+{"id":73,"accuracy":1,"predictions":"The God of Animals","gold":"The God of Animals"}
+{"id":74,"accuracy":0,"predictions":"Based on the summaries, I would say that the book \\\"The Bodysnatchers\\\" is in a different genre than the other two. The other two books seem to be in the science fiction genre, while \\\"The Bodysnatchers\\\" appears to be a work of horror or science fiction horror, with elements of the supernatural and a focus on a frightening threat to society.","gold":"Survival Of The Fittest"}
+{"id":75,"accuracy":0,"predictions":"Starship Troopers","gold":"The World of Nagaraj"}
+{"id":76,"accuracy":1,"predictions":"Eyes of the Emperor","gold":"Eyes of the Emperor"}
+{"id":77,"accuracy":1,"predictions":"Queen of the Falls","gold":"Queen Of The Falls"}
+{"id":78,"accuracy":1,"predictions":"Things Fall Apart","gold":"Things Fall Apart"}
+{"id":79,"accuracy":1,"predictions":"Queen of the Slayers","gold":"Queen of the Slayers"}
+{"id":80,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is \\\"The Time Machine\". This is because \\\"The Time Machine\\\" and \\\"The Knight and Knave of Swords\\\" appear to be science fiction and fantasy respectively, while \\\"Boba Fett: Hunted\\\" is a work of science fiction set in a specific universe (Star Wars) which is primarily known for its space opera and action elements.","gold":"The Knight and Knave of Swords"}
+{"id":81,"accuracy":1,"predictions":"A Solitary Blue","gold":"A Solitary Blue"}
+{"id":82,"accuracy":0,"predictions":"Jane Eyre","gold":"The Black Echo"}
+{"id":83,"accuracy":0,"predictions":"Dragonsinger","gold":"Elantris"}
+{"id":84,"accuracy":1,"predictions":"World War Z","gold":"World War Z"}
+{"id":85,"accuracy":0,"predictions":"The Wind on the Moon","gold":"The Ganymede Takeover"}
+{"id":86,"accuracy":1,"predictions":"The Man on the Balcony","gold":"The Man on the Balcony"}
+{"id":87,"accuracy":0,"predictions":"The Wild Irish Girl","gold":"Killdozer"}
+{"id":88,"accuracy":0,"predictions":"The Pit and the Pendulum","gold":"Children of God"}
+{"id":89,"accuracy":0,"predictions":"The Hunt for Red October","gold":"Author, Author"}
+{"id":90,"accuracy":0,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is:Quiet as a NunThis book appears to be a mystery or thriller with elements of the supernatural, whereas the other two books seem to be more action-oriented and focused on military and espionage themes in \\\"The Cardinal of the Kremlin\\\" and fantasy themes in \\\"Captain\\'s Fury\".","gold":"Captain's Fury"}
+{"id":91,"accuracy":0,"predictions":"title3: Have Mercy on Us All","gold":"Seeing a Large Cat"}
+{"id":92,"accuracy":0,"predictions":"A Rebel In Time","gold":"Black House"}
+{"id":93,"accuracy":0,"predictions":"title2: The Mismeasure of Man","gold":"Money"}
+{"id":94,"accuracy":1,"predictions":"Based on the summaries provided, I would say that the book in a different genre than the other two is:Black Beauty","gold":"Black Beauty"}
+{"id":96,"accuracy":1,"predictions":"title2: The Torment of Others","gold":"The Torment of Others"}
+{"id":97,"accuracy":1,"predictions":"title3: Blindness","gold":"Blindness"}
+{"id":98,"accuracy":0,"predictions":"title1: The Solution","gold":"If Only It Were True"}
+{"id":99,"accuracy":1,"predictions":"The Champion Maker","gold":"The Champion Maker"}
+{"id":100,"accuracy":1,"predictions":"Beloved (Literary Fiction\/ Magical Realism)","gold":"Beloved"}
+{"id":101,"accuracy":1,"predictions":"Luna","gold":"Luna"}
+{"id":102,"accuracy":1,"predictions":"Zorro","gold":"Zorro"}
+{"id":103,"accuracy":1,"predictions":"Mortal danger","gold":"Mortal danger"}
+{"id":104,"accuracy":1,"predictions":"Destination Mars","gold":"Destination Mars"}
+{"id":105,"accuracy":1,"predictions":"The Sinner","gold":"The Sinner"}
+{"id":107,"accuracy":0,"predictions":"The Invisible Man","gold":"Drop Dead Beautiful"}
+{"id":108,"accuracy":0,"predictions":"Twenty Thousand Leagues Under the Sea","gold":"Involuntary Witness"}
+{"id":109,"accuracy":1,"predictions":"The Way of Kings","gold":"The Way of Kings"}
+{"id":111,"accuracy":1,"predictions":"title1: Spirit Bound","gold":"Spirit Bound"}
+{"id":112,"accuracy":0,"predictions":"The Fall","gold":"A Panther in the Basement"}
+{"id":115,"accuracy":1,"predictions":"High Citadel","gold":"High Citadel"}
+{"id":117,"accuracy":0,"predictions":"title1: The Rime of the Ancient Mariner","gold":"Under a War-Torn Sky"}
+{"id":118,"accuracy":1,"predictions":"Space Station Seventh Grade","gold":"Space Station Seventh Grade"}
+{"id":119,"accuracy":1,"predictions":"From the Mixed-Up Files of Mrs. Basil E. Frankweiler","gold":"From the Mixed-Up Files of Mrs. Basil E. Frankweiler"}
+{"id":120,"accuracy":1,"predictions":"The Mezzanine: A Novel","gold":"The Mezzanine: A Novel"}
+{"id":121,"accuracy":0,"predictions":"Digging to America","gold":"The Last Kingdom"}
+{"id":122,"accuracy":0,"predictions":"Around the World in Eighty Days","gold":"Placebo Effect"}
+{"id":123,"accuracy":0,"predictions":"Prague: A Novel","gold":"Sourcery"}
+{"id":124,"accuracy":0,"predictions":"The Slave-girl from Jerusalem","gold":"Abhorsen"}
+{"id":127,"accuracy":1,"predictions":"Yobgorgle: Mystery Monster of Lake Ontario","gold":"Yobgorgle: Mystery Monster of Lake Ontario"}
+{"id":128,"accuracy":0,"predictions":"Gulliver\\'s Travels","gold":"Murder on the Links"}
+{"id":129,"accuracy":0,"predictions":"The Sorrows of Young Werther","gold":"David Starr, Space Ranger"}
+{"id":130,"accuracy":0,"predictions":"A Midsummer Night\\'s Dream","gold":"Night of January 16th"}
+{"id":131,"accuracy":1,"predictions":"Based on the summaries provided, I believe the book in a different genre than the other two is:Children of Paranoia","gold":"Children of Paranoia"}
+{"id":134,"accuracy":0,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is \\\"The Forge of God\".","gold":"Blood of Amber"}
+{"id":135,"accuracy":0,"predictions":"title1","gold":"Pimpernel and Rosemary"}
+{"id":136,"accuracy":0,"predictions":"The Road","gold":"Amber and Blood"}
+{"id":137,"accuracy":0,"predictions":"The Creationists","gold":"Castle Amber"}
+{"id":139,"accuracy":0,"predictions":"Man Plus","gold":"The Good Companions"}
+{"id":140,"accuracy":0,"predictions":"Weapons of Choice","gold":"The Secret of the Old Mill"}
+{"id":141,"accuracy":1,"predictions":"title1: Captain Corelli\\'s Mandolin (Historical Fiction\/Literary Fiction)","gold":"Captain Corelli's Mandolin"}
+{"id":143,"accuracy":0,"predictions":"The Weirdstone of Brisingamen (Fantasy)","gold":"Greybeard"}
+{"id":144,"accuracy":1,"predictions":"Hard Love","gold":"Hard Love"}
+{"id":145,"accuracy":0,"predictions":"The 33 Strategies of War","gold":"According to Mary Magdalene"}
+{"id":146,"accuracy":0,"predictions":"I Am Legend","gold":"Final Theory"}
+{"id":147,"accuracy":1,"predictions":"The Last Dog on Earth","gold":"The Last Dog on Earth"}
+{"id":148,"accuracy":0,"predictions":"**Historical Alternate Fiction**","gold":"The Narrative of Arthur Gordon Pym of Nantucket"}
+{"id":149,"accuracy":1,"predictions":"title3: Nightjohn","gold":"Nightjohn"}
+{"id":150,"accuracy":0,"predictions":"Gemini Doyle Trilogy","gold":"Gemma Doyle Trilogy"}
+{"id":151,"accuracy":0,"predictions":"The Power of Six","gold":"The Truth-Teller's Tale"}
+{"id":152,"accuracy":0,"predictions":"Starman Jones","gold":"City of Ashes"}
+{"id":153,"accuracy":0,"predictions":"The Children\\'s Story","gold":"The Children's Story"}
+{"id":154,"accuracy":1,"predictions":"Vampirates: Tide of Terror","gold":"Vampirates: Tide of Terror"}
+{"id":155,"accuracy":0,"predictions":"The Star Beast","gold":"Scuppers"}
+{"id":156,"accuracy":1,"predictions":"The Circuit: Stories from the Life of a Migrant Child","gold":"The Circuit: Stories from the Life of a Migrant Child"}
+{"id":157,"accuracy":0,"predictions":"The Razor\\'s Edge","gold":"The Razor's Edge"}
+{"id":158,"accuracy":0,"predictions":"Charlotte\\'s Web","gold":"The Stone Monkey"}
+{"id":159,"accuracy":0,"predictions":"The Home and the World (Literary Fiction)","gold":"Tempest"}
+{"id":160,"accuracy":0,"predictions":"The Last Man","gold":"The Castle"}
+{"id":161,"accuracy":0,"predictions":"The Terror (Horror)","gold":"Mother of Pearl"}
+{"id":162,"accuracy":1,"predictions":"title1","gold":"Ren\u00e9"}
+{"id":163,"accuracy":0,"predictions":"Dragonflight","gold":"The Way of Shadows"}
+{"id":164,"accuracy":1,"predictions":"Based on the summaries, I would say title1: All The Beautiful Sinners","gold":"All The Beautiful Sinners"}
+{"id":165,"accuracy":1,"predictions":"The Jester","gold":"The Jester"}
+{"id":166,"accuracy":1,"predictions":"Young Bond Book 4","gold":"Young Bond Book 4"}
+{"id":167,"accuracy":1,"predictions":"title2: When the Birds Fly South","gold":"When the Birds Fly South"}
+{"id":168,"accuracy":1,"predictions":"title2: The White Priory Murders","gold":"The White Priory Murders"}
+{"id":169,"accuracy":0,"predictions":"The Patchwork Girl of Oz","gold":"Assassin"}
+{"id":170,"accuracy":1,"predictions":"title2: Oz: Into the Wild","gold":"Oz: Into the Wild"}
+{"id":171,"accuracy":0,"predictions":"Double Star","gold":"The Chinese Gold Murders"}
+{"id":172,"accuracy":1,"predictions":"Reading Lolita in Tehran: A Memoir in Books","gold":"Reading Lolita in Tehran: A Memoir in Books"}
+{"id":173,"accuracy":0,"predictions":"Revelation Space","gold":"High Time to Kill"}
+{"id":174,"accuracy":0,"predictions":"Once a Hero","gold":"A Ship of the Line"}
+{"id":175,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is:Dragon Sword and Wind ChildThis book appears to be Fantasy, while the other two books, The Arrangement and Glory Road, seem to be Literary Fiction and Adventure\/Fantasy respectively, with elements of Magical Realism in Glory Road, but overall they share more similarities with the Literary Fiction genre than Dragon Sword and Wind Child does.","gold":"The Arrangement"}
+{"id":176,"accuracy":0,"predictions":"The Moon Is a Harsh Mistress","gold":"Ten Big Ones"}
+{"id":177,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is \\\"I Will Fear No Evil\". The other two books, \"Death Is a Lonely Business\\\" and \\\"Ossian\\'s Ride\", both have elements of mystery and thriller, while \\\"I Will Fear No Evil\\\" is primarily a work of science fiction with elements of psychological exploration.","gold":"Death Is a Lonely Business"}
+{"id":178,"accuracy":0,"predictions":"title1: Snow White and the Giants","gold":"Engaging the Muslim World"}
+{"id":179,"accuracy":0,"predictions":"Methuselah\\'s Children","gold":"Dragon Death"}
+{"id":181,"accuracy":1,"predictions":"Based on the summaries provided, I believe title1: Caps for Sale is in a different genre than the other two.This book appears to be a children\\'s picture book or a folktale, whereas the other two books seem to be fantasy novels.","gold":"Caps for Sale"}
+{"id":183,"accuracy":0,"predictions":"Wuthering Heights (Romance)","gold":"The Last Boleyn Book"}
+{"id":184,"accuracy":1,"predictions":"title3: Iceworld","gold":"Iceworld"}
+{"id":185,"accuracy":1,"predictions":"Sideways Arithmetic From Wayside School","gold":"Sideways Arithmetic From Wayside School"}
+{"id":186,"accuracy":0,"predictions":"title2: Robinson Crusoe","gold":"Settling Accounts: Return Engagement"}
+{"id":188,"accuracy":1,"predictions":"My Uncle Napoleon","gold":"My Uncle Napoleon"}
+{"id":189,"accuracy":1,"predictions":"Based on the summaries provided, I believe the book in a different genre than the other two is: title2: Arch of Triumph","gold":"Arch of Triumph"}
+{"id":191,"accuracy":1,"predictions":"The Cat Who Turned On and Off (Mystery)","gold":"The Cat Who Turned On and Off"}
+{"id":192,"accuracy":1,"predictions":"Based on the summaries provided, I believe the book in a different genre than the other two is:House of Chains (Fantasy)","gold":"House of Chains"}
+{"id":193,"accuracy":1,"predictions":"Based on the summaries, I would say that the book in a different genre than the other two is: Winter Kills","gold":"Winter Kills"}
+{"id":194,"accuracy":0,"predictions":"Naked Empire","gold":"The Hunger of Sejanoz"}
+{"id":195,"accuracy":0,"predictions":"title2: Espedair Street","gold":"The Secret Order of the Gumm Street Girls"}
+{"id":196,"accuracy":0,"predictions":"title2: The Crow Road","gold":"1636: The Saxon Uprising"}
+{"id":197,"accuracy":1,"predictions":"title1","gold":"A Conspiracy of Friends"}
+{"id":198,"accuracy":0,"predictions":"Tarzan and the Ant Men","gold":"Beguilement"}
+{"id":200,"accuracy":0,"predictions":"Star King","gold":"The Killings at Badger's Drift"}
+{"id":202,"accuracy":0,"predictions":"title3: Icehenge","gold":"Angel Angel"}
+{"id":203,"accuracy":1,"predictions":"One Shot","gold":"One Shot"}
+{"id":204,"accuracy":0,"predictions":"The City of Ember","gold":"I Is for Innocent"}
+{"id":205,"accuracy":0,"predictions":"title3: Farmer in the Sky","gold":"The Queen of Air and Darkness"}
+{"id":206,"accuracy":0,"predictions":"title2: Nick and the Glimmung","gold":"Spring Snow"}
+{"id":207,"accuracy":0,"predictions":"The Widow\\'s Broom","gold":"The Widow's Broom"}
+{"id":209,"accuracy":0,"predictions":"A Deepness in the Sky","gold":"The Green Mile"}
+{"id":210,"accuracy":0,"predictions":"The Number of the Beast","gold":"Bag Limit"}
+{"id":211,"accuracy":0,"predictions":"title1: Foundation\\'s Edge","gold":"Magic Study"}
+{"id":212,"accuracy":0,"predictions":"The Viper\\'s Nest","gold":"The Viper's Nest"}
+{"id":213,"accuracy":0,"predictions":"title3: Roma Eterna","gold":"Trunk Music"}
+{"id":214,"accuracy":1,"predictions":"Odd Thomas","gold":"Odd Thomas"}
+{"id":215,"accuracy":0,"predictions":"title1","gold":"Sam, Bangs, and Moonshine"}
+{"id":216,"accuracy":0,"predictions":"Across The Zodiac","gold":"Assassin's Apprentice"}
+{"id":217,"accuracy":1,"predictions":"Prince of Chaos","gold":"Prince of Chaos"}
+{"id":218,"accuracy":0,"predictions":"title3: The Book of Ptath (Science Fantasy)","gold":"Emotional Chemistry"}
+{"id":219,"accuracy":1,"predictions":"title2: The Singapore Grip","gold":"The Singapore Grip"}
+{"id":220,"accuracy":0,"predictions":"Streets of Laredo","gold":"A Flag Full of Stars"}
+{"id":221,"accuracy":0,"predictions":"The Dreamwalker\\'s Child","gold":"The Dreamwalker's Child"}
+{"id":222,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is:Darkwing","gold":"Darkwing"}
+{"id":223,"accuracy":1,"predictions":"Based on the summaries provided, I would say that title2: The Secret of the Forgotten City is in a different genre than the other two. The other two books, The Human Factor and Kim, appear to be spy novels or novels of espionage, set against the backdrop of the Cold War and the British Empire in India, respectively. The Secret of the Forgotten City, on the other hand, seems to be a young adult mystery or adventure novel, with a focus on a treasure hunt and a young sleuth.","gold":"The Secret of the Forgotten City"}
+{"id":224,"accuracy":0,"predictions":"title2: Whit","gold":"El delantero centro fue asesinado al atardecer"}
+{"id":225,"accuracy":0,"predictions":"title3: The Running Man","gold":"Bloodhound"}
+{"id":227,"accuracy":0,"predictions":"Wolf\\'s Blood","gold":"Wolf's Blood"}
+{"id":229,"accuracy":1,"predictions":"Le lion","gold":"Le lion"}
+{"id":230,"accuracy":0,"predictions":"The Fist of God","gold":"The Wonderful Visit"}
+{"id":231,"accuracy":0,"predictions":"Based on the summaries, I think the book in a different genre is title2: Into the Out Of. The other two books seem to be science fiction novels set in space, while Into the Out Of appears to be a blend of science fiction and fantasy, with elements of African culture and supernatural creatures.","gold":"Black Blade"}
+{"id":232,"accuracy":0,"predictions":"title3: Joshua Then and Now","gold":"Starclimber"}
+{"id":233,"accuracy":0,"predictions":"The Shadow Rising","gold":"The Marriage Plot"}
+{"id":234,"accuracy":0,"predictions":"The Women of Brewster Place","gold":"The Optimist's Daughter"}
+{"id":235,"accuracy":0,"predictions":"title2: Dodsworth","gold":"Bella at Midnight"}
+{"id":236,"accuracy":1,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is \\\"Lost Horizon\". The other two books, \"Ashling\\\" and \\\"Lord of the Nutcracker Men\", seem to be primarily in the young adult fantasy and historical fiction genres respectively. \"Lost Horizon\", however, appears to be a work of science fiction or utopian fiction, as it features a hidden, isolated community with advanced technology and a unique aging process.","gold":"Ashling"}
+{"id":237,"accuracy":0,"predictions":"Miss Peregrine\\'s Home for Peculiar Children","gold":"Miss Peregrine's Home for Peculiar Children"}
+{"id":238,"accuracy":0,"predictions":"Goodbye, Mr. Chips","gold":"The Bourne Sanction"}
+{"id":239,"accuracy":1,"predictions":"Wizardborn","gold":"Wizardborn"}
+{"id":243,"accuracy":0,"predictions":"title1","gold":"Repent, Harlequin! Said the Ticktockman"}
+{"id":244,"accuracy":1,"predictions":"title1: The Barn Owl\\'s Wondrous Capers","gold":"The Barn Owl's Wondrous Capers"}
+{"id":245,"accuracy":1,"predictions":"Guns, Germs, and Steel","gold":"Guns, Germs, and Steel"}
+{"id":248,"accuracy":1,"predictions":"title3: The Beast Within","gold":"The Beast Within"}
+{"id":249,"accuracy":0,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is: The Blue Man","gold":"Kailashey Kelenkari"}
+{"id":251,"accuracy":0,"predictions":"First to Fight","gold":"Ruby"}
+{"id":252,"accuracy":0,"predictions":"The Rise of Nine","gold":"A Midsummer Night's Dream"}
+{"id":253,"accuracy":1,"predictions":"Based on the summaries, I believe title3: I Will Survive is in a different genre than the other two. Title3: I Will Survive is a memoir, which is a non-fiction book, whereas title1: On Writing: A Memoir of the Craft and title2: The Divine Folly are both fiction and non-fiction books respectively but both contain elements of a memoir and historical fiction.","gold":"The Divine Folly"}
+{"id":254,"accuracy":1,"predictions":"The Treasure of Alpheus Winterborn","gold":"The Treasure of Alpheus Winterborn"}
+{"id":255,"accuracy":0,"predictions":"Wizard and Glass","gold":"Soldier of Sidon"}
+{"id":256,"accuracy":1,"predictions":"The Pearl","gold":"The Pearl"}
+{"id":257,"accuracy":1,"predictions":"Based on the summaries provided, I believe title3: Revenant is in a different genre than the other two. It appears to be a work of science fiction\/fantasy, specifically a supernatural teen drama, given the mention of a Chinese gang, the occult, and supernatural creatures such as demons. The other two books, Rabbit Redux and The Eyes of the Dragon, seem to be more grounded in realistic fiction and fantasy, respectively, with a focus on character development and social commentary.","gold":"Rabbit Redux"}
+{"id":259,"accuracy":0,"predictions":"title3: Dolores Claiborne","gold":"The Crown of Dalemark"}
+{"id":260,"accuracy":0,"predictions":"The Girl with the Dragon Tattoo","gold":"The Story of the Phantom: The Ghost Who Walks"}
+{"id":261,"accuracy":0,"predictions":"The Girl Who Loved Tom Gordon: A Novel","gold":"The 35th of May, or Conrad's Ride to the South Seas"}
+{"id":262,"accuracy":1,"predictions":"My Uncle Oswald","gold":"My Uncle Oswald"}
+{"id":263,"accuracy":1,"predictions":"The Joy Luck Club","gold":"The Joy Luck Club"}
+{"id":264,"accuracy":0,"predictions":"title2: Wonders of a Godless World","gold":"The Colour"}
+{"id":267,"accuracy":1,"predictions":"The Walking Drum","gold":"The Walking Drum"}
+{"id":269,"accuracy":0,"predictions":"title3: Love and Mr Lewisham","gold":"Play to the End"}
+{"id":270,"accuracy":0,"predictions":"Based on the summaries, I believe title1: Sinister Barrier is in a different genre than the other two.","gold":"Cities of the Plain"}
+{"id":272,"accuracy":0,"predictions":"The Flames: A Fantasy","gold":"Fat Kid Rules the World"}
+{"id":275,"accuracy":0,"predictions":"title2: Dragon Dance","gold":"Grandfather's Journey"}
+{"id":276,"accuracy":0,"predictions":"Harriet the Spy","gold":"Tai-Pan: A Novel of Hong Kong"}
+{"id":278,"accuracy":1,"predictions":"The Worm Ouroboros","gold":"The Worm Ouroboros"}
+{"id":279,"accuracy":0,"predictions":"Based on the summaries, I believe the book in a different genre than the other two is: G.O.G. 666","gold":"Assassin"}
+{"id":280,"accuracy":0,"predictions":"The Player of Games","gold":"Probuditi!"}
+{"id":281,"accuracy":0,"predictions":"Lucky Starr and the Oceans of Venus","gold":"One for the Morning Glory"}
+{"id":282,"accuracy":0,"predictions":"Anathem","gold":"Herzog"}
+{"id":283,"accuracy":1,"predictions":"Based on the summaries provided, I believe title1: Safe Harbour is in a different genre than the other two. Safe Harbour appears to be a Romance novel, while Use of Weapons and Tower of Glass seem to be Science Fiction novels.","gold":"Safe Harbour"}
+{"id":284,"accuracy":1,"predictions":"Things Fall Apart","gold":"Things Fall Apart"}
+{"id":285,"accuracy":0,"predictions":"Based on the summaries provided, I believe the book in a different genre than the other two is \\\"Black Cocktail\". This book appears to be a romance novel, focusing on the idea of finding one\\'s missing half and dealing with Platonic concepts, which is a departure from the fantasy and dark comedy genres of the other two books.","gold":"Sinner"}
+{"id":286,"accuracy":0,"predictions":"A Friend of the Earth","gold":"Mario and the Magician"}
+{"id":287,"accuracy":0,"predictions":"Empire of the Sun","gold":"First Rider's Call"}
+{"id":288,"accuracy":0,"predictions":"title1: Alvin Journeyman","gold":"Freedomland"}
+{"id":289,"accuracy":0,"predictions":"The Weirdstone of Brisingamen (Fantasy)","gold":"Capable of Honor"}
+{"id":290,"accuracy":1,"predictions":"Ginger Pye","gold":"Ginger Pye"}
+{"id":291,"accuracy":0,"predictions":"title2: Absent in the Spring","gold":"Ivanhoe"}
+{"id":292,"accuracy":1,"predictions":"Hideaway","gold":"Hideaway"}
+{"id":293,"accuracy":1,"predictions":"title2: Night Whispers","gold":"Night Whispers"}
+{"id":294,"accuracy":0,"predictions":"The Adventures of Pinocchio","gold":"Something Fresh"}
+{"id":295,"accuracy":1,"predictions":"title3: Lucinda Brayford","gold":"Lucinda Brayford"}
+{"id":297,"accuracy":0,"predictions":"Celestial Matters","gold":"All The Beautiful Sinners"}
+{"id":298,"accuracy":1,"predictions":"title2: A Kid for Two Farthings","gold":"A Kid for Two Farthings"}
+{"id":299,"accuracy":0,"predictions":"title1: Lucky Starr and the Pirates of the Asteroids","gold":"Mannan Magal"}
+{"id":300,"accuracy":0,"predictions":"Against a Dark Background","gold":"Poison In Jest"}
+{"id":301,"accuracy":1,"predictions":"Hideaway","gold":"Hideaway"}
+{"id":302,"accuracy":0,"predictions":"My Brilliant Career","gold":"An Ice-Cream War"}
+{"id":303,"accuracy":0,"predictions":"It\\'s Kind of a Funny Story","gold":"It's Kind of a Funny Story"}
+{"id":304,"accuracy":0,"predictions":"Child\\'s Play","gold":"Child's Play"}
+{"id":305,"accuracy":0,"predictions":"title2: Deep Water","gold":"Praetorian"}
+{"id":306,"accuracy":1,"predictions":"The Golden Spiders","gold":"The Golden Spiders"}
+{"id":308,"accuracy":1,"predictions":"title2: Holiday","gold":"Holiday"}
+{"id":311,"accuracy":0,"predictions":"Mildred Pierce","gold":"Pool of Twilight"}
