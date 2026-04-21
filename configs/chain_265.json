@@ -1,6 +1,6 @@
 {
     "task": "cmu_booksum",
-    "split": "dev",
+    "split": "test",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 1,
@@ -10,7 +10,7 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "0",
+    "device_id": "",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
@@ -19,6 +19,6 @@
     "output_format": "",
     "conv_format": "",
     "start": 0,
-    "end": 250,
-    "run_idx": 263
+    "end": 1000,
+    "run_idx": 265
 }
