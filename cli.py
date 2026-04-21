@@ -37,7 +37,7 @@ class CLI:
             self.config["candidate"] = "adapted-agashe-2025_str_gemini-final"
 
         # for grancir
-        if "device_id" in self.config.keys() and self.config["device_id"]!="":
+        if "device_id" in self.config.keys() and self.config["device_id"] not in ["", "auto"]:
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
             self.config["device"] = f"cuda:{self.config['device_id']}"
 
