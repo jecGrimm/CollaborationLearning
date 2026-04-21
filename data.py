@@ -84,21 +84,25 @@ class CMUBookSum:
         self.arranged_file = "./data/cmu_booksum/CMU_BookSum_arranged_" + split + ".jsonl"
         os.makedirs("./data/cmu_booksum/", exist_ok=True)
 
-        if not end:
-            if split == "mini":
+        if not os.path.exists(self.arranged_file) or arrange == True:
+            if split == "test":
+                start = 1000
+
+            if not end:
+                if split == "mini":
                     end = 3
-            elif split == "dev":
+                elif split == "dev":
                     end = 1000
-            elif split == "test":
-                    start = 1000
+                elif split == "test":
                     end = 2000
 
-        if not os.path.exists(self.arranged_file) or arrange == True:
             self.genre_data = self.orig_dataset.filter(lambda x: x["genres"] != None)
+            self.genre_data = self.genre_data.remove_columns(["wikipedia_id", "freebase_id", "author", "publication_date"])
             self.arranged_data = self.genre_data.map(lambda x: self.arrange_data(x))
 
-            self.arranged_data.select(range(start, end)).to_json(self.arranged_file, indent=4)
+            self.arranged_data.select(range(start, end)).to_json(self.arranged_file)
         else:
+            # TODO: test for null values
             self.arranged_data = load_dataset("json", data_files=self.arranged_file, split="train")
 
             self.arranged_data = self.arranged_data.select(range(start, end))
@@ -162,5 +166,5 @@ if __name__ == "__main__":
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
 
-    book_data = CMUBookSum(arrange=True)
+    book_data = CMUBookSum(arrange=False, split = "test")
     print("Done")
