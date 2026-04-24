@@ -116,7 +116,7 @@ if __name__ == "__main__":
     qwen8_out3 = "outputs/multi/Qwen3-32B/test/outputs_258_259"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
-    inspect_instances(qwen8_out1, 1)
+    inspect_instances(qwen8_out1)
     #evaluate(qwen8_out1, "single")
 
     #merge_outputs([qwen8_out1, qwen8_out2], "outputs/multi/Qwen3-32B/test/outputs_258_259", "multi")
