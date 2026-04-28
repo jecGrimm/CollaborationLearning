@@ -414,7 +414,10 @@ class MultiAgent(Agent):
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
         else:
             if not self.structured:
+<<<<<<< Updated upstream
                 breakpoint()
+=======
+>>>>>>> Stashed changes
                 if output_format == "hypo":
                     self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
                 elif output_format == "full":
@@ -676,7 +679,7 @@ class MultiAgent(Agent):
                             )
                         }
                     )
-                    
+
         breakpoint()
         return message
     
