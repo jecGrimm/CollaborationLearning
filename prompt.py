@@ -66,7 +66,6 @@ class Agent:
             processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(self.max_new_tokens * thinking_budget)) # increased thinking budget
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
-            print("Device: ", device)
             if processor.max_thinking_tokens > 0:
                 # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
                 pipe = pipeline(
@@ -80,7 +79,7 @@ class Agent:
                     top_p = 0.95,
                     top_k = 20,
                     min_p = 0,
-                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             else:
                 # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
@@ -95,7 +94,7 @@ class Agent:
                     top_p = 0.8,
                     top_k = 20,
                     min_p = 0,
-                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
             
         pipe.tokenizer.padding_side = "left"
@@ -260,8 +259,8 @@ class SingleAgent(Agent):
             
             input_samples = ""
             for n in range(len(batch["ids"][i])):
-                input_samples += f"title{n+1}: {batch['titles'][i][n]}\n"
-                input_samples += f"summary{n+1}: {batch['summaries'][i][n]}\n"
+                input_samples += f"title{n+1}: {batch["titles"][i][n]}\n"
+                input_samples += f"summary{n+1}: {batch["summaries"][i][n]}\n"
 
             message.append({"role": "user", "content": self.PROMPT.format(input_samples = input_samples)})
 
@@ -414,10 +413,6 @@ class MultiAgent(Agent):
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
         else:
             if not self.structured:
-<<<<<<< Updated upstream
-                breakpoint()
-=======
->>>>>>> Stashed changes
                 if output_format == "hypo":
                     self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
                 elif output_format == "full":
@@ -785,17 +780,16 @@ class MultiAgent(Agent):
                 conv_list = ast.literal_eval(conv_str)
                 return self.formulate_conv(conv_list, conv_format)
             except:
-                conv_list = []
-
                 if self.task == "rocstories":
-                    conv_dict = self.extract_conv_dict_rocstories(conv_str)
-
-                conv_list.append(conv_dict)
-                
+                    breakpoint()
+                    conv_list = self.extract_conv_dict_rocstories(conv_str)
+                # TODO: cmu 
+                breakpoint()
                 return self.formulate_conv(conv_list, conv_format)
 
     def extract_conv_dict_rocstories(self, conv_str: str):
         breakpoint()
+        conv_list = []
         sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
         positions = re.findall(r"""position\': (\d)""", conv_str)
@@ -831,8 +825,11 @@ class MultiAgent(Agent):
 
             if i < len(reason_5_list):
                 conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
-            
-            return conv_dict
+
+            conv_list.append(conv_dict)
+        
+        breakpoint()
+        return conv_list
 
     def extract_conv_dict_cmu(self, conv_str: str):
         breakpoint()
