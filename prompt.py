@@ -13,6 +13,7 @@ import ast
 from collections import defaultdict
 from data import get_sent_list
 from transformers.utils import logging
+import pdb
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, task: str, interactive = True):
@@ -412,9 +413,9 @@ class MultiAgent(Agent):
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
         else:
             if output_format == "hypo":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title3}',\n'label': <label odd-one>\n}}\n]" 
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
             elif output_format == "full":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}},\n{{\n'title': '{title3}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}}\n]" 
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
@@ -596,59 +597,62 @@ class MultiAgent(Agent):
                 }
             ]
 
-            if shuffled_sents and not self.structured:
-                message.append(
-                {
-                    "role": "user",
-                    "content": self.FINAL.format(
-                        shuffled_sents = shuffled_sents,
-                        conversation = conversation
-                        )
-                    }
-                )
-            elif self.structured:
-                max_sent_idx = len(shuffled_sents)
-
-                sample = "[\n"
-                for idx in range(max_sent_idx):
-                    sample += self.OUTPUT_FORMAT_HYPO.format(sentence = shuffled_sents[idx])
-
-                    if idx != max_sent_idx -1:
-                        sample += ",\n"
-                sample += "\n]"
+            if self.task == "cmu_booksum":
+                input_samples = ""
+                for v in roles.values():
+                    input_samples = f"title: {v[0]}\n"
+                    input_samples += f"summary: {v[1]}\n"
 
                 message.append(
                     {
                         "role": "user",
                         "content": self.FINAL.format(
-                            sample = sample,
                             conversation = conversation,
-                            shuffled_sents = shuffled_sents
+                            input_samples = input_samples
                         )
                     }
                 )
+
+                breakpoint()
             else:
-                if self.task == "rocstories":
+                if shuffled_sents and not self.structured:
                     message.append(
-                        {
-                            "role": "user",
-                            "content": self.FINAL.format(
-                                conversation = conversation
+                    {
+                        "role": "user",
+                        "content": self.FINAL.format(
+                            shuffled_sents = shuffled_sents,
+                            conversation = conversation
                             )
                         }
                     )
-                else:
-                    input_samples = ""
-                    for v in roles.values():
-                        input_samples = f"title: {v[0]}\n"
-                        input_samples += f"summary: {v[1]}\n"
+                elif self.structured:
+                    # TODO: Test for Rocstories -> sollte eigl nicht funktionieren, weil kein sample mehr im prompt ist.
+                    max_sent_idx = len(shuffled_sents)
+
+                    sample = "[\n"
+                    for idx in range(max_sent_idx):
+                        sample += self.OUTPUT_FORMAT_HYPO.format(sentence = shuffled_sents[idx])
+
+                        if idx != max_sent_idx -1:
+                            sample += ",\n"
+                    sample += "\n]"
 
                     message.append(
                         {
                             "role": "user",
                             "content": self.FINAL.format(
+                                sample = sample,
                                 conversation = conversation,
-                                input_samples = input_samples
+                                shuffled_sents = shuffled_sents
+                            )
+                        }
+                    )
+                else:
+                    message.append(
+                        {
+                            "role": "user",
+                            "content": self.FINAL.format(
+                                conversation = conversation
                             )
                         }
                     )
@@ -711,6 +715,7 @@ class MultiAgent(Agent):
             model_answer = model_out[0]["generated_text"][2]["content"]
 
             conv_answer = self.create_conv_answer(model_answer, conv_format, final)
+            breakpoint()
             
             if player_name.startswith("a ") or player_name.startswith("an "):
                 conv_name = player_name.replace("a ", "")
@@ -758,63 +763,89 @@ class MultiAgent(Agent):
             except:
                 conv_list = []
 
-                sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                positions = re.findall(r"""position\': (\d)""", conv_str)
-                reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
-                reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                if self.task == "rocstories":
+                    conv_dict = self.extract_conv_dict_rocstories(conv_str)
 
-                for i, sent in enumerate(sentences):
-                    conv_dict = defaultdict(str)
-
-                    conv_dict["sentence"] = sent
-
-                    if i < len(positions):
-                        conv_dict["position"] = int(positions[i])
-
-                    if i < len(reasoning_list):                        
-                        conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
-                    
-                    if i < len(reason_1_list):
-                        conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
-
-                    if i < len(reason_2_list):
-                        conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
-
-                    if i < len(reason_3_list):
-                        conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
-
-                    if i < len(reason_4_list):
-                        conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
-
-                    if i < len(reason_5_list):
-                        conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
-
-                    conv_list.append(conv_dict)
-
-                # for item in zip(sentences, positions, reason_1_list, reason_2_list, reason_3_list, reason_4_list, reason_5_list):
-                #     conv_list.append({
-                #         "sentence" : item[0],
-                #         "position" : int(item[1]),
-                #         "reason_1" : item[2],
-                #         "reason_2" : item[3],
-                #         "reason_3" : item[4],
-                #         "reason_4" : item[5],
-                #         "reason_5" : item[6]
-                #     })
-
-
+                conv_list.append(conv_dict)
                 
                 return self.formulate_conv(conv_list, conv_format)
+
+    def extract_conv_dict_rocstories(self, conv_str: str):
+        breakpoint()
+        sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        positions = re.findall(r"""position\': (\d)""", conv_str)
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, sent in enumerate(sentences):
+            conv_dict = defaultdict(str)
+
+            conv_dict["sentence"] = sent
+
+            if i < len(positions):
+                conv_dict["position"] = int(positions[i])
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+
+            if i < len(reason_3_list):
+                conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
+
+            if i < len(reason_4_list):
+                conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
+
+            if i < len(reason_5_list):
+                conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
+            
+            return conv_dict
+
+    def extract_conv_dict_cmu(self, conv_str: str):
+        breakpoint()
+        sentences = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        positions = re.findall(r"""label\': (\d)""", conv_str)
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, sent in enumerate(sentences):
+            conv_dict = defaultdict(str)
+
+            conv_dict["sentence"] = sent
+
+            if i < len(positions):
+                conv_dict["position"] = int(positions[i])
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+            
+            return conv_dict
 
     def strip_arg(self, item):
         if "argument" in item:
             item = item.strip("argument")
         elif "position" in item:
             item = item.strip("position")
+        elif "label" in item:
+            breakpoint()
+            item = item.strip("label")
         return item
 
     def formulate_conv(self, conv_list, conv_format):
@@ -850,14 +881,19 @@ class MultiAgent(Agent):
                         conv_answer += f" {v}"
             elif conv_format == "full": 
                 if conv_dir['position'] != "":
+                    breakpoint()
                     conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 else:
+                    breakpoint()
                     conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
 
                 for i in range(1, 6):
+                    # TODO: CMU
+                    breakpoint()
                     key = f"argument_{i}"
 
                     if key in conv_dir.keys():
+                        breakpoint()
                         conv_answer += f" {conv_dir[key]}"
             elif conv_format == "correct":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
@@ -879,6 +915,7 @@ class MultiAgent(Agent):
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
+        breakpoint()
         return conv_answer
 
     def update_shard(self, batch, filtered_data, dataset_len):
