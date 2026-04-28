@@ -420,8 +420,6 @@ class MultiAgent(Agent):
             else:
                 if output_format == "full":
                     self.OUTPUT_FORMAT = "{{\n'title': '{title}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}}"
-                    #breakpoint()
-
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
         """
@@ -485,7 +483,6 @@ class MultiAgent(Agent):
                     # START prompts
                     if self.structured:
                         sample = f"[\n{self.OUTPUT_FORMAT.format(title = roles[player_name][0])}\n]"
-                        #breakpoint()
                         message.append(
                             {
                                 "role": "user",
@@ -495,7 +492,6 @@ class MultiAgent(Agent):
                                 )
                             }
                         )
-                        #breakpoint()
                     else:
                         message.append(
                             {
@@ -509,20 +505,17 @@ class MultiAgent(Agent):
                 # MID prompts
                 if init_answer:
                     if self.structured:
-                        breakpoint()
                         max_sent_idx = len(shuffled_sents)
 
                         sample = "[\n"
                         for idx in range(max_sent_idx):
                             # TODO: add hypo format
-                            breakpoint()
                             sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
 
                             if idx != max_sent_idx -1:
                                 sample += ",\n"
                         sample += "\n]"
 
-                        breakpoint()
                         message.append(
                             {
                                 "role": "user",
@@ -534,7 +527,6 @@ class MultiAgent(Agent):
                                 )
                             }
                         )
-                        breakpoint()
                     else:
                         message.append(
                             {
@@ -550,22 +542,18 @@ class MultiAgent(Agent):
                         )
                 elif self.structured and not init_answer:
                     if conv_round == 0:
-                        breakpoint()
                         max_sent_idx = turn + 1
                     else: 
-                        breakpoint()
                         max_sent_idx = len(shuffled_sents)
 
                     sample = "[\n"
                     for idx in range(max_sent_idx):
-                        breakpoint()
                         sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
 
                         if idx != max_sent_idx -1:
                             sample += ",\n"
 
                     sample += "\n]"
-                    breakpoint()
                     message.append(
                         {
                             "role": "user",
@@ -576,7 +564,6 @@ class MultiAgent(Agent):
                             )
                         }
                     )
-                    breakpoint()
                 else: 
                     if self.task == "rocstories":
                         message.append(
@@ -600,7 +587,6 @@ class MultiAgent(Agent):
                         )
         else:
             # define system prompt
-            breakpoint()
             message = [
                 {
                     "role": "system",
@@ -614,13 +600,11 @@ class MultiAgent(Agent):
             ]
 
             if self.task == "cmu_booksum":
-                breakpoint()
                 input_samples = ""
                 for v in roles.values():
                     input_samples = f"title: {v[0]}\n"
                     input_samples += f"summary: {v[1]}\n"
 
-                breakpoint()
                 message.append(
                     {
                         "role": "user",
@@ -631,7 +615,6 @@ class MultiAgent(Agent):
                     }
                 )
 
-                breakpoint()
             else:
                 if shuffled_sents and not self.structured:
                     message.append(
@@ -674,8 +657,6 @@ class MultiAgent(Agent):
                             )
                         }
                     )
-
-        #breakpoint()
         return message
     
     def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False, conv_format: str = "full"):
@@ -734,7 +715,6 @@ class MultiAgent(Agent):
             model_answer = model_out[0]["generated_text"][2]["content"]
 
             conv_answer = self.create_conv_answer(model_answer, conv_format, final)
-            breakpoint()
             
             if player_name.startswith("a ") or player_name.startswith("an "):
                 conv_name = player_name.replace("a ", "")
@@ -781,14 +761,11 @@ class MultiAgent(Agent):
                 return self.formulate_conv(conv_list, conv_format)
             except:
                 if self.task == "rocstories":
-                    breakpoint()
                     conv_list = self.extract_conv_dict_rocstories(conv_str)
                 # TODO: cmu 
-                breakpoint()
                 return self.formulate_conv(conv_list, conv_format)
 
     def extract_conv_dict_rocstories(self, conv_str: str):
-        breakpoint()
         conv_list = []
         sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
@@ -828,11 +805,9 @@ class MultiAgent(Agent):
 
             conv_list.append(conv_dict)
         
-        breakpoint()
         return conv_list
 
     def extract_conv_dict_cmu(self, conv_str: str):
-        breakpoint()
         sentences = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
         positions = re.findall(r"""label\': (\d)""", conv_str)
@@ -865,7 +840,6 @@ class MultiAgent(Agent):
         elif "position" in item:
             item = item.strip("position")
         elif "label" in item:
-            breakpoint()
             item = item.strip("label")
         return item
 
@@ -902,19 +876,15 @@ class MultiAgent(Agent):
                         conv_answer += f" {v}"
             elif conv_format == "full": 
                 if conv_dir['position'] != "":
-                    breakpoint()
                     conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 else:
-                    breakpoint()
                     conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
 
                 for i in range(1, 6):
                     # TODO: CMU
-                    breakpoint()
                     key = f"argument_{i}"
 
                     if key in conv_dir.keys():
-                        breakpoint()
                         conv_answer += f" {conv_dir[key]}"
             elif conv_format == "correct":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
@@ -936,7 +906,6 @@ class MultiAgent(Agent):
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
-        breakpoint()
         return conv_answer
 
     def update_shard(self, batch, filtered_data, dataset_len):

@@ -21,7 +21,6 @@ class CLI:
             with open(config_file, "r", encoding="utf-8") as f:
                 self.config = json.load(f)
         else:
-            breakpoint()
             raise NameError(f"No such file: {config_file}")
         #else:
         #     self.experiment_file = parser.parse_args().experiment_file

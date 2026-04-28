@@ -53,7 +53,6 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate 
-    breakpoint()
     evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"])
     # evaluator = Evaluator(outfile, config["framework"], logger, last = False, task = config["task"])
     # evaluator.evaluate_sent_order()
@@ -178,7 +177,6 @@ def run_final_only(config: dict = None, logger: ExperimentLog = None):
 
 if __name__ == "__main__":
     cli = CLI()
-    breakpoint()
     run_experiment(cli.config)
 
     #run_final_only(cli.config)

@@ -263,7 +263,6 @@ class Evaluator:
             else:
                 pred = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
             
-            breakpoint()
             self.pred_lists.append(pred)
 
             # metrics
