@@ -412,10 +412,15 @@ class MultiAgent(Agent):
             elif output_format == "reject":
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
         else:
-            if output_format == "hypo":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
-            elif output_format == "full":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}},\n{{\n'title': '{title3}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}}\n]" 
+            if self.structured:
+                if output_format == "hypo":
+                    self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
+                elif output_format == "full":
+                    self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}},\n{{\n'title': '{title3}',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'}}\n]" 
+            else:
+                if output_format == "full":
+                    self.OUTPUT_FORMAT = "{{\n'title': '{title}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}}"
+                    breakpoint()
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
@@ -479,16 +484,19 @@ class MultiAgent(Agent):
                 else:
                     # START prompts
                     if self.structured:
-                        sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
+                        breakpoint()
+                        sample = f"[\n{self.OUTPUT_FORMAT.format(title = player_sent)}\n]"
+                        breakpoint()
                         message.append(
                             {
                                 "role": "user",
                                 "content": self.START_PROMPT.format(
                                     sample = sample,
-                                    shuffled_sents = f"['{player_sent}']"
+                                    input_samples = player_sent
                                 )
                             }
                         )
+                        breakpoint()
                     else:
                         message.append(
                             {
@@ -502,17 +510,20 @@ class MultiAgent(Agent):
                 # MID prompts
                 if init_answer:
                     if self.structured:
+                        breakpoint()
                         max_sent_idx = len(shuffled_sents)
 
                         sample = "[\n"
                         for idx in range(max_sent_idx):
                             # TODO: add hypo format
+                            breakpoint()
                             sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
 
                             if idx != max_sent_idx -1:
                                 sample += ",\n"
                         sample += "\n]"
 
+                        breakpoint()
                         message.append(
                             {
                                 "role": "user",
@@ -524,6 +535,7 @@ class MultiAgent(Agent):
                                 )
                             }
                         )
+                        breakpoint()
                     else:
                         message.append(
                             {
@@ -539,19 +551,22 @@ class MultiAgent(Agent):
                         )
                 elif self.structured and not init_answer:
                     if conv_round == 0:
+                        breakpoint()
                         max_sent_idx = turn + 1
                     else: 
+                        breakpoint()
                         max_sent_idx = len(shuffled_sents)
 
                     sample = "[\n"
                     for idx in range(max_sent_idx):
+                        breakpoint()
                         sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
 
                         if idx != max_sent_idx -1:
                             sample += ",\n"
 
                     sample += "\n]"
-
+                    breakpoint()
                     message.append(
                         {
                             "role": "user",
@@ -562,6 +577,7 @@ class MultiAgent(Agent):
                             )
                         }
                     )
+                    breakpoint()
                 else: 
                     if self.task == "rocstories":
                         message.append(
@@ -585,6 +601,7 @@ class MultiAgent(Agent):
                         )
         else:
             # define system prompt
+            breakpoint()
             message = [
                 {
                     "role": "system",
@@ -598,11 +615,13 @@ class MultiAgent(Agent):
             ]
 
             if self.task == "cmu_booksum":
+                breakpoint()
                 input_samples = ""
                 for v in roles.values():
                     input_samples = f"title: {v[0]}\n"
                     input_samples += f"summary: {v[1]}\n"
 
+                breakpoint()
                 message.append(
                     {
                         "role": "user",
@@ -656,7 +675,8 @@ class MultiAgent(Agent):
                             )
                         }
                     )
-
+                    
+        breakpoint()
         return message
     
     def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False, conv_format: str = "full"):

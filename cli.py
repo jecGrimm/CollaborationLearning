@@ -19,7 +19,10 @@ class CLI:
         if os.path.isfile(config_file):
             with open(config_file, "r", encoding="utf-8") as f:
                 self.config = json.load(f)
-        # else:
+        else:
+            breakpoint()
+            raise NameError(f"No such file: {config_file}")
+        #else:
         #     self.experiment_file = parser.parse_args().experiment_file
         #     self.split = parser.parse_args().split
         #     self.device = parser.parse_args().device
