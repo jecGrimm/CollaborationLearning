@@ -102,6 +102,14 @@ class CMUBookSum:
 
             self.arranged_data.select(range(start, end)).to_json(self.arranged_file)
         else:
+            if not end:
+                if split == "mini":
+                    end = 3
+                elif split == "dev":
+                    end = 1000
+                elif split == "test":
+                    end = 1000
+
             # TODO: test for null values
             self.arranged_data = load_dataset("json", data_files=self.arranged_file, split="train")
 
@@ -159,12 +167,14 @@ class CMUBookSum:
 
 
 if __name__ == "__main__":
-    # roc_data = ROCStories(split = "dev", variation = True, start=0, end=1000)
-    # outpath = "outputs/random/dev"
+    #bookdata = ROCStories(split = "dev", variation = True, start=0, end=1000)
+    outpath = "outputs/random/cmu_booksum/test"
 
     # roc_data.shuffled_dataset.save_to_disk(outpath)
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
 
     book_data = CMUBookSum(arrange=False, split = "test")
+    book_data.arranged_data.save_to_disk(outpath)
+
     print("Done")

@@ -12,6 +12,7 @@ from collections import defaultdict
 import csv
 from tqdm import tqdm
 from scipy import stats
+import random
 
 def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False):
     evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task)
@@ -268,7 +269,6 @@ class Evaluator:
         
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
         
-
     def evaluate_order_answer_random(self, batch):
         """
         This function collect the evaluation results for the shuffled random outputs.
@@ -312,7 +312,18 @@ class Evaluator:
         return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
 
     def evaluate_odd_answer_random(self, batch):
-        pass
+        acc = []
+        pred_lists = []
+
+        for i in range(len(batch["id"])):
+            rand_idx = random.randint(0, 2)
+            pred = batch["titles"][i][rand_idx]
+            pred_lists.append(pred)
+
+            gold = batch["gold_title"][i]
+            acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
+
+        return {"id": batch["id"], "accuracy": acc, "predictions": pred_lists, "gold": list(batch["gold_title"])}
 
     def extract_answer_list(self, model_out: str, gold: list):
         """
@@ -881,13 +892,13 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/random/rocstories/dev"
+    outdir = "outputs/random/cmu_booksum/test"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    #evaluate(outfile = outdir,framework= "random", task = "rocstories")
+    evaluate(outfile = outdir,framework= "random", task = "cmu_booksum")
 
-    bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
-    evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
+    # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
+    # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
 
     # evaluator = Evaluator(outdir, "single", last = True)
     # evaluator.evaluate_sent_order()

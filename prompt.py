@@ -192,7 +192,7 @@ class SingleAgent(Agent):
             if output_format == "hypo":
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'position': <number of the position>}}\n]" 
             elif output_format == "full":
-                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>}}\n]" 
+                self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'argument_1': <reason for the first position>,\n'argument_2': <reason for the second position>,\n'argument_3': <reason for the third position>,\n'argument_4': <reason for the fourth position>,\n'argument_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'argument_1': <reason for the first position>,\n'argument_2': <reason for the second position>,\n'argument_3': <reason for the third position>,\n'argument_4': <reason for the fourth position>,\n'argument_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'argument_1': <reason for the first position>,\n'argument_2': <reason for the second position>,\n'argument_3': <reason for the third position>,\n'argument_4': <reason for the fourth position>,\n'argument_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'argument_1': <reason for the first position>,\n'argument_2': <reason for the second position>,\n'argument_3': <reason for the third position>,\n'argument_4': <reason for the fourth position>,\n'argument_5': <reason for the fifth position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'argument_1': <reason for the first position>,\n'argument_2': <reason for the second position>,\n'argument_3': <reason for the third position>,\n'argument_4': <reason for the fourth position>,\n'argument_5': <reason for the fifth position>,\n'position': <number of the position>}}\n]" 
             elif output_format == "support":
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason for the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason for the position>,\n'position': <number of the position>}}\n]" 
             elif output_format == "reject":
@@ -201,7 +201,7 @@ class SingleAgent(Agent):
             if output_format == "hypo":
                 self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title3}',\n'label': <label odd-one>\n}}\n]" 
             elif output_format == "full":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
 
         self.structured = structured
 
@@ -403,7 +403,7 @@ class MultiAgent(Agent):
         if self.task == "rocstories":
             self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
             if output_format == "full":
-                self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reason_1': <reason for the first position>,\n'reason_2': <reason for the second position>,\n'reason_3': <reason for the third position>,\n'reason_4': <reason for the fourth position>,\n'reason_5': <reason for the fifth position>,\n'position': <number of the position>\n}}"
+                self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reasoning': '<reasoning about the story>',\n'argument_1': '<argument for the first position>',\n'argument_2': '<argument for the second position>',\n'argument_3': '<argument for the third position>',\n'argument_4': '<argument for the fourth position>',\n'argument_5': '<argument for the fifth position>',\n'position': <number of the position>\n}}"
             elif output_format == "hypo":
                 self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
             elif output_format == "support":
@@ -414,7 +414,7 @@ class MultiAgent(Agent):
             if output_format == "hypo":
                 self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'label': <label odd-one>\n}},\n{{\n'title': '{title3}',\n'label': <label odd-one>\n}}\n]" 
             elif output_format == "full":
-                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'reason_true': <reason for odd-one>,\n'reason_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
+                self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>\n}},\n{{\n'title': '{title2}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}},\n{{\n'title': '{title3}',\n'argument_true': <reason for odd-one>,\n'argument_false': <reason against odd-one>,\n'label': <label odd-one>}}\n]" 
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
@@ -710,7 +710,7 @@ class MultiAgent(Agent):
 
             model_answer = model_out[0]["generated_text"][2]["content"]
 
-            conv_answer = self.create_conv_answer(model_answer, conv_format)
+            conv_answer = self.create_conv_answer(model_answer, conv_format, final)
             
             if player_name.startswith("a ") or player_name.startswith("an "):
                 conv_name = player_name.replace("a ", "")
@@ -719,7 +719,11 @@ class MultiAgent(Agent):
             else:
                 conv_name = player_name
 
-            batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
+            if conv_answer != "":
+                batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
+            else:
+                batch["conversation_history"][i] += f"\n{conv_name}: {model_answer}\n"
+
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
@@ -728,7 +732,7 @@ class MultiAgent(Agent):
         
         return batch
     
-    def create_conv_answer(self, model_answer, conv_format = "full"):
+    def create_conv_answer(self, model_answer, conv_format = "full", final=False):
         conv_str = model_answer.split("</think>")[-1].strip()
         conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
         # remove newlines to make matching possible
@@ -745,7 +749,7 @@ class MultiAgent(Agent):
         conv_str = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', conv_str)
         conv_str = fr"{conv_str}"
 
-        if not self.structured:
+        if not self.structured or final:
             return conv_str
         else:
             try:
@@ -754,13 +758,14 @@ class MultiAgent(Agent):
             except:
                 conv_list = []
 
-                sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
                 positions = re.findall(r"""position\': (\d)""", conv_str)
-                reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-                reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-                reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-                reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-                reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+                reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+                reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
 
                 for i, sent in enumerate(sentences):
                     conv_dict = defaultdict(str)
@@ -769,21 +774,24 @@ class MultiAgent(Agent):
 
                     if i < len(positions):
                         conv_dict["position"] = int(positions[i])
+
+                    if i < len(reasoning_list):                        
+                        conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
                     
                     if i < len(reason_1_list):
-                        conv_dict["reason_1"] = reason_1_list[i]
+                        conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
 
                     if i < len(reason_2_list):
-                        conv_dict["reason_2"] = reason_2_list[i]
+                        conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
 
                     if i < len(reason_3_list):
-                        conv_dict["reason_3"] = reason_3_list[i]
+                        conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
 
                     if i < len(reason_4_list):
-                        conv_dict["reason_4"] = reason_4_list[i]
+                        conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
 
                     if i < len(reason_5_list):
-                        conv_dict["reason_5"] = reason_5_list[i]
+                        conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
 
                     conv_list.append(conv_dict)
 
@@ -802,51 +810,68 @@ class MultiAgent(Agent):
                 
                 return self.formulate_conv(conv_list, conv_format)
 
+    def strip_arg(self, item):
+        if "argument" in item:
+            item = item.strip("argument")
+        elif "position" in item:
+            item = item.strip("position")
+        return item
+
     def formulate_conv(self, conv_list, conv_format):
         conv_answer = ""
         for n, conv_dir in enumerate(conv_list):
             if conv_format == "hypo":
-                conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
-            elif conv_format == "reasons": # TODO: Add good/bad und rejecting/accepting arguments
-                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                if conv_dir['position'] != "":
+                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+                else:
+                    conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+
+            elif conv_format == "reasons": 
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 for i in range(1, 6):
-                    key = f"reason_{i}"
+                    key = f"argument_{i}"
 
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
             elif conv_format == "support":
-                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
-                key = f"reason_{conv_dir['position']}"
+                # TODO: reject/support previous arguments
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+                key = f"argument_{conv_dir['position']}"
 
                 if key in conv_dir.keys():
                     conv_answer += f" {conv_dir[key]}"
             elif conv_format == "reject":
-                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
-                hypo_key = f"reason_{conv_dir['position']}"
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+
+                hypo_key = f"argument_{conv_dir['position']}"
 
                 for k, v in conv_dir.items():
                     if k != hypo_key and k.startswith("reason"):
                         conv_answer += f" {v}"
             elif conv_format == "full": 
-                conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'."
+                if conv_dir['position'] != "":
+                    conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+                else:
+                    conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
+
                 for i in range(1, 6):
-                    key = f"reason_{i}"
+                    key = f"argument_{i}"
 
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
             elif conv_format == "correct":
-                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
                 if conv_dir["sentence"] in self.gold:
-                    correct_key = f"reason_{self.gold.index(conv_dir["sentence"])+1}"
+                    correct_key = f"argument_{self.gold.index(conv_dir["sentence"])+1}"
 
                     if correct_key in conv_dir.keys():
                         conv_answer += f" {conv_dir[correct_key]}"
             elif conv_format == "incorrect":
-                conv_answer += f"Sentence: '{conv_dir['sentence']}'."
+                conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
                 if conv_dir["sentence"] in self.gold:
-                    correct_key = f"reason_{self.gold.index(conv_dir["sentence"])+1}"
+                    correct_key = f"argument_{self.gold.index(conv_dir["sentence"])+1}"
 
                     for k, v in conv_dir.items():
                         if k != correct_key and k.startswith("reason"):
