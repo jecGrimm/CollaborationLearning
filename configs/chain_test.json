@@ -1,9 +1,9 @@
 {
-    "task": "rocstories",
+    "task": "cmu_booksum",
     "split": "mini",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 1,
+    "batch_size": 128,
     "model_id": "meta-llama/Llama-3.2-1B-Instruct",
     "desc": "This run tests the chain setup with 1024 tokens with Llama-3.1-1B-Instruct with variation.",
     "candidate": "cmu_structured_chain",

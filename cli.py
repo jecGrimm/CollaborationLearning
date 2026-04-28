@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import torch
+import pdb
 
 class CLI:
     def __init__(self):
@@ -43,6 +44,8 @@ class CLI:
         if "device_id" in self.config.keys() and self.config["device_id"] not in ["", "auto"]:
             os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device_id"]
             self.config["device"] = f"cuda:{self.config['device_id']}"
+        elif "device_id" == "auto":
+            self.config["device"] = "auto"
 
         if "variation" not in self.config.keys():
             self.config["variation"] = False
