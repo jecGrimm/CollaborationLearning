@@ -420,7 +420,7 @@ class MultiAgent(Agent):
             else:
                 if output_format == "full":
                     self.OUTPUT_FORMAT = "{{\n'title': '{title}',\n'reasoning': '<reasoning about the story>',\n'argument_true': '<argument for odd-one>',\n'argument_false': '<argument against odd-one>',\n'label': '<label odd-one>'\n}}"
-                    breakpoint()
+                    #breakpoint()
 
 
     def create_message(self, conv_round: int, turn: int, conversation: str, roles: dict, player_name: str, final: bool, shuffled_sents: list = None, titles: list = None, summaries: list = None, init_answer = None):
@@ -485,7 +485,7 @@ class MultiAgent(Agent):
                     # START prompts
                     if self.structured:
                         sample = f"[\n{self.OUTPUT_FORMAT.format(title = roles[player_name][0])}\n]"
-                        breakpoint()
+                        #breakpoint()
                         message.append(
                             {
                                 "role": "user",
@@ -495,7 +495,7 @@ class MultiAgent(Agent):
                                 )
                             }
                         )
-                        breakpoint()
+                        #breakpoint()
                     else:
                         message.append(
                             {
@@ -675,7 +675,7 @@ class MultiAgent(Agent):
                         }
                     )
 
-        breakpoint()
+        #breakpoint()
         return message
     
     def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False, conv_format: str = "full"):
