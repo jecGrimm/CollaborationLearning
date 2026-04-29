@@ -723,10 +723,9 @@ class MultiAgent(Agent):
             else:
                 conv_name = player_name
 
+            #batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
             if conv_answer != "":
                 batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
-            else:
-                batch["conversation_history"][i] += f"\n{conv_name}: {model_answer}\n"
 
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
@@ -762,7 +761,9 @@ class MultiAgent(Agent):
             except:
                 if self.task == "rocstories":
                     conv_list = self.extract_conv_dict_rocstories(conv_str)
-                # TODO: cmu 
+                else:
+                    conv_list = self.extract_conv_dict_cmu(conv_str)
+
                 return self.formulate_conv(conv_list, conv_format)
 
     def extract_conv_dict_rocstories(self, conv_str: str):
