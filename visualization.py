@@ -685,10 +685,22 @@ class Vis():
         
         return acc_per_turn
 
+    def plot_distributed_base(self):
+        df_experiment_files = pd.read_csv(f"eval/distributed_base_rocstories.csv", delimiter = ";")
+
+        s_acc = df_experiment_files["output"].map(self.get_avg_acc)
+        df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+        
+        df_acc.to_csv(f"./visualizations/distributed_base_results.csv", sep = ";")
+        df_acc.to_latex()
+
 if __name__ == "__main__":
 
-    for last in [False, True]:
-        vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
-        vis.plot_all_table()
+    # for last in [False, True]:
+    #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
+    #     vis.plot_all_table()
+
+    vis = Vis()
+    vis.plot_distributed_base()
 
     print("Done")
