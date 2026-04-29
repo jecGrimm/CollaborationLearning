@@ -883,6 +883,7 @@ class Evaluator:
 if __name__ == "__main__":
     cli = CLI()
 
+    eval = Evaluator("eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_257.jsonl")
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
@@ -893,10 +894,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/random/cmu_booksum/test"
+    #outdir = "eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_257.jsonl"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outfile = outdir,framework= "random", task = "cmu_booksum")
+    #evaluate(outfile = outdir,framework= "random", task = "cmu_booksum")
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")

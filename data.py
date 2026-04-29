@@ -167,14 +167,16 @@ class CMUBookSum:
 
 
 if __name__ == "__main__":
-    #bookdata = ROCStories(split = "dev", variation = True, start=0, end=1000)
-    outpath = "outputs/random/cmu_booksum/test"
+    # rocdata = ROCStories(shuffle=False, split = "mini", variation = True, start=0, end=3)
+    # print(len(rocdata.orig_dataset))
+    #outpath = "outputs/random/cmu_booksum/test"
 
     # roc_data.shuffled_dataset.save_to_disk(outpath)
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
 
-    book_data = CMUBookSum(arrange=False, split = "test")
-    book_data.arranged_data.save_to_disk(outpath)
+    book_data = CMUBookSum(arrange=False, split = "mini")
+    print(len(book_data.orig_dataset))
+    # book_data.arranged_data.save_to_disk(outpath)
 
     print("Done")

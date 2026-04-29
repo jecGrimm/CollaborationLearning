@@ -541,29 +541,54 @@ class MultiAgent(Agent):
                             }
                         )
                 elif self.structured and not init_answer:
-                    if conv_round == 0:
-                        max_sent_idx = turn + 1
-                    else: 
-                        max_sent_idx = len(shuffled_sents)
+                    if self.task == "rocstories":
+                        if conv_round == 0:
+                            max_sent_idx = turn + 1
+                        else: 
+                            max_sent_idx = len(shuffled_sents)
 
-                    sample = "[\n"
-                    for idx in range(max_sent_idx):
-                        sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
+                        sample = "[\n"
+                        for idx in range(max_sent_idx):
+                            sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
 
-                        if idx != max_sent_idx -1:
-                            sample += ",\n"
+                            if idx != max_sent_idx -1:
+                                sample += ",\n"
 
-                    sample += "\n]"
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.MID_PROMPT.format(
-                                sample = sample,
-                                conversation = conversation,
-                                shuffled_sents = shuffled_sents[:max_sent_idx]
-                            )
-                        }
-                    )
+                        sample += "\n]"
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    sample = sample,
+                                    conversation = conversation,
+                                    shuffled_sents = shuffled_sents[:max_sent_idx]
+                                )
+                            }
+                        ) 
+                    else:
+                        if conv_round == 0:
+                            max_title_idx = turn + 1
+                        else: 
+                            max_title_idx = len(roles)
+
+                        sample = "[\n"
+                        for idx in range(max_title_idx):
+                            sample += self.OUTPUT_FORMAT.format(title = list(roles.values())[0][0]) # TODO: add hypo generation
+
+                            if idx != max_title_idx -1:
+                                sample += ",\n"
+
+                        sample += "\n]"
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.MID_PROMPT.format(
+                                    sample = sample,
+                                    conversation = conversation,
+                                    input_samples = player_sent
+                                )
+                            }
+                        ) 
                 else: 
                     if self.task == "rocstories":
                         message.append(
@@ -757,14 +782,18 @@ class MultiAgent(Agent):
         else:
             try:
                 conv_list = ast.literal_eval(conv_str)
-                return self.formulate_conv(conv_list, conv_format)
+                if self.task == "rocstories":
+                    return self.formulate_conv_roc(conv_list, conv_format)
+                else:
+                    return self.formulate_conv_cmu(conv_list, conv_format)
             except:
                 if self.task == "rocstories":
                     conv_list = self.extract_conv_dict_rocstories(conv_str)
+                    return self.formulate_conv_roc(conv_list, conv_format)
                 else:
                     conv_list = self.extract_conv_dict_cmu(conv_str)
-
-                return self.formulate_conv(conv_list, conv_format)
+                    return self.formulate_conv_cmu(conv_list, conv_format)
+                
 
     def extract_conv_dict_rocstories(self, conv_str: str):
         conv_list = []
@@ -809,31 +838,34 @@ class MultiAgent(Agent):
         return conv_list
 
     def extract_conv_dict_cmu(self, conv_str: str):
-        sentences = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        conv_list = []
+
+        titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
-        positions = re.findall(r"""label\': (\d)""", conv_str)
+        labels = re.findall(r"""label\': (\d)""", conv_str)
         reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
 
-        for i, sent in enumerate(sentences):
+        for i, title in enumerate(titles):
             conv_dict = defaultdict(str)
 
-            conv_dict["sentence"] = sent
+            conv_dict["title"] = title
 
-            if i < len(positions):
-                conv_dict["position"] = int(positions[i])
+            if i < len(labels):
+                conv_dict["label"] = int(labels[i])
 
             if i < len(reasoning_list):                        
                 conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
             
             if i < len(reason_1_list):
-                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+                conv_dict["argument_true"] = self.strip_arg(reason_1_list[i])
 
             if i < len(reason_2_list):
-                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+                conv_dict["argument_false"] = self.strip_arg(reason_2_list[i])
             
-            return conv_dict
+            conv_list.append(conv_dict)
+        return conv_list
 
     def strip_arg(self, item):
         if "argument" in item:
@@ -844,7 +876,7 @@ class MultiAgent(Agent):
             item = item.strip("label")
         return item
 
-    def formulate_conv(self, conv_list, conv_format):
+    def formulate_conv_roc(self, conv_list, conv_format):
         conv_answer = ""
         for n, conv_dir in enumerate(conv_list):
             if conv_format == "hypo":
@@ -882,7 +914,6 @@ class MultiAgent(Agent):
                     conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
 
                 for i in range(1, 6):
-                    # TODO: CMU
                     key = f"argument_{i}"
 
                     if key in conv_dir.keys():
@@ -904,6 +935,22 @@ class MultiAgent(Agent):
                     for k, v in conv_dir.items():
                         if k != correct_key and k.startswith("reason"):
                             conv_answer += f" {v}"
+            if n < len(conv_list) - 1:
+                conv_answer += "\n"
+        
+        return conv_answer
+
+    def formulate_conv_cmu(self, conv_list, conv_format):
+        conv_answer = ""
+        for n, conv_dir in enumerate(conv_list):
+            if conv_format == "hypo":
+                if conv_dir['label'].lower() == "true":
+                    conv_answer += f"I propose that the book '{conv_dir['title']}' is in a different genre than the other two. {conv_dir['reasoning']}"
+                elif conv_dir['label'].lower() == "false":
+                    conv_answer += f"I propose that the book '{conv_dir['title']}' is not in a different genre than the other two. {conv_dir['reasoning']}"
+                else:
+                    conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+            # TODO: reasons, full, support, reject, correct, incorrect
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         

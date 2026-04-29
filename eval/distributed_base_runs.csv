@@ -1,0 +1,2 @@
+model;framework;task;run
+random;;rocstories;./eval/random/rocstories/test.jsonl
