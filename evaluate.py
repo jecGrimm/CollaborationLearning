@@ -406,15 +406,17 @@ class Evaluator:
                     conv_list.append(conv_dict)
             else:
                 titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-                labels = re.findall(r"""label[\'"]: (\d)""", conv_str)
+                labels = [item[0] for item in re.findall(r"""label[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
 
                 for i, title in enumerate(titles):
                     conv_dict = defaultdict(str)
 
-                    conv_dict["titles"] = title
+                    conv_dict["title"] = title
 
                     if i < len(labels):
-                        conv_dict["labels"] = int(labels[i])
+                        conv_dict["label"] = labels[i]
+                    else:
+                        print("Could not find a label")
                     
                     conv_list.append(conv_dict)
 
@@ -582,11 +584,14 @@ class Evaluator:
         
     def compute_accuracy_odd(self, pred: str, gold_title: str, gold_title_id: str):
         num_correct = 0
+        subtitles = gold_title.split(":")
 
-        if gold_title.lower() in pred.lower() or str(gold_title_id) in pred.lower():
-            num_correct = 1
-        else:
-            print("incorrect prediction")
+        for subtitle in subtitles:
+            subtitle = subtitle.strip().lower()
+            if subtitle in pred.lower() or str(gold_title_id) in pred.lower():
+                return 1
+            else:
+                print("incorrect prediction")
         
         return num_correct
         
@@ -745,11 +750,28 @@ class Evaluator:
             if outdir != "ckps" and not outdir.endswith("jsonl"):
                 #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
                 self.experiment_file = splitdir + outdir
-                self.exp_data = load_from_disk(self.experiment_file)
-                if self.last:
-                    print(f"\n{outdir}: {self.evaluate_last_beliefs()}\n")
+
+                if "rocstories" in self.experiment_file:
+                    acc_mean = self.evaluate_sent_order()
                 else:
-                    print(f"\n{outdir}: {self.evaluate_sent_order()}\n")
+                    acc_mean = self.evaluate_odd_one()
+
+                self.last = True
+                self.zero_counter = 0
+                self.double_counter = 0
+                self.wrong_format = 0
+
+                acc_last = 0.0
+
+                if self.framework == "multi":
+                    self.evaluate_last_beliefs()
+
+                
+                # self.exp_data = load_from_disk(self.experiment_file)
+                # if self.last:
+                #     print(f"\n{outdir}: {self.evaluate_last_beliefs()}\n")
+                # else:
+                #     print(f"\n{outdir}: {self.evaluate_sent_order()}\n")
 
         #print(evals)
 
@@ -779,18 +801,21 @@ class Evaluator:
         
         return run2files, min_insts
 
-    def update_evaluation_files(self, frameworks = ["single", "multi"], splits = ["mini", "dev", "test"]):
+    def update_evaluation_files(self, frameworks = ["single", "multi"], splits = ["mini", "dev", "test"], tasks = ["rocstories", "cmu_booksum", "booksum"]):
         for fw in frameworks: 
             self.framework = fw
             models = os.listdir(f"outputs/{fw}/")
 
             for model in models:
-                for split in splits: 
-                    dir_path = f"outputs/{fw}/{model}/{split}/"
-                    if os.path.isdir(dir_path):
-                        self.evaluate_all_outputs(dir_path)
+                for task in tasks:
+                    self.task = task
+                    for split in splits: 
+                        self.split = split
+                        dir_path = f"outputs/{fw}/{model}/{task}/{split}/"
+                        if os.path.isdir(dir_path):
+                            self.evaluate_all_outputs(dir_path)
 
-    def create_belief_instance(self, out, eval):
+    def create_belief_instance_roc(self, out, eval):
         sent2gold = {sent:idx for idx, sent in enumerate(eval["gold"], start = 1)}
         beliefs = []
         if "turns" in out.keys():
@@ -820,18 +845,51 @@ class Evaluator:
                         })
 
         return {"beliefs": beliefs}
+    
+    def create_belief_instance_cmu(self, out, eval):
+        beliefs = []
+        if "turns" in out.keys():
+            for i, turn in enumerate(out["turns"]):
+                conv_list = self.extract_structured_answer(turn)
+
+                player = out["player"][i]
+
+                for conv_dir in conv_list:
+                    if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                        # Player, sentence, position, time-step
+                        if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
+                            correct = "correct"
+                        elif conv_dir["label"].lower() == "false" and conv_dir["title"] != eval["gold"]:
+                            correct = "correct"
+                        else:
+                            correct = "incorrect"
+
+                        beliefs.append({
+                            "title": conv_dir["title"],
+                            "turn": i+1,
+                            "agent": player,
+                            "gold_title": eval["gold"],
+                            "hypo": conv_dir["label"],
+                            "correct": correct,
+                            "label": f"({player}, title {conv_dir['title']}, hypothesis {conv_dir['label']})"
+                        })
+
+        return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
         eval_file = f"{self.experiment_file.replace('outputs', 'eval').split('.jsonl')[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
 
-        exp_beliefs = self.exp_data.map(lambda x, idx: self.create_belief_instance(x, full_eval_data.select([idx])[0]), batched = False, with_indices=True)
-
-        preds = exp_beliefs.map(self.create_pred_from_belief, batched = False)
-
-        self.eval_data = preds.map(lambda batch: self.calculate_metrics(batch), batched = True)
-
+        if self.task == "rocstories":
+            exp_beliefs = self.exp_data.map(lambda x, idx: self.create_belief_instance_roc(x, full_eval_data.select([idx])[0]), batched = False, with_indices=True)
+            preds = exp_beliefs.map(self.create_pred_from_belief_roc, batched = False)
+            self.eval_data = preds.map(lambda batch: self.calculate_metrics_roc(batch), batched = True)
+        else:
+            exp_beliefs = self.exp_data.map(lambda x, idx: self.create_belief_instance_cmu(x, full_eval_data.select([idx])[0]), batched = False, with_indices=True)
+            preds = exp_beliefs.map(self.create_pred_from_belief_cmu, batched = False)
+            self.eval_data = preds.map(lambda batch: self.calculate_metrics_cmu(batch), batched = True)
+        
         self.save_eval_data(f"{self.experiment_file.replace('outputs', 'eval')}_last.jsonl")
 
         acc_mean = self.report_accuracy()
@@ -840,20 +898,30 @@ class Evaluator:
         return acc_mean
 
 
-    def create_pred_from_belief(self, beliefs):
+    def create_pred_from_belief_roc(self, beliefs):
         # list of beliefs with dict, describing the belief
         pred = [""]*5
 
         for belief in beliefs["beliefs"][::-1]:
-            if belief["agent"] != "Player 6" and belief["sentence"] not in pred and int(belief["hypo"]) < len(pred):
+            if belief["agent"] not in ["Player 6", "expert"] and belief["sentence"] not in pred and int(belief["hypo"]) < len(pred):
                 pred[int(belief["hypo"])-1] = belief["sentence"]
 
         return {"pred": pred}
     
-    def calculate_metrics(self, batch):
+    def create_pred_from_belief_cmu(self, beliefs):
+        # list of beliefs with dict, describing the belief
+        pred = ""
+
+        for belief in beliefs["beliefs"][::-1]:
+            if belief["agent"] not in ["Player 6", "expert"] and belief["hypo"].lower() == "true":
+                pred = belief["title"]
+
+        return {"pred": pred}
+    
+    def calculate_metrics_roc(self, batch):
         self.initiate_metric_lists()
+        self.pred_lists = list(batch["pred"])
         for i in range(len(batch["storyid"])):
-            self.pred_lists = list(batch["pred"])
 
             gold = get_sent_list(batch, i)
             self.gold_sents.append(gold)
@@ -873,6 +941,16 @@ class Evaluator:
         
         return {"storyid": batch["storyid"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": self.gold_sents, "prec_1": self.prec_1, "prec_2": self.prec_2, "prec_3": self.prec_3, "prec_4": self.prec_4, "prec_5": self.prec_5, "spearman": self.spearman, "kendalltau": self.kendalltau}
 
+    def calculate_metrics_cmu(self, batch):
+        self.initiate_metric_lists()
+        self.pred_lists = list(batch["pred"])
+        for i in range(len(batch["id"])):
+            gold = batch["gold_title"][i]
+            self.acc.append(self.compute_accuracy_odd(batch["pred"][i], gold, batch["titles"][i].index(gold)+1))
+        
+        return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
+
+
     def load_eval_data(self, eval_file):
         try:
             return load_dataset("json", data_files=eval_file, split="train")
@@ -883,7 +961,9 @@ class Evaluator:
 if __name__ == "__main__":
     cli = CLI()
 
-    eval = Evaluator("eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_257.jsonl")
+    eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
+
+    eval.update_evaluation_files(tasks=["cmu_booksum", "booksum"])
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 

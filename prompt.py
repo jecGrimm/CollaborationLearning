@@ -842,7 +842,7 @@ class MultiAgent(Agent):
 
         titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
-        labels = re.findall(r"""label\': (\d)""", conv_str)
+        labels = [item[0] for item in re.findall(r"""label[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
         reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
@@ -853,7 +853,7 @@ class MultiAgent(Agent):
             conv_dict["title"] = title
 
             if i < len(labels):
-                conv_dict["label"] = int(labels[i])
+                conv_dict["label"] = labels[i]
 
             if i < len(reasoning_list):                        
                 conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
@@ -962,7 +962,14 @@ class MultiAgent(Agent):
                     key = f"argument_{i}"
 
                     if key in conv_dir.keys():
-                        conv_answer += f" {conv_dir[key]}" 
+                        conv_answer += f" {conv_dir[key]}"
+            elif conv_format == "reasons": 
+                conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+                for i in ["true", "false"]:
+                    key = f"argument_{i}"
+
+                    if key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[key]}"
             # TODO: reasons, support, reject, correct, incorrect
             if n < len(conv_list) - 1:
                 conv_answer += "\n"

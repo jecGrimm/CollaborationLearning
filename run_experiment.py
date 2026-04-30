@@ -53,7 +53,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate 
-    evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"])
+    evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"], structured=config["structured"])
     # evaluator = Evaluator(outfile, config["framework"], logger, last = False, task = config["task"])
     # evaluator.evaluate_sent_order()
     # evaluator.last = True
