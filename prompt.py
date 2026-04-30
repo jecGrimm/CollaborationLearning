@@ -950,7 +950,20 @@ class MultiAgent(Agent):
                     conv_answer += f"I propose that the book '{conv_dir['title']}' is not in a different genre than the other two. {conv_dir['reasoning']}"
                 else:
                     conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
-            # TODO: reasons, full, support, reject, correct, incorrect
+            elif conv_format == "full": 
+                if conv_dir['label'].lower() == "true":
+                    conv_answer += f"I propose that the book '{conv_dir['title']}' is in a different genre than the other two. {conv_dir['reasoning']}"
+                elif conv_dir['label'].lower() == "false":
+                    conv_answer += f"I propose that the book '{conv_dir['title']}' is not in a different genre than the other two. {conv_dir['reasoning']}"
+                else:
+                    conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+
+                for i in ["true", "false"]:
+                    key = f"argument_{i}"
+
+                    if key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[key]}" 
+            # TODO: reasons, support, reject, correct, incorrect
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
