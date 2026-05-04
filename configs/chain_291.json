@@ -4,13 +4,13 @@
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 1,
-    "model_id": "meta-llama/Llama-3.1-8B-Instruct",
-    "desc": "This run tests the chain setup with 1024 tokens withmeta-llama/Llama-3.1-8B-Instruct with variation.",
+    "model_id": "Qwen/Qwen3-32B",
+    "desc": "This run tests the chain setup with 1024 tokens with Qwen/Qwen3-32B with variation.",
     "candidate": "roc_structured_chain",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "0",
+    "device_id": "",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
@@ -20,5 +20,5 @@
     "conv_format": "hypo",
     "start": 0,
     "end": 1000,
-    "run_idx": 272
+    "run_idx": 291
 }
