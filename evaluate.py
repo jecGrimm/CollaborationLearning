@@ -101,13 +101,13 @@ class Evaluator:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
         print("zero percentage:", self.zero_counter/(len(self.eval_data)*5))
-        self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*5)})
+        self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
 
         print("double percentage:", self.double_counter/(len(self.eval_data)*5))
-        self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*5)})
+        self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
 
         print("wrong format:", self.wrong_format/(len(self.eval_data)*5))
-        self.logger.run_data.update({"wrong_format": self.wrong_format/(len(self.eval_data)*5)})
+        self.logger.run_data.update({"wrong_format": self.wrong_format/(len(self.eval_data)*self.pred_len)})
 
         return acc_mean
 
@@ -155,15 +155,22 @@ class Evaluator:
     def evaluate_odd_answer_single(self, batch):
         pred_lists = []
         acc = []
-        gold_lbls = list(batch["gold_title"])
+        gold_lbls = []
 
         for i in range(len(batch["id"])):
-            gold = batch["gold_title"][i]
+            if "gold_title" in batch.keys():
+                gold = batch["gold_title"][i]
+            else:
+                gold = [batch["titles"][i][idx] for idx, lbl in enumerate(batch["gold_lbls"][i]) if lbl == 1][0]
+
+            gold_lbls.append(gold)
 
             if "turns" in batch.keys():
                 pred = self.extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip(), gold)
             else:
                 pred = self.extract_answer_list(batch["output"][i].split("</think>")[-1].strip(), gold)
+            
+            pred = self.extract_pred_odd(pred, batch["titles"][i])
             pred_lists.append(pred)
         
             acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
@@ -259,10 +266,11 @@ class Evaluator:
             gold = batch["gold_title"][i]
 
             if "turns" in batch.keys():
-                pred = batch["turns"][i][-1].split("</think>")[-1].strip() # exclude thinking to retrieve only the final result
+                out = batch["turns"][i][-1].split("</think>")[-1].strip() # exclude thinking to retrieve only the final result
             else:
-                pred = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
-            
+                out = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
+
+            pred = self.extract_pred_odd(out, batch["titles"][i])
             self.pred_lists.append(pred)
 
             # metrics
@@ -270,6 +278,33 @@ class Evaluator:
         
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
         
+    def extract_pred_odd(self, pred, titles):
+        if type(pred) == str:
+            match = re.search(r"different genre is:\n\n([\w *]+)", pred)
+            if match:
+                return match.group(1).strip()
+            else:
+                pred = pred.replace("\\'", "'")
+                pred = pred.replace('\\"', '"')
+
+                max_id = 0
+                max_title = ""
+                for title in titles:
+                    subtitles = title.split(":")
+
+                    for subtitle in subtitles:
+                        # TODO: "Ronia the Robber\\'s Daughter" == "Ronia the Robber's Daughter"
+                        subtitle = subtitle.strip().lower()
+                        if subtitle.lower() in pred.lower():
+                            curr_idx = pred.lower().rfind(subtitle.lower()) # get last title occurrence as answer
+
+                            if curr_idx >= max_id:
+                                max_title = title
+                                max_id = curr_idx
+                return max_title
+        else:
+            return [titles[idx] for idx, lbl in enumerate(pred) if lbl == 1][0]
+
     def evaluate_order_answer_random(self, batch):
         """
         This function collect the evaluation results for the shuffled random outputs.
@@ -319,6 +354,7 @@ class Evaluator:
         for i in range(len(batch["id"])):
             rand_idx = random.randint(0, 2)
             pred = batch["titles"][i][rand_idx]
+                        
             pred_lists.append(pred)
 
             gold = batch["gold_title"][i]
@@ -750,6 +786,8 @@ class Evaluator:
             if outdir != "ckps" and not outdir.endswith("jsonl"):
                 #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
                 self.experiment_file = splitdir + outdir
+                
+                self.exp_data = load_from_disk(self.experiment_file)
 
                 if "rocstories" in self.experiment_file:
                     acc_mean = self.evaluate_sent_order()
@@ -824,25 +862,26 @@ class Evaluator:
 
                 player = out["player"][i]
 
-                for conv_dir in conv_list:
-                    if type(conv_dir) == dict and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
-                        sent_idx = sent2gold[conv_dir["sentence"]]
-                        
-                        # Player, sentence, position, time-step
-                        if sent_idx == conv_dir["position"]:
-                            correct = "correct"
-                        else:
-                            correct = "incorrect"
+                if type(conv_list) == list:
+                    for conv_dir in conv_list:
+                        if type(conv_dir) == dict and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
+                            sent_idx = sent2gold[conv_dir["sentence"]]
+                            
+                            # Player, sentence, position, time-step
+                            if sent_idx == conv_dir["position"]:
+                                correct = "correct"
+                            else:
+                                correct = "incorrect"
 
-                        beliefs.append({
-                            "sentence": conv_dir["sentence"],
-                            "turn": i+1,
-                            "agent": player,
-                            "gold_sent_idx": sent_idx,
-                            "hypo": conv_dir["position"],
-                            "correct": correct,
-                            "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir['position']})"
-                        })
+                            beliefs.append({
+                                "sentence": conv_dir["sentence"],
+                                "turn": i+1,
+                                "agent": player,
+                                "gold_sent_idx": sent_idx,
+                                "hypo": conv_dir["position"],
+                                "correct": correct,
+                                "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir['position']})"
+                            })
 
         return {"beliefs": beliefs}
     
@@ -854,25 +893,26 @@ class Evaluator:
 
                 player = out["player"][i]
 
-                for conv_dir in conv_list:
-                    if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
-                        # Player, sentence, position, time-step
-                        if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
-                            correct = "correct"
-                        elif conv_dir["label"].lower() == "false" and conv_dir["title"] != eval["gold"]:
-                            correct = "correct"
-                        else:
-                            correct = "incorrect"
+                if type(conv_list) == list:
+                    for conv_dir in conv_list:
+                        if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                            # Player, sentence, position, time-step
+                            if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
+                                correct = "correct"
+                            elif conv_dir["label"].lower() == "false" and conv_dir["title"] != eval["gold"]:
+                                correct = "correct"
+                            else:
+                                correct = "incorrect"
 
-                        beliefs.append({
-                            "title": conv_dir["title"],
-                            "turn": i+1,
-                            "agent": player,
-                            "gold_title": eval["gold"],
-                            "hypo": conv_dir["label"],
-                            "correct": correct,
-                            "label": f"({player}, title {conv_dir['title']}, hypothesis {conv_dir['label']})"
-                        })
+                            beliefs.append({
+                                "title": conv_dir["title"],
+                                "turn": i+1,
+                                "agent": player,
+                                "gold_title": eval["gold"],
+                                "hypo": conv_dir["label"],
+                                "correct": correct,
+                                "label": f"({player}, title {conv_dir['title']}, hypothesis {conv_dir['label']})"
+                            })
 
         return {"beliefs": beliefs}
 
@@ -955,7 +995,10 @@ class Evaluator:
         try:
             return load_dataset("json", data_files=eval_file, split="train")
         except:
-            self.evaluate_sent_order()
+            if self.task == "rocstories":
+                self.evaluate_sent_order()
+            else:
+                self.evaluate_odd_one()
             return load_dataset("json", data_files=eval_file, split="train")
 
 if __name__ == "__main__":
@@ -974,10 +1017,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    #outdir = "eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_257.jsonl"
+    #outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/dev/outputs_280"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    #evaluate(outfile = outdir,framework= "random", task = "cmu_booksum")
+    #evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")

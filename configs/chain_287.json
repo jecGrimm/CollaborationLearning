@@ -1,6 +1,6 @@
 {
     "task": "cmu_booksum",
-    "split": "dev",
+    "split": "test",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 2,
@@ -10,15 +10,15 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device_id": "1",
+    "device_id": "2",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "full",
+    "conv_format": "hypo",
     "start": 0,
-    "end": 50,
-    "run_idx": 282
+    "end": 1000,
+    "run_idx": 287
 }

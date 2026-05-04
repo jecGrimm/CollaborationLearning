@@ -1,3 +1,250 @@
-{"id":0,"accuracy":1,"predictions":"'Adrian Mole' is a coming-of-age novel.","gold":"Adrian Mole: The Prostrate Years"}
-{"id":1,"accuracy":1,"predictions":"The book in a different genre is:\n\n'Chronic City'","gold":"Chronic City"}
-{"id":2,"accuracy":0,"predictions":"The book in a different genre than the other two is 'The Plague'.","gold":"Jonathan Strange & Mr Norrell"}
+{"id":0,"accuracy":0,"predictions":"Animal Farm","gold":"Legacy of the Daleks"}
+{"id":1,"accuracy":1,"predictions":"Blood Secret","gold":"Blood Secret"}
+{"id":2,"accuracy":0,"predictions":"","gold":"Indiana Jones and the Dance of the Giants"}
+{"id":4,"accuracy":1,"predictions":"The Scarlatti Inheritance","gold":"The Scarlatti Inheritance"}
+{"id":5,"accuracy":1,"predictions":"Five on Finniston Farm","gold":"Five on Finniston Farm"}
+{"id":6,"accuracy":0,"predictions":"A Wizard of Earthsea","gold":"River of Fortune"}
+{"id":8,"accuracy":1,"predictions":"Nostromo","gold":"Nostromo"}
+{"id":9,"accuracy":1,"predictions":"The Lions of Al-Rassan","gold":"The Lions of Al-Rassan"}
+{"id":15,"accuracy":1,"predictions":"The White Rabbit","gold":"The White Rabbit"}
+{"id":20,"accuracy":0,"predictions":"","gold":"Tom Swift and His Sky Racer"}
+{"id":21,"accuracy":1,"predictions":"The Help","gold":"The Help"}
+{"id":22,"accuracy":1,"predictions":"Love, Stargirl","gold":"Love, Stargirl"}
+{"id":23,"accuracy":0,"predictions":"The Pretender","gold":"Fancy Nancy"}
+{"id":24,"accuracy":0,"predictions":"Carmilla","gold":"Imperium: A Novel of Ancient Rome"}
+{"id":25,"accuracy":1,"predictions":"By Night In Chile","gold":"By Night In Chile"}
+{"id":26,"accuracy":1,"predictions":"Wayside School is Falling Down","gold":"Wayside School is Falling Down"}
+{"id":27,"accuracy":0,"predictions":"Don Quixote","gold":"Darkhouse"}
+{"id":29,"accuracy":0,"predictions":"The Begum's Millions","gold":"Appley Dapply's Nursery Rhymes"}
+{"id":30,"accuracy":0,"predictions":"","gold":"The White Tiger"}
+{"id":31,"accuracy":1,"predictions":"Heartbeat","gold":"Heartbeat"}
+{"id":32,"accuracy":0,"predictions":"","gold":"Deep Storm"}
+{"id":33,"accuracy":1,"predictions":"Sweeping Up Glass","gold":"Sweeping Up Glass"}
+{"id":34,"accuracy":0,"predictions":"The Metamorphosis","gold":"The Game-Players of Titan"}
+{"id":35,"accuracy":0,"predictions":"","gold":"Bath Tangle"}
+{"id":36,"accuracy":0,"predictions":"She and Allan","gold":"The Shadow Speaker"}
+{"id":37,"accuracy":0,"predictions":"The Ape Who Guards the Balance","gold":"Proteus in the Underworld"}
+{"id":39,"accuracy":0,"predictions":"The Dawning Light","gold":"At Lady Molly's"}
+{"id":40,"accuracy":0,"predictions":"Genesis","gold":"Tempest-Tost"}
+{"id":41,"accuracy":0,"predictions":"Leviathan","gold":"The Knife of Never Letting Go"}
+{"id":42,"accuracy":0,"predictions":"Secret Servant: The Moneypenny Diaries","gold":"Starlight"}
+{"id":44,"accuracy":0,"predictions":"Heretics of Dune","gold":"The Armourer's House"}
+{"id":45,"accuracy":0,"predictions":"Adventures of Huckleberry Finn","gold":"Kingdom of Shadows"}
+{"id":46,"accuracy":0,"predictions":"The Letter of Marque","gold":"Behold the Man"}
+{"id":47,"accuracy":0,"predictions":"Johnny Got His Gun","gold":"A Prayer for Owen Meany"}
+{"id":48,"accuracy":1,"predictions":"Who Will Run the Frog Hospital?","gold":"Who Will Run the Frog Hospital?"}
+{"id":52,"accuracy":0,"predictions":"Microserfs","gold":"Jewels"}
+{"id":53,"accuracy":0,"predictions":"The Narrative of Arthur Gordon Pym of Nantucket","gold":"Dance of Death"}
+{"id":54,"accuracy":0,"predictions":"I Want to Go Home","gold":"Prince of Foxes"}
+{"id":55,"accuracy":1,"predictions":"The Perfect Storm","gold":"The Perfect Storm"}
+{"id":56,"accuracy":1,"predictions":"A Time for George Stavros","gold":"A Time for George Stavros"}
+{"id":57,"accuracy":1,"predictions":"Where Are You Now?","gold":"Where Are You Now?"}
+{"id":61,"accuracy":0,"predictions":"The False Peace","gold":"Wide Is the Gate"}
+{"id":62,"accuracy":0,"predictions":"Truesight","gold":"The Saint in New York"}
+{"id":63,"accuracy":1,"predictions":"Halfway House","gold":"Halfway House"}
+{"id":64,"accuracy":1,"predictions":"Joe Gould's Secret","gold":"Joe Gould's Secret"}
+{"id":65,"accuracy":0,"predictions":"His Master's Voice","gold":"Tears of the Oracle"}
+{"id":66,"accuracy":0,"predictions":"Saint Leibowitz and the Wild Horse Woman","gold":"Las pel\u00edculas de mi vida"}
+{"id":69,"accuracy":0,"predictions":"Rosencrantz & Guildenstern Are Dead","gold":"The Tin Drum"}
+{"id":70,"accuracy":1,"predictions":"Elusive Isabel","gold":"Elusive Isabel"}
+{"id":72,"accuracy":1,"predictions":"Part of the Furniture","gold":"Part of the Furniture"}
+{"id":73,"accuracy":0,"predictions":"The Clocks","gold":"The God of Animals"}
+{"id":74,"accuracy":0,"predictions":"The Bodysnatchers","gold":"Survival Of The Fittest"}
+{"id":75,"accuracy":0,"predictions":"Starship Troopers","gold":"The World of Nagaraj"}
+{"id":76,"accuracy":0,"predictions":"Sir Gawain and the Green Knight","gold":"Eyes of the Emperor"}
+{"id":77,"accuracy":1,"predictions":"Queen Of The Falls","gold":"Queen Of The Falls"}
+{"id":78,"accuracy":1,"predictions":"Things Fall Apart","gold":"Things Fall Apart"}
+{"id":79,"accuracy":0,"predictions":"Marius the Epicurean","gold":"Queen of the Slayers"}
+{"id":80,"accuracy":0,"predictions":"The Time Machine","gold":"The Knight and Knave of Swords"}
+{"id":81,"accuracy":0,"predictions":"The Shockwave Rider","gold":"A Solitary Blue"}
+{"id":82,"accuracy":0,"predictions":"Jane Eyre","gold":"The Black Echo"}
+{"id":83,"accuracy":1,"predictions":"Elantris","gold":"Elantris"}
+{"id":84,"accuracy":1,"predictions":"World War Z","gold":"World War Z"}
+{"id":85,"accuracy":0,"predictions":"The Wind on the Moon","gold":"The Ganymede Takeover"}
+{"id":86,"accuracy":0,"predictions":"The Great Divorce","gold":"The Man on the Balcony"}
+{"id":87,"accuracy":1,"predictions":"Killdozer","gold":"Killdozer"}
+{"id":88,"accuracy":0,"predictions":"The Pit and the Pendulum","gold":"Children of God"}
+{"id":89,"accuracy":0,"predictions":"The Hunt for Red October","gold":"Author, Author"}
+{"id":90,"accuracy":1,"predictions":"Captain's Fury","gold":"Captain's Fury"}
+{"id":91,"accuracy":0,"predictions":"Have Mercy on Us All","gold":"Seeing a Large Cat"}
+{"id":92,"accuracy":0,"predictions":"Tunnel in the Sky","gold":"Black House"}
+{"id":93,"accuracy":1,"predictions":"Money","gold":"Money"}
+{"id":94,"accuracy":1,"predictions":"Black Beauty","gold":"Black Beauty"}
+{"id":96,"accuracy":0,"predictions":"","gold":"The Torment of Others"}
+{"id":97,"accuracy":0,"predictions":"","gold":"Blindness"}
+{"id":98,"accuracy":1,"predictions":"If Only It Were True","gold":"If Only It Were True"}
+{"id":99,"accuracy":1,"predictions":"The Champion Maker","gold":"The Champion Maker"}
+{"id":100,"accuracy":0,"predictions":"The Rime of the Ancient Mariner","gold":"Beloved"}
+{"id":101,"accuracy":0,"predictions":"The Wanderer","gold":"Luna"}
+{"id":102,"accuracy":1,"predictions":"Zorro","gold":"Zorro"}
+{"id":103,"accuracy":1,"predictions":"Mortal danger","gold":"Mortal danger"}
+{"id":104,"accuracy":0,"predictions":"Aeneid","gold":"Destination Mars"}
+{"id":105,"accuracy":1,"predictions":"The Sinner","gold":"The Sinner"}
+{"id":107,"accuracy":1,"predictions":"Drop Dead Beautiful","gold":"Drop Dead Beautiful"}
+{"id":108,"accuracy":1,"predictions":"Involuntary Witness","gold":"Involuntary Witness"}
+{"id":109,"accuracy":1,"predictions":"The Way of Kings","gold":"The Way of Kings"}
+{"id":111,"accuracy":0,"predictions":"Lions' Commentary on UNIX 6th Edition, with Source Code","gold":"Spirit Bound"}
+{"id":112,"accuracy":0,"predictions":"The Myth of Sisyphus","gold":"A Panther in the Basement"}
+{"id":115,"accuracy":1,"predictions":"High Citadel","gold":"High Citadel"}
+{"id":117,"accuracy":1,"predictions":"Under a War-Torn Sky","gold":"Under a War-Torn Sky"}
+{"id":118,"accuracy":0,"predictions":"A Calculus of Angels","gold":"Space Station Seventh Grade"}
+{"id":119,"accuracy":1,"predictions":"From the Mixed-Up Files of Mrs. Basil E. Frankweiler","gold":"From the Mixed-Up Files of Mrs. Basil E. Frankweiler"}
+{"id":120,"accuracy":0,"predictions":"A Crown of Swords","gold":"The Mezzanine: A Novel"}
+{"id":121,"accuracy":1,"predictions":"The Last Kingdom","gold":"The Last Kingdom"}
+{"id":122,"accuracy":0,"predictions":"Silverwing","gold":"Placebo Effect"}
+{"id":123,"accuracy":1,"predictions":"Sourcery","gold":"Sourcery"}
+{"id":124,"accuracy":0,"predictions":"The Slave-girl from Jerusalem","gold":"Abhorsen"}
+{"id":127,"accuracy":1,"predictions":"Yobgorgle: Mystery Monster of Lake Ontario","gold":"Yobgorgle: Mystery Monster of Lake Ontario"}
+{"id":128,"accuracy":0,"predictions":"Prisoner of the Daleks","gold":"Murder on the Links"}
+{"id":129,"accuracy":0,"predictions":"The Color Purple","gold":"David Starr, Space Ranger"}
+{"id":130,"accuracy":0,"predictions":"Here Comes the Sun","gold":"Night of January 16th"}
+{"id":131,"accuracy":1,"predictions":"Children of Paranoia","gold":"Children of Paranoia"}
+{"id":134,"accuracy":1,"predictions":"Blood of Amber","gold":"Blood of Amber"}
+{"id":135,"accuracy":1,"predictions":"Pimpernel and Rosemary","gold":"Pimpernel and Rosemary"}
+{"id":136,"accuracy":1,"predictions":"Amber and Blood","gold":"Amber and Blood"}
+{"id":137,"accuracy":1,"predictions":"Castle Amber","gold":"Castle Amber"}
+{"id":139,"accuracy":0,"predictions":"The Memory of Earth","gold":"The Good Companions"}
+{"id":140,"accuracy":1,"predictions":"The Secret of the Old Mill","gold":"The Secret of the Old Mill"}
+{"id":141,"accuracy":0,"predictions":"A Talent for War","gold":"Captain Corelli's Mandolin"}
+{"id":143,"accuracy":0,"predictions":"The Wind in the Willows","gold":"Greybeard"}
+{"id":144,"accuracy":1,"predictions":"Hard Love","gold":"Hard Love"}
+{"id":145,"accuracy":0,"predictions":"The 33 Strategies of War","gold":"According to Mary Magdalene"}
+{"id":146,"accuracy":0,"predictions":"Twilight","gold":"Final Theory"}
+{"id":147,"accuracy":0,"predictions":"The Stranger","gold":"The Last Dog on Earth"}
+{"id":148,"accuracy":1,"predictions":"The Narrative of Arthur Gordon Pym of Nantucket","gold":"The Narrative of Arthur Gordon Pym of Nantucket"}
+{"id":149,"accuracy":1,"predictions":"Nightjohn","gold":"Nightjohn"}
+{"id":150,"accuracy":0,"predictions":"Destiny's Road","gold":"Gemma Doyle Trilogy"}
+{"id":151,"accuracy":0,"predictions":"Between Planets","gold":"The Truth-Teller's Tale"}
+{"id":152,"accuracy":0,"predictions":"Starman Jones","gold":"City of Ashes"}
+{"id":153,"accuracy":1,"predictions":"The Children's Story","gold":"The Children's Story"}
+{"id":154,"accuracy":1,"predictions":"Vampirates: Tide of Terror","gold":"Vampirates: Tide of Terror"}
+{"id":155,"accuracy":1,"predictions":"Scuppers","gold":"Scuppers"}
+{"id":156,"accuracy":1,"predictions":"The Circuit: Stories from the Life of a Migrant Child","gold":"The Circuit: Stories from the Life of a Migrant Child"}
+{"id":157,"accuracy":1,"predictions":"The Razor's Edge","gold":"The Razor's Edge"}
+{"id":158,"accuracy":1,"predictions":"The Stone Monkey","gold":"The Stone Monkey"}
+{"id":159,"accuracy":0,"predictions":"Down and Out in Paris and London","gold":"Tempest"}
+{"id":160,"accuracy":1,"predictions":"The Castle","gold":"The Castle"}
+{"id":161,"accuracy":0,"predictions":"The Terror","gold":"Mother of Pearl"}
+{"id":162,"accuracy":1,"predictions":"Ren\u00e9","gold":"Ren\u00e9"}
+{"id":163,"accuracy":0,"predictions":"","gold":"The Way of Shadows"}
+{"id":164,"accuracy":0,"predictions":"Mona Lisa Overdrive","gold":"All The Beautiful Sinners"}
+{"id":165,"accuracy":1,"predictions":"The Jester","gold":"The Jester"}
+{"id":166,"accuracy":1,"predictions":"Young Bond Book 4","gold":"Young Bond Book 4"}
+{"id":167,"accuracy":0,"predictions":"Now Wait for Last Year","gold":"When the Birds Fly South"}
+{"id":168,"accuracy":1,"predictions":"The White Priory Murders","gold":"The White Priory Murders"}
+{"id":169,"accuracy":1,"predictions":"Assassin","gold":"Assassin"}
+{"id":170,"accuracy":0,"predictions":"The Great Fetish","gold":"Oz: Into the Wild"}
+{"id":171,"accuracy":0,"predictions":"The Covenant of the Crown","gold":"The Chinese Gold Murders"}
+{"id":172,"accuracy":1,"predictions":"Reading Lolita in Tehran: A Memoir in Books","gold":"Reading Lolita in Tehran: A Memoir in Books"}
+{"id":173,"accuracy":0,"predictions":"Revelation Space","gold":"High Time to Kill"}
+{"id":174,"accuracy":0,"predictions":"Once a Hero","gold":"A Ship of the Line"}
+{"id":175,"accuracy":0,"predictions":"Dragon Sword and Wind Child","gold":"The Arrangement"}
+{"id":176,"accuracy":0,"predictions":"The Moon Is a Harsh Mistress","gold":"Ten Big Ones"}
+{"id":177,"accuracy":0,"predictions":"I Will Fear No Evil","gold":"Death Is a Lonely Business"}
+{"id":178,"accuracy":1,"predictions":"Engaging the Muslim World","gold":"Engaging the Muslim World"}
+{"id":179,"accuracy":0,"predictions":"Methuselah's Children","gold":"Dragon Death"}
+{"id":181,"accuracy":0,"predictions":"Dark Thane","gold":"Caps for Sale"}
+{"id":183,"accuracy":0,"predictions":"Horns","gold":"The Last Boleyn Book"}
+{"id":184,"accuracy":1,"predictions":"Iceworld","gold":"Iceworld"}
+{"id":185,"accuracy":1,"predictions":"Sideways Arithmetic From Wayside School","gold":"Sideways Arithmetic From Wayside School"}
+{"id":186,"accuracy":1,"predictions":"Settling Accounts: Return Engagement","gold":"Settling Accounts: Return Engagement"}
+{"id":188,"accuracy":0,"predictions":"The Sicilian","gold":"My Uncle Napoleon"}
+{"id":189,"accuracy":1,"predictions":"Arch of Triumph","gold":"Arch of Triumph"}
+{"id":191,"accuracy":1,"predictions":"The Cat Who Turned On and Off","gold":"The Cat Who Turned On and Off"}
+{"id":192,"accuracy":1,"predictions":"House of Chains","gold":"House of Chains"}
+{"id":193,"accuracy":1,"predictions":"Winter Kills","gold":"Winter Kills"}
+{"id":194,"accuracy":0,"predictions":"The Wasp Factory","gold":"The Hunger of Sejanoz"}
+{"id":195,"accuracy":1,"predictions":"The Secret Order of the Gumm Street Girls","gold":"The Secret Order of the Gumm Street Girls"}
+{"id":196,"accuracy":0,"predictions":"The Crow Road","gold":"1636: The Saxon Uprising"}
+{"id":197,"accuracy":0,"predictions":"Consider Phlebas","gold":"A Conspiracy of Friends"}
+{"id":198,"accuracy":1,"predictions":"Beguilement","gold":"Beguilement"}
+{"id":200,"accuracy":0,"predictions":"Star King","gold":"The Killings at Badger's Drift"}
+{"id":202,"accuracy":0,"predictions":"Icehenge","gold":"Angel Angel"}
+{"id":203,"accuracy":0,"predictions":"Flow My Tears, The Policeman Said","gold":"One Shot"}
+{"id":204,"accuracy":0,"predictions":"The City of Ember","gold":"I Is for Innocent"}
+{"id":205,"accuracy":1,"predictions":"The Queen of Air and Darkness","gold":"The Queen of Air and Darkness"}
+{"id":206,"accuracy":0,"predictions":"Nick and the Glimmung","gold":"Spring Snow"}
+{"id":207,"accuracy":1,"predictions":"The Widow's Broom","gold":"The Widow's Broom"}
+{"id":209,"accuracy":1,"predictions":"**The Green Mile**","gold":"The Green Mile"}
+{"id":210,"accuracy":1,"predictions":"Bag Limit","gold":"Bag Limit"}
+{"id":211,"accuracy":1,"predictions":"Magic Study","gold":"Magic Study"}
+{"id":212,"accuracy":1,"predictions":"The Viper's Nest","gold":"The Viper's Nest"}
+{"id":213,"accuracy":1,"predictions":"Trunk Music","gold":"Trunk Music"}
+{"id":214,"accuracy":1,"predictions":"Odd Thomas","gold":"Odd Thomas"}
+{"id":215,"accuracy":1,"predictions":"Sam, Bangs, and Moonshine","gold":"Sam, Bangs, and Moonshine"}
+{"id":216,"accuracy":1,"predictions":"Assassin's Apprentice","gold":"Assassin's Apprentice"}
+{"id":217,"accuracy":1,"predictions":"Prince of Chaos","gold":"Prince of Chaos"}
+{"id":218,"accuracy":0,"predictions":"The Book of Ptath","gold":"Emotional Chemistry"}
+{"id":219,"accuracy":1,"predictions":"The Singapore Grip","gold":"The Singapore Grip"}
+{"id":220,"accuracy":1,"predictions":"A Flag Full of Stars","gold":"A Flag Full of Stars"}
+{"id":221,"accuracy":1,"predictions":"The Dreamwalker's Child","gold":"The Dreamwalker's Child"}
+{"id":222,"accuracy":1,"predictions":"Darkwing","gold":"Darkwing"}
+{"id":223,"accuracy":1,"predictions":"The Secret of the Forgotten City","gold":"The Secret of the Forgotten City"}
+{"id":224,"accuracy":0,"predictions":"The Hot Zone","gold":"El delantero centro fue asesinado al atardecer"}
+{"id":225,"accuracy":0,"predictions":"The Running Man","gold":"Bloodhound"}
+{"id":227,"accuracy":0,"predictions":"Native Son","gold":"Wolf's Blood"}
+{"id":229,"accuracy":0,"predictions":"Skin Tight","gold":"Le lion"}
+{"id":230,"accuracy":0,"predictions":"The Fist of God","gold":"The Wonderful Visit"}
+{"id":231,"accuracy":0,"predictions":"The Last Command","gold":"Black Blade"}
+{"id":232,"accuracy":1,"predictions":"Starclimber","gold":"Starclimber"}
+{"id":233,"accuracy":0,"predictions":"The Shadow Rising","gold":"The Marriage Plot"}
+{"id":234,"accuracy":1,"predictions":"The Optimist's Daughter","gold":"The Optimist's Daughter"}
+{"id":235,"accuracy":0,"predictions":"Dodsworth","gold":"Bella at Midnight"}
+{"id":236,"accuracy":0,"predictions":"","gold":"Ashling"}
+{"id":237,"accuracy":1,"predictions":"Miss Peregrine's Home for Peculiar Children","gold":"Miss Peregrine's Home for Peculiar Children"}
+{"id":238,"accuracy":1,"predictions":"The Bourne Sanction","gold":"The Bourne Sanction"}
+{"id":239,"accuracy":0,"predictions":"Of Mice and Men","gold":"Wizardborn"}
+{"id":243,"accuracy":0,"predictions":"Ishmael","gold":"Repent, Harlequin! Said the Ticktockman"}
+{"id":244,"accuracy":0,"predictions":"","gold":"The Barn Owl's Wondrous Capers"}
+{"id":245,"accuracy":1,"predictions":"Guns, Germs, and Steel","gold":"Guns, Germs, and Steel"}
+{"id":248,"accuracy":1,"predictions":"The Beast Within","gold":"The Beast Within"}
+{"id":249,"accuracy":0,"predictions":"The Blue Man","gold":"Kailashey Kelenkari"}
+{"id":251,"accuracy":0,"predictions":"The Drawing of the Three","gold":"Ruby"}
+{"id":252,"accuracy":0,"predictions":"The Gunslinger","gold":"A Midsummer Night's Dream"}
+{"id":253,"accuracy":0,"predictions":"On Writing: A Memoir of the Craft","gold":"The Divine Folly"}
+{"id":254,"accuracy":0,"predictions":"The Body","gold":"The Treasure of Alpheus Winterborn"}
+{"id":255,"accuracy":0,"predictions":"Ringworld","gold":"Soldier of Sidon"}
+{"id":256,"accuracy":0,"predictions":"The Waste Lands","gold":"The Pearl"}
+{"id":257,"accuracy":0,"predictions":"Revenant","gold":"Rabbit Redux"}
+{"id":259,"accuracy":0,"predictions":"Dolores Claiborne","gold":"The Crown of Dalemark"}
+{"id":260,"accuracy":0,"predictions":"The Girl with the Dragon Tattoo","gold":"The Story of the Phantom: The Ghost Who Walks"}
+{"id":261,"accuracy":0,"predictions":"The Girl Who Loved Tom Gordon: A Novel","gold":"The 35th of May, or Conrad's Ride to the South Seas"}
+{"id":262,"accuracy":0,"predictions":"Burnt Offerings","gold":"My Uncle Oswald"}
+{"id":263,"accuracy":0,"predictions":"The Long Walk","gold":"The Joy Luck Club"}
+{"id":264,"accuracy":0,"predictions":"Solaris","gold":"The Colour"}
+{"id":267,"accuracy":1,"predictions":"The Walking Drum","gold":"The Walking Drum"}
+{"id":269,"accuracy":0,"predictions":"Love and Mr Lewisham","gold":"Play to the End"}
+{"id":270,"accuracy":0,"predictions":"","gold":"Cities of the Plain"}
+{"id":272,"accuracy":0,"predictions":"The Flames: A Fantasy","gold":"Fat Kid Rules the World"}
+{"id":275,"accuracy":0,"predictions":"Watership Down","gold":"Grandfather's Journey"}
+{"id":276,"accuracy":0,"predictions":"The World Is Not Enough","gold":"Tai-Pan: A Novel of Hong Kong"}
+{"id":278,"accuracy":0,"predictions":"","gold":"The Worm Ouroboros"}
+{"id":279,"accuracy":0,"predictions":"G.O.G. 666","gold":"Assassin"}
+{"id":280,"accuracy":0,"predictions":"The Player of Games","gold":"Probuditi!"}
+{"id":281,"accuracy":0,"predictions":"Lucky Starr and the Oceans of Venus","gold":"One for the Morning Glory"}
+{"id":282,"accuracy":0,"predictions":"Anathem","gold":"Herzog"}
+{"id":283,"accuracy":0,"predictions":"Tower of Glass","gold":"Safe Harbour"}
+{"id":284,"accuracy":0,"predictions":"So Long, and Thanks for All the Fish","gold":"Things Fall Apart"}
+{"id":285,"accuracy":0,"predictions":"Choke","gold":"Sinner"}
+{"id":286,"accuracy":1,"predictions":"Mario and the Magician","gold":"Mario and the Magician"}
+{"id":287,"accuracy":0,"predictions":"In Search of Lost Time","gold":"First Rider's Call"}
+{"id":288,"accuracy":0,"predictions":"Liza of Lambeth","gold":"Freedomland"}
+{"id":289,"accuracy":0,"predictions":"The Weirdstone of Brisingamen","gold":"Capable of Honor"}
+{"id":290,"accuracy":0,"predictions":"Market Forces","gold":"Ginger Pye"}
+{"id":291,"accuracy":0,"predictions":"Absent in the Spring","gold":"Ivanhoe"}
+{"id":292,"accuracy":0,"predictions":"The Water's Lovely","gold":"Hideaway"}
+{"id":293,"accuracy":0,"predictions":"","gold":"Night Whispers"}
+{"id":294,"accuracy":0,"predictions":"The Animals of Farthing Wood","gold":"Something Fresh"}
+{"id":295,"accuracy":1,"predictions":"Lucinda Brayford","gold":"Lucinda Brayford"}
+{"id":297,"accuracy":0,"predictions":"England, England","gold":"All The Beautiful Sinners"}
+{"id":298,"accuracy":1,"predictions":"A Kid for Two Farthings","gold":"A Kid for Two Farthings"}
+{"id":299,"accuracy":1,"predictions":"Mannan Magal","gold":"Mannan Magal"}
+{"id":300,"accuracy":0,"predictions":"","gold":"Poison In Jest"}
+{"id":301,"accuracy":1,"predictions":"Hideaway","gold":"Hideaway"}
+{"id":302,"accuracy":0,"predictions":"My Brilliant Career","gold":"An Ice-Cream War"}
+{"id":303,"accuracy":1,"predictions":"It's Kind of a Funny Story","gold":"It's Kind of a Funny Story"}
+{"id":304,"accuracy":1,"predictions":"Child's Play","gold":"Child's Play"}
+{"id":305,"accuracy":0,"predictions":"Deep Water","gold":"Praetorian"}
+{"id":306,"accuracy":1,"predictions":"The Golden Spiders","gold":"The Golden Spiders"}
+{"id":308,"accuracy":0,"predictions":"To Kill a Mockingbird","gold":"Holiday"}
+{"id":311,"accuracy":0,"predictions":"Mildred Pierce","gold":"Pool of Twilight"}
