@@ -259,8 +259,8 @@ class SingleAgent(Agent):
             
             input_samples = ""
             for n in range(len(batch["ids"][i])):
-                input_samples += f"title{n+1}: {batch["titles"][i][n]}\n"
-                input_samples += f"summary{n+1}: {batch["summaries"][i][n]}\n"
+                input_samples += f"title{n+1}: {batch['titles'][i][n]}\n"
+                input_samples += f"summary{n+1}: {batch['summaries'][i][n]}\n"
 
             message.append({"role": "user", "content": self.PROMPT.format(input_samples = input_samples)})
 
@@ -922,7 +922,7 @@ class MultiAgent(Agent):
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
                 if conv_dir["sentence"] in self.gold:
-                    correct_key = f"argument_{self.gold.index(conv_dir["sentence"])+1}"
+                    correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     if correct_key in conv_dir.keys():
                         conv_answer += f" {conv_dir[correct_key]}"
@@ -930,7 +930,7 @@ class MultiAgent(Agent):
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
                 if conv_dir["sentence"] in self.gold:
-                    correct_key = f"argument_{self.gold.index(conv_dir["sentence"])+1}"
+                    correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     for k, v in conv_dir.items():
                         if k != correct_key and k.startswith("reason"):

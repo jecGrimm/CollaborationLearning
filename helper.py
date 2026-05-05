@@ -7,6 +7,7 @@ from collections import defaultdict
 import random
 from evaluate import Evaluator
 from log import ExperimentLog
+from huggingface_hub import snapshot_download
 
 def check_SCT_ROC_overlap():
     """
