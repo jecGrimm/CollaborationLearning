@@ -1,0 +1,10 @@
+Current run_idx: 290
+
+Batch size: 2
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:11,  3.86s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:07<00:07,  3.91s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:11<00:03,  3.85s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  2.68s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  3.12s/it]
+Processing shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2638.66 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 36284.16 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2962.95 examples/s]
