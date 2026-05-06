@@ -67,6 +67,13 @@ class Agent:
             logger.run_data["thinking_budget"] = processor.max_thinking_tokens
 
             if processor.max_thinking_tokens > 0:
+                temperature = 0.6
+                top_p = 0.95
+            else:
+                temperature = 0.7
+                top_p = 0.8
+
+            if "32" in self.model_id and "booksum" in self.task:
                 # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
                 pipe = pipeline(
                     "text-generation", 
@@ -75,12 +82,14 @@ class Agent:
                     device_map=device,
                     max_new_tokens=int(self.max_new_tokens-processor.max_thinking_tokens), 
                     logits_processor=LogitsProcessorList([processor]), 
-                    temperature = 0.6,
-                    top_p = 0.95,
+                    temperature = temperature,
+                    top_p = top_p,
                     top_k = 20,
                     min_p = 0,
-                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
+                logger.run_data["quantized"] = True
+                print("Quantized!")
             else:
                 # Temperature=0.7, TopP=0.8, TopK=20, and MinP=0, https://huggingface.co/Qwen/Qwen3-8B
                 pipe = pipeline(
@@ -90,12 +99,14 @@ class Agent:
                     device_map=device,
                     max_new_tokens=self.max_new_tokens, 
                     logits_processor=LogitsProcessorList([processor]), 
-                    temperature = 0.7,
-                    top_p = 0.8,
+                    temperature = temperature,
+                    top_p = top_p,
                     top_k = 20,
                     min_p = 0,
                     #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
+                logger.run_data["quantized"] = False
+                print("Running without quantization!")
             
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
