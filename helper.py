@@ -5,7 +5,7 @@ import pandas as pd
 import os
 from collections import defaultdict
 import random
-from evaluate import Evaluator
+from evaluate import Evaluator, evaluate
 from log import ExperimentLog
 from huggingface_hub import snapshot_download
 
@@ -87,10 +87,10 @@ def inspect_instances(outdir: str, rand_idx: int = None):
     # print(out)
     # print(eval)
 
-def merge_outputs(outdirs: list, outpath: str, framework: str):
+def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, structured: bool, data_len: int = 1000):
     exp_data = [load_from_disk(outdir) for outdir in outdirs]
 
-    if len(exp_data) > 1500:
+    if len(exp_data) > data_len:
         full_data = concatenate_datasets(exp_data).select(range(1500))
     else:
         full_data = concatenate_datasets(exp_data)
@@ -99,28 +99,29 @@ def merge_outputs(outdirs: list, outpath: str, framework: str):
 
     full_data.save_to_disk(outpath)
 
-    evaluate(outpath, framework)
+    evaluate(outpath, framework, task, structured=structured)
 
-def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
-    evaluator = Evaluator(outfile, framework, logger, last = False)
-    evaluator.evaluate_sent_order()
-    evaluator.last = True
-    evaluator.evaluate_last_beliefs()
+# def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
+#     evaluator = Evaluator(outfile, framework, logger, last = False)
+#     evaluator.evaluate_sent_order()
+#     evaluator.last = True
+#     evaluator.evaluate_last_beliefs()
 
 if __name__ == "__main__":
     #check_SCT_ROC_overlap()
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/single/Qwen3-8B/dev/outputs_single_Qwen3-8B_dev_2025-11-25_14:10:17.428416"
-    qwen8_out1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268"
-    qwen8_out2 = "outputs/multi/Qwen3-32B/test/outputs_259"
-    qwen8_out3 = "outputs/multi/Qwen3-32B/test/outputs_258_259"
+    qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_0"
+    qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_1"
+    qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_2"
+    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_285"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
-    inspect_instances(qwen8_out1)
+    #inspect_instances(qwen8_out1)
     #evaluate(qwen8_out1, "single")
 
-    #merge_outputs([qwen8_out1, qwen8_out2], "outputs/multi/Qwen3-32B/test/outputs_258_259", "multi")
+    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285", "multi", "rocstories", True)
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
