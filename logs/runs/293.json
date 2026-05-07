@@ -21,6 +21,6 @@
     "start": 0,
     "end": 1000,
     "run_idx": 293,
-    "device": "cpu",
+    "device": "cuda:0",
     "final": true
 }
