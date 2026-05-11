@@ -12,6 +12,7 @@ import plotly.graph_objects as go # TODO: Full sankey with go https://python-gra
 import statistics
 from scipy.stats.mstats import ttest_ind
 from matplotlib import colors
+from matplotlib.patches import Patch
 
 class Vis():
     def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories"):
@@ -686,12 +687,105 @@ class Vis():
         return acc_per_turn
 
     def plot_distributed_base(self):
-        df_experiment_files = pd.read_csv(f"eval/distributed_base_rocstories.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv(f"eval/distributed_base_runs.csv", delimiter = ";")
 
         s_acc = df_experiment_files["output"].map(self.get_avg_acc)
         df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
-        
-        df_acc.to_csv(f"./visualizations/distributed_base_results.csv", sep = ";")
+
+        # 1. Pivot the data to group by Task on X-axis
+        plot_df = df_acc.pivot(index='task', columns=['model', 'framework'], values='accuracy')
+        plot_df = plot_df.dropna(axis=1, how='all')
+
+        # 2. Assign styles (Colors for Models, Hatches for Frameworks)
+        color_map = {
+            'Random': 'lightgray', 
+            'Llama-3.1-8B-Instruct': '#93c4d5',  
+            'Qwen3-32B': '#ffc7a2'               
+        }
+
+        hatch_map = {
+            'random': '',      # Solid
+            'Single': '',      # Solid
+            'MAS': '//'        # Diagonal lines
+        }
+
+        original_cols = plot_df.columns
+        colors = [color_map[model] for model, framework in original_cols]
+
+        # 3. Plot the base colored bars (edgecolor is required for hatches to show)
+        ax = plot_df.plot(
+            kind="bar", 
+            figsize=(6, 4.5),
+            color=colors,
+            width=0.85, 
+            yticks=np.arange(0, 101, 10), 
+            ylabel="Accuracy", 
+            rot=0,
+            edgecolor='grey',
+            xlabel=""
+        )
+
+        # 4. Apply spacing, hatches, and accuracy value labels
+        num_tasks = len(plot_df.index)
+        for i, patch in enumerate(ax.patches):
+            
+            # --- SPACING LOGIC ---
+            original_width = patch.get_width()
+            new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
+            patch.set_width(new_width)
+            
+            # Re-center the bar
+            new_x = patch.get_x() + (original_width - new_width) / 2
+            patch.set_x(new_x)
+
+            # --- HATCH LOGIC ---
+            col_idx = i // num_tasks
+            framework = original_cols[col_idx][1]
+            
+            hatch_pattern = hatch_map.get(framework, '')
+            if hatch_pattern:
+                patch.set_hatch(hatch_pattern)
+
+            # --- ANNOTATION (VALUE) LOGIC ---
+            height = patch.get_height()
+            if not np.isnan(height) and height > 0:
+                ax.annotate(
+                    f"{height:.2f}",                                 # Format the accuracy to 2 decimal places
+                    (patch.get_x() + patch.get_width() / 2, height), 
+                    ha='center',                                     
+                    va='bottom',                                     
+                    xytext=(0, 3),                                   
+                    textcoords='offset points',
+                    rotation=0,                                     
+                    fontsize=10
+                )
+
+        # Extend the Y-axis slightly so the highest text labels don't get cut off
+        #ax.set_ylim(0, 120)
+
+        # 5. Create a combined legend for Models and Frameworks
+        legend_elements = [
+            # Model colors
+            Patch(facecolor=color_map['Random'], edgecolor='black', label='Model: Random'),
+            Patch(facecolor=color_map['Llama-3.1-8B-Instruct'], edgecolor='black', label='Model: Llama-3.1-8B-Instruct'),
+            Patch(facecolor=color_map['Qwen3-32B'], edgecolor='black', label='Model: Qwen 3-32B'),
+            
+            # Empty patch for spacing in the legend
+            Patch(facecolor='none', edgecolor='none', label=''), 
+            
+            # Framework patterns (represented with white boxes)
+            Patch(facecolor='white', edgecolor='black', hatch='', label='Framework: Single'),
+            Patch(facecolor='white', edgecolor='black', hatch='//', label='Framework: MAS')
+        ]
+
+        ax.legend(handles=legend_elements, title = "Model & Setup", loc="upper left")
+
+        plt.tight_layout()
+        plt.show()
+
+        plt.savefig("./visualizations/distributed_base.png")
+        #df_acc.plot(kind="bar", x = "task", y = "accuracy", yticks=np.arange(0, 110, 10), xlabel="Task", ylabel="Accuracy", rot = 0)
+        df_acc.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
         df_acc.to_latex()
 
 if __name__ == "__main__":
@@ -699,8 +793,13 @@ if __name__ == "__main__":
     # for last in [False, True]:
     #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
     #     vis.plot_all_table()
+    experiment_files = {
+        "single":"outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264",
+        "MAS": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265"
+    }
+    vis = Vis(experiment_files)
+    #vis.plot_distributed_base()
 
-    vis = Vis()
-    vis.plot_distributed_base()
+    vis.perform_ttest(comparison="single")
 
     print("Done")

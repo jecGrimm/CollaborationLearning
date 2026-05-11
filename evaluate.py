@@ -878,7 +878,7 @@ class Evaluator:
                                 "turn": i+1,
                                 "agent": player,
                                 "gold_sent_idx": sent_idx,
-                                "hypo": conv_dir["position"],
+                                "hypo": int(conv_dir["position"]),
                                 "correct": correct,
                                 "label": f"({player}, sentence {sent_idx}, hypothesis {conv_dir['position']})"
                             })
@@ -1017,10 +1017,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286"
+    outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
+    evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
