@@ -745,12 +745,15 @@ class MultiAgent(Agent):
         """
         for i, model_out in enumerate(outputs):
             if conv_format in ["correct", "incorrect"]:
-                self.gold = get_sent_list(batch, i)
+                if self.task == "rocstories":
+                    self.gold = get_sent_list(batch, i)
+                else:
+                    self.gold = batch["gold_title"][i] # correct, incorrect
             #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"]
 
-            conv_answer, last_hypos = self.create_conv_answer(batch, i, model_answer, conv_format, final) # TODO: support
+            conv_answer, last_hypos = self.create_conv_answer(batch, i, model_answer, conv_format, final)
             
             if player_name.startswith("a ") or player_name.startswith("an "):
                 conv_name = player_name.replace("a ", "")
@@ -976,7 +979,7 @@ class MultiAgent(Agent):
             elif conv_format == "correct":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["sentence"] in self.gold:
+                if conv_dir["sentence"] in self.gold: # TODO: correct, incorrect
                     correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     if correct_key in conv_dir.keys():
@@ -984,7 +987,7 @@ class MultiAgent(Agent):
             elif conv_format == "incorrect":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["sentence"] in self.gold:
+                if conv_dir["sentence"] in self.gold: # TODO: correct, incorrect
                     correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     for k, v in conv_dir.items():
@@ -1085,21 +1088,24 @@ class MultiAgent(Agent):
             elif conv_format == "correct":
                 conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["title"] in self.gold: # TODO: correct, denk an lower()
-                    correct_key = f"argument_{self.gold.index(conv_dir['title'])+1}"
+                if conv_dir["title"] == self.gold:
+                    correct_key = f"argument_true"
+                else:
+                    correct_key = f"argument_false"
 
-                    if correct_key in conv_dir.keys():
-                        conv_answer += f" {conv_dir[correct_key]}"
+                if correct_key in conv_dir.keys():
+                    conv_answer += f" {conv_dir[correct_key]}"
             elif conv_format == "incorrect":
                 conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["title"] in self.gold: # TODO: incorrect, denk an lower()
-                    correct_key = f"argument_{self.gold.index(conv_dir['title'])+1}"
+                if conv_dir["title"] == self.gold:
+                    correct_key = f"argument_true"
+                else:
+                    correct_key = f"argument_false"
 
-                    for k, v in conv_dir.items():
-                        if k != correct_key and k.startswith("argument"):
-                            conv_answer += f" {v}"
-            # TODO: support, correct, incorrect
+                for k, v in conv_dir.items():
+                    if k != correct_key and k.startswith("argument"):
+                        conv_answer += f" {v}"
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         

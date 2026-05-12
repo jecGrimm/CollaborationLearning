@@ -17,7 +17,7 @@
     "max_new_tokens": 1024,
     "structured": true,
     "output_format": "full",
-    "conv_format": "support",
+    "conv_format": "incorrect",
     "start": 0,
     "end": 3,
     "run_idx": 0,
@@ -98,9 +98,9 @@
     "min_p": null,
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_mini.jsonl",
     "instances": 3,
-    "duration": 512.4689676761627,
+    "duration": 257.6165897846222,
     "mean_acc": 0.0,
     "zero_percentage": 0.0,
     "double_percentage": 0.0,
-    "wrong_format": 2.111111111111111
+    "wrong_format": 2.0
 }
