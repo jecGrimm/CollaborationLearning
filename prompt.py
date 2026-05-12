@@ -750,7 +750,7 @@ class MultiAgent(Agent):
 
             model_answer = model_out[0]["generated_text"][2]["content"]
 
-            conv_answer = self.create_conv_answer(model_answer, conv_format, final)
+            conv_answer, last_hypos = self.create_conv_answer(batch, i, model_answer, conv_format, final) # TODO: support
             
             if player_name.startswith("a ") or player_name.startswith("an "):
                 conv_name = player_name.replace("a ", "")
@@ -763,6 +763,9 @@ class MultiAgent(Agent):
             if conv_answer != "":
                 batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
 
+            if last_hypos != None:
+                batch["last_hypos"][i] = last_hypos.copy() # TODO: reject, support
+
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
@@ -771,7 +774,7 @@ class MultiAgent(Agent):
         
         return batch
     
-    def create_conv_answer(self, model_answer, conv_format = "full", final=False):
+    def create_conv_answer(self, batch, i, model_answer, conv_format = "full", final=False):
         conv_str = model_answer.split("</think>")[-1].strip()
         conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
         # remove newlines to make matching possible
@@ -789,23 +792,22 @@ class MultiAgent(Agent):
         conv_str = fr"{conv_str}"
 
         if not self.structured or final:
-            return conv_str
+            return conv_str, None
         else:
             try:
                 conv_list = ast.literal_eval(conv_str)
                 if self.task == "rocstories":
-                    return self.formulate_conv_roc(conv_list, conv_format)
-                else:
-                    return self.formulate_conv_cmu(conv_list, conv_format)
+                    return self.formulate_conv_roc(batch, i, conv_list, conv_format)
+                else: 
+                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format) # TODO: support
             except:
                 if self.task == "rocstories":
                     conv_list = self.extract_conv_dict_rocstories(conv_str)
-                    return self.formulate_conv_roc(conv_list, conv_format)
+                    return self.formulate_conv_roc(batch, i, conv_list, conv_format)
                 else:
                     conv_list = self.extract_conv_dict_cmu(conv_str)
-                    return self.formulate_conv_cmu(conv_list, conv_format)
+                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format) # TODO: support
                 
-
     def extract_conv_dict_rocstories(self, conv_str: str):
         conv_list = []
         sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
@@ -887,7 +889,12 @@ class MultiAgent(Agent):
             item = item.strip("label")
         return item
 
-    def formulate_conv_roc(self, conv_list, conv_format):
+    def formulate_conv_roc(self, batch, idx, conv_list, conv_format):
+        new_last_hypos = None
+        if conv_format in ["reject", "support"]: 
+            prev_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy() # remove None
+            new_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy()
+
         conv_answer = ""
         for n, conv_dir in enumerate(conv_list):
             if conv_format == "hypo":
@@ -904,20 +911,57 @@ class MultiAgent(Agent):
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
             elif conv_format == "support":
-                # TODO: reject/support previous arguments
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
-                key = f"argument_{conv_dir['position']}"
 
-                if key in conv_dir.keys():
-                    conv_answer += f" {conv_dir[key]}"
+                prev_hypos = []
+                if conv_dir["sentence"] in prev_last_hypos.keys():
+                    prev_hypos = prev_last_hypos[conv_dir["sentence"]]
+
+                if prev_hypos == []:
+                    for i in range(1, 6): # add all arguments at first
+                        key = f"argument_{i}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
+                else:
+                    for hypo in prev_hypos: # add rejecting args for all previous hypos
+                        hypo_key = f"argument_{hypo}"
+
+                        for k, v in conv_dir.items():
+                            if k == hypo_key and k.startswith("argument"):
+                                conv_answer += f" {v}"
+
+                if conv_dir["position"] != "":
+                    if conv_dir["sentence"] in new_last_hypos.keys() and conv_dir["position"] not in new_last_hypos[conv_dir["sentence"]]:
+                        new_last_hypos[conv_dir["sentence"]].append(conv_dir["position"]) # add current hypo as last hypo
+                    else:
+                        new_last_hypos.update({conv_dir["sentence"]: [conv_dir["position"]]}) # add new first hypo
             elif conv_format == "reject":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
 
-                hypo_key = f"argument_{conv_dir['position']}"
+                prev_hypos = []
+                if conv_dir["sentence"] in prev_last_hypos.keys():
+                    prev_hypos = prev_last_hypos[conv_dir["sentence"]]
 
-                for k, v in conv_dir.items():
-                    if k != hypo_key and k.startswith("reason"):
-                        conv_answer += f" {v}"
+                if prev_hypos == []:
+                    for i in range(1, 6): # add all arguments at first
+                        key = f"argument_{i}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
+                else:
+                    for hypo in prev_hypos: # add rejecting args for all previous hypos
+                        hypo_key = f"argument_{hypo}"
+
+                        for k, v in conv_dir.items():
+                            if k != hypo_key and k.startswith("argument"):
+                                conv_answer += f" {v}"
+
+                if conv_dir["position"] != "":
+                    if conv_dir["sentence"] in new_last_hypos.keys() and conv_dir["position"] not in new_last_hypos[conv_dir["sentence"]]:
+                        new_last_hypos[conv_dir["sentence"]].append(conv_dir["position"]) # add current hypo as last hypo
+                    else:
+                        new_last_hypos.update({conv_dir["sentence"]: [conv_dir["position"]]}) # add new first hypo
             elif conv_format == "full": 
                 if conv_dir['position'] != "":
                     conv_answer += f"I propose position {conv_dir['position']} for the sentence '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
@@ -944,14 +988,19 @@ class MultiAgent(Agent):
                     correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     for k, v in conv_dir.items():
-                        if k != correct_key and k.startswith("reason"):
+                        if k != correct_key and k.startswith("argument"):
                             conv_answer += f" {v}"
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
-        return conv_answer
+        return conv_answer, new_last_hypos
 
-    def formulate_conv_cmu(self, conv_list, conv_format):
+    def formulate_conv_cmu(self, batch, idx, conv_list, conv_format):
+        new_last_hypos = None
+        if conv_format in ["reject", "support"]: 
+            prev_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy() # remove None
+            new_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy()
+
         conv_answer = ""
         for n, conv_dir in enumerate(conv_list):
             if conv_format == "hypo":
@@ -981,13 +1030,82 @@ class MultiAgent(Agent):
 
                     if key in conv_dir.keys():
                         conv_answer += f" {conv_dir[key]}"
-            # TODO: reasons, support, reject, correct, incorrect
+            elif conv_format == "support":
+                conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+
+                prev_hypos = []
+                if conv_dir["title"] in prev_last_hypos.keys():
+                    prev_hypos = prev_last_hypos[conv_dir["title"]]
+
+                if prev_hypos == []:
+                    for i in ["true", "false"]: # add all arguments at first
+                        key = f"argument_{i}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
+                else:
+                    for hypo in prev_hypos: # add rejecting args for all previous hypos
+                        hypo_key = f"argument_{hypo.lower()}"
+
+                        for k, v in conv_dir.items():
+                            if k == hypo_key and k.startswith("argument"):
+                                conv_answer += f" {v}"
+
+                if conv_dir["label"] != "":
+                    if conv_dir["title"] in new_last_hypos.keys() and conv_dir["label"] not in new_last_hypos[conv_dir["title"]]:
+                        new_last_hypos[conv_dir["title"]].append(conv_dir["label"]) # add current hypo as last hypo
+                    else:
+                        new_last_hypos.update({conv_dir["title"]: [conv_dir["label"]]}) # add new first hypo
+            elif conv_format == "reject":
+                conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+
+                prev_hypos = []
+                if conv_dir["title"] in prev_last_hypos.keys():
+                    prev_hypos = prev_last_hypos[conv_dir["title"]]
+
+                if prev_hypos == []:
+                    for i in ["true", "false"]: # add all arguments at first
+                        key = f"argument_{i}"
+
+                        if key in conv_dir.keys():
+                            conv_answer += f" {conv_dir[key]}"
+                else:
+                    for hypo in prev_hypos: # add rejecting args for all previous hypos
+                        hypo_key = f"argument_{hypo.lower()}"
+
+                        for k, v in conv_dir.items():
+                            if k != hypo_key and k.startswith("argument"):
+                                conv_answer += f" {v}"
+
+                if conv_dir["label"] != "":
+                    if conv_dir["title"] in new_last_hypos.keys() and conv_dir["label"] not in new_last_hypos[conv_dir["title"]]:
+                        new_last_hypos[conv_dir["title"]].append(conv_dir["label"]) # add current hypo as last hypo
+                    else:
+                        new_last_hypos.update({conv_dir["title"]: [conv_dir["label"]]}) # add new first hypo
+            elif conv_format == "correct":
+                conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+                
+                if conv_dir["title"] in self.gold: # TODO: correct, denk an lower()
+                    correct_key = f"argument_{self.gold.index(conv_dir['title'])+1}"
+
+                    if correct_key in conv_dir.keys():
+                        conv_answer += f" {conv_dir[correct_key]}"
+            elif conv_format == "incorrect":
+                conv_answer += f"Book: '{conv_dir['title']}'. {conv_dir['reasoning']}"
+                
+                if conv_dir["title"] in self.gold: # TODO: incorrect, denk an lower()
+                    correct_key = f"argument_{self.gold.index(conv_dir['title'])+1}"
+
+                    for k, v in conv_dir.items():
+                        if k != correct_key and k.startswith("argument"):
+                            conv_answer += f" {v}"
+            # TODO: support, correct, incorrect
             if n < len(conv_list) - 1:
                 conv_answer += "\n"
         
-        return conv_answer
+        return conv_answer, new_last_hypos
 
-    def update_shard(self, batch, filtered_data, dataset_len):
+    def update_shard(self, batch, filtered_data, dataset_len, conv_format):
         """
         This method updates the instances in the shard data with the processed instances.
 
@@ -1016,6 +1134,9 @@ class MultiAgent(Agent):
                     batch["player"][i] = processed_inst["player"][0] 
                     #batch["roles"][i] = processed_inst["roles"][0] # TODO: check whether role exists
                     batch["stop"][i] = processed_inst["stop"][0]
+
+                    if self.structured and conv_format in ["reject", "support"]:
+                        batch["last_hypos"][i] = processed_inst["last_hypos"][0]
 
         return batch
 
@@ -1078,6 +1199,9 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             shard_data = shard_data.map(self.define_roles, batched=True)
 
+            if conv_format in ["reject", "support"]: # TODO: cmu support
+                shard_data = shard_data.add_column("last_hypos", [dict()]*len(shard_data))
+
             #filtered_data = shard_data
             conv_round = 0
             while conv_round < self.conversation_rounds:
@@ -1103,7 +1227,7 @@ class MultiAgent(Agent):
                         # add model answer to conversation history
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
 
-                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data)), batched = True)
+                        shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data), conv_format), batched = True)
 
                         # if processor:
                         #     processor.tokens_generated = 0 # allow thinking for the next answer
@@ -1342,6 +1466,7 @@ class MultiAgent(Agent):
                 batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i]))))
         
         return batch
+
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
         prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = self.NAMES[-1], final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)

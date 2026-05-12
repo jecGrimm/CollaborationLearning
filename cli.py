@@ -28,15 +28,22 @@ class CLI:
         #     self.framework = parser.parse_args().framework
 
         # add default configurations
-        os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
         if "device" not in self.config.keys():
+            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
             os.environ["CUDA_VISIBLE_DEVICES"] = "0" # set to first GPU in nvidia order (only this one is visible)
 
             import torch
             self.config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu" # set to first of visible GPUs
+            print("Device: ", torch.cuda.get_device_name(torch.cuda.current_device()))
         else:
-            os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device"].split(":")[-1] # set to n GPU in nvidia order (only this one is visible)
+            if self.config["device"] != "mig":
+                os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
+                os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device"].split(":")[-1] # set to n GPU in nvidia order (only this one is visible)
+            
             self.config["device"] = "cuda:0" # # set to first of visible GPUs = visible device
+
+            import torch
+            print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
 
         if self.config["framework"] == "multi" and "conversation_rounds" not in self.config.keys():
             self.config["conversation_rounds"] = 2

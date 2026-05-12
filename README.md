@@ -33,3 +33,6 @@ MIT-License for use with citations.
 
 ### prompt.py
 Script to prompt the models.
+
+## AI usage
+plot_distributed_base(): improved styling (= added bar labels, hatches, etc.) by Max (Google, LMArena.ai) 

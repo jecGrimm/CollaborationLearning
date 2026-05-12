@@ -22,6 +22,8 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
     # saves computation time
     torch.set_grad_enabled(False)
+    os.environ["HF_DATASETS_CACHE"] = "/nfs/gdata/jgrimm/hf_cache/dataset_cache" # TODO: Doku remove
+    os.environ["HF_HUB_CACHE"] = "/nfs/gdata/llms/hf-models/model/" # TODO: Doku remove
 
     if logger == None:
         logger = ExperimentLog(config)
