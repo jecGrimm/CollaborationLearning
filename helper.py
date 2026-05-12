@@ -115,10 +115,10 @@ if __name__ == "__main__":
     qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_0"
     qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_1"
     qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_278_2"
-    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/dev/outputs_294"
+    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/dev/outputs_298"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
-    inspect_instances(out_4, 19)
+    inspect_instances(out_4, 1)
     #evaluate(qwen8_out1, "single")
 
     #merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285", "multi", "rocstories", True)
