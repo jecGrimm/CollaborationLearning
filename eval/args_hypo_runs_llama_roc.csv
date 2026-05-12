@@ -1,0 +1,4 @@
+format;task;run
+Hypo;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_272
+Full;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285
+Args;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288

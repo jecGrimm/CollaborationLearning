@@ -60,7 +60,7 @@ class Evaluator:
         if self.task == "rocstories":
             self.pred_len = 5
         else:
-            self.pred_len = 3
+            self.pred_len = 1
         
     def initiate_metric_lists(self):
         self.pred_lists = []
@@ -864,7 +864,7 @@ class Evaluator:
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) == dict and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
+                        if type(conv_dir) in [defaultdict, dict] and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
                             sent_idx = sent2gold[conv_dir["sentence"]]
                             
                             # Player, sentence, position, time-step
@@ -895,7 +895,7 @@ class Evaluator:
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                        if type(conv_dir) in [defaultdict, dict] and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
                             # Player, sentence, position, time-step
                             if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
                                 correct = "correct"

@@ -1,0 +1,4 @@
+format;task;run
+Hypo;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_287
+Full;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286
+Args;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_290

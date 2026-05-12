@@ -24,6 +24,7 @@ class Vis():
 
         self.task = task
         self.variation = variation
+        self.evaluator = None
 
         if task == "rocstories":
             if self.variation:
@@ -64,7 +65,11 @@ class Vis():
         self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
 
         mean_preds = defaultdict(list)
-        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
+
+        if self.task == "rocstories":
+            self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
+        else:
+            self.metrics = ["accuracy"]
 
         for setup, eval_data in self.eval_data_hf.items():
             for metric in self.metrics:
@@ -113,14 +118,14 @@ class Vis():
             
             plt.close()
 
-    def create_belief_instance(self, index: int, setup: str):
+    def create_belief_instance_roc(self, index: int, setup: str):
         out = self.exp_data_hf[setup].select([index])[0]
         eval = self.eval_data_hf[setup].select([index])[0]
 
         sent2gold = {sent:idx for idx, sent in enumerate(eval["gold"], start = 1)}
         beliefs = []
         for i, turn in enumerate(out["turns"]):
-            conv_list = self.create_conv_list(turn)
+            conv_list = self.create_conv_list_roc(turn)
 
             player = out["player"][i]
 
@@ -144,12 +149,49 @@ class Vis():
                     })
 
         return beliefs
+    
+    def create_belief_instance_cmu(self, index: int, setup: str):
+        out = self.exp_data_hf[setup].select([index])[0]
+        eval = self.eval_data_hf[setup].select([index])[0]
+
+        beliefs = []
+        if "turns" in out.keys():
+            for i, turn in enumerate(out["turns"]):
+                conv_list = self.extract_structured_answer(turn)
+
+                player = out["player"][i]
+
+                if type(conv_list) == list:
+                    for conv_dir in conv_list:
+                        if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                            # Player, sentence, position, time-step
+                            if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
+                                correct = "correct"
+                            elif conv_dir["label"].lower() == "false" and conv_dir["title"] != eval["gold"]:
+                                correct = "correct"
+                            else:
+                                correct = "incorrect"
+
+                            beliefs.append({
+                                "title": conv_dir["title"],
+                                "turn": i+1,
+                                "agent": player,
+                                "gold_title": eval["gold"],
+                                "hypo": conv_dir["label"],
+                                "correct": correct,
+                                "label": f"({player}, title {conv_dir['title']}, hypothesis {conv_dir['label']})"
+                            })
+
+        return {"beliefs": beliefs}
         
 
     def plot_instance(self, index: int, setup: str):
 
         #vis_beliefs_df = pd.DataFrame(vis_beliefs)
-        beliefs = self.create_belief_instance(index, setup)
+        if self.task == "rocstories":
+            beliefs = self.create_belief_instance_roc(index, setup)
+        else:
+            beliefs = self.create_belief_instance_cmu(index, setup)
         belief_df = pd.DataFrame(beliefs)
         belief_pivot = belief_df.pivot(columns = ["correct"], values=["turn", "label"])
 
@@ -167,64 +209,86 @@ class Vis():
             file.write(html)
         #dfi.export(styled_beliefs, "test.png")
 
+    def create_conv_list_roc(self, conv_str: str):
+        conv_list = []
+        sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        positions = re.findall(r"""position\': (\d)""", conv_str)
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
 
-    def create_conv_list(self, model_answer):
-        conv_str = model_answer.split("</think>")[-1].strip()
-        conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
-        # remove newlines to make matching possible
-        conv_str = re.sub("\n", "", conv_str)
+        for i, sent in enumerate(sentences):
+            conv_dict = defaultdict(str)
 
-        # escape single quote strings
-        conv_str = re.sub(r'(\b|\b )"(\b| )', r'\1\\"\2', conv_str)
-        conv_str = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", conv_str)
+            conv_dict["sentence"] = sent
 
-        # remove json notation
-        conv_str = re.sub(r"```json(.*)```", r"\1", conv_str)
+            if i < len(positions):
+                conv_dict["position"] = int(positions[i])
 
-        # double quotes
-        conv_str = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', conv_str)
-        conv_str = fr"{conv_str}"
-
-        try:
-            conv_list = ast.literal_eval(conv_str)
-            return conv_list
-        except:
-            conv_list = []
-
-            sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            positions = re.findall(r"""position[\'"]: (\d)""", conv_str)
-            reason_1_list = [item[0] for item in re.findall(r"""reason_1[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_2_list = [item[0] for item in re.findall(r"""reason_2[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_3_list = [item[0] for item in re.findall(r"""reason_3[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_4_list = [item[0] for item in re.findall(r"""reason_4[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-            reason_5_list = [item[0] for item in re.findall(r"""reason_5[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
-
-            for i, sent in enumerate(sentences):
-                conv_dict = defaultdict(str)
-
-                conv_dict["sentence"] = sent
-
-                if i < len(positions):
-                    conv_dict["positions"] = int(positions[i])
-                
-                if i < len(reason_1_list):
-                    conv_dict["reason_1"] = reason_1_list[i]
-
-                if i < len(reason_2_list):
-                    conv_dict["reason_2"] = reason_2_list[i]
-
-                if i < len(reason_3_list):
-                    conv_dict["reason_3"] = reason_3_list[i]
-
-                if i < len(reason_4_list):
-                    conv_dict["reason_4"] = reason_4_list[i]
-
-                if i < len(reason_5_list):
-                    conv_dict["reason_5"] = reason_5_list[i]
-
-                conv_list.append(conv_dict)
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
             
-            return conv_list
+            if i < len(reason_1_list):
+                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+
+            if i < len(reason_3_list):
+                conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
+
+            if i < len(reason_4_list):
+                conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
+
+            if i < len(reason_5_list):
+                conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
+
+            conv_list.append(conv_dict)
+        
+        return conv_list
+
+    def create_conv_list_cmu(self, conv_str: str):
+        conv_list = []
+
+        titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        labels = [item[0] for item in re.findall(r"""label[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, title in enumerate(titles):
+            conv_dict = defaultdict(str)
+
+            conv_dict["title"] = title
+
+            if i < len(labels):
+                conv_dict["label"] = labels[i]
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_true"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_false"] = self.strip_arg(reason_2_list[i])
+            
+            conv_list.append(conv_dict)
+        return conv_list
+    
+    def strip_arg(self, item):
+        if "argument" in item:
+            item = item.strip("argument")
+        elif "position" in item:
+            item = item.strip("position")
+        elif "label" in item:
+            item = item.strip("label")
+        return item
         
     def plot_sankey(self, setup: str):
         # last hypo == correct/incorrect -> final hypo == correct/incorrect 
@@ -249,7 +313,10 @@ class Vis():
             fig.savefig(f"{self.vispath}/sankey_{setup}_no_var.png", bbox_inches="tight", dpi=150)
 
     def create_sankey_hf(self, x, idx, setup):
-        beliefs = self.create_belief_instance(idx, setup)
+        if self.task == "rocstories":
+            beliefs = self.create_belief_instance_roc(idx, setup)
+        else:
+            beliefs = self.create_belief_instance_cmu(idx, setup)
 
         seen_sents = []
         for belief in beliefs[::-1]:
@@ -359,8 +426,9 @@ class Vis():
             "correct": "#f78c1b", 
             "incorrect": "#1b7ef7"
         }
-        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
 
+        self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
+        
         self.sources = [src for src, _, _ in self.links.keys()]
         self.targets = [tgt for _, tgt, _ in self.links.keys()]
         self.values = list(self.links.values())
@@ -441,7 +509,7 @@ class Vis():
                 fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var_sent.html")
         
     def create_sankey_link(self, inst, idx, setup, sent_color):
-        beliefs = self.create_belief_instance(idx, setup)
+        beliefs = self.create_belief_instance_roc(idx, setup)
 
         #sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
         for sent_idx in range(1, 6):
@@ -593,7 +661,7 @@ class Vis():
         plt.close()
 
     def plot_all_table(self):
-        df_experiment_files = pd.read_csv(f"eval/all_runs_{self.task}.csv", delimiter = ";").set_index("format")
+        df_experiment_files = pd.read_csv(f"eval/args_hypos_runs_llama_roc.csv", delimiter = ";").set_index("format")
 
         df_acc = df_experiment_files.map(self.get_avg_acc)
 
@@ -606,9 +674,9 @@ class Vis():
                 
                 for setup in exp_files.keys():
                     if "single" not in setup and "random" not in setup and "du" not in setup:
-                        self.plot_sankey_full_plotly(setup, sent_color=False)
+                        #self.plot_sankey_full_plotly(setup, sent_color=False)
 
-                        acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup)
+                        acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup) # TODO: Test
                     else:
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
 
@@ -617,6 +685,104 @@ class Vis():
         
         df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
 
+
+    def plot_acc_changes(self, run_file):
+        df_experiment_files = pd.read_csv(run_file, delimiter = ";")
+
+        df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_acc)
+
+        # plot sankeys
+        df_dict = df_experiment_files.T.to_dict()
+        acc_changes = defaultdict(list)
+        for row in df_dict.values():
+            conv_format = row["format"]
+            task = row["task"]
+            exp_file = row["run"]
+            setup = conv_format
+            self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower())
+            
+            self.evaluator = Evaluator(exp_file,"multi", task.lower())
+
+            self.num_turns = max([len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))])-1
+            self.corr_per_turn = [0]*self.num_turns
+            self.beliefs_per_turn = [0]*self.num_turns
+            self.exp_data_hf[setup] = self.exp_data_hf[setup].map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
+
+            acc_per_turn = [0]*self.num_turns
+            for i in range(self.num_turns):
+                if self.beliefs_per_turn[i] != 0:
+                    acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
+            
+            #acc_per_turn[-1] = row["accuracy"]
+            acc_changes[setup] = acc_per_turn
+
+        df_acc_changes = pd.DataFrame(acc_changes)
+
+        color_map = {
+            'Hypo': '#cbb2ff',
+            'Full': '#93c4d5',  
+            'Args': '#ffc7a2'               
+        }
+        #df_acc_changes.plot(ylabel="Accuracy", xlabel="Turn", xticks = np.arange(self.num_turns), yticks=np.arange(0, 101, 10), color=list(color_map.values()))
+        
+        #plt.savefig(f"visualizations/{self.task}/args_hypos.png")
+        #df_acc.to_csv(f"./visualizations/{self.task}/acc_changes_llama_roc.csv", sep = ";")
+
+        return df_acc_changes
+
+    def plot_arg_hypo_changes(self):
+        llama_roc = self.plot_acc_changes("eval/args_hypo_runs_llama_roc.csv")
+        llama_cmu = self.plot_acc_changes("eval/args_hypo_runs_llama_cmu.csv")
+
+        df_list = [llama_roc, llama_cmu]
+        
+        nrow = 1
+        ncol = 2
+        fig, axes = plt.subplots(nrow, ncol)
+
+        # plot counter
+        color_map = {
+            'Hypo': '#cbb2ff',
+            'Full': '#93c4d5',  
+            'Args': '#ffc7a2'               
+        }
+        subtitle = ["ROCStories", "CMU_Booksum"]
+        for c in range(ncol):
+            if c == 0:
+                ylabel = "Micro Accuracy"
+                xticks = np.arange(10)
+            else:
+                ylabel = ""
+                xticks = np.arange(6)
+
+            df_list[c].plot(
+                ax=axes[c], 
+                ylabel=ylabel, 
+                xlabel="Turn", 
+                xticks = xticks, 
+                yticks=np.arange(0, 61, 10), 
+                color=list(color_map.values()), 
+                title = subtitle[c], 
+                legend = (c==0),
+                figsize=(4.5,2.5)
+            )
+
+        plt.savefig(f"visualizations/args_hypos.png")
+
+    def get_acc_per_turn(self, inst, idx, setup):
+        out = self.exp_data_hf[setup].select([idx])[0]
+        eval = self.eval_data_hf[setup].select([idx])[0]
+
+        if self.task == "rocstories":
+            beliefs = self.evaluator.create_belief_instance_roc(out, eval)
+        else:
+            beliefs = self.evaluator.create_belief_instance_cmu(out, eval)
+
+        for belief in beliefs["beliefs"]:
+            if belief["correct"] == "correct":
+                self.corr_per_turn[belief["turn"]-1] += 1
+
+            self.beliefs_per_turn[belief["turn"]-1] += 1
         
     def get_avg_acc(self, exp_file):
         if self.last and "single" not in exp_file:
@@ -637,7 +803,7 @@ class Vis():
 
         return round(acc*100, 2)
     
-    def get_acc_changes(self, setup, sent_color = False):        
+    def get_acc_changes(self, setup, sent_color = False):  
         self.num_turns = 0
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
@@ -662,6 +828,8 @@ class Vis():
             "correct": "#f78c1b", 
             "incorrect": "#1b7ef7"
         }
+
+
         self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
 
         self.sources = [src for src, _, _ in self.links.keys()]
@@ -793,13 +961,15 @@ if __name__ == "__main__":
     # for last in [False, True]:
     #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
     #     vis.plot_all_table()
-    experiment_files = {
-        "single":"outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264",
-        "MAS": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265"
-    }
-    vis = Vis(experiment_files)
+    # experiment_files = {
+    #     "single":"outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264",
+    #     "MAS": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265"
+    # }
+    vis = Vis()
     #vis.plot_distributed_base()
+    vis.plot_arg_hypo_changes()
+    #vis.plot_acc_changes("eval/args_hypo_runs_llama_roc.csv")
 
-    vis.perform_ttest(comparison="single")
+    #   vis.perform_ttest(comparison="single")
 
     print("Done")
