@@ -1,0 +1,50 @@
+{"id":0,"accuracy":1,"predictions":"Molloy","gold":"Molloy"}
+{"id":1,"accuracy":0,"predictions":"A Clockwork Orange","gold":"Wild Meat and the Bully Burgers"}
+{"id":2,"accuracy":1,"predictions":"Night of Error","gold":"Night of Error"}
+{"id":4,"accuracy":1,"predictions":"As She Climbed Across the Table","gold":"As She Climbed Across the Table"}
+{"id":5,"accuracy":1,"predictions":"Aunt Jane's Nieces Abroad","gold":"Aunt Jane's Nieces Abroad"}
+{"id":6,"accuracy":0,"predictions":"Johnny and the Dead","gold":"Memories of Midnight"}
+{"id":8,"accuracy":0,"predictions":"*","gold":"Princess of Glass"}
+{"id":9,"accuracy":1,"predictions":"Brat Farrar","gold":"Brat Farrar"}
+{"id":15,"accuracy":1,"predictions":"Ella Enchanted","gold":"Ella Enchanted"}
+{"id":20,"accuracy":1,"predictions":"Fig Pudding","gold":"Fig Pudding"}
+{"id":21,"accuracy":1,"predictions":"SkyClan's Destiny","gold":"SkyClan's Destiny"}
+{"id":22,"accuracy":1,"predictions":"Dark Magic","gold":"Dark Magic"}
+{"id":23,"accuracy":1,"predictions":"The American Gun Mystery","gold":"The American Gun Mystery"}
+{"id":24,"accuracy":0,"predictions":"The End","gold":"206 Bones"}
+{"id":25,"accuracy":0,"predictions":"The Cider House Rules","gold":"The Fort at River's Bend"}
+{"id":26,"accuracy":0,"predictions":"Dracula","gold":"An Ice-Cream War"}
+{"id":27,"accuracy":0,"predictions":"Pride and Prejudice and Zombies","gold":"The Two of Them"}
+{"id":29,"accuracy":0,"predictions":"The Skinner","gold":"The Naked Ape"}
+{"id":30,"accuracy":0,"predictions":"Magick Without Tears","gold":"Secret Army"}
+{"id":31,"accuracy":0,"predictions":"The Devil's Teardrop: A Novel of the Last Night of the Century","gold":"Bones of the Dragon"}
+{"id":32,"accuracy":0,"predictions":"Book of Job","gold":"The Treatment"}
+{"id":33,"accuracy":0,"predictions":"The Monastery","gold":"Warrior Scarlet"}
+{"id":34,"accuracy":0,"predictions":"Curious George Flies a Kite","gold":"The Space Merchants"}
+{"id":35,"accuracy":1,"predictions":"The Killing Doll","gold":"The Killing Doll"}
+{"id":36,"accuracy":1,"predictions":"Protector","gold":"Protector"}
+{"id":37,"accuracy":0,"predictions":"Gaudy Night","gold":"The Sykaos Papers"}
+{"id":39,"accuracy":0,"predictions":"Son of Spellsinger","gold":"Tom Swift in Captivity"}
+{"id":40,"accuracy":1,"predictions":"Janissaries","gold":"Janissaries"}
+{"id":41,"accuracy":0,"predictions":"Gone with the Wind","gold":"Mildred Pierce"}
+{"id":42,"accuracy":0,"predictions":"The Savage Girl","gold":"David Golder"}
+{"id":44,"accuracy":0,"predictions":"Heretics of Dune","gold":"The Scorpion God"}
+{"id":45,"accuracy":0,"predictions":"The Space Merchants","gold":"Original Stories from Real Life"}
+{"id":46,"accuracy":0,"predictions":"Ivanhoe","gold":"The Dragon of the Ishtar Gate"}
+{"id":47,"accuracy":0,"predictions":"Johnny Got His Gun","gold":"Kung Fu High School"}
+{"id":48,"accuracy":1,"predictions":"Someone Comes to Town, Someone Leaves Town","gold":"Someone Comes to Town, Someone Leaves Town"}
+{"id":52,"accuracy":0,"predictions":"Letters of Insurgents","gold":"The Resistance"}
+{"id":53,"accuracy":0,"predictions":"The Narrative of Arthur Gordon Pym of Nantucket","gold":"Castle Rackrent"}
+{"id":54,"accuracy":1,"predictions":"Handles","gold":"Handles"}
+{"id":55,"accuracy":0,"predictions":"Neuromancer","gold":"Le Corps Lesbien"}
+{"id":56,"accuracy":0,"predictions":"Cryptonomicon","gold":"The Beast Within"}
+{"id":57,"accuracy":1,"predictions":"The Proteus Operation","gold":"The Proteus Operation"}
+{"id":61,"accuracy":0,"predictions":"Predator's Gold","gold":"Vision in White"}
+{"id":62,"accuracy":1,"predictions":"War for the Oaks","gold":"War for the Oaks"}
+{"id":63,"accuracy":0,"predictions":"**A Scanner Darkly**","gold":"Mother of Pearl"}
+{"id":64,"accuracy":0,"predictions":"Radio Free Albemuth","gold":"So This Is How It Ends"}
+{"id":65,"accuracy":0,"predictions":"","gold":"The Robber Bride"}
+{"id":66,"accuracy":0,"predictions":"**Pale Fire**","gold":"Storm Born"}
+{"id":69,"accuracy":0,"predictions":"Rosencrantz & Guildenstern Are Dead","gold":"Kane and Abel"}
+{"id":70,"accuracy":0,"predictions":"Ringworld","gold":"Moribito: Guardian of the Spirit"}
+{"id":72,"accuracy":0,"predictions":"Quarantine","gold":"Daedalus"}
