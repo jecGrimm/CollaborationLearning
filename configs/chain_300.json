@@ -10,7 +10,7 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device": "cuda:1",
+    "device": "cuda:0",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",
