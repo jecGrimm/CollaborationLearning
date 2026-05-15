@@ -451,8 +451,8 @@ class Evaluator:
 
                     if i < len(labels):
                         conv_dict["label"] = labels[i]
-                    else:
-                        print("Could not find a label")
+                    #else:
+                        #print("Could not find a label")
                     
                     conv_list.append(conv_dict)
 
@@ -626,8 +626,8 @@ class Evaluator:
             subtitle = subtitle.strip().lower()
             if subtitle in pred.lower() or str(gold_title_id) in pred.lower():
                 return 1
-            else:
-                print("incorrect prediction")
+            # else:
+            #     print("incorrect prediction")
         
         return num_correct
         
@@ -1017,10 +1017,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288"
+    outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_304"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
+    evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
