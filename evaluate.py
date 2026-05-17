@@ -96,6 +96,7 @@ class Evaluator:
         if "run_idx" in self.logger.run_data.keys():
             print(f"{self.logger.run_data['run_idx']}: {acc_mean}")
         else:
+            print(self.experiment_file)
             print(f"accuracy: {acc_mean}")
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
@@ -451,8 +452,8 @@ class Evaluator:
 
                     if i < len(labels):
                         conv_dict["label"] = labels[i]
-                    #else:
-                        #print("Could not find a label")
+                    # else:
+                    #     print("Could not find a label")
                     
                     conv_list.append(conv_dict)
 
@@ -565,7 +566,7 @@ class Evaluator:
                         if type(model_pred[model_i][0]) == str and type(model_pred[model_i][1]) == str:
                             cleaned_pred = list(model_pred[0])
                             type_i = max_i
-                elif pred_type == dict and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
+                elif pred_type in [dict, defaultdict] and "position" in model_pred[model_i].keys() and "sentence" in model_pred[model_i].keys(): # structured discussions
                     hypo = int(model_pred[model_i]["position"])
                     
                     if hypo <= len(cleaned_pred): 
@@ -578,7 +579,8 @@ class Evaluator:
                             self.zero_counter += 1
                 elif pred_type == int:
                     cleaned_pred[model_i] = gold[model_i] # TODO: test
-                elif pred_type == dict and "label" in model_pred[model_i].keys() and "title" in model_pred[model_i].keys():
+                elif pred_type in [dict, defaultdict] and "label" in model_pred[model_i].keys() and "title" in model_pred[model_i].keys():
+                    # TODO: pred_type in [dict, defaultdict]
                     hypo = int(model_pred[model_i]["label"])
 
                     if hypo in [0, 1]:
@@ -1004,9 +1006,10 @@ class Evaluator:
 if __name__ == "__main__":
     #cli = CLI()
 
-    #eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
+    eval = Evaluator(experiment_file="outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253", framework = "single", task = "rocstories")
+    #evaluate("outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253", task = "rocstories", structured=False, framework="single")
 
-    #eval.update_evaluation_files(tasks=["cmu_booksum", "booksum"])
+    eval.update_evaluation_files(splits=["test"], tasks=["rocstories"])
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
@@ -1017,10 +1020,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_304"
+    #outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
-
-    evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
+    
+    #evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")

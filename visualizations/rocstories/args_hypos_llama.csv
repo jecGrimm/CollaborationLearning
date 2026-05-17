@@ -1,0 +1,4 @@
+;format;task;run;accuracy;prec_1;prec_2;prec_3;prec_4;prec_5;spearman;kendalltau;last_accuracy
+0;Hypo;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_272;43.58;91.9;38.45;23.43;17.3;16.5;53.94;47.94;13.76
+1;Full;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285;39.26;95.24;34.33;19.1;13.5;12.3;42.81;37.76;9.78
+2;Args;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288;39.98;93.2;36.33;21.4;15.25;14.4;44.98;40.2;13.24

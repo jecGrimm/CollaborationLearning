@@ -163,7 +163,7 @@ class Vis():
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) == dict and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                        if type(conv_dir) in [dict, defaultdict] and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
                             # Player, sentence, position, time-step
                             if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
                                 correct = "correct"
@@ -663,7 +663,7 @@ class Vis():
     def plot_all_table(self):
         df_experiment_files = pd.read_csv(f"eval/args_hypos_runs_llama_roc.csv", delimiter = ";").set_index("format")
 
-        df_acc = df_experiment_files.map(self.get_avg_acc)
+        df_acc = df_experiment_files.map(self.get_avg_metric)
 
         # plot sankeys
         if self.last == False:
@@ -689,7 +689,10 @@ class Vis():
     def plot_acc_changes(self, run_file):
         df_experiment_files = pd.read_csv(run_file, delimiter = ";")
 
-        df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_acc)
+        df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+
+        # plot_last instead to include last results
+        #df_experiment_files.to_csv(f"./visualizations/{self.task}/args_hypos_llama.csv", sep = ";")
 
         # plot sankeys
         df_dict = df_experiment_files.T.to_dict()
@@ -731,7 +734,10 @@ class Vis():
         return df_acc_changes
 
     def plot_arg_hypo_changes(self):
+        self.task = "rocstories"
         llama_roc = self.plot_acc_changes("eval/args_hypo_runs_llama_roc.csv")
+
+        self.task = "cmu_booksum"
         llama_cmu = self.plot_acc_changes("eval/args_hypo_runs_llama_cmu.csv")
 
         df_list = [llama_roc, llama_cmu]
@@ -784,7 +790,12 @@ class Vis():
 
             self.beliefs_per_turn[belief["turn"]-1] += 1
         
-    def get_avg_acc(self, exp_file):
+    def get_avg_metric(self, exp_file, metric = "accuracy"):
+        if "booksum" in exp_file:
+            self.task = "cmu_booksum"
+        else:
+            self.task = "rocstories"
+
         if self.last and "single" not in exp_file:
             eval_file = f"{exp_file.replace('outputs', 'eval')}_last.jsonl"
         else:
@@ -792,7 +803,11 @@ class Vis():
         
         try:
             eval_data = load_dataset("json", data_files=eval_file, split="train")
-            acc = float(eval_data.with_format("pandas")["accuracy"].mean())
+            
+            if metric in eval_data.features:
+                acc = float(eval_data.with_format("pandas")[metric].mean())
+            else:
+                acc = 0.0
         except:
             if self.last and "single" not in exp_file:
                 acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
@@ -857,7 +872,7 @@ class Vis():
     def plot_distributed_base(self):
         df_experiment_files = pd.read_csv(f"eval/distributed_base_runs.csv", delimiter = ";")
 
-        s_acc = df_experiment_files["output"].map(self.get_avg_acc)
+        s_acc = df_experiment_files["output"].map(self.get_avg_metric)
         df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
 
         # 1. Pivot the data to group by Task on X-axis
@@ -889,7 +904,7 @@ class Vis():
             yticks=np.arange(0, 101, 10), 
             ylabel="Accuracy", 
             rot=0,
-            edgecolor='grey',
+            edgecolor='black',
             xlabel=""
         )
 
@@ -949,26 +964,67 @@ class Vis():
         ax.legend(handles=legend_elements, title = "Model & Setup", loc="upper left")
 
         plt.tight_layout()
-        plt.show()
+        #plt.show()
 
         plt.savefig("./visualizations/distributed_base.png")
+        plt.close()
         #df_acc.plot(kind="bar", x = "task", y = "accuracy", yticks=np.arange(0, 110, 10), xlabel="Task", ylabel="Accuracy", rot = 0)
         df_acc.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
         df_acc.to_latex()
+
+    def plot_last(self):
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_cmu.csv", delimiter = ";")
+
+        self.last = False
+        df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+
+        self.last = True
+        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+
+        print(df_experiment_files)
+
+
+    def plot_dist_metrics(self):
+        df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
+
+        self.last = False
+        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
+        for metric in self.metrics:
+            df_experiment_files[metric] = df_experiment_files["output"].map(lambda x: vis.get_avg_metric(x, metric=metric))
+
+        print(df_experiment_files)
+        df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
+
+    def plot_args_hypos_metrics(self):
+        self.task = "rocstories"
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
+
+        self.last = False
+        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
+        for metric in self.metrics:
+            df_experiment_files[metric] = df_experiment_files["run"].map(lambda x: vis.get_avg_metric(x, metric=metric))
+
+        self.last = True
+        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+        
+        print(df_experiment_files)
+        df_experiment_files.to_csv("./visualizations/rocstories/args_hypos_llama.csv", sep = ";")
 
 if __name__ == "__main__":
 
     # for last in [False, True]:
     #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
     #     vis.plot_all_table()
-    # experiment_files = {
+    #experiment_files = {
     #     "single":"outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264",
     #     "MAS": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265"
     # }
-    vis = Vis()
-    #vis.plot_distributed_base()
-    vis.plot_arg_hypo_changes()
-    #vis.plot_acc_changes("eval/args_hypo_runs_llama_roc.csv")
+
+    vis = Vis(task="rocstories", last = False)
+    #vis.plot_dist_metrics()
+    #vis.plot_args_hypos_metrics()
+    vis.plot_distributed_base()
+    #vis.plot_arg_hypo_changes()
 
     #   vis.perform_ttest(comparison="single")
 

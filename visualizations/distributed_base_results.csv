@@ -4,7 +4,7 @@
 2;Llama-3.1-8B-Instruct;MAS;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_257;31.72
 3;Qwen3-32B;Single;ROCStories;outputs/single/Qwen3-32B/rocstories/test/outputs_254;81.84
 4;Qwen3-32B;MAS;ROCStories;outputs/multi/Qwen3-32B/test/outputs_258_259;59.92
-5;Random;random;CMU Booksum;outputs/random/cmu_booksum/test;32.0
+5;Random;random;CMU Booksum;outputs/random/cmu_booksum/test;33.7
 6;Llama-3.1-8B-Instruct;Single;CMU Booksum;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264;35.3
 7;Llama-3.1-8B-Instruct;MAS;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265;41.7
 8;Qwen3-32B;Single;CMU Booksum;outputs/single/Qwen3-32B/booksum/test/outputs_269;38.7
