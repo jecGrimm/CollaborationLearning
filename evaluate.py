@@ -639,7 +639,6 @@ class Evaluator:
 
         spearman = 0.0 # 0.0 because it indicates no correlation and because Huggingface does not allow differing data formats (e.g., None)
         kendall = 0.0
-
         gold_ranks = [1, 2, 3, 4, 5]
         pred_ranks = []
 
@@ -1006,10 +1005,9 @@ class Evaluator:
 if __name__ == "__main__":
     #cli = CLI()
 
-    eval = Evaluator(experiment_file="outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253", framework = "single", task = "rocstories")
-    #evaluate("outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253", task = "rocstories", structured=False, framework="single")
+    eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
 
-    eval.update_evaluation_files(splits=["test"], tasks=["rocstories"])
+    eval.update_evaluation_files(tasks=["rocstories", "cmu_booksum", "booksum"], splits=["test"])
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
@@ -1020,10 +1018,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    #outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288"
+    #outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_307"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
-    
-    #evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
+
+    #evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")

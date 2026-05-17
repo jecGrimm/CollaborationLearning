@@ -2,7 +2,7 @@
     "task": "text-generation",
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/ckps/outputs_307_1",
+    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_307",
     "batch_size": 1,
     "model_id": "meta-llama/Llama-3.1-8B-Instruct",
     "desc": "This run tests the chain setup with 1024 tokens with meta-llama/Llama-3.1-8B-Instruct.",
@@ -97,5 +97,10 @@
     "top_k": 50,
     "min_p": null,
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl",
-    "instances": 500
+    "instances": 1000,
+    "duration": 218551.8505859375,
+    "mean_acc": 0.291,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 1.61
 }

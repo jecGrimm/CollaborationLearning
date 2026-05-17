@@ -2,7 +2,7 @@
     "task": "text-generation",
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_297_2",
+    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_297",
     "batch_size": 1,
     "model_id": "meta-llama/Llama-3.1-8B-Instruct",
     "desc": "This run tests the chain setup with 1024 tokens with meta-llama/Llama-3.1-8B-Instruct.",
@@ -99,5 +99,10 @@
     "top_k": 50,
     "min_p": null,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_test.jsonl",
-    "instances": 750
+    "instances": 1000,
+    "duration": 288702.9536476135,
+    "mean_acc": 0.0038,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.4008
 }
