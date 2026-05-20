@@ -4,6 +4,7 @@ import json
 import csv
 import pandas as pd
 import re
+import wandb
 
 class ExperimentLog:
     def __init__(self, config: dict = None):
@@ -13,14 +14,15 @@ class ExperimentLog:
         @params
             config: configuration data that should be logged
         """
-        # self.run = wandb.init(
-        #     # Set the wandb entity where your project will be logged (generally your team name).
-        #     entity="j-grimm-ludwig-maximilian-university-of-munich",
-        #     # Set the wandb project where this run will be logged.
-        #     project="CollaborationLearning",
-        #     # Track hyperparameters and run metadata.
-        #     config=config
-        # )
+        wandb.login()
+        self.run = wandb.init(
+            # Set the wandb entity where your project will be logged (generally your team name).
+            entity="j-grimm-ludwig-maximilian-university-of-munich",
+            # Set the wandb project where this run will be logged.
+            project="CollaborationLearning",
+            # Track hyperparameters and run metadata.
+            config=config
+        )
 
         # self.output_artifact = wandb.Artifact(name="output", type="dataset")
         
@@ -89,7 +91,8 @@ class ExperimentLog:
         os.makedirs(run_dir, exist_ok=True)
 
         # assign run_idx
-        self.get_run_idx()
+        run_idx = self.get_run_idx()
+        self.run.name = str(run_idx)
 
         # save run data in json file
         with open(f"{run_dir}/{self.run_data['run_idx']}.json", "w", encoding="utf-8") as f:

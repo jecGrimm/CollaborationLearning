@@ -7,7 +7,7 @@ def get_sent_list(batch, i):
     return [batch["sentence1"][i], batch["sentence2"][i], batch["sentence3"][i], batch["sentence4"][i], batch["sentence5"][i]]
 
 class ROCStories:
-    def __init__(self, shuffle = False, split = "mini", variation = False, start = 0, end = None):
+    def __init__(self, shuffle = False, split = "mini", variation = False, start = 0, end = None, version_idx = 0):
         '''
         This constructor loads the original ROCStories data and creates the shuffled dataset.
 
@@ -18,12 +18,18 @@ class ROCStories:
             self.orig_dataset = load_dataset("csv", data_files="data/rocstories/ROCStories_winter2017 - ROCStories_winter2017.csv", split="train")
 
             # load shuffled data
-            self.shuffle_file = "./data/rocstories/ROCStories_shuffled_" + split + ".jsonl"
+            if version_idx == 0:
+                self.shuffle_file = "./data/rocstories/ROCStories_shuffled_" + split + ".jsonl"
+            else:
+                self.shuffle_file = "./data/rocstories/ROCStories_shuffled_" + split + f"_{version_idx}.jsonl"
         else:
             self.orig_dataset = load_dataset("csv", data_files="data/rocstories/example_good_short_stories - story_modeling_full_scale_123_hits.csv", split="train")
 
             # load shuffled data
-            self.shuffle_file = "./data/rocstories/ROCStories_shuffled_no_variation_" + split + ".jsonl"
+            if version_idx == 0:
+                self.shuffle_file = "./data/rocstories/ROCStories_shuffled_no_variation_" + split + ".jsonl"
+            else:
+                self.shuffle_file = "./data/rocstories/ROCStories_shuffled_no_variation_" + split + f"_{version_idx}.jsonl"
 
         if not end:
             if split == "mini":
@@ -45,7 +51,8 @@ class ROCStories:
             self.shuffled_dataset = self.orig_dataset.map(self.shuffle_sents, batched = True)
             # JSON because of list of shuffled sentences
 
-            self.shuffled_dataset.select(range(start, end)).to_json(self.shuffle_file, indent=4)
+            self.shuffled_dataset = self.shuffled_dataset.select(range(start, end))
+            self.shuffled_dataset.to_json(self.shuffle_file)
         else:
             self.shuffled_dataset = load_dataset("json", data_files=self.shuffle_file, split="train")
 
@@ -76,6 +83,7 @@ class CMUBookSum:
         @param
             shuffle: False -> Do not create shuffled data else True
         '''
+        # TODO: new shuffle files
         self.orig_dataset = load_dataset("Iliasselyaa/CMUBookSummaryDataset", split = "train")
 
         self.split = split
@@ -100,7 +108,8 @@ class CMUBookSum:
             self.genre_data = self.genre_data.remove_columns(["wikipedia_id", "freebase_id", "author", "publication_date"])
             self.arranged_data = self.genre_data.map(lambda x: self.arrange_data(x))
 
-            self.arranged_data.select(range(start, end)).to_json(self.arranged_file)
+            self.arranged_data = self.arranged_data.select(range(start, end)) # TODO: save select in dataset
+            self.arranged_data.select(range(start, end)).to_json(self.arranged_file) 
         else:
             if not end:
                 if split == "mini":
@@ -167,16 +176,16 @@ class CMUBookSum:
 
 
 if __name__ == "__main__":
-    # rocdata = ROCStories(shuffle=False, split = "mini", variation = True, start=0, end=3)
+    rocdata = ROCStories(shuffle=False, split = "test", variation = True, start=0, end=1000, version_idx=2)
     # print(len(rocdata.orig_dataset))
-    #outpath = "outputs/random/cmu_booksum/test"
+    outpath = "outputs/random/rocstories/test_2"
 
-    # roc_data.shuffled_dataset.save_to_disk(outpath)
+    rocdata.shuffled_dataset.save_to_disk(outpath)
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
 
-    book_data = CMUBookSum(arrange=False, split = "mini")
-    print(len(book_data.orig_dataset))
+    #book_data = CMUBookSum(arrange=False, split = "mini")
+    #print(len(book_data.orig_dataset))
     # book_data.arranged_data.save_to_disk(outpath)
 
     print("Done")

@@ -1,16 +1,17 @@
 {
-    "task": "cmu_booksum",
+    "task": "rocstories",
+    "version_idx": 1,
     "split": "mini",
     "framework": "single",
-    "experiment_file": "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260",
-    "batch_size": 1,
+    "experiment_file": "",
+    "batch_size": 3,
     "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-    "desc": "This run tests the single setup with Llama-3.1-1B-Instruct on cmu_booksum.",
-    "candidate": "cmu_single_unstructured",
+    "desc": "This run tests the single setup with Llama-3.1-1B-Instruct.",
+    "candidate": "single_unstructured",
     "thinking_budget": 0.0,
     "conversation_rounds": 0,
     "variation": "True",
-    "device_id": "",
+    "device": "mig",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "",
@@ -19,5 +20,5 @@
     "output_format": "",
     "start": 0,
     "end": 3,
-    "run_idx": 260
+    "run_idx": 1
 }

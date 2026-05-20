@@ -92,6 +92,7 @@ class Evaluator:
         acc_mean = float(self.eval_data.with_format("pandas")["accuracy"].mean())
 
         self.logger.run_data.update({"mean_acc": acc_mean})
+        self.logger.run.log({"mean_acc": acc_mean})
 
         if "run_idx" in self.logger.run_data.keys():
             print(f"{self.logger.run_data['run_idx']}: {acc_mean}")
@@ -1004,9 +1005,9 @@ class Evaluator:
 if __name__ == "__main__":
     #cli = CLI()
 
-    eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
+    #eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
 
-    eval.update_evaluation_files(tasks=["rocstories", "cmu_booksum", "booksum"], splits=["test"])
+    #eval.update_evaluation_files(tasks=["rocstories", "cmu_booksum", "booksum"], splits=["test"])
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
     #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
 
@@ -1017,10 +1018,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    #outdir = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_307"
+    outdir = "./outputs/random/rocstories/test_2"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    #evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True)
+    evaluate(outfile = outdir,framework= "random", task = "rocstories", structured=False)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")

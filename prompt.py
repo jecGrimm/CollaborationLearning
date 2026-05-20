@@ -279,7 +279,7 @@ class SingleAgent(Agent):
 
         return {"prompt": batch_messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None, version_idx = 0):
         """
         This method prompts the model.
 
@@ -294,7 +294,7 @@ class SingleAgent(Agent):
     
         # prepare prompts
         if self.task == "rocstories":
-            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
             logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
             prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
@@ -1146,7 +1146,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
+    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None, version_idx: int = 0):
         """
         This function prompts the multi-agent framework.
 
@@ -1162,7 +1162,7 @@ class MultiAgent(Agent):
         
         # prepare dataset
         if self.task == "rocstories":
-            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
             logger.run_data.update({
                 "shuffle_file": roc_data.shuffle_file, 
                 "batch_size": batch_size, 
@@ -1298,7 +1298,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end) # TODO: ADD version_idx
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -1389,7 +1389,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end)
+        roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end) # TODO: ADD version_idx
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -1502,7 +1502,7 @@ class MultiAgent(Agent):
         pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
         
         # prepare dataset
-        roc_data = ROCStories(split = self.split, variation = variation)
+        roc_data = ROCStories(split = self.split, variation = variation) # TODO: ADD version_idx
         logger.run_data.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
@@ -1586,7 +1586,7 @@ class MultiAgent(Agent):
 
     
 if __name__ == "__main__":
-    roc_data = ROCStories(split = "dev")
+    roc_data = ROCStories(split = "dev") # TODO: ADD version_idx
     multi = MultiAgent(model_id = "Qwen/Qwen3-0.6B", split = "dev")
 
     prompt_data = load_from_disk("outputs/multi/Qwen3-32B/dev/outputs_88")
