@@ -60,7 +60,7 @@ class Evaluator:
         if self.task == "rocstories":
             self.pred_len = 5
         else:
-            self.pred_len = 1
+            self.pred_len = 3
         
     def initiate_metric_lists(self):
         self.pred_lists = []
@@ -580,7 +580,6 @@ class Evaluator:
                 elif pred_type == int:
                     cleaned_pred[model_i] = gold[model_i] # TODO: test
                 elif pred_type in [dict, defaultdict] and "label" in model_pred[model_i].keys() and "title" in model_pred[model_i].keys():
-                    # TODO: pred_type in [dict, defaultdict]
                     hypo = int(model_pred[model_i]["label"])
 
                     if hypo in [0, 1]:
@@ -931,7 +930,7 @@ class Evaluator:
             preds = exp_beliefs.map(self.create_pred_from_belief_cmu, batched = False)
             self.eval_data = preds.map(lambda batch: self.calculate_metrics_cmu(batch), batched = True)
         
-        self.save_eval_data(f"{self.experiment_file.replace('outputs', 'eval')}_last.jsonl")
+        self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
 
         acc_mean = self.report_accuracy()
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:

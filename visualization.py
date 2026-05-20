@@ -88,13 +88,13 @@ class Vis():
             else:
                 fw = "multi"
 
-            evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last)
+            evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last, task = self.task)
             
             if self.last and fw == "multi":
                 evaluator.evaluate_last_beliefs()
             else:
                 evaluator.evaluate_sent_order()
-            return load_dataset("json", data_files=eval_file, split="train")
+            return evaluator.eval_data
 
     def plot_performance(self):
         for metric in self.metrics:
@@ -750,7 +750,8 @@ class Vis():
         color_map = {
             'Hypo': '#cbb2ff',
             'Full': '#93c4d5',  
-            'Args': '#ffc7a2'               
+            'Args': '#ffc7a2',
+            'Reject': '#'#TODO:                           
         }
         subtitle = ["ROCStories", "CMU_Booksum"]
         for c in range(ncol):
@@ -801,20 +802,20 @@ class Vis():
         else:
             eval_file = f"{exp_file.replace('outputs', 'eval')}.jsonl"
         
-        try:
-            eval_data = load_dataset("json", data_files=eval_file, split="train")
+        # try:
+        #     eval_data = load_dataset("json", data_files=eval_file, split="train")
             
-            if metric in eval_data.features:
-                acc = float(eval_data.with_format("pandas")[metric].mean())
-            else:
-                acc = 0.0
-        except:
-            if self.last and "single" not in exp_file:
-                acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
-                acc = acc_last
-            else:
-                acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = False)
-                acc = acc_mean
+        #     if metric in eval_data.features:
+        #         acc = float(eval_data.with_format("pandas")[metric].mean())
+        #     else:
+        #         acc = 0.0
+        # except:
+        if self.last and "single" not in exp_file:
+            acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
+            acc = acc_last
+        else:
+            acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = False)
+            acc = acc_mean
 
         return round(acc*100, 2)
     
@@ -969,8 +970,8 @@ class Vis():
         plt.savefig("./visualizations/distributed_base.png")
         plt.close()
         #df_acc.plot(kind="bar", x = "task", y = "accuracy", yticks=np.arange(0, 110, 10), xlabel="Task", ylabel="Accuracy", rot = 0)
-        df_acc.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
-        df_acc.to_latex()
+        #df_acc.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
+        #df_acc.to_latex()
 
     def plot_last(self):
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_cmu.csv", delimiter = ";")
@@ -979,7 +980,7 @@ class Vis():
         df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
 
         self.last = True
-        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric) # last accuracy stimmt nicht
 
         print(df_experiment_files)
 
@@ -993,7 +994,7 @@ class Vis():
             df_experiment_files[metric] = df_experiment_files["output"].map(lambda x: vis.get_avg_metric(x, metric=metric))
 
         print(df_experiment_files)
-        df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
+        df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";") # multi:stimmt nicht
 
     def plot_args_hypos_metrics(self):
         self.task = "rocstories"
@@ -1021,10 +1022,10 @@ if __name__ == "__main__":
     # }
 
     vis = Vis(task="rocstories", last = False)
-    #vis.plot_dist_metrics()
+    # vis.plot_dist_metrics()
     #vis.plot_args_hypos_metrics()
-    vis.plot_distributed_base()
-    #vis.plot_arg_hypo_changes()
+    #vis.plot_distributed_base()
+    vis.plot_arg_hypo_changes()
 
     #   vis.perform_ttest(comparison="single")
 

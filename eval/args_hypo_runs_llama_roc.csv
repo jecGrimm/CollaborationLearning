@@ -2,3 +2,7 @@ format;task;run
 Hypo;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_272
 Full;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285
 Args;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288
+Reject;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302
+Support;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_303
+Correct;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_296
+Incorrect;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_297
