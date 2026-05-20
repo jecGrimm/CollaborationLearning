@@ -5,6 +5,7 @@ import csv
 import pandas as pd
 import re
 import wandb
+import torch
 
 class ExperimentLog:
     def __init__(self, config: dict = None):
@@ -32,6 +33,9 @@ class ExperimentLog:
         # log config data
         if config:
             self.run_data.update(config)
+            self.run.config.update(config)
+
+            self.run.config.update({"GPU": torch.cuda.get_device_name(torch.cuda.current_device())})
 
             # Assign and print run_idx
             self.store_run_data()
@@ -46,6 +50,7 @@ class ExperimentLog:
             single: object of the class Single
         """
         self.run_data.update({"user_prompt": single.PROMPT.replace("\n", "\\n")})
+        self.run.config.update({"user_prompt": single.PROMPT.replace("\n", "\\n")})
 
     def log_multi(self, multi):
         """
@@ -60,6 +65,13 @@ class ExperimentLog:
         self.run_data.update({"rules": multi.RULES.replace("\n", "\\n")})
         self.run_data.update({"names": multi.NAMES})
         self.run_data.update({"conversation_rounds": multi.conversation_rounds})
+
+        self.run.config.update({"system_prompt": multi.SYSTEM_PROMPT.replace("\n", "\\n")})
+        self.run.config.update({"start_prompt": multi.START_PROMPT.replace("\n", "\\n")})
+        self.run.config.update({"mid_prompt": multi.MID_PROMPT.replace("\n", "\\n")})
+        self.run.config.update({"rules": multi.RULES.replace("\n", "\\n")})
+        self.run.config.update({"names": multi.NAMES})
+        self.run.config.update({"conversation_rounds": multi.conversation_rounds})
 
     def log_pipe(self, pipe):
         """
@@ -82,6 +94,21 @@ class ExperimentLog:
             "top_k": pipe.generation_config.top_k,
             "min_p": pipe.generation_config.min_p
         })
+
+        self.run.config.update({
+            "pipe_task": pipe.task,
+            "model": pipe.model.config.to_dict(),
+            "torch_dtype": str(pipe.torch_dtype),
+            "device_map": pipe.device.type,
+            "do_sample": pipe.generation_config.do_sample,
+            "num_beams": pipe.generation_config.num_beams,
+            "temperature": pipe.generation_config.temperature,
+            "max_new_tokens": pipe.generation_config.max_new_tokens,
+            "length_penalty": pipe.generation_config.length_penalty,
+            "top_p": pipe.generation_config.top_p,
+            "top_k": pipe.generation_config.top_k,
+            "min_p": pipe.generation_config.min_p
+        }, allow_val_change=True)
 
     def store_run_data(self):
         """

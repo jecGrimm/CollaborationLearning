@@ -296,11 +296,13 @@ class SingleAgent(Agent):
         if self.task == "rocstories":
             roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
             logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
+            logger.run.config.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
             prompt_data = roc_data.shuffled_dataset.map(self.create_message, batched=True)
         else:
             booksum_data = CMUBookSum(split = self.split, start = start, end = end)
             logger.run_data.update({"arranged_file": booksum_data.arranged_file, "batch_size": batch_size})
+            logger.run.config.update({"arranged_file": booksum_data.arranged_file, "batch_size": batch_size})
 
             prompt_data = booksum_data.arranged_data.map(self.create_message_booksum, batched=True)
 
@@ -345,6 +347,7 @@ class SingleAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
 
             logger.store_run_data()
 
@@ -369,6 +372,7 @@ class SingleAgent(Agent):
         # output_data.to_json(outfile, indent=4)
         outpath = self.save_outputs_hf(logger, output_data)
         logger.run_data.update({"instances": len(full_output_list), "experiment_file": outpath})
+        logger.run.log({"instances": len(full_output_list), "experiment_file": outpath})
 
         logger.store_run_data()
 
@@ -413,6 +417,7 @@ class MultiAgent(Agent):
         self.structured = structured
 
         if self.task == "rocstories":
+
             self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
             if output_format == "full":
                 self.OUTPUT_FORMAT = "{{\n'sentence': '{sentence}',\n'reasoning': '<reasoning about the story>',\n'argument_1': '<argument for the first position>',\n'argument_2': '<argument for the second position>',\n'argument_3': '<argument for the third position>',\n'argument_4': '<argument for the fourth position>',\n'argument_5': '<argument for the fifth position>',\n'position': <number of the position>\n}}"
@@ -1168,11 +1173,21 @@ class MultiAgent(Agent):
                 "batch_size": batch_size, 
                 "conversation_rounds": self.conversation_rounds
             })
+            logger.run.config.update({
+                "shuffle_file": roc_data.shuffle_file, 
+                "batch_size": batch_size, 
+                "conversation_rounds": self.conversation_rounds
+            })
 
             prompt_data = roc_data.shuffled_dataset
         else:
             cmu_data = CMUBookSum(split = self.split, start = start, end = end)
             logger.run_data.update({
+                "arranged_file": cmu_data.arranged_file, 
+                "batch_size": batch_size, 
+                "conversation_rounds": self.conversation_rounds
+            })
+            logger.run.config.update({
                 "arranged_file": cmu_data.arranged_file, 
                 "batch_size": batch_size, 
                 "conversation_rounds": self.conversation_rounds
@@ -1271,6 +1286,7 @@ class MultiAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
             
             logger.store_run_data()
 
@@ -1281,6 +1297,7 @@ class MultiAgent(Agent):
         #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath})
         logger.store_run_data()
 
     def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
@@ -1304,6 +1321,12 @@ class MultiAgent(Agent):
             "batch_size": batch_size, 
             "conversation_rounds": self.conversation_rounds
         })
+        logger.run.config.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conversation_rounds": self.conversation_rounds
+        })
+
 
         prompt_data = roc_data.shuffled_dataset
         full_output = None
@@ -1362,6 +1385,7 @@ class MultiAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
             
             logger.store_run_data()
 
@@ -1372,6 +1396,7 @@ class MultiAgent(Agent):
         #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath})
         logger.store_run_data()
 
     def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: str = 0, end = None):
@@ -1391,6 +1416,11 @@ class MultiAgent(Agent):
         # prepare dataset
         roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end) # TODO: ADD version_idx
         logger.run_data.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conversation_rounds": self.conversation_rounds
+        })
+        logger.run.config.update({
             "shuffle_file": roc_data.shuffle_file, 
             "batch_size": batch_size, 
             "conversation_rounds": self.conversation_rounds
@@ -1453,6 +1483,7 @@ class MultiAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
             
             logger.store_run_data()
 
@@ -1461,6 +1492,7 @@ class MultiAgent(Agent):
 
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath})
         logger.store_run_data()
 
     def define_roles(self, batch):
@@ -1509,6 +1541,12 @@ class MultiAgent(Agent):
             "conv_file": conv_file,
             "conv_final": conv_final
         })
+        logger.run.config.update({
+            "shuffle_file": roc_data.shuffle_file, 
+            "batch_size": batch_size, 
+            "conv_file": conv_file,
+            "conv_final": conv_final
+        })
 
         prompt_data = load_from_disk(conv_file)
 
@@ -1537,6 +1575,7 @@ class MultiAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
             
             logger.store_run_data()
 
@@ -1545,6 +1584,7 @@ class MultiAgent(Agent):
 
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath})
         logger.store_run_data()
 
     def remove_final(self, batch):

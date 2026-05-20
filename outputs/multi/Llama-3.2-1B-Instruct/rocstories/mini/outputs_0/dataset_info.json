@@ -6,7 +6,7 @@
   "dataset_size": 1759,
   "description": "",
   "download_checksums": {
-    "/nfs/gdata/jgrimm/CollaborationLearning/./data/rocstories/ROCStories_shuffled_mini.jsonl": {
+    "/nfs/gdata/jgrimm/CollaborationLearning/./data/rocstories/ROCStories_shuffled_mini_1.jsonl": {
       "num_bytes": 2023,
       "checksum": null
     }

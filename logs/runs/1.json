@@ -89,8 +89,8 @@
     "min_p": null,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_mini_1.jsonl",
     "instances": 3,
-    "duration": 2.134049892425537,
-    "mean_acc": 0.20000000000000004,
+    "duration": 6.6800713539123535,
+    "mean_acc": 0.26666666666666666,
     "zero_percentage": 0.0,
     "double_percentage": 0.0,
     "wrong_format": 0.0

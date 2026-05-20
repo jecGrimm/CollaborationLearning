@@ -91,8 +91,12 @@ class Evaluator:
         # report mean accuracy
         acc_mean = float(self.eval_data.with_format("pandas")["accuracy"].mean())
 
-        self.logger.run_data.update({"mean_acc": acc_mean})
-        self.logger.run.log({"mean_acc": acc_mean})
+        if self.last:
+            self.logger.run_data.update({"last_mean_acc": acc_mean})
+            self.logger.run.log({"last_mean_acc": acc_mean}) # TODO: last accuracy
+        else:
+            self.logger.run_data.update({"mean_acc": acc_mean})
+            self.logger.run.log({"mean_acc": acc_mean}) # TODO: last accuracy
 
         if "run_idx" in self.logger.run_data.keys():
             print(f"{self.logger.run_data['run_idx']}: {acc_mean}")
@@ -104,12 +108,15 @@ class Evaluator:
 
         print("zero percentage:", self.zero_counter/(len(self.eval_data)*5))
         self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
+        self.logger.run.log({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
 
         print("double percentage:", self.double_counter/(len(self.eval_data)*5))
         self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
+        self.logger.run.log({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
 
         print("wrong format:", self.wrong_format/(len(self.eval_data)*5))
         self.logger.run_data.update({"wrong_format": self.wrong_format/(len(self.eval_data)*self.pred_len)})
+        self.logger.run.log({"wrong_format": self.wrong_format/(len(self.eval_data)*self.pred_len)})
 
         return acc_mean
 
