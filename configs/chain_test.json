@@ -11,7 +11,7 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-    "device": "mig",
+    "device": "hpc",
     "final_reorder": "True",
     "conv_file": "",
     "topology": "chain",

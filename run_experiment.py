@@ -21,6 +21,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
     #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     # saves computation time
+    print(torch.cuda.is_available())
     torch.set_grad_enabled(False)
     os.environ["HF_DATASETS_CACHE"] = "/nfs/gdata/jgrimm/hf_cache/dataset_cache" # TODO: Doku remove
     os.environ["HF_HUB_CACHE"] = "/nfs/gdata/llms/hf-models/model/" # TODO: Doku remove

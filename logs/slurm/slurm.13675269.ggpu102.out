@@ -1,0 +1,134 @@
+================================================================================
+JobID = 13675269
+User = u27794, Account = nhr_by_starter_26900
+Partition = grete:shared, Nodelist = ggpu102
+================================================================================
+Current run_idx: 0
+
+Batch size: 3
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/run_experiment.py", line 180, in <module>
+    run_experiment(cli.config)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/run_experiment.py", line 47, in run_experiment
+    multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/prompt.py", line 1034, in prompt_chain
+    pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/prompt.py", line 52, in init_pipe
+    pipe = pipeline(
+           ^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/__init__.py", line 1002, in pipeline
+    model = load_model(
+            ^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/base.py", line 268, in load_model
+    raise ValueError(
+ValueError: Could not load model meta-llama/Llama-3.2-1B-Instruct with any of the following classes: (<class 'transformers.models.auto.modeling_auto.AutoModelForCausalLM'>, <class 'transformers.models.llama.modeling_llama.LlamaForCausalLM'>). See the original errors:
+
+while loading with AutoModelForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/base.py", line 232, in load_model
+    model = model_class.from_pretrained(model, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 394, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4245, in from_pretrained
+    loading_info, disk_offload_index = cls._load_pretrained_model(model, state_dict, checkpoint_files, load_config)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4326, in _load_pretrained_model
+    caching_allocator_warmup(model, expanded_device_map, load_config.hf_quantizer)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4949, in caching_allocator_warmup
+    free_device_memory, total_device_memory = accelerator_module.mem_get_info(index)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/memory.py", line 842, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 555, in cudart
+    _lazy_init()
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 478, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: The NVIDIA driver on your system is too old (found version 12080). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/base.py", line 248, in load_model
+    model = model_class.from_pretrained(model, **fp32_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/models/auto/auto_factory.py", line 394, in from_pretrained
+    return model_class.from_pretrained(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4245, in from_pretrained
+    loading_info, disk_offload_index = cls._load_pretrained_model(model, state_dict, checkpoint_files, load_config)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4326, in _load_pretrained_model
+    caching_allocator_warmup(model, expanded_device_map, load_config.hf_quantizer)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4949, in caching_allocator_warmup
+    free_device_memory, total_device_memory = accelerator_module.mem_get_info(index)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/memory.py", line 842, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 555, in cudart
+    _lazy_init()
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 478, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: The NVIDIA driver on your system is too old (found version 12080). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver.
+
+while loading with LlamaForCausalLM, an error is thrown:
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/base.py", line 232, in load_model
+    model = model_class.from_pretrained(model, **kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4245, in from_pretrained
+    loading_info, disk_offload_index = cls._load_pretrained_model(model, state_dict, checkpoint_files, load_config)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4326, in _load_pretrained_model
+    caching_allocator_warmup(model, expanded_device_map, load_config.hf_quantizer)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4949, in caching_allocator_warmup
+    free_device_memory, total_device_memory = accelerator_module.mem_get_info(index)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/memory.py", line 842, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 555, in cudart
+    _lazy_init()
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 478, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: The NVIDIA driver on your system is too old (found version 12080). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/pipelines/base.py", line 248, in load_model
+    model = model_class.from_pretrained(model, **fp32_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4245, in from_pretrained
+    loading_info, disk_offload_index = cls._load_pretrained_model(model, state_dict, checkpoint_files, load_config)
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4326, in _load_pretrained_model
+    caching_allocator_warmup(model, expanded_device_map, load_config.hf_quantizer)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/modeling_utils.py", line 4949, in caching_allocator_warmup
+    free_device_memory, total_device_memory = accelerator_module.mem_get_info(index)
+                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/memory.py", line 842, in mem_get_info
+    return torch.cuda.cudart().cudaMemGetInfo(device)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 555, in cudart
+    _lazy_init()
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py", line 478, in _lazy_init
+    torch._C._cuda_init()
+RuntimeError: The NVIDIA driver on your system is too old (found version 12080). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver.
+
+
+
+srun: error: ggpu102: task 0: Exited with exit code 1
+srun: Terminating StepId=13675269.0
+============ Job Information ===================================================
+Submitted: 2026-05-06T13:24:56
+Started: 2026-05-06T13:25:07
+Ended: 2026-05-06T13:27:46
+Elapsed: 3 min, Limit: 2880 min, Difference: 2877 min
+CPUs: 8, Nodes: 1
+Estimated credit Consumption: 7.50 core-hours
+================================================================================
