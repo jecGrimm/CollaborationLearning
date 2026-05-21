@@ -15,7 +15,7 @@ class ExperimentLog:
         @params
             config: configuration data that should be logged
         """
-        wandb.login()
+        #wandb.login()
         self.run = wandb.init(
             # Set the wandb entity where your project will be logged (generally your team name).
             entity="j-grimm-ludwig-maximilian-university-of-munich",

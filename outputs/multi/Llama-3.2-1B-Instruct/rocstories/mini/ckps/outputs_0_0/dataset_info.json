@@ -6,7 +6,7 @@
   "dataset_size": 1759,
   "description": "",
   "download_checksums": {
-    "/nfs/gdata/jgrimm/CollaborationLearning/./data/rocstories/ROCStories_shuffled_mini_1.jsonl": {
+    "/nfs/gdata/jgrimm/CollaborationLearning/./data/rocstories/ROCStories_shuffled_mini.jsonl": {
       "num_bytes": 2023,
       "checksum": null
     }
@@ -71,23 +71,23 @@
       "_type": "List"
     },
     "roles": {
-      "a critic": {
+      "Player 1": {
         "dtype": "string",
         "_type": "Value"
       },
-      "a journalist": {
+      "Player 2": {
         "dtype": "string",
         "_type": "Value"
       },
-      "a linguistic expert": {
+      "Player 3": {
         "dtype": "string",
         "_type": "Value"
       },
-      "a literary scholar": {
+      "Player 4": {
         "dtype": "string",
         "_type": "Value"
       },
-      "a novelist": {
+      "Player 5": {
         "dtype": "string",
         "_type": "Value"
       }

@@ -42,16 +42,16 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"], task=config["task"])
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"], task=config["task"], final = config["final"]) # TODO: final
 
             logger.log_multi(multi)
 
             if config["topology"] == "chain":
-                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+                multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"], version_idx = config["version_idx"])
             elif config["topology"] == "graph":
-                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+                multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"]) # TODO: ADD version_idx
             else:
-                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+                multi.prompt_panel(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"]) # TODO: ADD version_idx
 
             outfile = multi.define_outfile(logger, hf = True)
 

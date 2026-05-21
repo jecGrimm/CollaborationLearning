@@ -100,21 +100,21 @@
       "_type": "List"
     },
     "roles": {
-      "a critic": {
+      "Player 1": {
         "feature": {
           "dtype": "string",
           "_type": "Value"
         },
         "_type": "List"
       },
-      "a literary scholar": {
+      "Player 2": {
         "feature": {
           "dtype": "string",
           "_type": "Value"
         },
         "_type": "List"
       },
-      "a novelist": {
+      "Player 3": {
         "feature": {
           "dtype": "string",
           "_type": "Value"

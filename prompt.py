@@ -377,7 +377,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full", task: str = "rocstories"):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full", task: str = "rocstories", final: bool = True):
         """
         This class defines multi-agents.
 
@@ -404,12 +404,16 @@ class MultiAgent(Agent):
 
         self.RULES = self.prompt_candidates[prompt_candidate]["rules"]
 
-        self.SYSTEM_FINAL = self.prompt_candidates[prompt_candidate]["system_final"]
-
-        self.FINAL = self.prompt_candidates[prompt_candidate]["final"]
+        self.use_final = final
+        if final:
+            self.SYSTEM_FINAL = self.prompt_candidates[prompt_candidate]["system_final"]
+            self.FINAL = self.prompt_candidates[prompt_candidate]["final"]
 
         # define player names
-        self.NAMES = self.prompt_candidates[prompt_candidate]["names"]
+        try:
+            self.NAMES = self.prompt_candidates[prompt_candidate]["names"]
+        except:
+            self.NAMES = None
         #self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
         self.conversation_rounds = conversation_rounds 
@@ -417,6 +421,7 @@ class MultiAgent(Agent):
         self.structured = structured
 
         if self.task == "rocstories":
+            self.num_agents = 6 
 
             self.OUTPUT_FORMAT_HYPO = "{{\n'sentence': '{sentence}',\n'position': <number of the position>\n}}"
             if output_format == "full":
@@ -428,6 +433,8 @@ class MultiAgent(Agent):
             elif output_format == "reject":
                 self.OUTPUT_FORMAT = "[\n{{\n'sentence': '{sentence1}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence2}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence3}'\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence4}',\n'reason': <reason against the position>,\n'position': <number of the position>\n}},\n{{\n'sentence': '{sentence5}',\n'reason': <reason against the position>,\n'position': <number of the position>}}\n]" 
         else:
+            self.num_agents = 4
+
             if not self.structured:
                 if output_format == "hypo":
                     self.OUTPUT_FORMAT = "[\n{{\n'title': '{title1}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title2}',\n'label': '<label odd-one>'\n}},\n{{\n'title': '{title3}',\n'label': '<label odd-one>'\n}}\n]" 
@@ -450,7 +457,10 @@ class MultiAgent(Agent):
             message: list of system and user prompt
         """
         # define agent state
-        other_players = [name for name in self.NAMES if name != player_name] 
+        if self.NAMES:
+            other_players  = [name for name in self.NAMES if name != player_name] # TODO: base
+        else:
+            other_players = None # TODO: base
         
         if not final:
             player_sent = ""
@@ -460,16 +470,26 @@ class MultiAgent(Agent):
                 player_sent = f"title: {roles[player_name][0]}\n"
                 player_sent += f"summary: {roles[player_name][1]}\n"
             # define system prompt
-            message = [
-                {
-                    "role": "system",
-                    "content": self.SYSTEM_PROMPT.format(
-                        player_name = player_name,
-                        other_players = other_players,
-                        rules = self.RULES
-                        )
-                }
-            ]
+            if self.use_final:
+                message = [
+                    {
+                        "role": "system",
+                        "content": self.SYSTEM_PROMPT.format(
+                            player_name = player_name,
+                            other_players = other_players,
+                            rules = self.RULES
+                            )
+                    }
+                ]
+            else:
+                message = [
+                    {
+                        "role": "system",
+                        "content": self.SYSTEM_PROMPT.format(
+                            rules = self.RULES
+                            )
+                    }
+                ]
 
             # define user prompt (start or mid conversation)
             if self.interactive == False or (self.topology == "chain" and conv_round == 0 and turn == 0) or (self.topology == "graph" and conv_round == 0):
@@ -634,8 +654,7 @@ class MultiAgent(Agent):
                     "content": self.SYSTEM_FINAL.format(
                         player_name = player_name,
                         other_players = other_players,
-                        rules = self.RULES,
-                        num_players = len(other_players)
+                        rules = self.RULES                    
                     )
                 }
             ]
@@ -777,7 +796,7 @@ class MultiAgent(Agent):
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
 
-            if final == False and "STOP" in model_answer and len(batch["turns"][i]) >= 5: # disable early stopping in first round
+            if final == False and "STOP" in model_answer and len(batch["turns"][i]) >= (self.num_agents-1): # disable early stopping in first round
                 batch["stop"][i] = True # model ended the conversation
         
         return batch
@@ -1227,7 +1246,7 @@ class MultiAgent(Agent):
             conv_round = 0
             while conv_round < self.conversation_rounds:
                 turn = 0
-                while turn < (len(self.NAMES)-1):
+                while turn < (self.num_agents-1): # TODO: base
                     # filter out early stopping
                     if self.task == "rocstories":
                         filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
@@ -1235,7 +1254,10 @@ class MultiAgent(Agent):
                         filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["id"]))], batched = True)
 
                     if len(filtered_data) > 0:
-                        player_name = self.NAMES[turn]
+                        if self.NAMES:
+                            player_name = self.NAMES[turn] # TODO: base
+                        else:
+                            player_name = f"Player {turn +1}" # TODO: base
                         
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
 
@@ -1255,7 +1277,7 @@ class MultiAgent(Agent):
                         torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
-                        turn = len(self.NAMES)-1
+                        turn = self.num_agents-1 # TODO: base
                         conv_round = self.conversation_rounds
 
                     # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
@@ -1274,7 +1296,8 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format=conv_format)
+            if self.use_final:
+                shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format=conv_format) # TODO: base
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -1297,7 +1320,7 @@ class MultiAgent(Agent):
         #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
-        logger.run.config.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
     def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
@@ -1355,7 +1378,7 @@ class MultiAgent(Agent):
             #filtered_data = shard_data
             turn = 0
             while turn < 5:
-                player_name = self.NAMES[turn]
+                player_name = self.NAMES[turn] # TODO: base
                 
                 filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, 0, 0, player_name, final = False, shuffled_sents = False, conv_format = conv_format), batched = True)
 
@@ -1373,6 +1396,7 @@ class MultiAgent(Agent):
                 turn += 1
             
             # get final answer
+            # TODO: base
             shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
@@ -1451,7 +1475,7 @@ class MultiAgent(Agent):
             while conv_round < self.conversation_rounds:
                 turn = 0
                 while turn < 5:
-                    player_name = self.NAMES[turn]
+                    player_name = self.NAMES[turn] # TODO: base
                     
                     filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
 
@@ -1471,6 +1495,7 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
+            # TODO: base
             shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
@@ -1498,23 +1523,34 @@ class MultiAgent(Agent):
     def define_roles(self, batch):
         if self.task == "rocstories":
             for i in range(len(batch["storyid"])):
-                batch["roles"][i] = dict(zip(self.NAMES[:-1], batch["shuffled_sents"][i]))
+                if self.NAMES:
+                    batch["roles"][i] = dict(zip(self.NAMES[:-1], batch["shuffled_sents"][i])) # TODO: base
+                else:
+                    batch["roles"][i] = dict(zip(["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"], batch["shuffled_sents"][i]))
         else:
             for i in range(len(batch["id"])):
-                batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i]))))
+                if self.NAMES:
+                    batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i])))) # TODO: base
+                else:
+                    batch["roles"][i] = dict(zip(["Player 1", "Player 2", "Player 3"], list(zip(batch["titles"][i], batch["summaries"][i])))) # TODO: base
         
         return batch
 
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
-        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = self.NAMES[-1], final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
+        if self.NAMES:
+            player_name = self.NAMES[-1]
+        else:
+            player_name = "Player 6"
+        
+        prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = player_name, final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
 
         final_outputs = tqdm([out for out in pipe(
             list(prompt_data["prompt"]),
             batch_size = batch_size
         )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
 
-        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, self.NAMES[-1], final = True, conv_format=conv_format), batched = True)
+        shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, player_name, final = True, conv_format=conv_format), batched = True)
         
         return shard_data
 

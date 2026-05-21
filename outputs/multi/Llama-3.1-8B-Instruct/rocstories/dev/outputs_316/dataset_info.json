@@ -1,0 +1,113 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "json",
+  "dataset_size": 3022011,
+  "description": "",
+  "download_checksums": {
+    "/nfs/gdata/jgrimm/CollaborationLearning/./data/rocstories/ROCStories_shuffled_dev.jsonl": {
+      "num_bytes": 3485459,
+      "checksum": null
+    }
+  },
+  "download_size": 3485459,
+  "features": {
+    "storyid": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "storytitle": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence1": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence2": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence3": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence4": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence5": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "shuffled_sents": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "stop": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "conversation_history": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "turns": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "player": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "roles": {
+      "Player 1": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "Player 2": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "Player 3": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "Player 4": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "Player 5": {
+        "dtype": "string",
+        "_type": "Value"
+      }
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 6507470,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 3022011,
+      "num_examples": 5266,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
