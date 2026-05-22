@@ -112,7 +112,7 @@ class CMUBookSum:
             self.genre_data = self.genre_data.remove_columns(["wikipedia_id", "freebase_id", "author", "publication_date"])
             self.arranged_data = self.genre_data.map(lambda x: self.arrange_data(x))
 
-            self.arranged_data = self.arranged_data.select(range(start, end)) # TODO: save select in dataset
+            self.arranged_data = self.arranged_data.select(range(start, end)) # TODO: save select in dataset, check ID 111
             self.arranged_data.to_json(self.arranged_file) 
         else:
             if not end:
@@ -137,7 +137,7 @@ class CMUBookSum:
             same_inst = same_insts.select([rand_idx])[0]
 
             # find instance with different genre
-            odd_insts = self.genre_data.filter(lambda x: self.filter_odd_genre(orig_inst=instance, cand_inst=x, same_inst=same_inst))
+            odd_insts = self.genre_data.filter(lambda batch: self.filter_odd_genre(orig_inst=instance, batch=batch, same_inst=same_inst), batched=True)
 
             odd_rand_idx = random.randint(0, len(odd_insts)-1)
             odd_inst = odd_insts.select([odd_rand_idx])[0]
@@ -174,10 +174,10 @@ class CMUBookSum:
 
     def filter_same_genre(self, orig_inst, batch):
         same_genre = []
-        for cand_inst in batch:
-            if orig_inst["title"] != cand_inst["title"]:
+        for cand_idx in range(len(batch["id"])):
+            if orig_inst["title"] != batch["title"][cand_idx]:
                 orig_genres = set(genre.strip() for genre in orig_inst["genres"].lower().split(","))
-                cand_genres = set(genre.strip() for genre in cand_inst["genres"].lower().split(","))
+                cand_genres = set(genre.strip() for genre in batch["genres"][cand_idx].lower().split(","))
 
                 if len(orig_genres.intersection(cand_genres)) > 0:
                     same_genre.append(True)
@@ -187,28 +187,33 @@ class CMUBookSum:
                 same_genre.append(False)
         return same_genre
     
-    def filter_odd_genre(self, orig_inst, same_inst, cand_inst):
-        if orig_inst["title"] != cand_inst["title"] and cand_inst["title"] != same_inst["title"]:
-            orig_genres = set(genre.strip() for genre in orig_inst["genres"].lower().split(","))
-            same_genres = set(genre.strip() for genre in same_inst["genres"].lower().split(","))
-            cand_genres = set(genre.strip() for genre in cand_inst["genres"].lower().split(","))
+    def filter_odd_genre(self, orig_inst, same_inst, batch):
+        odd_genre = []
+        for cand_idx in range(len(batch["id"])):
+            if orig_inst["title"] != batch["title"][cand_idx] and batch["title"][cand_idx] != same_inst["title"]:
+                orig_genres = set(genre.strip() for genre in orig_inst["genres"].lower().split(","))
+                same_genres = set(genre.strip() for genre in same_inst["genres"].lower().split(","))
+                cand_genres = set(genre.strip() for genre in batch["genres"][cand_idx].lower().split(","))
 
-            if len(orig_genres.intersection(cand_genres)) == 0 and len(same_genres.intersection(cand_genres)) == 0:
-                return True
+                if len(orig_genres.intersection(cand_genres)) == 0 and len(same_genres.intersection(cand_genres)) == 0:
+                    odd_genre.append(True)
+                else:
+                    odd_genre.append(False)
             else:
-                return False
-        return False
+                odd_genre.append(True)
+        
+        return odd_genre
 
 if __name__ == "__main__":
     #rocdata = ROCStories(shuffle=False, split = "test", variation = True, start=0, end=1000, version_idx=2)
     # print(len(rocdata.orig_dataset))
-    outpath = "outputs/random/cmu_booksum/test_1"
+    outpath = "outputs/random/cmu_booksum/test_2"
 
     #rocdata.shuffled_dataset.save_to_disk(outpath)
 
     #good_inst = roc_data.orig_dataset.filter(lambda x: x["storytitle"] == "Earthquake!")
 
-    book_data = CMUBookSum(arrange=False, split = "test", version_idx=1)
+    book_data = CMUBookSum(arrange=True, split = "test", version_idx=2)
     #print(len(book_data.orig_dataset))
     book_data.arranged_data.save_to_disk(outpath)
 
