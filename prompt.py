@@ -1409,7 +1409,7 @@ class MultiAgent(Agent):
 
             processed_inst += len(shard_data)
             logger.run_data.update({"instances": processed_inst, "experiment_file": outpath})
-            logger.run.log({"instances": processed_inst, "experiment_file": outpath})
+            logger.run.log({"instances": processed_inst, "experiment_file": outpath}, allow_val_change=True)
             
             logger.store_run_data()
 
@@ -1420,7 +1420,7 @@ class MultiAgent(Agent):
         #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
-        logger.run.config.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
     def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: str = 0, end = None):
@@ -1517,7 +1517,7 @@ class MultiAgent(Agent):
 
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
-        logger.run.config.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
     def define_roles(self, batch):
@@ -1620,7 +1620,7 @@ class MultiAgent(Agent):
 
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
-        logger.run.config.update({"experiment_file": outpath})
+        logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
     def remove_final(self, batch):

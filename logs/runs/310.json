@@ -3,7 +3,7 @@
     "version_idx": 1,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_310_2",
+    "experiment_file": "./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_310_3",
     "batch_size": 2,
     "model_id": "meta-llama/Llama-3.1-8B-Instruct",
     "desc": "This run tests the chain setup with 1024 tokens with Llama-3.1-8B-Instruct with variation.",
@@ -100,5 +100,5 @@
     "top_k": 50,
     "min_p": null,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_test_1.jsonl",
-    "instances": 750
+    "instances": 1000
 }

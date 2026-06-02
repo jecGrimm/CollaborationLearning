@@ -115,7 +115,7 @@ if __name__ == "__main__":
     qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_0"
     qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_1"
     qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_2"
-    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/dev/outputs_320"
+    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/dev/outputs_321"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
     inspect_instances(out_4, 1)

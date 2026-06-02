@@ -112,7 +112,7 @@ class CMUBookSum:
             self.genre_data = self.genre_data.remove_columns(["wikipedia_id", "freebase_id", "author", "publication_date"])
             self.arranged_data = self.genre_data.map(lambda x: self.arrange_data(x))
 
-            self.arranged_data = self.arranged_data.select(range(start, end)) # TODO: save select in dataset, check ID 111
+            self.arranged_data = self.arranged_data.select(range(start, end))
             self.arranged_data.to_json(self.arranged_file) 
         else:
             if not end:
