@@ -3,3 +3,6 @@
 __pycache__/
 .dvc/
 **/cache-*.arrow
+# Files over 100 MB (Automatically added)
+Miniconda3-latest-Linux-x86_64.sh
+eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_305.jsonl_last.jsonl
