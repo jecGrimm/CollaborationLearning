@@ -4,7 +4,7 @@
     "split": "test",
     "framework": "single",
     "experiment_file": "",
-    "batch_size": 1,
+    "batch_size": 8,
     "model_id": "meta-llama/Llama-3.1-8B-Instruct",
     "desc": "This run tests the single setup with Llama-3.1-8B-Instruct.",
     "candidate": "cmu_single_unstructured",

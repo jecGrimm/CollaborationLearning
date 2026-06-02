@@ -1,6 +1,6 @@
 {
     "task": "cmu_booksum",
-    "version_idx": 1,
+    "version_idx": 2,
     "split": "test",
     "framework": "single",
     "experiment_file": "",
