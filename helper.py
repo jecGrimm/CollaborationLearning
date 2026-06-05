@@ -112,16 +112,16 @@ if __name__ == "__main__":
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/single/Qwen3-8B/dev/outputs_single_Qwen3-8B_dev_2025-11-25_14:10:17.428416"
-    qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_0"
-    qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_1"
-    qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_302_2"
-    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/dev/outputs_321"
+    qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_319_0"
+    qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_319_1"
+    qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_319_2"
+    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_329"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
-    inspect_instances(out_4, 1)
+    #inspect_instances(out_4, 1)
     #evaluate(qwen8_out1, "single")
 
-    #merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302", "multi", "rocstories", True)
+    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_319_329", "multi", "rocstories", structured = True)
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"

@@ -4,5 +4,21 @@ __pycache__/
 .dvc/
 **/cache-*.arrow
 # Files over 100 MB (Automatically added)
+<<<<<<< Updated upstream
 Miniconda3-latest-Linux-x86_64.sh
 eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_305.jsonl_last.jsonl
+=======
+eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_304.jsonl_last.jsonl
+eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_302.jsonl_last.jsonl
+eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_303.jsonl_last.jsonl
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/data-00000-of-00001.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-930eede4767bd2c2.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-80e3042e142ab91b.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-8efb0b6d154ee691.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-4e989035843f079c.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-6b8d5faf36ca7b9e.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-f4147e4c557f7a19.arrow
+
+# Files over 100 MB (Automatically added)
+eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_302_last.jsonl
+>>>>>>> Stashed changes
