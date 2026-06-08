@@ -872,7 +872,7 @@ class Evaluator:
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys():
+                        if type(conv_dir) in [defaultdict, dict] and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
                             sent_idx = sent2gold[conv_dir["sentence"]]
                             
                             # Player, sentence, position, time-step
@@ -1025,10 +1025,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_322"
+    outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_331"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=False)
+    evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
