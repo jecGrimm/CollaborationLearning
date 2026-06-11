@@ -1,0 +1,113 @@
+{
+  "builder_name": "json",
+  "citation": "",
+  "config_name": "default",
+  "dataset_name": "json",
+  "dataset_size": 572214,
+  "description": "",
+  "download_checksums": {
+    "/dss/dsshome1/0F/di97pub/CollaborationLearning/./data/rocstories/ROCStories_shuffled_test_1.jsonl": {
+      "num_bytes": 660224,
+      "checksum": null
+    }
+  },
+  "download_size": 660224,
+  "features": {
+    "storyid": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "storytitle": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence1": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence2": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence3": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence4": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "sentence5": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "shuffled_sents": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "stop": {
+      "dtype": "bool",
+      "_type": "Value"
+    },
+    "conversation_history": {
+      "dtype": "string",
+      "_type": "Value"
+    },
+    "turns": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "player": {
+      "feature": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "_type": "List"
+    },
+    "roles": {
+      "a critic": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "a journalist": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "a linguistic expert": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "a literary scholar": {
+        "dtype": "string",
+        "_type": "Value"
+      },
+      "a novelist": {
+        "dtype": "string",
+        "_type": "Value"
+      }
+    }
+  },
+  "homepage": "",
+  "license": "",
+  "size_in_bytes": 1232438,
+  "splits": {
+    "train": {
+      "name": "train",
+      "num_bytes": 572214,
+      "num_examples": 1000,
+      "dataset_name": "json"
+    }
+  },
+  "version": {
+    "version_str": "0.0.0",
+    "major": 0,
+    "minor": 0,
+    "patch": 0
+  }
+}
