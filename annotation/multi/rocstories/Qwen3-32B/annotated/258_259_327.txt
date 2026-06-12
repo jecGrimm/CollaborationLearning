@@ -1,32 +1,32 @@
-Novelist: <CORRECT_INFORMATION>My sentence is: *That morning, Casey cried when her gift was a new puppy!*</CORRECT_INFORMATION>  <INCORRECT_HYPOTHESIS>I think this could be the opening sentence of the story since it introduces Casey and a significant emotional event—receiving a puppy as a gift.</INCORRECT_HYPOTHESIS>
+Novelist: <CORRECT_INFORMATION>My sentence is: *That morning, Casey cried when her gift was a new puppy!*</CORRECT_INFORMATION>  <INCORRECT_ARG>I think this could be the opening sentence of the story since it introduces Casey and a significant emotional event—receiving a puppy as a gift.</INCORRECT_ARG>
 <INCORRECT_ARG>It sets up a context of surprise and emotion, which might be followed by a reaction or an explanation of the situation.</INCORRECT_ARG>
 <COORDINATION>I’d be curious to see if any of your sentences provide a cause for Casey’s reaction or continue the narrative from this moment.</COORDINATION>
 <COORDINATION>Would anyone like to share their sentence and see if it logically follows or precedes this one?</COORDINATION>
 Journalist: <CORRECT_INFORMATION>As the journalist, I\'ll share my sentence: *Every day for a year, Casey asked about having a puppy.*</CORRECT_INFORMATION> <CORRECT_ARG>This clearly precedes the novelist\'s sentence about Casey receiving the puppy as a gift.</CORRECT_ARG>
-<REASONING>It establishes Casey\'s long-standing desire, which makes the emotional reaction in the novelist\'s sentence much more meaningful.</REASONING>
-<REASONING>The longing and persistence shown in my sentence provide important backstory that explains why Casey would cry with joy at receiving the puppy.</REASONING>
+<CORRECT_ARG>It establishes Casey\'s long-standing desire, which makes the emotional reaction in the novelist\'s sentence much more meaningful.</CORRECT_ARG>
+<CORRECT_ARG>The longing and persistence shown in my sentence provide important backstory that explains why Casey would cry with joy at receiving the puppy.</CORRECT_ARG>
 <CORRECT_ARG>This creates a clear cause-effect relationship between the two sentences, with mine logically coming first to set up the emotional payoff in the novelist\'s sentence.</CORRECT_ARG>
 <COORDINATION>Would anyone like to share their sentence to see if it connects to either of these two?</COORDINATION>
 Literary scholar: <CORRECT_INFORMATION>As the literary scholar, I’d like to add my sentence to the discussion: *Casey was five and she really wanted a puppy.*</CORRECT_INFORMATION> <CORRECT_ARG>This sentence seems to serve as a foundational setup that precedes both the journalist’s and the novelist’s sentences.</CORRECT_ARG>
 <CORRECT_ARG>It introduces Casey’s age and her desire for a puppy in a more general, straightforward way, which the journalist’s sentence then expands upon with the added detail of her daily requests over a year.</CORRECT_ARG>
 <CORRECT_ARG>The novelist’s sentence, in turn, represents the emotional climax of Casey finally receiving the puppy.</CORRECT_ARG>
-<CORRECT_HYPOTHESIS>So the logical order so far seems to be:  1.</CORRECT_HYPOTHESIS>
+<COORDINATION>So the logical order so far seems to be:</COORDINATION>  <CORRECT_HYPOTHESIS>1.</CORRECT_HYPOTHESIS>
 <CORRECT_HYPOTHESIS>*Casey was five and she really wanted a puppy.* (literary scholar)</CORRECT_HYPOTHESIS>  <INCORRECT_HYPOTHESIS>2.</INCORRECT_HYPOTHESIS>
 <INCORRECT_HYPOTHESIS>*Every day for a year, Casey asked about having a puppy.* (journalist)</INCORRECT_HYPOTHESIS>  <INCORRECT_HYPOTHESIS>3.</INCORRECT_HYPOTHESIS>
-<INCORRECT_HYPOTHESIS>*That morning, Casey cried when her gift was a new puppy!* (novelist)</INCORRECT_HYPOTHESIS>  <INCORRECT_ARG>This sequence builds a narrative arc from introduction to persistence to emotional resolution.</INCORRECT_ARG>
+<INCORRECT_HYPOTHESIS>*That morning, Casey cried when her gift was a new puppy!* (novelist)</INCORRECT_HYPOTHESIS>  <CORRECT_ARG>This sequence builds a narrative arc from introduction to persistence to emotional resolution.</CORRECT_ARG>
 <COORDINATION>I’m curious if any of your sentences might follow the novelist’s or precede mine to provide more context or continuation.</COORDINATION>
-Linguistic expert: <CORRECT_INFORMATION>As the expert, I\'d like to contribute my sentence: *Finally Christmas day came.*</CORRECT_INFORMATION> <CORRECT_ARG>This sentence appears to serve as a crucial temporal marker that bridges the journalist\'s sentence about Casey\'s daily requests and the novelist\'s sentence about her receiving the puppy as a gift.</CORRECT_ARG>
-<CORRECT_ARG>The journalist\'s sentence establishes Casey\'s persistent desire for a puppy over a year, and my sentence provides the specific moment in time when that desire is fulfilled—Christmas Day.</CORRECT_ARG>
+Linguistic expert: <CORRECT_INFORMATION>As the expert, I\'d like to contribute my sentence: *Finally Christmas day came.*</CORRECT_INFORMATION> <REASONING>This sentence appears to serve as a crucial temporal marker that bridges the journalist\'s sentence about Casey\'s daily requests and the novelist\'s sentence about her receiving the puppy as a gift.</REASONING>
+<REASONING>The journalist\'s sentence establishes Casey\'s persistent desire for a puppy over a year, and my sentence provides the specific moment in time when that desire is fulfilled—Christmas Day.</REASONING>
 <CORRECT_ARG>This makes my sentence a logical transition between the journalist\'s long-term buildup and the novelist\'s climactic emotional moment.</CORRECT_ARG>
 <CORRECT_ARG>The literary scholar\'s sentence about Casey being five years old and wanting a puppy sets the stage, the journalist\'s sentence builds the persistence, my sentence marks the pivotal time, and the novelist\'s sentence delivers the emotional payoff.</CORRECT_ARG>
-<CORRECT_HYPOTHESIS>So the sequence now appears to be:1.</CORRECT_HYPOTHESIS>
+<COORDINATION>So the sequence now appears to be:</COORDINATION><CORRECT_HYPOTHESIS>1.</CORRECT_HYPOTHESIS>
 <CORRECT_HYPOTHESIS>*Casey was five and she really wanted a puppy.* (literary scholar)</CORRECT_HYPOTHESIS><INCORRECT_HYPOTHESIS>2.</INCORRECT_HYPOTHESIS>
 <INCORRECT_HYPOTHESIS>*Every day for a year, Casey asked about having a puppy.* (journalist)</INCORRECT_HYPOTHESIS><INCORRECT_HYPOTHESIS>3.</INCORRECT_HYPOTHESIS>
 <INCORRECT_HYPOTHESIS>*Finally Christmas day came.* (expert)</INCORRECT_HYPOTHESIS><INCORRECT_HYPOTHESIS>4.</INCORRECT_HYPOTHESIS>
 <INCORRECT_HYPOTHESIS>*That morning, Casey cried when her gift was a new puppy!* (novelist)</INCORRECT_HYPOTHESIS><COORDINATION>I\'m curious if the critic or the remaining player has a sentence that might follow the novelist\'s or provide additional context to complete the story.</COORDINATION>
 Critic: <CORRECT_INFORMATION>As the critic, I’ll now introduce my sentence: *Her parents told her they couldn\'t have a puppy right now.*</CORRECT_INFORMATION> <CORRECT_ARG>This sentence seems to fit logically after the literary scholar’s sentence (*Casey was five and she really wanted a puppy.*) and before the journalist’s (*Every day for a year, Casey asked about having a puppy.*).</CORRECT_ARG>
-<REASONING>It introduces a conflict or obstacle to Casey’s desire, which then explains her persistence over the following year.</REASONING>
-<CORRECT_HYPOTHESIS>This creates a more complete narrative arc: Casey wants a puppy, her parents say no, she keeps asking, and eventually, on Christmas Day, she receives the puppy as a gift.</CORRECT_HYPOTHESIS><CORRECT_HYPOTHESIS>So the updated sequence would be:1.</CORRECT_HYPOTHESIS>
+<CORRECT_ARG>It introduces a conflict or obstacle to Casey’s desire, which then explains her persistence over the following year.</CORRECT_ARG>
+<CORRECT_ARG>This creates a more complete narrative arc: Casey wants a puppy, her parents say no, she keeps asking, and eventually, on Christmas Day, she receives the puppy as a gift.</CORRECT_ARG><COORDINATION>So the updated sequence would be:</COORDINATION><CORRECT_HYPOTHESIS>1.</CORRECT_HYPOTHESIS>
 <CORRECT_HYPOTHESIS>*Casey was five and she really wanted a puppy.* (literary scholar)</CORRECT_HYPOTHESIS>  <CORRECT_HYPOTHESIS>2.</CORRECT_HYPOTHESIS>
 <CORRECT_HYPOTHESIS>*Her parents told her they couldn\'t have a puppy right now.* (critic)</CORRECT_HYPOTHESIS>  <CORRECT_HYPOTHESIS>3.</CORRECT_HYPOTHESIS>
 <CORRECT_HYPOTHESIS>*Every day for a year, Casey asked about having a puppy.* (journalist)</CORRECT_HYPOTHESIS>  <CORRECT_HYPOTHESIS>4.</CORRECT_HYPOTHESIS>

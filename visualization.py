@@ -819,6 +819,26 @@ class Vis():
 
         return round(acc*100, 2)
     
+    def get_sanity_checks(self, exp_file):
+        if "booksum" in exp_file:
+            self.task = "cmu_booksum"
+        else:
+            self.task = "rocstories"
+
+        if self.last and "single" not in exp_file:
+            eval_file = f"{exp_file.replace('outputs', 'eval')}_last.jsonl"
+        else:
+            eval_file = f"{exp_file.replace('outputs', 'eval')}.jsonl"
+        
+        if self.last and "single" not in exp_file:
+            wrong_format, wrong_format_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True, sanity_checks=True)
+            wf = wrong_format_last
+        else:
+            wrong_format, wrong_format_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = False, sanity_checks=True)
+            wf = wrong_format
+
+        return round(wf, 3)
+    
     def get_acc_changes(self, setup, sent_color = False):  
         self.num_turns = 0
         if "chain" in setup:
@@ -996,6 +1016,15 @@ class Vis():
         print(df_experiment_files)
         df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";") # multi:stimmt nicht
 
+    def plot_dist_sanity_checks(self):
+        df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
+
+        self.last = False
+        df_experiment_files["wrong_format"] = df_experiment_files["output"].map(lambda x: vis.get_sanity_checks(x))
+
+        print(df_experiment_files)
+        df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";") # multi:stimmt nicht
+
     def plot_args_hypos_metrics(self):
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
@@ -1025,7 +1054,8 @@ if __name__ == "__main__":
     # vis.plot_dist_metrics()
     #vis.plot_args_hypos_metrics()
     #vis.plot_distributed_base()
-    vis.plot_arg_hypo_changes()
+    #vis.plot_arg_hypo_changes()
+    vis.plot_dist_sanity_checks()
 
     #   vis.perform_ttest(comparison="single")
 

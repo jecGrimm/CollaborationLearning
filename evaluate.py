@@ -15,15 +15,18 @@ from scipy import stats
 import random
 import pdb
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False):
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False):
     evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task)
 
     acc_mean = 0.0
+    wrong_format = 0.0
 
     if task == "rocstories":
         acc_mean = evaluator.evaluate_sent_order()
     else:
         acc_mean = evaluator.evaluate_odd_one()
+
+    wrong_format = evaluator.wrong_format
 
     evaluator.last = True
     evaluator.zero_counter = 0
@@ -31,10 +34,15 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     evaluator.wrong_format = 0
 
     acc_last = 0.0
+    wrong_format_last = 0.0
     if structured:
         acc_last = evaluator.evaluate_last_beliefs()
-    
-    return acc_mean, acc_last
+        wrong_format_last = evaluator.wrong_format
+
+    if sanity_checks:
+        return wrong_format, wrong_format_last
+    else:
+        return acc_mean, acc_last
 
 class Evaluator:
     def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
@@ -106,17 +114,18 @@ class Evaluator:
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
-        print("zero percentage:", self.zero_counter/(len(self.eval_data)*5))
+        print("zero percentage:", self.zero_counter/(len(self.eval_data)*self.pred_len))
         self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
         self.logger.run.log({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
 
-        print("double percentage:", self.double_counter/(len(self.eval_data)*5))
+        print("double percentage:", self.double_counter/(len(self.eval_data)*self.pred_len))
         self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
         self.logger.run.log({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
 
-        print("wrong format:", self.wrong_format/(len(self.eval_data)*5))
-        self.logger.run_data.update({"wrong_format": self.wrong_format/(len(self.eval_data)*self.pred_len)})
-        self.logger.run.log({"wrong_format": self.wrong_format/(len(self.eval_data)*self.pred_len)})
+        self.wrong_format = self.wrong_format/len(self.eval_data) # für not-last gibts eine Chance pro inst
+        print("wrong format:", self.wrong_format)
+        self.logger.run_data.update({"wrong_format": self.wrong_format})
+        self.logger.run.log({"wrong_format": self.wrong_format})
 
         return acc_mean
 
@@ -310,6 +319,10 @@ class Evaluator:
                             if curr_idx >= max_id:
                                 max_title = title
                                 max_id = curr_idx
+                
+                if max_title == "":
+                    self.wrong_format += 1 # Sanity check for missing titles
+
                 return max_title
         else:
             return [titles[idx] for idx, lbl in enumerate(pred) if lbl == 1][0]
@@ -749,6 +762,9 @@ class Evaluator:
                 writer.writerow(writing_dict)
 
     def compare_metrics(self, metric_name: str, eval_data, eval_datasets: defaultdict, results: defaultdict, i: int):
+        """
+        @deprecated?
+        """
         all_metrics = defaultdict()
 
         # check if accuracy is the same for all experiments
