@@ -4,7 +4,7 @@
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 16,
+    "batch_size": 8,
     "model_id": "meta-llama/Llama-3.1-8B-Instruct",
     "desc": "This run tests the chain setup with 1024 tokens with Llama-3.1-8B-Instruct with variation.",
     "candidate": "cmu_structured_chain",
