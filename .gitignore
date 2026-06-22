@@ -22,3 +22,7 @@ outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-f4147e4c55
 # Files over 100 MB (Automatically added)
 eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_302_last.jsonl
 >>>>>>> Stashed changes
+
+# Files over 100 MB (Automatically added)
+eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_349_last.jsonl
+eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_348_last.jsonl
