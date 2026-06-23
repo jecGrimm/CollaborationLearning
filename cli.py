@@ -43,6 +43,8 @@ class CLI:
             elif self.config["device"] not in ["mig", "hpc"]:
                 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
                 os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device"].split(":")[-1] # set to n GPU in nvidia order (only this one is visible)
+                import torch
+                print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
             else:
                 self.config["device"] = "cuda:0" # # set to first of visible GPUs = visible device
 
