@@ -1040,6 +1040,11 @@ class Vis():
         print(df_experiment_files)
         df_experiment_files.to_csv("./visualizations/rocstories/args_hypos_llama.csv", sep = ";")
 
+    def get_exp_groups(self):
+        df_runs = pd.read_csv("logs/runs.csv", delimiter = ";")
+
+        print("stop")
+
 if __name__ == "__main__":
 
     # for last in [False, True]:
@@ -1055,7 +1060,9 @@ if __name__ == "__main__":
     #vis.plot_args_hypos_metrics()
     #vis.plot_distributed_base()
     #vis.plot_arg_hypo_changes()
-    vis.plot_dist_sanity_checks()
+    #vis.plot_dist_sanity_checks()
+
+    vis.get_exp_groups()
 
     #   vis.perform_ttest(comparison="single")
 

@@ -3,7 +3,7 @@
     "version_idx": 2,
     "split": "test",
     "framework": "single",
-    "experiment_file": "./outputs/single/Qwen3-32B/rocstories/test/ckps/outputs_360_0",
+    "experiment_file": "./outputs/single/Qwen3-32B/rocstories/test/outputs_360",
     "batch_size": 64,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the single setup with Qwen/Qwen3-32B.",
@@ -148,5 +148,10 @@
     "top_k": 20,
     "min_p": 0,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_test_2.jsonl",
-    "instances": 250
+    "instances": 1000,
+    "duration": 159.37830233573914,
+    "mean_acc": 0.813,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.003
 }
