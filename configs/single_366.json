@@ -4,7 +4,7 @@
     "split": "test",
     "framework": "single",
     "experiment_file": "",
-    "batch_size": 64,
+    "batch_size": 4,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests the single setup with Qwen/Qwen3-32B.",
     "candidate": "cmu_single_unstructured",
