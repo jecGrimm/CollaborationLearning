@@ -1,0 +1,50 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
+wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.27.0
+wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260624_185307-b1a8l268
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run fiery-dawn-137
+wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
+wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/b1a8l268
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+True
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Current run_idx: 360
+
+Batch size: 2
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files:  29%|██▉       | 5/17 [01:10<02:49, 14.13s/it]
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files:  29%|██▉       | 5/17 [01:39<03:59, 19.96s/it]
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files:  29%|██▉       | 5/17 [00:58<02:20, 11.70s/it]
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files:  29%|██▉       | 5/17 [01:45<04:12, 21.03s/it]
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 183, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 41, in run_experiment
+    single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 293, in prompt_model
+    pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 95, in init_pipe
+    pipe = pipeline(
+        "text-generation",
+    ...<9 lines>...
+        #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/__init__.py", line 1027, in pipeline
+    framework, model = infer_framework_load_model(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        adapter_path if adapter_path is not None else model,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        **model_kwargs,
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/base.py", line 333, in infer_framework_load_model
+    raise ValueError(
+        f"Could not load model {model} with any of the following classes: {class_tuple}. See the original errors:\n\n{error}\n"
+    )
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mfiery-dawn-137[0m at: [34mhttps://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/b1a8l268[0m
