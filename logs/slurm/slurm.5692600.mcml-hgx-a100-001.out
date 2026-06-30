@@ -1,0 +1,79 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
+wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run 1qh1qhon
+wandb: Tracking run with wandb version 0.27.0
+wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260629_125502-1qh1qhon
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run fluent-puddle-244
+wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
+wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/1qh1qhon
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+GPU:  NVIDIA A100-SXM4-80GB
+True
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Current run_idx: 366
+
+Batch size: 4
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 183, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 41, in run_experiment
+    single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 293, in prompt_model
+    pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
+                      ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 78, in init_pipe
+    pipe = pipeline(
+        "text-generation",
+    ...<9 lines>...
+        model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+    )
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/__init__.py", line 1027, in pipeline
+    framework, model = infer_framework_load_model(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        adapter_path if adapter_path is not None else model,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+        **model_kwargs,
+        ^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/base.py", line 293, in infer_framework_load_model
+    model = model_class.from_pretrained(model, **kwargs)
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/models/auto/auto_factory.py", line 604, in from_pretrained
+    return model_class.from_pretrained(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        pretrained_model_name_or_path, *model_args, config=config, **hub_kwargs, **kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/modeling_utils.py", line 277, in _wrapper
+    return func(*args, **kwargs)
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/modeling_utils.py", line 4881, in from_pretrained
+    hf_quantizer, config, dtype, device_map = get_hf_quantizer(
+                                              ~~~~~~~~~~~~~~~~^
+        config, quantization_config, dtype, from_tf, from_flax, device_map, weights_only, user_agent
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/quantizers/auto.py", line 319, in get_hf_quantizer
+    hf_quantizer.validate_environment(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dtype=dtype,
+        ^^^^^^^^^^^^
+    ...<3 lines>...
+        weights_only=weights_only,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/quantizers/quantizer_bnb_8bit.py", line 73, in validate_environment
+    raise ImportError(
+        "Using `bitsandbytes` 8-bit quantization requires the latest version of bitsandbytes: `pip install -U bitsandbytes`"
+    )
+ImportError: Using `bitsandbytes` 8-bit quantization requires the latest version of bitsandbytes: `pip install -U bitsandbytes`
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mfluent-puddle-244[0m at: [34mhttps://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/1qh1qhon[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20260629_125502-1qh1qhon/logs[0m
+srun: error: mcml-hgx-a100-001: task 0: Exited with exit code 1

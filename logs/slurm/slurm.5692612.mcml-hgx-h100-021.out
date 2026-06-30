@@ -1,0 +1,20 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
+wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run ewgkfry7
+wandb: Tracking run with wandb version 0.27.0
+wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260630_102327-ewgkfry7
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run ethereal-serenity-246
+wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
+wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/ewgkfry7
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+GPU:  NVIDIA H100
+True
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Current run_idx: 368
+
+Batch size: 4
+Fetching 17 files:   0%|          | 0/17 [00:00<?, ?it/s]Fetching 17 files:   6%|▌         | 1/17 [04:24<1:10:39, 264.96s/it]Fetching 17 files:  18%|█▊        | 3/17 [04:32<16:38, 71.30s/it]   Fetching 17 files:  35%|███▌      | 6/17 [04:33<05:05, 27.76s/it]Fetching 17 files:  47%|████▋     | 8/17 [04:34<02:40, 17.80s/it]Fetching 17 files:  53%|█████▎    | 9/17 [06:15<04:41, 35.16s/it]Fetching 17 files:  59%|█████▉    | 10/17 [06:47<04:01, 34.53s/it]Fetching 17 files:  65%|██████▍   | 11/17 [08:08<04:35, 45.84s/it]Fetching 17 files:  71%|███████   | 12/17 [08:16<02:59, 35.94s/it]Fetching 17 files:  82%|████████▏ | 14/17 [08:16<01:01, 20.65s/it]Fetching 17 files: 100%|██████████| 17/17 [08:18<00:00, 11.10s/it]Fetching 17 files: 100%|██████████| 17/17 [08:18<00:00, 29.32s/it]
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 5692612.0 ON mcml-hgx-h100-021 CANCELLED AT 2026-06-30T10:32:04 ***
+slurmstepd: error: *** JOB 5692612 ON mcml-hgx-h100-021 CANCELLED AT 2026-06-30T10:32:04 ***

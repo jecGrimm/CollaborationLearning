@@ -78,7 +78,7 @@ class Agent:
                 pipe = pipeline(
                     "text-generation", 
                     model=self.model_id, 
-                    dtype=torch.bfloat16,
+                    dtype=torch.float16, # is casted to float 16 anyways
                     device_map=device,
                     max_new_tokens=int(self.max_new_tokens-processor.max_thinking_tokens), 
                     logits_processor=LogitsProcessorList([processor]), 
