@@ -99,7 +99,7 @@ def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, struct
 
     full_data.save_to_disk(outpath)
 
-    evaluate(outpath, framework, task, structured=structured)
+    evaluate(outpath, framework, task, structured=structured, all=True)
 
 # def evaluate(outfile, framework, logger: ExperimentLog = ExperimentLog()):
 #     evaluator = Evaluator(outfile, framework, logger, last = False)
@@ -107,21 +107,34 @@ def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, struct
 #     evaluator.last = True
 #     evaluator.evaluate_last_beliefs()
 
+def fix_outputs(outdir):
+    exp_data = load_from_disk(outdir)
+
+    exp_data = exp_data.map(split_think)
+
+    exp_data.save_to_disk(f"{outdir}_fixed")
+
+def split_think(inst):
+    return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
+
 if __name__ == "__main__":
     #check_SCT_ROC_overlap()
     #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
 
     #qwen14_out = "outputs/single/Qwen3-8B/dev/outputs_single_Qwen3-8B_dev_2025-11-25_14:10:17.428416"
-    qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/ckps/outputs_353_0"
-    #qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_319_1"
+    qwen8_out1 = "outputs/single/Qwen3-32B/cmu_booksum/test/ckps/outputs_366_0"
+    qwen8_out2 = "outputs/single/Qwen3-32B/cmu_booksum/test/ckps/outputs_366_1"
     #qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_319_2"
-    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_358"
+    out_4 = "./outputs/single/Qwen3-32B/cmu_booksum/test/outputs_371"
     #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
 
     #inspect_instances(out_4, 1)
     #evaluate(qwen8_out1, "single")
 
-    merge_outputs([qwen8_out1, out_4], "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_353_358", "multi", "cmu_booksum", structured = True)
+    #fix_outputs(qwen8_out1)
+    #fix_outputs(qwen8_out2)
+
+    merge_outputs([f"{qwen8_out1}_fixed", f"{qwen8_out2}_fixed", out_4], "outputs/single/Qwen3-32B/cmu_booksum/test/outputs_366_0_1_371", "single", "cmu_booksum", structured = False)
 
     # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
     #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
