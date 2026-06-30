@@ -11,14 +11,8 @@
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
-<<<<<<< Updated upstream
     "device": "hpc",
     "final_reorder": "True",
-=======
-    "device": "mig",
-    "final_reorder": "False",
-    "final": "True",
->>>>>>> Stashed changes
     "conv_file": "",
     "topology": "chain",
     "max_new_tokens": 1024,

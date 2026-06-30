@@ -17,7 +17,7 @@
     "conv_file": "",
     "topology": "chain",
     "max_new_tokens": 1024,
-    "structured": "True",
+    "structured": "False",
     "output_format": "",
     "conv_format": "",
     "start": 0,
