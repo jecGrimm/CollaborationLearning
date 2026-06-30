@@ -13,6 +13,7 @@ import statistics
 from scipy.stats.mstats import ttest_ind
 from matplotlib import colors
 from matplotlib.patches import Patch
+import math
 
 class Vis():
     def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories"):
@@ -660,28 +661,43 @@ class Vis():
         plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
         plt.close()
 
-    def plot_all_table(self):
-        df_experiment_files = pd.read_csv(f"eval/args_hypos_runs_llama_roc.csv", delimiter = ";").set_index("format")
+    def plot_all_table(self, run_file = "eval/args_hypos_runs_llama_roc.csv"):
+        """
+        This function plots the accuracy and accuracy changes of the setups in run_file.
+        """
+        # eval/multi/Qwen3-32B/rocstories/dev/all_runs_rocstories_dev.csv
+        df_experiment_files = pd.read_csv(run_file, delimiter = ";").set_index("format")
 
-        df_acc = df_experiment_files.map(self.get_avg_metric)
+        df_acc = df_experiment_files["run"].map(self.get_avg_metric)
 
         # plot sankeys
         if self.last == False:
-            df_dict = df_experiment_files.T.to_dict()
+            if run_file == "eval/multi/Qwen3-32B/rocstories/dev/full_full_topologies_250.csv":
+                df_dict = df_experiment_files.to_dict()
+            else:
+                df_dict = df_experiment_files.T.to_dict()
             acc_changes = defaultdict(list)
             for conv_format, exp_files in df_dict.items():
+                if conv_format == "run":
+                    conv_format = "full_full"
+                
                 self.__init__(experiment_files = exp_files, variation = self.variation, conv_format = conv_format, last = self.last)
                 
                 for setup in exp_files.keys():
                     if "single" not in setup and "random" not in setup and "du" not in setup:
                         #self.plot_sankey_full_plotly(setup, sent_color=False)
 
-                        acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup) # TODO: Test
+                        if conv_format != "run":
+                            acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup) # TODO: Test
+                        else:
+                            acc_changes[f"{setup}"] = self.get_acc_changes(setup) # TODO: Test
                     else:
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
 
             df_acc_changes = pd.DataFrame(acc_changes)
-            df_acc_changes.plot()
+            df_acc_changes.plot(ylabel="Micro accuracy", xlabel="Turn", xticks = np.arange(11), yticks=np.arange(0, 101, 10))
+
+            plt.savefig(f"{self.vispath}/acc_changes.png")
         
         df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
 
@@ -775,6 +791,48 @@ class Vis():
             )
 
         plt.savefig(f"visualizations/args_hypos.png")
+
+    def plot_topology_changes(self):
+        "@deprecated, use plot_all_table instead"
+        self.task = "rocstories"
+        df_list = [self.plot_acc_changes("eval/multi/Qwen3-32B/rocstories/dev/topologies_250.csv")]
+        
+        nrow = 1
+        ncol = 1
+        fig, axes = plt.subplots(nrow, ncol)
+
+        # plot counter
+        color_map = {
+            'Hypo': '#cbb2ff',
+            'Full': '#93c4d5',  
+            'Args': '#ffc7a2',
+            'Reject': '#B2FFCB',
+            'Support': '#FFB2E6',
+            'Correct': '#C90D72',
+            'Incorrect': '#0D72C9'                           
+        }
+        #subtitle = ["ROCStories", "CMU_Booksum"]
+        for c in range(ncol):
+            if c == 0:
+                ylabel = "Micro Accuracy"
+                xticks = np.arange(10)
+            else:
+                ylabel = ""
+                xticks = np.arange(6)
+
+            df_list[c].plot(
+                ax=axes[c], 
+                ylabel=ylabel, 
+                xlabel="Turn", 
+                xticks = xticks, 
+                yticks=np.arange(0, 61, 10), 
+                color=list(color_map.values()), 
+                #title = subtitle[c], 
+                legend = (c==0),
+                figsize=(4.5,2.5)
+            )
+
+        plt.savefig(f"visualizations/args_hypos/rocstories/variation/full_full/topologies.png")
 
     def get_acc_per_turn(self, inst, idx, setup):
         out = self.exp_data_hf[setup].select([idx])[0]
@@ -1043,26 +1101,111 @@ class Vis():
     def get_exp_groups(self):
         df_runs = pd.read_csv("logs/runs.csv", delimiter = ";")
 
+        # important keys for comparison
+        keys = ["topology", "do_sample", "version_idx", "top_p", "num_beams", "length_penalty", "final_reorder", "candidate", "names", "temperature", "top_k", "framework", "output_format", "conv_format", "thinking_budget", "max_new_tokens", "variation", "min_p", "quantized", "final", "torch_dtype"]
+        for row_idx, row in df_runs.iterrows():
+            if row["split"] != "mini":
+                row_data = dict(row)
+
+                run_groups = defaultdict(list)
+
+                for next_idx, next_row in df_runs.iterrows():
+                    if next_row["split"] != "mini":
+                        if next_idx != row_idx:
+                            distinct_vals = 0
+                            next_row_data = dict(next_row)
+
+                            found_key = ""
+                            for key, row_val in row_data.items():
+                                if key in keys:
+                                    #check = False
+                                    check_row = self.check_val(row_val)
+                                    check_next = self.check_val(next_row_data[key])
+
+                                    if (check_row or check_next) and row_val != next_row_data[key]:
+                                        distinct_vals += 1
+                                        found_key = key
+
+                            if distinct_vals == 1:
+                                if row_idx not in run_groups[found_key]:
+                                    run_groups[found_key].append(row_idx)
+                                
+                                run_groups[found_key].append(next_idx)
+
+                if run_groups != {}:
+                    for k, ids in run_groups.items():
+                        df_objects = []
+                        for idx in ids:
+                            df_obj = df_runs.iloc[idx]
+
+                            # if type(df_obj["experiment_file"]) == str:
+                            #     task = ""
+                            #     if "booksum" in df_obj["experiment_file"]:
+                            #         task = "cmu_booksum"
+                            #     else:
+                            #         task = "rocstories"
+
+                            #         if "rocstories" not in df_obj["experiment_file"]:
+                            #             split = df_obj["experiment_file"].split(f"/{df_obj["split"]}")
+                            #             df_obj["experiment_file"] = f"{split[0]}/rocstories/{df_obj["split"]}{split[1]}"
+                                
+                            #     if os.path.exists(df_obj["experiment_file"]):
+                            #         try:
+                            #             results = evaluate(df_obj["experiment_file"], df_obj["framework"], task, structured=df_obj["structured"], all = True)
+
+                            #             for metric, res in results.items():
+                            #                 df_obj[metric] = res
+                            #         finally:
+                            #             df_objects.append(df_obj)
+                            #     else:
+                            #         print("experiment file empty")
+
+                            df_objects.append(df_obj)
+
+                        if df_objects != []:
+                            df_compare = pd.concat(df_objects, axis = 1)
+
+                            path = f"./visualizations/comp_runs/{k}/"
+                            os.makedirs(path, exist_ok=True)
+                            file = f"{path}{"_".join([str(df_obj["run_idx"]) for df_obj in df_objects])}.csv"
+
+                            df_compare.to_csv(file, sep=";")
+                    
+                    #print(run_groups)
+
         print("stop")
+
+    def check_val(self, val):
+        if type(val) != float:
+            return True
+        elif type(val) == float and not math.isnan(val):
+            return True
+        else: 
+            return False
 
 if __name__ == "__main__":
 
     # for last in [False, True]:
     #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
     #     vis.plot_all_table()
-    #experiment_files = {
-    #     "single":"outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264",
-    #     "MAS": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265"
-    # }
+    experiment_files = {
+         "chain":"outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_155_0",
+         "layered": "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_176_0",
+         "star": "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_158_0"
+    }
 
-    vis = Vis(task="rocstories", last = False)
+    vis = Vis(variation = True, conv_format = "full_full", last = False, task="rocstories")
+    vis.plot_all_table(run_file = "eval/multi/Qwen3-32B/rocstories/dev/full_full_topologies_250.csv")
+    
+    #vis.plot_sankey_full_plotly("chain", sent_color=False)
+    #vis.plot_topology_changes("graph", sent_color=False)
+    #vis.plot_sankey_full_plotly("star", sent_color=False)
     # vis.plot_dist_metrics()
     #vis.plot_args_hypos_metrics()
     #vis.plot_distributed_base()
     #vis.plot_arg_hypo_changes()
     #vis.plot_dist_sanity_checks()
-
-    vis.get_exp_groups()
+    #vis.get_exp_groups()
 
     #   vis.perform_ttest(comparison="single")
 

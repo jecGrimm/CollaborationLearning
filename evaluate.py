@@ -15,42 +15,67 @@ from scipy import stats
 import random
 import pdb
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False):
-    evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task)
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None):
+    evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task, instances = instances)
 
-    acc_mean = 0.0
-    wrong_format = 0.0
+    results = defaultdict(float)
 
     if task == "rocstories":
-        acc_mean = evaluator.evaluate_sent_order()
-    else:
-        acc_mean = evaluator.evaluate_odd_one()
+        results["acc_mean"] = evaluator.evaluate_sent_order()
 
-    wrong_format = evaluator.wrong_format
+        results["prec_1"] = float(evaluator.eval_data.with_format("pandas")["prec_1"].mean())
+        results["prec_2"] = float(evaluator.eval_data.with_format("pandas")["prec_2"].mean())
+        results["prec_3"] = float(evaluator.eval_data.with_format("pandas")["prec_3"].mean())
+        results["prec_4"] = float(evaluator.eval_data.with_format("pandas")["prec_4"].mean())
+        results["prec_5"] = float(evaluator.eval_data.with_format("pandas")["prec_5"].mean())
+        results["spearman"] = float(evaluator.eval_data.with_format("pandas")["spearman"].mean())
+        results["kendalltau"] = float(evaluator.eval_data.with_format("pandas")["kendalltau"].mean())
+    else:
+        results["acc_mean"] = evaluator.evaluate_odd_one()
+
+    results["instances"] = instances
+    results["wrong_format"] = evaluator.wrong_format
+    results["zero_percentage"] = evaluator.zero_percentage
+    results["double_percentage"] = evaluator.double_percentage
 
     evaluator.last = True
     evaluator.zero_counter = 0
     evaluator.double_counter = 0
     evaluator.wrong_format = 0
 
-    acc_last = 0.0
-    wrong_format_last = 0.0
-    if structured:
-        acc_last = evaluator.evaluate_last_beliefs()
-        wrong_format_last = evaluator.wrong_format
+    if structured == True:
+        results["acc_last"] = evaluator.evaluate_last_beliefs()
 
-    if sanity_checks:
-        return wrong_format, wrong_format_last
+        results["wrong_format_last"] = evaluator.wrong_format
+        results["zero_percentage_last"] = evaluator.zero_percentage
+        results["double_percentage_last"] = evaluator.double_percentage
+
+        if task == "rocstories":
+            results["prec_1_last"] = float(evaluator.eval_data.with_format("pandas")["prec_1"].mean())
+            results["prec_2_last"] = float(evaluator.eval_data.with_format("pandas")["prec_2"].mean())
+            results["prec_3_last"] = float(evaluator.eval_data.with_format("pandas")["prec_3"].mean())
+            results["prec_4_last"] = float(evaluator.eval_data.with_format("pandas")["prec_4"].mean())
+            results["prec_5_last"] = float(evaluator.eval_data.with_format("pandas")["prec_5"].mean())
+            results["spearman_last"] = float(evaluator.eval_data.with_format("pandas")["spearman"].mean())
+            results["kendalltau_last"] = float(evaluator.eval_data.with_format("pandas")["kendalltau"].mean())
+
+    if all:
+        return results
+    elif sanity_checks:
+        return results["wrong_format"], results["wrong_format_last"]
     else:
-        return acc_mean, acc_last
+        return results["acc_mean"], results["acc_last"]
 
 class Evaluator:
-    def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False):
+    def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False, instances = None):
         self.experiment_file = experiment_file
         if idx:
             self.exp_data = load_from_disk(experiment_file).select([idx])
         else:
             self.exp_data = load_from_disk(experiment_file)
+
+        if instances:
+            self.exp_data = self.exp_data.select(range(instances))
 
         self.framework = framework
         self.task = task
@@ -114,13 +139,15 @@ class Evaluator:
         # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
         #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
-        print("zero percentage:", self.zero_counter/(len(self.eval_data)*self.pred_len))
-        self.logger.run_data.update({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
-        self.logger.run.log({"zero_percentage": self.zero_counter/(len(self.eval_data)*self.pred_len)})
+        self.zero_percentage = self.zero_counter/(len(self.eval_data)*self.pred_len)
+        print("zero percentage:", self.zero_percentage)
+        self.logger.run_data.update({"zero_percentage": self.zero_percentage})
+        self.logger.run.log({"zero_percentage": self.zero_percentage})
 
-        print("double percentage:", self.double_counter/(len(self.eval_data)*self.pred_len))
-        self.logger.run_data.update({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
-        self.logger.run.log({"double_percentage": self.double_counter/(len(self.eval_data)*self.pred_len)})
+        self.double_percentage = self.double_counter/(len(self.eval_data)*self.pred_len)
+        print("double percentage:", self.double_percentage)
+        self.logger.run_data.update({"double_percentage": self.double_percentage})
+        self.logger.run.log({"double_percentage": self.double_percentage})
 
         self.wrong_format = self.wrong_format/len(self.eval_data) # für not-last gibts eine Chance pro inst
         print("wrong format:", self.wrong_format)
@@ -1041,10 +1068,11 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_331"
+    outdir = "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True)
+    results = evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True, all = True, instances = 250)
+    print(results)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
