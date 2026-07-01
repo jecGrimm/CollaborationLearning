@@ -74,6 +74,7 @@ class Agent:
                 top_p = 0.8
 
             if "32" in self.model_id and "booksum" in self.task:
+            #if "700" in self.model_id: # TODO: remove
                 # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
                 pipe = pipeline(
                     "text-generation", 
@@ -107,7 +108,7 @@ class Agent:
                 )
                 logger.run_data["quantized"] = False
                 print("Running without quantization!")
-            
+        
         pipe.tokenizer.padding_side = "left"
         logger.log_pipe(pipe)
     
