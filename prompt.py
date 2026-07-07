@@ -79,7 +79,7 @@ class Agent:
                 pipe = pipeline(
                     "text-generation", 
                     model=self.model_id, 
-                    dtype=torch.float16, # is casted to float 16 anyways
+                    dtype=torch.bfloat16, # is casted to float 16 anyways
                     device_map=device,
                     max_new_tokens=int(self.max_new_tokens-processor.max_thinking_tokens), 
                     logits_processor=LogitsProcessorList([processor]), 
@@ -87,7 +87,9 @@ class Agent:
                     top_p = top_p,
                     top_k = 20,
                     min_p = 0,
-                    model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
+                    model_kwargs={
+                        "quantization_config": BitsAndBytesConfig(load_in_4bit=True),
+                    }
                 )
                 logger.run_data["quantized"] = True
                 print("Quantized!")

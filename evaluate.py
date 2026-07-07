@@ -35,7 +35,9 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
 
     results["instances"] = instances
     results["wrong_format"] = evaluator.wrong_format
+    results["zero_counter"] = evaluator.zero_counter
     results["zero_percentage"] = evaluator.zero_percentage
+    results["double_counter"] = evaluator.double_counter
     results["double_percentage"] = evaluator.double_percentage
 
     evaluator.last = True
@@ -144,6 +146,7 @@ class Evaluator:
         self.logger.run_data.update({"zero_percentage": self.zero_percentage})
         self.logger.run.log({"zero_percentage": self.zero_percentage})
 
+        #print("double_counter:", self.double_counter)
         self.double_percentage = self.double_counter/(len(self.eval_data)*self.pred_len)
         print("double percentage:", self.double_percentage)
         self.logger.run_data.update({"double_percentage": self.double_percentage})
@@ -1068,10 +1071,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0"
+    outdir = "./outputs/single/Qwen3-32B/rocstories/dev/outputs_214"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    results = evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True, all = True, instances = 250)
+    results = evaluate(outfile = outdir,framework= "single", task = "rocstories", structured=False, all = True, instances = 250)
     print(results)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
