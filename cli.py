@@ -28,28 +28,29 @@ class CLI:
         #     self.framework = parser.parse_args().framework
 
         # add default configurations
-        if "device" not in self.config.keys():
-            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
-            os.environ["CUDA_VISIBLE_DEVICES"] = "0" # set to first GPU in nvidia order (only this one is visible)
+        # if "device" not in self.config.keys():
+        #     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
+        #     os.environ["CUDA_VISIBLE_DEVICES"] = "0" # set to first GPU in nvidia order (only this one is visible)
 
-            import torch
-            self.config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu" # set to first of visible GPUs
-            print("Device: ", torch.cuda.get_device_name(torch.cuda.current_device()))
-        else:
-            if self.config["device"] == "hpc":
-                import torch
-                self.config["device"] = "cuda" if torch.cuda.is_available() else "cpu"
-                print("Cuda?", torch.cuda.is_available())
-            elif self.config["device"] not in ["mig", "hpc"]:
-                os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
-                os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device"].split(":")[-1] # set to n GPU in nvidia order (only this one is visible)
-                import torch
-                print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
-            else:
-                self.config["device"] = "cuda:0" # # set to first of visible GPUs = visible device
+        #     import torch
+        #     self.config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu" # set to first of visible GPUs
+        #     print("Device: ", torch.cuda.get_device_name(torch.cuda.current_device()))
+        # else:
+        #     if self.config["device"] == "hpc":
+        #         import torch
+        #         self.config["device"] = "cuda" if torch.cuda.is_available() else "cpu"
+        #         print("Cuda?", torch.cuda.is_available())
+        #     elif self.config["device"] not in ["mig", "hpc"]:
+        #         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" # ensure nvidia order
+        #         os.environ["CUDA_VISIBLE_DEVICES"] = self.config["device"].split(":")[-1] # set to n GPU in nvidia order (only this one is visible)
+        #         print("Visible device:", os.environ["CUDA_VISIBLE_DEVICES"])
+        #         import torch
+        #         print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
+        #     else:
+        #         self.config["device"] = "cuda:0" # # set to first of visible GPUs = visible device
 
-                import torch
-                print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
+        #         import torch
+        #         print("GPU: ", torch.cuda.get_device_name(torch.cuda.current_device()))
 
         if self.config["framework"] == "multi" and "conversation_rounds" not in self.config.keys():
             self.config["conversation_rounds"] = 2
