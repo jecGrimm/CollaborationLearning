@@ -4,7 +4,7 @@
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 16,
+    "batch_size": 32,
     "model_id": "Qwen/Qwen3-8B",
     "desc": "This run tests hypo with Qwen3-8b.",
     "candidate": "roc_structured_chain",
