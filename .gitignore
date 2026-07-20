@@ -33,8 +33,5 @@ eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_342_last.jsonl
 eval/multi/Llama-3.1-8B-Instruct/rocstories/test/eval_340_last.jsonl
 
 # Files over 100 MB (Automatically added)
-wandb/run-20260608_132359-hhxv44sh/run-hhxv44sh.wandb
-eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_352_last.jsonl
-eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_349_last.jsonl
-eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_351_last.jsonl
-eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_348_last.jsonl
+Miniconda3-latest-Linux-x86_64.sh
+eval/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/eval_305.jsonl_last.jsonl
