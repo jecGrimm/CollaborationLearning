@@ -15,7 +15,7 @@ from scipy import stats
 import random
 import pdb
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None):
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False):
     evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task, instances = instances)
 
     results = defaultdict(float)
@@ -45,7 +45,7 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     evaluator.double_counter = 0
     evaluator.wrong_format = 0
 
-    if structured == True:
+    if structured == True and last == True:
         results["acc_last"] = evaluator.evaluate_last_beliefs()
 
         results["wrong_format_last"] = evaluator.wrong_format
