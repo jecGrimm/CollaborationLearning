@@ -3,7 +3,7 @@
     "version_idx": 1,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-8B/rocstories/test/ckps/outputs_412_1",
+    "experiment_file": "./outputs/multi/Qwen3-8B/rocstories/test/outputs_412",
     "batch_size": 16,
     "model_id": "Qwen/Qwen3-8B",
     "desc": "This run tests args with Qwen3-8b.",
@@ -169,5 +169,10 @@
     "top_k": 20,
     "min_p": 0,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_test_1.jsonl",
-    "instances": 500
+    "instances": 1000,
+    "duration": 89732.36704015732,
+    "mean_acc": 0.7014,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.0
 }
