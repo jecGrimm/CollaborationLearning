@@ -1,0 +1,5 @@
+model;framework;task;output_0;output_1;output_2
+Random;Random;CMU Booksum;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test
+Llama-3.1-8B-Instruct;Single;CMU Booksum;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_313
+Llama-3.1-8B-Instruct;Base;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_325;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328
+Llama-3.1-8B-Instruct;Improved;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_267;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_315

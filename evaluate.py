@@ -913,16 +913,40 @@ class Evaluator:
         if "turns" in out.keys():
             for i, turn in enumerate(out["turns"]):
                 conv_list = self.extract_structured_answer(turn)
+                
+                # format as list not as dict
+                if str in [type(item) for item in conv_list]:
+                    pred = conv_list.copy()
+                    conv_list = []
+
+                    for pos, sent in enumerate(pred, start=1):
+                        if sent != "":
+                            conv_list.append({"sentence": sent, "position": pos})
 
                 player = out["player"][i]
 
+                if i == (len(out["turns"])-1) and conv_list == []:
+                    pred = self.extract_answer_list(turn, eval["gold"])
+
+                    for pos, sent in enumerate(pred, start=1):
+                        if sent != "":
+                            conv_list.append({"sentence": sent, "position": pos})
+
                 if type(conv_list) == list:
+                    # check for 0:
+                    zero_count = True in [0 in conv_dir.values() for conv_dir in conv_list]
+
                     for conv_dir in conv_list:
                         if type(conv_dir) in [defaultdict, dict] and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
+                            if zero_count:
+                                pos = conv_dir["position"]+1
+                            else:
+                                pos = conv_dir["position"]
+                            
                             sent_idx = sent2gold[conv_dir["sentence"]]
                             
                             # Player, sentence, position, time-step
-                            if sent_idx == conv_dir["position"]:
+                            if sent_idx == pos:
                                 correct = "correct"
                             else:
                                 correct = "incorrect"
@@ -945,15 +969,21 @@ class Evaluator:
             for i, turn in enumerate(out["turns"]):
                 conv_list = self.extract_structured_answer(turn)
 
+                if i == (len(out["turns"])-1) and conv_list == []:
+                    pred = self.extract_answer_list(turn, eval["gold"])
+                    pred = self.extract_pred_odd(pred, out["titles"])
+
+                    conv_list.append({"title": pred, "label": "true"})
+
                 player = out["player"][i]
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
                         if type(conv_dir) in [defaultdict, dict] and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
                             # Player, sentence, position, time-step
-                            if conv_dir["label"].lower() == "true" and conv_dir["title"] == eval["gold"]:
+                            if "true" in conv_dir["label"].lower() and conv_dir["title"] == eval["gold"]:
                                 correct = "correct"
-                            elif conv_dir["label"].lower() == "false" and conv_dir["title"] != eval["gold"]:
+                            elif "false" in conv_dir["label"].lower() and conv_dir["title"] != eval["gold"]:
                                 correct = "correct"
                             else:
                                 correct = "incorrect"
@@ -1071,10 +1101,10 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/rocstories/dev/outputs_162"
+    outdir = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_379"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    results = evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True, all = True, instances = 25)
+    results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=False, all = True, instances = 1000)
     print(results)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"

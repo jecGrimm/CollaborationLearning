@@ -1,8 +1,4 @@
-format;task;run
-Hypo;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_287
-Full;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286
-Args;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_290
-Reject;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_304
-Support;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_305
-Correct;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_306
-Incorrect;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_307
+model;format;task;output_0;output_1;output_2
+Llama-3.1-8B-Instruct;Hypo;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_287;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_334;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_335
+Llama-3.1-8B-Instruct;Full;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_336;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_337
+Llama-3.1-8B-Instruct;Args;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_290;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_338;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_339

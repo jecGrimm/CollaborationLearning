@@ -1,8 +1,4 @@
-format;task;run
-Hypo;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_272
-Full;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285
-Args;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288
-Reject;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302
-Support;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_303
-Correct;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_296
-Incorrect;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_297
+model;format;task;output_0;output_1;output_2
+Llama-3.1-8B-Instruct;Hypo;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_272;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_318;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_319_329
+Llama-3.1-8B-Instruct;Full;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_278_285;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_327_330;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_331
+Llama-3.1-8B-Instruct;Args;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_288;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_332;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_333

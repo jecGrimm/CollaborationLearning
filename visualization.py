@@ -606,7 +606,7 @@ class Vis():
 
         stats_df = pd.DataFrame(stats_dict)
 
-        outfile = f"{self.vispath}/significance_{comparison}"
+        outfile = f"{self.vispath}significance_{comparison}"
         if exp_name != "":
             outfile += f"_{exp_name}"
 
@@ -701,11 +701,11 @@ class Vis():
         
         df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
 
+    def plot_acc_changes(self, run_file: str = None, df_experiment_files = None):
+        if run_file:
+            df_experiment_files = pd.read_csv(run_file, delimiter = ";")
 
-    def plot_acc_changes(self, run_file):
-        df_experiment_files = pd.read_csv(run_file, delimiter = ";")
-
-        df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+            df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
 
         # plot_last instead to include last results
         #df_experiment_files.to_csv(f"./visualizations/{self.task}/args_hypos_llama.csv", sep = ";")
@@ -718,22 +718,29 @@ class Vis():
             task = row["task"]
             exp_file = row["run"]
             setup = conv_format
-            self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower())
-            
-            self.evaluator = Evaluator(exp_file,"multi", task.lower())
 
-            self.num_turns = max([len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))])-1
-            self.corr_per_turn = [0]*self.num_turns
-            self.beliefs_per_turn = [0]*self.num_turns
-            self.exp_data_hf[setup] = self.exp_data_hf[setup].map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
+            if conv_format.lower() not in ["single", "random", "base", "improved"]:
+                self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower())
+                
+                self.evaluator = Evaluator(exp_file,"multi", task.lower())
 
-            acc_per_turn = [0]*self.num_turns
-            for i in range(self.num_turns):
-                if self.beliefs_per_turn[i] != 0:
-                    acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
-            
-            #acc_per_turn[-1] = row["accuracy"]
-            acc_changes[setup] = acc_per_turn
+                #self.num_turns = max([len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))])-1
+                if self.task == "rocstories":
+                    self.num_turns = 11 # TODO: fix, bei 302 (reject, llama geht die Berechnung nicht durch)
+                else:
+                    self.num_turns = 7
+
+                self.corr_per_turn = [0]*self.num_turns
+                self.beliefs_per_turn = [0]*self.num_turns
+                self.exp_data_hf[setup] = self.exp_data_hf[setup].map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
+
+                acc_per_turn = [0]*self.num_turns
+                for i in range(self.num_turns):
+                    if self.beliefs_per_turn[i] != 0:
+                        acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
+                
+                #acc_per_turn[-1] = row["accuracy"]
+                acc_changes[setup] = acc_per_turn
 
         df_acc_changes = pd.DataFrame(acc_changes)
 
@@ -751,10 +758,44 @@ class Vis():
 
     def plot_arg_hypo_changes(self):
         self.task = "rocstories"
-        llama_roc = self.plot_acc_changes("eval/args_hypo_runs_llama_roc.csv")
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
+
+        llama_roc_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
+        for col in llama_roc_dfs[0].columns:
+            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
 
         self.task = "cmu_booksum"
-        llama_cmu = self.plot_acc_changes("eval/args_hypo_runs_llama_cmu.csv")
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_cmu.csv", delimiter = ";")
+
+        llama_cmu_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
+        for col in llama_cmu_dfs[0].columns:
+            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
 
         df_list = [llama_roc, llama_cmu]
         
@@ -764,33 +805,216 @@ class Vis():
 
         # plot counter
         color_map = {
-            'Hypo': '#cbb2ff',
-            'Full': '#93c4d5',  
-            'Args': '#ffc7a2',
-            'Reject': '#'#TODO:                           
+            'Hypo': '#ffc7a2',
+            'Full': "#17b2e1",  
+            'Args': '#cbb2ff',                  
         }
         subtitle = ["ROCStories", "CMU_Booksum"]
+
         for c in range(ncol):
             if c == 0:
-                ylabel = "Micro Accuracy"
-                xticks = np.arange(10)
+                ylabel = "Micro Precision"
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9
             else:
                 ylabel = ""
-                xticks = np.arange(6)
+                xticks = np.arange(7)
+                linepos = 2
+                finalpos = 5
 
             df_list[c].plot(
                 ax=axes[c], 
                 ylabel=ylabel, 
                 xlabel="Turn", 
                 xticks = xticks, 
-                yticks=np.arange(0, 61, 10), 
+                yticks=np.arange(0, 81, 10), 
                 color=list(color_map.values()), 
                 title = subtitle[c], 
                 legend = (c==0),
-                figsize=(4.5,2.5)
+                figsize=(4.5,2.5),# TODO: kleiner machen
             )
+            axes[c].axvline(linepos, color='lightgray', linestyle='--')
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
 
+            if c == 0:
+                axes[c].legend(loc = "upper left")
+        
+        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, ncol=7)
+        plt.tight_layout() # TODO: check if it makes whitespace around figure smaller
         plt.savefig(f"visualizations/args_hypos.png")
+
+    def plot_exploration_changes(self):
+        self.task = "rocstories"
+        df_experiment_files = pd.read_csv("eval/exploration_runs_llama_roc.csv", delimiter = ";")
+
+        llama_roc_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
+        for col in llama_roc_dfs[0].columns:
+            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
+
+        self.task = "cmu_booksum"
+        df_experiment_files = pd.read_csv("eval/exploration_runs_llama_cmu.csv", delimiter = ";")
+
+        llama_cmu_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
+        for col in llama_cmu_dfs[0].columns:
+            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
+
+        df_list = [llama_roc, llama_cmu]
+        
+        nrow = 1
+        ncol = 2
+        fig, axes = plt.subplots(nrow, ncol)
+
+        # plot counter
+        color_map = {
+            'Reject': '#cbb2ff',
+            'Support': '#ffc7a2',                    
+        }
+        subtitle = ["ROCStories", "CMU_Booksum"]
+
+        for c in range(ncol):
+            if c == 0:
+                ylabel = "Micro Precision"
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9
+            else:
+                ylabel = ""
+                xticks = np.arange(7)
+                linepos = 2
+                finalpos = 5
+
+            df_list[c].plot(
+                ax=axes[c], 
+                ylabel=ylabel, 
+                xlabel="Turn", 
+                xticks = xticks, 
+                yticks=np.arange(0, 81, 10), 
+                color=list(color_map.values()), 
+                title = subtitle[c], 
+                legend = (c==0),
+                figsize=(4.5,2.5),
+            )
+            axes[c].axvline(linepos, color='lightgray', linestyle='--')
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
+        
+        # plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
+        #   fancybox=True, ncol=7)
+
+        plt.savefig(f"visualizations/exploration.png")
+
+    def plot_correctness_changes(self):
+        self.task = "rocstories"
+        df_experiment_files = pd.read_csv("eval/correctness_runs_llama_roc.csv", delimiter = ";")
+
+        llama_roc_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
+        for col in llama_roc_dfs[0].columns:
+            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
+
+        self.task = "cmu_booksum"
+        df_experiment_files = pd.read_csv("eval/correctness_runs_llama_cmu.csv", delimiter = ";")
+
+        llama_cmu_dfs = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_experiment_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"run"})
+
+            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+
+        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
+        for col in llama_cmu_dfs[0].columns:
+            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
+
+        df_list = [llama_roc, llama_cmu]
+        
+        nrow = 1
+        ncol = 2
+        fig, axes = plt.subplots(nrow, ncol)
+
+        # plot counter
+        color_map = {
+            'Correct': '#cbb2ff',
+            'Incorrect': '#ffc7a2',                    
+        }
+        subtitle = ["ROCStories", "CMU_Booksum"]
+
+        for c in range(ncol):
+            if c == 0:
+                ylabel = "Micro Precision"
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9
+            else:
+                ylabel = ""
+                xticks = np.arange(7)
+                linepos = 2
+                finalpos = 5
+
+            df_list[c].plot(
+                ax=axes[c], 
+                ylabel=ylabel, 
+                xlabel="Turn", 
+                xticks = xticks, 
+                yticks=np.arange(0, 81, 10), 
+                color=list(color_map.values()), 
+                title = subtitle[c], 
+                legend = (c==0),
+                figsize=(4.5,2.5),
+            )
+            axes[c].axvline(linepos, color='lightgray', linestyle='--')
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
+
+            # if c==0:
+            #     axes[c].legend(["Correct", "Incorrect"])
+        
+        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, ncol=7)
+
+        plt.savefig(f"visualizations/correctness.png")
 
     def plot_topology_changes(self):
         "@deprecated, use plot_all_table instead"
@@ -804,7 +1028,7 @@ class Vis():
         # plot counter
         color_map = {
             'Hypo': '#cbb2ff',
-            'Full': '#93c4d5',  
+            'Full': "#17b2e1",  
             'Args': '#ffc7a2',
             'Reject': '#B2FFCB',
             'Support': '#FFB2E6',
@@ -948,10 +1172,157 @@ class Vis():
         
         return acc_per_turn
 
+    def plot_dist_split(self):
+        """
+        This function plots distributed knowledge results for llama and qwen in different subplots.
+        """
+        run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
+
+        # df_list = []
+
+        # for run_file in run_files:
+        #     df_experiment_files = pd.read_csv(run_file, delimiter = ";")
+
+        #     # get avg of three runs
+        #     output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
+        #     output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
+        #     output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+
+        #     s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+
+        #     df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+            
+        #     df_list.append(df_acc)
+
+        # 1. Pivot the data to group by Task on X-axis
+        #plot_df = df_acc.pivot(index='task', columns=['model', 'framework'], values='accuracy')
+        #plot_df = plot_df.dropna(axis=1, how='all')
+
+        nrow = 3
+        ncol = 2
+        fig, axes = plt.subplots(nrow, ncol)
+
+        # plot counter
+        color_map = {
+            'Improved': '#cbb2ff',
+            'Single': "#17b2e1",  
+            'Base': '#ffc7a2',
+            'Random': 'lightgray'                    
+        }
+
+        #subtitle = ["ROCStories", "CMU_Booksum"]
+        for r in range(nrow):
+            for c in range(ncol):
+                df_experiment_files = pd.read_csv(run_files[r][c], delimiter = ";")
+
+                # get avg of three runs
+                output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
+                output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
+                output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+
+                    #s_acc = 34.5 # keep same avg random boundary across 
+                #else:
+                s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+
+                if "booksum" in self.task:
+                    s_acc[0] = 34.5 # keep same avg random boundary across 
+
+                df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+                plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') # index='task', 
+                plot_df = plot_df.dropna(axis=1, how='all')
+
+                original_cols = plot_df.columns
+                colors = [color_map[framework] for framework in original_cols]
+
+                ax = axes[r][c]
+                if c == 0:
+                    ylabel = df_acc["model"][1]
+                    yticks = np.arange(0, 101, 20)
+                    #xticks = []
+                else:
+                    ylabel = ""
+
+                if r == 1:
+                    title = None
+
+                plot_df.plot(
+                    ax=ax, 
+                    ylabel=ylabel, 
+                    yticks=yticks,
+                    color=colors, 
+                    #title = subtitle[c], 
+                    legend = (c==0 and r==0),
+                    figsize=(4.5,5.75), # w x h
+                    kind="bar",
+                    rot=0,
+                    xlabel = "",
+                    edgecolor='black',
+                    width = 0.85
+                )
+
+                if r == 0 and c == 0:
+                    ax.legend(title=None, loc="upper left", fontsize=8)
+
+                if c == 1:
+                    ax.tick_params(labelleft=False)    
+
+                for i, patch in enumerate(ax.patches):
+
+                    original_width = patch.get_width()
+                    new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
+                    patch.set_width(new_width)
+
+                    # --- ANNOTATION (VALUE) LOGIC ---
+                    height = patch.get_height()
+                    if not np.isnan(height) and height > 0:
+                        ax.annotate(
+                            f"{height:.1f}",                                 # Format the accuracy to 2 decimal places
+                            (patch.get_x() + patch.get_width() / 2, height), 
+                            ha='center',                                     
+                            va='bottom',                                     
+                            xytext=(0, 3),                                   
+                            textcoords='offset points',
+                            rotation=0,                                     
+                            fontsize=8
+                        )
+
+        plt.tight_layout() # TODO: check if it makes figure smaller
+        plt.savefig(f"visualizations/dist_split.png")
+
+    def compute_std(self):
+        """
+        This function plots distributed knowledge results for llama and qwen in different subplots.
+        """
+        run_file = "eval/final_llama.csv"
+
+        #subtitle = ["ROCStories", "CMU_Booksum"]
+        df_experiment_files = pd.read_csv(run_file, delimiter = ";")
+
+        # get avg of three runs
+        output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
+        output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
+        output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+
+        s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+
+        df_std = s_acc.std()
+
+        df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+
+        df_acc.to_csv("visualizations/final_llama.csv")
+
     def plot_distributed_base(self):
+        """
+        This function creates a bar plot of the accuracy on both games for the baselines and unstructured MAS setups.
+        """
         df_experiment_files = pd.read_csv(f"eval/distributed_base_runs.csv", delimiter = ";")
 
-        s_acc = df_experiment_files["output"].map(self.get_avg_metric)
+        output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
+        output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
+        output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+
+        s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+
         df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
 
         # 1. Pivot the data to group by Task on X-axis
@@ -961,14 +1332,15 @@ class Vis():
         # 2. Assign styles (Colors for Models, Hatches for Frameworks)
         color_map = {
             'Random': 'lightgray', 
-            'Llama-3.1-8B-Instruct': '#93c4d5',  
-            'Qwen3-32B': '#ffc7a2'               
+            'Llama-3.1-8B-Instruct': '#318CE7',  
+            'Qwen3-32B': '#FF9966'               
         }
 
         hatch_map = {
             'random': '',      # Solid
             'Single': '',      # Solid
-            'MAS': '//'        # Diagonal lines
+            'Base': '/',        # Diagonal lines
+            'Improved': '.'
         }
 
         original_cols = plot_df.columns
@@ -977,10 +1349,11 @@ class Vis():
         # 3. Plot the base colored bars (edgecolor is required for hatches to show)
         ax = plot_df.plot(
             kind="bar", 
-            figsize=(6, 4.5),
+            figsize=(4.5, 3.5), # w x h
             color=colors,
             width=0.85, 
             yticks=np.arange(0, 101, 10), 
+            #yticks=s_acc,
             ylabel="Accuracy", 
             rot=0,
             edgecolor='black',
@@ -1030,14 +1403,15 @@ class Vis():
             # Model colors
             Patch(facecolor=color_map['Random'], edgecolor='black', label='Model: Random'),
             Patch(facecolor=color_map['Llama-3.1-8B-Instruct'], edgecolor='black', label='Model: Llama-3.1-8B-Instruct'),
-            Patch(facecolor=color_map['Qwen3-32B'], edgecolor='black', label='Model: Qwen 3-32B'),
+            Patch(facecolor=color_map['Qwen3-32B'], edgecolor='black', label='Model: Qwen3-32B'),
             
             # Empty patch for spacing in the legend
             Patch(facecolor='none', edgecolor='none', label=''), 
             
             # Framework patterns (represented with white boxes)
-            Patch(facecolor='white', edgecolor='black', hatch='', label='Framework: Single'),
-            Patch(facecolor='white', edgecolor='black', hatch='//', label='Framework: MAS')
+            Patch(facecolor='white', edgecolor='black', hatch='', label='Setup: Single'),
+            Patch(facecolor='white', edgecolor='black', hatch='/', label='Setup: Base'),
+            Patch(facecolor='white', edgecolor='black', hatch='.', label='Setup: Improved')
         ]
 
         ax.legend(handles=legend_elements, title = "Model & Setup", loc="upper left")
@@ -1061,7 +1435,6 @@ class Vis():
         df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric) # last accuracy stimmt nicht
 
         print(df_experiment_files)
-
 
     def plot_dist_metrics(self):
         df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
@@ -1188,14 +1561,15 @@ if __name__ == "__main__":
     # for last in [False, True]:
     #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
     #     vis.plot_all_table()
-    experiment_files = {
-         "chain":"outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_155_0",
-         "layered": "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_176_0",
-         "star": "outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_158_0"
-    }
+    # experiment_files = {
+    #     "reject":"outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_352",
+    #     "support": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_349",
+    # }
 
-    vis = Vis(variation = True, conv_format = "full_full", last = False, task="rocstories")
-    vis.plot_all_table(run_file = "eval/multi/Qwen3-32B/rocstories/dev/full_full_topologies_250.csv")
+    vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
+    vis.plot_dist_split()
+
+    #vis.plot_all_table(run_file = "eval/multi/Qwen3-32B/rocstories/dev/full_full_topologies_250.csv")
     
     #vis.plot_sankey_full_plotly("chain", sent_color=False)
     #vis.plot_topology_changes("graph", sent_color=False)
@@ -1207,6 +1581,6 @@ if __name__ == "__main__":
     #vis.plot_dist_sanity_checks()
     #vis.get_exp_groups()
 
-    #   vis.perform_ttest(comparison="single")
+    #vis.perform_ttest(comparison="support", exp_name = "exploration_2")
 
     print("Done")

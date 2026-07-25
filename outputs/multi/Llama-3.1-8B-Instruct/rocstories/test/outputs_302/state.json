@@ -4,8 +4,23 @@
       "filename": "data-00000-of-00001.arrow"
     }
   ],
-  "_fingerprint": "f780601d004b2f10",
-  "_format_columns": null,
+  "_fingerprint": "6328b25177326834",
+  "_format_columns": [
+    "storyid",
+    "storytitle",
+    "sentence1",
+    "sentence2",
+    "sentence3",
+    "sentence4",
+    "sentence5",
+    "shuffled_sents",
+    "stop",
+    "conversation_history",
+    "turns",
+    "player",
+    "roles",
+    "last_hypos"
+  ],
   "_format_kwargs": {},
   "_format_type": null,
   "_output_all_columns": false,
