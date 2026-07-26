@@ -1,0 +1,4 @@
+model;format;task;output_0;output_1;output_2
+Llama-3.1-8B-Instruct;Hypo;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_287;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_334;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_335
+Llama-3.1-8B-Instruct;Full;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_336;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_337
+Llama-3.1-8B-Instruct;Args;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_290;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_338;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_339
