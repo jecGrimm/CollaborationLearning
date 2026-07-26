@@ -1,0 +1,155 @@
+================================================================================
+JobID = 13662326
+User = u27794, Account = nhr_by_starter_26900
+Partition = grete-h100:shared, Nodelist = ggpu235
+================================================================================
+/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/torch/cuda/__init__.py:180: UserWarning: CUDA initialization: The NVIDIA driver on your system is too old (found version 12080). Please update your GPU driver by downloading and installing a new version from the URL: http://www.nvidia.com/Download/index.aspx Alternatively, go to: https://pytorch.org to install a PyTorch version that has been compiled with your version of the CUDA driver. (Triggered internally at /pytorch/c10/cuda/CUDAFunctions.cpp:119.)
+  return torch._C._cuda_getDeviceCount() > 0
+Current run_idx: 292
+
+Batch size: 1
+'[Errno 101] Network is unreachable' thrown while requesting HEAD https://huggingface.co/Qwen/Qwen3-32B/resolve/main/config.json
+Retrying in 1s [Retry 1/5].
+'[Errno 101] Network is unreachable' thrown while requesting HEAD https://huggingface.co/Qwen/Qwen3-32B/resolve/main/config.json
+Retrying in 1s [Retry 1/5].
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 735, in _get_config_dict
+    resolved_config_file = cached_file(
+                           ^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 512, in cached_files
+    raise e
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 422, in cached_files
+    hf_hub_download(
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 997, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1130, in _hf_hub_download_to_cache_dir
+    _get_metadata_or_catch_error(
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1669, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1591, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 685, in _httpx_follow_relative_redirects_with_backoff
+    response = http_backoff(
+               ^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
+    return next(
+           ^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
+    response = client.request(method=method, url=url, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/httpx/_client.py", line 901, in send
+    raise RuntimeError("Cannot send a request, as the client has been closed.")
+RuntimeError: Cannot send a request, as the client has been closed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 687, in from_pretrained
+    config = AutoConfig.from_pretrained(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/models/auto/configuration_auto.py", line 374, in from_pretrained
+    config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 680, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 757, in _get_config_dict
+    raise OSError(
+OSError: Can't load the configuration of 'Qwen/Qwen3-32B'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Qwen/Qwen3-32B' is the correct path to a directory containing a config.json file
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 735, in _get_config_dict
+    resolved_config_file = cached_file(
+                           ^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 512, in cached_files
+    raise e
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/utils/hub.py", line 422, in cached_files
+    hf_hub_download(
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 997, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1130, in _hf_hub_download_to_cache_dir
+    _get_metadata_or_catch_error(
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1669, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/file_download.py", line 1591, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 685, in _httpx_follow_relative_redirects_with_backoff
+    response = http_backoff(
+               ^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 559, in http_backoff
+    return next(
+           ^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 467, in _http_backoff_base
+    response = client.request(method=method, url=url, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/httpx/_client.py", line 825, in request
+    return self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/httpx/_client.py", line 901, in send
+    raise RuntimeError("Cannot send a request, as the client has been closed.")
+RuntimeError: Cannot send a request, as the client has been closed.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/run_experiment.py", line 180, in <module>
+    run_experiment(cli.config)
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/run_experiment.py", line 47, in run_experiment
+    multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/prompt.py", line 1023, in prompt_chain
+    pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/prompt.py", line 66, in init_pipe
+    processor = ThinkingTokenBudgetProcessor(AutoTokenizer.from_pretrained(self.model_id), max_thinking_tokens=int(self.max_new_tokens * thinking_budget)) # increased thinking budget
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/models/auto/tokenization_auto.py", line 691, in from_pretrained
+    config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 639, in from_pretrained
+    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 680, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/vast-nhr/home/j.grimm/u27794/collab_learn/lib/python3.12/site-packages/transformers/configuration_utils.py", line 757, in _get_config_dict
+    raise OSError(
+OSError: Can't load the configuration of 'Qwen/Qwen3-32B'. If you were trying to load it from 'https://huggingface.co/models', make sure you don't have a local directory with the same name. Otherwise, make sure 'Qwen/Qwen3-32B' is the correct path to a directory containing a config.json file
+srun: error: ggpu235: task 0: Exited with exit code 1
+srun: Terminating StepId=13662326.0
+============ Job Information ===================================================
+Submitted: 
+Started: 
+Ended: 2026-05-05T09:44:29
+Elapsed: 0 min, Limit:  min, Difference: 0 min
+CPUs: , Nodes: 
+Estimated credit Consumption:  core-hours
+================================================================================

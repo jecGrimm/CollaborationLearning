@@ -1,0 +1,25 @@
+================================================================================
+JobID = 13655653
+User = u27794, Account = nhr_by_starter_26900
+Partition = grete:shared, Nodelist = ggpu124
+================================================================================
+
+EnvironmentLocationNotFound: Not a conda environment: /mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/collab_learn
+
+Traceback (most recent call last):
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/run_experiment.py", line 1, in <module>
+    from prompt import SingleAgent, MultiAgent
+  File "/mnt/vast-nhr/home/j.grimm/u27794/CollaborationLearning/prompt.py", line 262
+    input_samples += f"title{n+1}: {batch["titles"][i][n]}\n"
+                                           ^^^^^^
+SyntaxError: f-string: unmatched '['
+srun: error: ggpu124: task 0: Exited with exit code 1
+srun: Terminating StepId=13655653.0
+============ Job Information ===================================================
+Submitted: 2026-05-04T16:32:26
+Started: 2026-05-04T16:36:29
+Ended: 2026-05-04T16:36:54
+Elapsed: 1 min, Limit: 2880 min, Difference: 2879 min
+CPUs: 32, Nodes: 1
+Estimated credit Consumption: 2.50 core-hours
+================================================================================

@@ -1,0 +1,5 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Generating train split: 1000 examples [00:00, 428427.37 examples/s]
+Generating train split: 1000 examples [00:00, 430317.43 examples/s]
+Backend macosx is interactive backend. Turning interactive mode on.
+Done

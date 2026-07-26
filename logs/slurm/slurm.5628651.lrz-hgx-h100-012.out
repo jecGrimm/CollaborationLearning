@@ -1,0 +1,261 @@
+Current run_idx: 289
+
+Batch size: 2
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:11,  3.84s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:07<00:07,  3.90s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:11<00:03,  3.81s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  2.65s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:12<00:00,  3.09s/it]
+Processing shards:   0%|          | 0/1 [00:00<?, ?it/s]
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 1798.09 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 7153.85 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2478.96 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:  84%|████████▍ | 42/50 [00:00<00:00, 419.25it/s][ARound 0, Turn: 0: 100%|██████████| 50/50 [00:00<00:00, 481.87it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1215.68 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 127.84 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 126.48 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 9953.73 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2566.49 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:  88%|████████▊ | 44/50 [00:00<00:00, 439.26it/s][ARound 0, Turn: 1: 100%|██████████| 50/50 [00:00<00:00, 487.09it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1226.65 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 126.69 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 125.26 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 9772.83 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2535.79 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:  74%|███████▍  | 37/50 [00:00<00:00, 369.65it/s][ARound 0, Turn: 2: 100%|██████████| 50/50 [00:00<00:00, 471.61it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1139.66 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 127.12 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 125.76 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 9908.12 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2390.16 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:  70%|███████   | 35/50 [00:00<00:00, 349.22it/s][ARound 1, Turn: 0: 100%|██████████| 50/50 [00:00<00:00, 467.39it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1098.30 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 125.74 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 124.36 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 10027.98 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2356.80 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:  58%|█████▊    | 29/50 [00:00<00:00, 289.61it/s][ARound 1, Turn: 1: 100%|██████████| 50/50 [00:00<00:00, 454.69it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1083.28 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 125.19 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 123.75 examples/s]
+
+Filter:   0%|          | 0/50 [00:00<?, ? examples/s][AFilter: 100%|██████████| 50/50 [00:00<00:00, 9839.32 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2388.99 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:  62%|██████▏   | 31/50 [00:00<00:00, 309.08it/s][ARound 1, Turn: 2: 100%|██████████| 50/50 [00:00<00:00, 463.55it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 1083.80 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 50/50 [00:00<00:00, 125.67 examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 124.20 examples/s]
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][AMap: 100%|██████████| 50/50 [00:00<00:00, 2497.71 examples/s]
+
+Generating final answers:   0%|          | 0/50 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/50 [00:00<?, ? examples/s][A[AGenerating final answers: 100%|██████████| 50/50 [00:00<00:00, 842.17it/s]
+Map: 100%|██████████| 50/50 [00:00<00:00, 2862.42 examples/s]
+Current run_idx: 289
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/50 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 50/50 [00:00<00:00, 3591.26 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 50/50 [00:00<00:00, 3545.60 examples/s]
+Current run_idx: 289
+
+Processing shards: 100%|██████████| 1/1 [1:13:21<00:00, 4401.56s/it]Processing shards: 100%|██████████| 1/1 [1:13:21<00:00, 4401.56s/it]
+Current run_idx: 289
+
+Saving the dataset (0/1 shards):   0%|          | 0/50 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 50/50 [00:00<00:00, 5964.94 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 50/50 [00:00<00:00, 5845.56 examples/s]
+Current run_idx: 289
+
+Current run_idx: 289
+
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+Map:   0%|          | 0/50 [00:00<?, ? examples/s]Map: 100%|██████████| 50/50 [00:00<00:00, 4862.74 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 287.12ba/s]
+289: 0.48
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Generating train split: 0 examples [00:00, ? examples/s]Generating train split: 50 examples [00:00, 11469.88 examples/s]
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Could not find a label
+Map:   0%|          | 0/50 [00:00<?, ? examples/s]Map:  48%|████▊     | 24/50 [00:00<00:00, 224.75 examples/s]Map: 100%|██████████| 50/50 [00:00<00:00, 237.55 examples/s]Map: 100%|██████████| 50/50 [00:00<00:00, 230.23 examples/s]
+Map:   0%|          | 0/50 [00:00<?, ? examples/s]Map: 100%|██████████| 50/50 [00:00<00:00, 1968.93 examples/s]
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+incorrect prediction
+Map:   0%|          | 0/50 [00:00<?, ? examples/s]Map: 100%|██████████| 50/50 [00:00<00:00, 2746.33 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 36.69ba/s]
+289: 0.18
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.348
+Current run_idx: 289
+

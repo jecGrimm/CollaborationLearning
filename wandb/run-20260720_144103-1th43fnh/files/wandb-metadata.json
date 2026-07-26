@@ -1,0 +1,36 @@
+{
+  "os": "macOS-15.7.7-arm64-arm-64bit-Mach-O",
+  "python": "CPython 3.13.9",
+  "startedAt": "2026-07-20T12:41:03.185361Z",
+  "program": "/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py",
+  "codePath": "visualization.py",
+  "codePathLocal": "visualization.py",
+  "git": {
+    "remote": "git@github.com:jecGrimm/CollaborationLearning.git",
+    "commit": "4814d0fd10f2e0636967905b2f8acdb4bf539f78"
+  },
+  "email": "j.grimm@lmu.de",
+  "root": "/Users/jgrimm/Desktop/code/CollaborationLearning",
+  "host": "LsBPLt31.local",
+  "executable": "/Users/jgrimm/miniconda3/envs/collab_learn/bin/python",
+  "cpu_count": 10,
+  "cpu_count_logical": 10,
+  "disk": {
+    "/": {
+      "total": "494384795648",
+      "used": "405538365440"
+    }
+  },
+  "memory": {
+    "total": "17179869184"
+  },
+  "apple": {
+    "name": "Apple M4",
+    "ecpuCores": 6,
+    "pcpuCores": 4,
+    "gpuCores": 10,
+    "memoryGb": 16,
+    "ramTotalBytes": "17179869184"
+  },
+  "writerId": "x6awq74e9vg5pqbac0n1a1vee7iuabsc"
+}

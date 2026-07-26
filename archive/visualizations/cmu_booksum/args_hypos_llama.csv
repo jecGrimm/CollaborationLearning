@@ -1,0 +1,4 @@
+;format;task;run;accuracy;last_accuracy
+0;Hypo;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_287;39.2;30.9
+1;Full;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_286;41.0;30.1
+2;Args;CMU_Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_290;37.4;29.0

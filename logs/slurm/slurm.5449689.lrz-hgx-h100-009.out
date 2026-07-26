@@ -1,0 +1,227 @@
+Current run_idx: 176
+
+Batch size: 1
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<02:04,  7.79s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:14<01:51,  7.42s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:22<01:43,  7.36s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:29<01:35,  7.32s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:36<01:27,  7.29s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:44<01:21,  7.44s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:52<01:15,  7.53s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:59<01:06,  7.42s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:06<00:58,  7.37s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:13<00:51,  7.36s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:21<00:44,  7.34s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:28<00:36,  7.32s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:35<00:29,  7.33s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:43<00:22,  7.37s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:51<00:15,  7.52s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:58<00:07,  7.59s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:04<00:00,  7.08s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:04<00:00,  7.34s/it]
+Device set to use cuda:0
+`torch_dtype` attribute is deprecated. Use `dtype` instead!
+Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8986.38 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10399.34 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:32,  7.60it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1272.92it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 2553.17 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 12919.07 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:  18%|█▊        | 46/250 [00:00<00:00, 459.48it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1453.42it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 2657.65 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 12349.26 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.87it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1887.94it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4675.11 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10843.60 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:24,  9.98it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1911.33it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 3027.09 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10377.21 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   6%|▋         | 16/250 [00:00<00:01, 159.85it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1929.68it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4354.53 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1333.10 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1292.06 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:30,  8.22it/s][A
+Processing prompts:  63%|██████▎   | 158/250 [00:00<00:00, 849.20it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 886.29it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1270.41 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1059.53 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 706.85 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 589.84 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:29,  8.51it/s][A
+Processing prompts:  63%|██████▎   | 157/250 [00:00<00:00, 857.49it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 903.28it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1292.05 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1024.63 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 480.98 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 441.74 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:30,  8.07it/s][A
+Processing prompts:  63%|██████▎   | 158/250 [00:00<00:00, 842.13it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 878.79it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1109.05 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 889.68 examples/s] 
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 363.15 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 346.43 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:32,  7.77it/s][A
+Processing prompts:  64%|██████▎   | 159/250 [00:00<00:00, 832.33it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 870.08it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 998.03 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 975.27 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 230.73 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 229.47 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:33,  7.47it/s][A
+Processing prompts:  64%|██████▍   | 160/250 [00:00<00:00, 824.02it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 858.31it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 812.14 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 797.03 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2344.77 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2224.20 examples/s]
+You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
+
+Generating final answers:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Generating final answers:   0%|          | 1/250 [00:00<00:31,  7.79it/s][AGenerating final answers: 100%|██████████| 250/250 [00:00<00:00, 1109.09it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1213.09 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1177.25 examples/s]
+Current run_idx: 176
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2581.73 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2573.46 examples/s]
+Current run_idx: 176
+
+Processing shards:  17%|█▋        | 1/6 [28:33:29<142:47:29, 102809.98s/it]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3516.27 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9640.48 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.92it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1900.40it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 5458.15 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 13140.54 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:26,  9.42it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1827.60it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 5156.91 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 12683.42 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.91it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1902.66it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 937.69 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11698.03 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:27,  9.10it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1772.83it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4689.10 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10946.04 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:30,  8.08it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1606.83it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 3428.25 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1385.48 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1344.47 examples/s]
+
+Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Processing prompts:   0%|          | 1/250 [00:00<00:32,  7.66it/s][A
+Processing prompts:  64%|██████▍   | 161/250 [00:00<00:00, 838.50it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 869.27it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1370.47 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1155.99 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap:   0%|          | 0/250 [00:00<?, ? examples/s]
+Processing shards:  17%|█▋        | 1/6 [37:30:07<187:30:36, 135007.33s/it]
+Traceback (most recent call last):
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 174, in <module>
+    run_experiment(cli.config)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 48, in run_experiment
+    multi.prompt_graph(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"])
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 970, in prompt_graph
+    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
+    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
+                                           ~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3341, in map
+    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
+                               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3697, in _map_single
+    for i, batch in iter_outputs(shard_iterable):
+                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3647, in iter_outputs
+    yield i, apply_function(example, i, offset=offset)
+             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3570, in apply_function
+    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 970, in <lambda>
+    filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
+                                                 ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 560, in create_prompts
+    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i], init_answer = init_turn))
+                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 463, in create_message
+    "content": self.MID_PROMPT.format(
+               ~~~~~~~~~~~~~~~~~~~~~~^
+        sample = sample,
+        ^^^^^^^^^^^^^^^^
+        conversation = conversation,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        shuffled_sents = shuffled_sents[:max_sent_idx]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+KeyError: 'other_solutions'
+srun: error: lrz-hgx-h100-009: task 0: Exited with exit code 1

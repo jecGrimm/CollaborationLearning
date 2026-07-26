@@ -1,0 +1,33 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Backend macosx is interactive backend. Turning interactive mode on.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 2452.98 examples/s]
+Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 403.69ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_155_0.jsonl
+accuracy: 0.7487999999999999
+zero percentage: 0.0024
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 2916.31 examples/s]
+Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 753.56ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_176_0.jsonl
+accuracy: 0.7527999999999999
+zero percentage: 0.0112
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 3545.05 examples/s]
+Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 734.17ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_158_0.jsonl
+accuracy: 0.7527999999999999
+zero percentage: 0.0192
+double percentage: 0.0
+wrong format: 0.0
+Generating train split: 250 examples [00:00, 52358.12 examples/s]
+Generating train split: 250 examples [00:00, 131929.54 examples/s]
+Generating train split: 250 examples [00:00, 80387.61 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 641.11 examples/s]
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 662.79 examples/s]
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 721.39 examples/s]

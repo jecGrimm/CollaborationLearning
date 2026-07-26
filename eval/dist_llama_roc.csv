@@ -1,0 +1,5 @@
+model;framework;task;output_0;output_1;output_2
+Random;Random;ROCStories;outputs/random/rocstories/test;outputs/random/rocstories/test_1;outputs/random/rocstories/test_2
+Llama-3.1-8B-Instruct;Single;ROCStories;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_308;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_309
+Llama-3.1-8B-Instruct;Base;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_322;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_323;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_324
+Llama-3.1-8B-Instruct;Improved;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_257;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_310;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_311

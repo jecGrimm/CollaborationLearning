@@ -1,0 +1,37 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████| 250/250 [00:31<00:00,  7.98 examples/s]
+Traceback (most recent call last):
+  File "/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/runpy.py", line 198, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+                     "__main__", mod_spec)
+  File "/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/runpy.py", line 88, in _run_code
+    exec(code, run_globals)
+    ~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/__main__.py", line 71, in <module>
+    cli.main()
+    ~~~~~~~~^^
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 542, in main
+    run()
+    ~~~^^
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/adapter/../../debugpy/launcher/../../debugpy/../debugpy/server/cli.py", line 361, in run_file
+    runpy.run_path(target, run_name="__main__")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 310, in run_path
+    return _run_module_code(code, init_globals, run_name, pkg_name=pkg_name, script_name=fname)
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 127, in _run_module_code
+    _run_code(code, mod_globals, init_globals, mod_name, mod_spec, pkg_name, script_name)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/jgrimm/.vscode/extensions/ms-python.debugpy-2026.6.0-darwin-arm64/bundled/libs/debugpy/_vendored/pydevd/_pydevd_bundle/pydevd_runpy.py", line 118, in _run_code
+    exec(code, run_globals)
+    ~~~~^^^^^^^^^^^^^^^^^^^
+  File "/Users/jgrimm/Desktop/code/CollaborationLearning/helper.py", line 134, in <module>
+    fix_outputs(qwen8_out1)
+    ~~~~~~~~~~~^^^^^^^^^^^^
+  File "/Users/jgrimm/Desktop/code/CollaborationLearning/helper.py", line 115, in fix_outputs
+    exp_data.save_to_disk(outdir)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 1577, in save_to_disk
+    raise PermissionError(
+        f"Tried to overwrite {Path(dataset_path).expanduser().resolve()} but a dataset can't overwrite itself."
+    )
+PermissionError: Tried to overwrite /Users/jgrimm/Desktop/code/CollaborationLearning/outputs/single/Qwen3-32B/cmu_booksum/test/ckps/outputs_366_0 but a dataset can't overwrite itself.

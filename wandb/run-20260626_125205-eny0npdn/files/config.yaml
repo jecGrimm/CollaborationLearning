@@ -1,0 +1,38 @@
+_wandb:
+    value:
+        cli_version: 0.23.0
+        e:
+            c3djuou9g847wktldvbm6ngprb41clba:
+                codePath: evaluate.py
+                codePathLocal: evaluate.py
+                email: j.grimm@lmu.de
+                executable: /Users/jgrimm/miniconda3/envs/collab_learn/bin/python
+                git:
+                    commit: b10f2b6883cb4ea46e0b08aafda08a7328074ac4
+                    remote: git@github.com:jecGrimm/CollaborationLearning.git
+                host: LsBPLt31.local
+                os: macOS-15.7.7-arm64-arm-64bit-Mach-O
+                program: /Users/jgrimm/Desktop/code/CollaborationLearning/evaluate.py
+                python: CPython 3.13.9
+                root: /Users/jgrimm/Desktop/code/CollaborationLearning
+                startedAt: "2026-06-26T10:52:05.325781Z"
+                writerId: c3djuou9g847wktldvbm6ngprb41clba
+        m: []
+        python_version: 3.13.9
+        t:
+            "1":
+                - 1
+                - 49
+                - 51
+                - 105
+            "2":
+                - 1
+                - 49
+                - 51
+                - 105
+            "3":
+                - 24
+            "4": 3.13.9
+            "5": 0.23.0
+            "12": 0.23.0
+            "13": darwin-arm64

@@ -1,0 +1,9 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 6611.03 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 470.37ba/s]
+./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/dev/outputs_321.jsonl
+accuracy: 0.42
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.04
+defaultdict(<class 'float'>, {'acc_mean': 0.42, 'wrong_format': 0.04, 'zero_percentage': 0.0, 'double_percentage': 0.0})

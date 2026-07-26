@@ -1,0 +1,6 @@
+{"time":"2026-06-25T10:46:58.243879+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
+{"time":"2026-06-25T10:46:58.511313+02:00","level":"INFO","msg":"stream: created new stream","id":"srzcatkg"}
+{"time":"2026-06-25T10:46:58.511357+02:00","level":"INFO","msg":"handler: started","stream_id":"srzcatkg"}
+{"time":"2026-06-25T10:46:58.511736+02:00","level":"INFO","msg":"stream: started","id":"srzcatkg"}
+{"time":"2026-06-25T10:46:58.511784+02:00","level":"INFO","msg":"writer: started","stream_id":"srzcatkg"}
+{"time":"2026-06-25T10:46:58.511836+02:00","level":"INFO","msg":"sender: started","stream_id":"srzcatkg"}

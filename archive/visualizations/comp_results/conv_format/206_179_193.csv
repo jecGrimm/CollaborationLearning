@@ -1,0 +1,74 @@
+;195;168;182
+zero_percentage;0.0;0.019333333333333334;0.0
+device_id;3;;
+run_idx;206;179;193
+do_sample;True;True;True
+batch_size;1;8;8
+version_idx;;;
+top_p;0.8;0.8;0.8
+num_beams;1.0;1.0;1.0
+conv_file;;;
+system_prompt;You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules};You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules};You are a player in a conversational game with 4 other players. Your name is {player_name}. The names of the other players are {other_players}. {rules}
+experiment_file;./outputs/multi/Qwen3-32B/rocstories/dev/outputs_206;./outputs/multi/Qwen3-32B/rocstories/dev/outputs_179;./outputs/multi/Qwen3-32B/rocstories/dev/outputs_193
+length_penalty;1.0;1.0;1.0
+final_reorder;True;True;True
+candidate;structured_panel_short_pos-num_sents_output-format;structured_panel_short_pos-num_sents_output-format;structured_panel_short_pos-num_sents_output-format
+arranged_file;;;
+names;['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5'];['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5'];['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5']
+temperature;0.7;0.7;0.7
+interactive;;;
+top_k;20.0;20.0;20.0
+last_mean_acc;;;
+framework;multi;multi;multi
+output_format;;;
+device;cuda:3;cuda:0;cuda:0
+conv_format;support;full;reasons
+model;{'vocab_size': 151936, 'max_position_embeddings': 40960, 'hidden_size': 5120, 'intermediate_size': 25600, 'num_hidden_layers': 64, 'num_attention_heads': 64, 'use_sliding_window': False, 'sliding_window': None, 'max_window_layers': 64, 'num_key_value_heads': 8, 'head_dim': 128, 'hidden_act': 'silu', 'initializer_range': 0.02, 'rms_norm_eps': 1e-06, 'use_cache': True, 'rope_theta': 1000000, 'rope_scaling': None, 'attention_bias': False, 'attention_dropout': 0.0, 'layer_types': ['full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention'], 'return_dict': True, 'output_hidden_states': False, 'torchscript': False, 'dtype': 'bfloat16', 'pruned_heads': {}, 'tie_word_embeddings': False, 'chunk_size_feed_forward': 0, 'is_encoder_decoder': False, 'is_decoder': False, 'cross_attention_hidden_size': None, 'add_cross_attention': False, 'tie_encoder_decoder': False, 'architectures': ['Qwen3ForCausalLM'], 'finetuning_task': None, 'id2label': {'0': 'LABEL_0', '1': 'LABEL_1'}, 'label2id': {'LABEL_0': 0, 'LABEL_1': 1}, 'task_specific_params': None, 'problem_type': None, 'tokenizer_class': None, 'prefix': None, 'bos_token_id': 151643, 'pad_token_id': None, 'eos_token_id': 151645, 'sep_token_id': None, 'decoder_start_token_id': None, 'max_length': 20, 'min_length': 0, 'do_sample': False, 'early_stopping': False, 'num_beams': 1, 'temperature': 1.0, 'top_k': 50, 'top_p': 1.0, 'typical_p': 1.0, 'repetition_penalty': 1.0, 'length_penalty': 1.0, 'no_repeat_ngram_size': 0, 'encoder_no_repeat_ngram_size': 0, 'bad_words_ids': None, 'num_return_sequences': 1, 'output_scores': False, 'return_dict_in_generate': False, 'forced_bos_token_id': None, 'forced_eos_token_id': None, 'remove_invalid_values': False, 'exponential_decay_length_penalty': None, 'suppress_tokens': None, 'begin_suppress_tokens': None, 'num_beam_groups': 1, 'diversity_penalty': 0.0, '_name_or_path': 'Qwen/Qwen3-32B', 'transformers_version': '4.57.1', 'model_type': 'qwen3', 'tf_legacy_loss': False, 'use_bfloat16': False, 'output_attentions': False};{'vocab_size': 151936, 'max_position_embeddings': 40960, 'hidden_size': 5120, 'intermediate_size': 25600, 'num_hidden_layers': 64, 'num_attention_heads': 64, 'use_sliding_window': False, 'sliding_window': None, 'max_window_layers': 64, 'num_key_value_heads': 8, 'head_dim': 128, 'hidden_act': 'silu', 'initializer_range': 0.02, 'rms_norm_eps': 1e-06, 'use_cache': True, 'rope_theta': 1000000, 'rope_scaling': None, 'attention_bias': False, 'attention_dropout': 0.0, 'layer_types': ['full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention'], 'return_dict': True, 'output_hidden_states': False, 'torchscript': False, 'dtype': 'bfloat16', 'pruned_heads': {}, 'tie_word_embeddings': False, 'chunk_size_feed_forward': 0, 'is_encoder_decoder': False, 'is_decoder': False, 'cross_attention_hidden_size': None, 'add_cross_attention': False, 'tie_encoder_decoder': False, 'architectures': ['Qwen3ForCausalLM'], 'finetuning_task': None, 'id2label': {'0': 'LABEL_0', '1': 'LABEL_1'}, 'label2id': {'LABEL_0': 0, 'LABEL_1': 1}, 'task_specific_params': None, 'problem_type': None, 'tokenizer_class': None, 'prefix': None, 'bos_token_id': 151643, 'pad_token_id': None, 'eos_token_id': 151645, 'sep_token_id': None, 'decoder_start_token_id': None, 'max_length': 20, 'min_length': 0, 'do_sample': False, 'early_stopping': False, 'num_beams': 1, 'temperature': 1.0, 'top_k': 50, 'top_p': 1.0, 'typical_p': 1.0, 'repetition_penalty': 1.0, 'length_penalty': 1.0, 'no_repeat_ngram_size': 0, 'encoder_no_repeat_ngram_size': 0, 'bad_words_ids': None, 'num_return_sequences': 1, 'output_scores': False, 'return_dict_in_generate': False, 'forced_bos_token_id': None, 'forced_eos_token_id': None, 'remove_invalid_values': False, 'exponential_decay_length_penalty': None, 'suppress_tokens': None, 'begin_suppress_tokens': None, 'num_beam_groups': 1, 'diversity_penalty': 0.0, '_name_or_path': 'Qwen/Qwen3-32B', 'transformers_version': '4.57.3', 'model_type': 'qwen3', 'tf_legacy_loss': False, 'use_bfloat16': False, 'output_attentions': False};{'vocab_size': 151936, 'max_position_embeddings': 40960, 'hidden_size': 5120, 'intermediate_size': 25600, 'num_hidden_layers': 64, 'num_attention_heads': 64, 'use_sliding_window': False, 'sliding_window': None, 'max_window_layers': 64, 'num_key_value_heads': 8, 'head_dim': 128, 'hidden_act': 'silu', 'initializer_range': 0.02, 'rms_norm_eps': 1e-06, 'use_cache': True, 'rope_theta': 1000000, 'rope_scaling': None, 'attention_bias': False, 'attention_dropout': 0.0, 'layer_types': ['full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention', 'full_attention'], 'return_dict': True, 'output_hidden_states': False, 'torchscript': False, 'dtype': 'bfloat16', 'pruned_heads': {}, 'tie_word_embeddings': False, 'chunk_size_feed_forward': 0, 'is_encoder_decoder': False, 'is_decoder': False, 'cross_attention_hidden_size': None, 'add_cross_attention': False, 'tie_encoder_decoder': False, 'architectures': ['Qwen3ForCausalLM'], 'finetuning_task': None, 'id2label': {'0': 'LABEL_0', '1': 'LABEL_1'}, 'label2id': {'LABEL_0': 0, 'LABEL_1': 1}, 'task_specific_params': None, 'problem_type': None, 'tokenizer_class': None, 'prefix': None, 'bos_token_id': 151643, 'pad_token_id': None, 'eos_token_id': 151645, 'sep_token_id': None, 'decoder_start_token_id': None, 'max_length': 20, 'min_length': 0, 'do_sample': False, 'early_stopping': False, 'num_beams': 1, 'temperature': 1.0, 'top_k': 50, 'top_p': 1.0, 'typical_p': 1.0, 'repetition_penalty': 1.0, 'length_penalty': 1.0, 'no_repeat_ngram_size': 0, 'encoder_no_repeat_ngram_size': 0, 'bad_words_ids': None, 'num_return_sequences': 1, 'output_scores': False, 'return_dict_in_generate': False, 'forced_bos_token_id': None, 'forced_eos_token_id': None, 'remove_invalid_values': False, 'exponential_decay_length_penalty': None, 'suppress_tokens': None, 'begin_suppress_tokens': None, 'num_beam_groups': 1, 'diversity_penalty': 0.0, '_name_or_path': 'Qwen/Qwen3-32B', 'transformers_version': '4.57.3', 'model_type': 'qwen3', 'tf_legacy_loss': False, 'use_bfloat16': False, 'output_attentions': False}
+candidates;;;
+thinking_budget;0.0;0.0;0.0
+start;750.0;0.0;0.0
+mid_prompt;;;
+conversation_rounds;1.0;1.0;1.0
+start_prompt;Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n;Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n;Think of convincing reasons for ALL possible positions of the following sentences. Provide one sentence per reason.\n\n**Sentences:**\n{shuffled_sents}\n\n**Output Format:**\n{sample}\nAnswer:\n
+max_new_tokens;1877.0;1877.0;1877.0
+shuffle_file;./data/ROCStories_shuffled_dev.jsonl;./data/ROCStories_shuffled_dev.jsonl;./data/ROCStories_shuffled_dev.jsonl
+device_map;cuda;cuda;cuda
+end;1500.0;;
+wrong_format;0.0;0.0;0.0
+variation;True;True;True
+mean_acc;0.0858666666666666;0.7333333333333333;0.0891378655526015
+rules;Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.;Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.;Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response.
+double_percentage;0.0;0.0;0.0
+user_prompt;;;
+min_p;0.0;0.0;0.0
+task;text-generation;text-generation;text-generation
+desc;This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.;This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.;This run tests the panel setup with 1024 tokens with Qwen3-32B with variation.
+quantized;;;
+final;True;True;True
+torch_dtype;torch.bfloat16;torch.bfloat16;torch.bfloat16
+conv_final;;;
+model_id;Qwen/Qwen3-32B;Qwen/Qwen3-32B;Qwen/Qwen3-32B
+structured;True;True;True
+duration;58268.26131105423;23910.168568372726;79578.4761273861
+instances;750.0;1500.0;5266.0
+topology;panel;panel;panel
+split;dev;dev;dev
+acc_mean;0.788;0.7338666666666668;0.8088492214204329
+prec_1;0.9962666666666667;0.9767999999999999;0.9953285225977971
+prec_2;0.7526666666666667;0.7373333333333333;0.7632453475123433
+prec_3;0.6608888888888889;0.6497777777777778;0.6768578301050765
+prec_4;0.6193333333333333;0.6036666666666667;0.6358716293201672
+prec_5;0.6133333333333333;0.5693333333333334;0.6302696543866312
+spearman;0.8577333333333332;0.8019333333333333;0.8842025050020571
+kendalltau;0.8287999999999999;0.7726666666666666;0.8533452768260572
+acc_last;0.06266666666666666;0.06426666666666667;0.06486897075579187
+wrong_format_last;0.0;0.0013333333333333333;0.00018989745537409798
+zero_percentage_last;0.0;0.0;0.0
+double_percentage_last;0.0;0.0;0.0
+prec_1_last;0.2749333333333334;0.2712;0.2702240789973414
+prec_2_last;0.004666666666666667;0.006833333333333334;0.008545385491834409
+prec_3_last;0.0004444444444444444;0.0004444444444444444;0.000506393214330928
+prec_4_last;0.0;0.0;0.0
+prec_5_last;0.0;0.0;0.0
+spearman_last;0.0;0.0;0.0
+kendalltau_last;0.0;0.0;0.0

@@ -76,3 +76,14 @@ outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350/cache-2f6174
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350/cache-d7478fa3a661cf21.arrow
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350/data-00000-of-00001.arrow
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350/cache-ec80821215da902f.arrow
+
+# Files over 100 MB (Automatically added)
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_342/cache-cd7396ac07c86a3f.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_342/cache-565a8599fe015834.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_342/cache-e5ab9578ccef5d94.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-38fd776e5cc50d50.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-7aec00f4a4fc8372.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-b102d461269993e4.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-7cd4475b7108fbe2.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-00cb468eb6c64e2c.arrow
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-ff63b3ddb1806685.arrow

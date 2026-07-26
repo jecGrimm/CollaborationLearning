@@ -1,0 +1,429 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Backend macosx is interactive backend. Turning interactive mode on.
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 2874.66 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 147.87ba/s]
+outputs/random/rocstories/test.jsonl
+accuracy: 0.19960000000000003
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3835.80 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 243.13ba/s]
+outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253.jsonl
+accuracy: 0.5476
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.004
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 12368.46 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 244.32ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_322.jsonl
+accuracy: 0.23040000000000002
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.012
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4824.69 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 252.97ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_257.jsonl
+accuracy: 0.31720000000000004
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.08
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4203.43 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 251.32ba/s]
+outputs/random/rocstories/test_1.jsonl
+accuracy: 0.2068
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3876.90 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 244.27ba/s]
+outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_308.jsonl
+accuracy: 0.5518
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.001
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 13101.18 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 242.12ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_323.jsonl
+accuracy: 0.22360000000000002
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.013
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4757.12 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 228.15ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_310.jsonl
+accuracy: 0.3234
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.084
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4062.66 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 251.13ba/s]
+outputs/random/rocstories/test_2.jsonl
+accuracy: 0.1982
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3873.91 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 252.97ba/s]
+outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_309.jsonl
+accuracy: 0.5536
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.001
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 12624.24 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 241.48ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_324.jsonl
+accuracy: 0.24180000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.011
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4767.97 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 260.06ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_311.jsonl
+accuracy: 0.33720000000000006
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.072
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 219287.08 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 774.00ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.342
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 40280.27 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 989.22ba/s]
+outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264.jsonl
+accuracy: 0.353
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.024
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 96870.62 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 921.83ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_325.jsonl
+accuracy: 0.455
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.013
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 102470.05 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1005.11ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_267.jsonl
+accuracy: 0.401
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.042
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 241718.76 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1009.22ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.3
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 28296.68 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 809.09ba/s]
+outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312.jsonl
+accuracy: 0.369
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.027
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 91690.80 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 834.02ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326.jsonl
+accuracy: 0.476
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.015
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 211854.93 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 925.08ba/s]
+./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314.jsonl
+accuracy: 0.334
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 219241.23 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 733.65ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.333
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 38486.56 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 826.46ba/s]
+outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_313.jsonl
+accuracy: 0.38
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.014
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 93633.31 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 962.22ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328.jsonl
+accuracy: 0.466
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.008
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 212402.09 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 874.72ba/s]
+./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_315.jsonl
+accuracy: 0.318
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4201.68 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 207.43ba/s]
+outputs/random/rocstories/test.jsonl
+accuracy: 0.19960000000000003
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3030.42 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 250.62ba/s]
+outputs/single/Qwen3-8B/rocstories/test/outputs_357.jsonl
+accuracy: 0.7283999999999999
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.022
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 7831.40 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 246.55ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_390.jsonl
+accuracy: 0.4872
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.005
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3881.86 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 267.10ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_393.jsonl
+accuracy: 0.63
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.001
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3987.04 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 253.54ba/s]
+outputs/random/rocstories/test_1.jsonl
+accuracy: 0.2068
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3125.35 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 250.99ba/s]
+outputs/single/Qwen3-8B/rocstories/test/outputs_388.jsonl
+accuracy: 0.7367999999999999
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.014
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 7688.71 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 254.83ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_391.jsonl
+accuracy: 0.4796
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.007
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3894.66 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 258.33ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_394.jsonl
+accuracy: 0.6444
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4220.30 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 262.87ba/s]
+outputs/random/rocstories/test_2.jsonl
+accuracy: 0.1982
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3267.40 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 265.09ba/s]
+outputs/single/Qwen3-8B/rocstories/test/outputs_389.jsonl
+accuracy: 0.7375999999999999
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.016
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 7910.08 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 265.73ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_392.jsonl
+accuracy: 0.4648
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.006
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3968.92 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 252.46ba/s]
+outputs/multi/Qwen3-8B/rocstories/test/outputs_395.jsonl
+accuracy: 0.6295999999999999
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 214729.13 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 931.86ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.319
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 43952.09 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 996.98ba/s]
+outputs/single/Qwen3-8B/cmu_booksum/test/outputs_396.jsonl
+accuracy: 0.332
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 106757.89 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 947.87ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_399.jsonl
+accuracy: 0.329
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.242
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 98195.06 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 867.31ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_402.jsonl
+accuracy: 0.48
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.027
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 231422.64 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1012.14ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.372
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 43713.43 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 978.38ba/s]
+outputs/single/Qwen3-8B/cmu_booksum/test/outputs_397.jsonl
+accuracy: 0.343
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.001
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 111145.67 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 1009.22ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_400.jsonl
+accuracy: 0.324
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.233
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 96440.73 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 990.16ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_403.jsonl
+accuracy: 0.495
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.037
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 198143.61 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 968.89ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.342
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 42224.68 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 989.92ba/s]
+outputs/single/Qwen3-8B/cmu_booksum/test/outputs_398.jsonl
+accuracy: 0.336
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 102645.59 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 989.22ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_401.jsonl
+accuracy: 0.301
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.256
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 99179.57 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 959.79ba/s]
+outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_404.jsonl
+accuracy: 0.462
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.026
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4140.02 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 260.48ba/s]
+outputs/random/rocstories/test.jsonl
+accuracy: 0.19960000000000003
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3905.21 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 255.42ba/s]
+outputs/single/Qwen3-32B/rocstories/test/outputs_254.jsonl
+accuracy: 0.8184
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.004
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 6328.67 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 267.82ba/s]
+outputs/multi/Qwen3-32B/rocstories/test/outputs_361.jsonl
+accuracy: 0.5598000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4476.56 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 240.79ba/s]
+outputs/multi/Qwen3-32B/test/outputs_258_259.jsonl
+accuracy: 0.5992000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3887.10 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 221.84ba/s]
+outputs/random/rocstories/test_1.jsonl
+accuracy: 0.2068
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3743.83 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 251.20ba/s]
+outputs/single/Qwen3-32B/rocstories/test/outputs_359.jsonl
+accuracy: 0.8332
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.003
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 6019.56 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 261.52ba/s]
+outputs/multi/Qwen3-32B/rocstories/test/outputs_362.jsonl
+accuracy: 0.5568000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4325.95 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 260.76ba/s]
+outputs/multi/Qwen3-32B/rocstories/test/outputs_364.jsonl
+accuracy: 0.626
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4069.82 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 254.34ba/s]
+outputs/random/rocstories/test_2.jsonl
+accuracy: 0.1982
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3965.01 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 241.08ba/s]
+outputs/single/Qwen3-32B/rocstories/test/outputs_360.jsonl
+accuracy: 0.813
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.003
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 5979.29 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 261.36ba/s]
+outputs/multi/Qwen3-32B/rocstories/test/outputs_363.jsonl
+accuracy: 0.5702
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.001
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 4394.86 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 271.90ba/s]
+outputs/multi/Qwen3-32B/rocstories/test/outputs_365.jsonl
+accuracy: 0.6372000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 224606.62 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 902.58ba/s]
+outputs/random/cmu_booksum/test.jsonl
+accuracy: 0.334
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0

@@ -1,0 +1,20 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+New data length:  1000
+Saving the dataset (1/1 shards): 100%|██████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 1673.57 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 1823.55 examples/s]
+Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 109.66ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350.jsonl
+accuracy: 0.3892
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.071
+Generating train split: 1000 examples [00:00, 204950.11 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:04<00:00, 217.44 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 466.99 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 1351.33 examples/s]
+Creating json from Arrow format: 100%|█████████████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.94s/ba]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350.jsonl
+accuracy: 0.138
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 1.891

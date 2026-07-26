@@ -1,0 +1,23 @@
+{
+    "split": "mini",
+    "framework": "multi",
+    "experiment_file": "outputs/multi/Qwen3-0.6B/mini/outputs_139",
+    "batch_size": 32,
+    "model_id": "Qwen/Qwen3-0.6B",
+    "desc": "This run tests the chain setup with 1024 tokens with Qwen3-0.6B without variation.",
+    "candidate": "structured_chain",
+    "thinking_budget": 0.0,
+    "conversation_rounds": 1,
+    "variation": false,
+    "device_id": "0",
+    "final_reorder": true,
+    "conv_file": "",
+    "topology": "chain",
+    "max_new_tokens": 1024,
+    "structured": true,
+    "output_format": "full",
+    "conv_format": "full",
+    "device": "cuda:0",
+    "mean_acc": 0.0,
+    "run_idx": 140
+}

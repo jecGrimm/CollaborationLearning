@@ -1,0 +1,366 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Backend macosx is interactive backend. Turning interactive mode on.
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+defaultdict(<class 'list'>, {'candidate': [69, 77]})
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1095: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj["experiment_file"] = f"{split[0]}/rocstories/{df_obj["split"]}{split[1]}"
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5266/5266 [00:00<00:00, 6220.23 examples/s]
+Creating json from Arrow format: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 6/6 [00:00<00:00, 342.97ba/s]
+./outputs/multi/Qwen3-8B/rocstories/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl
+accuracy: 0.13011773642233196
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.5127231295100646
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1101: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj[metric] = res
+/Users/jgrimm/Desktop/code/CollaborationLearning/visualization.py:1095: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  df_obj["experiment_file"] = f"{split[0]}/rocstories/{df_obj["split"]}{split[1]}"
+Map: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 5266/5266 [00:00<00:00, 5947.98 examples/s]
+Creating json from Arrow format: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████| 6/6 [00:00<00:00, 283.62ba/s]
+./outputs/multi/Qwen3-8B/rocstories/dev/outputs_81.jsonl
+accuracy: 0.49134067603494125
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.005127231295100646

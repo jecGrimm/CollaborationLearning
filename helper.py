@@ -1,37 +1,7 @@
 import csv 
-import json
-from datasets import load_dataset, Dataset, load_from_disk
-import pandas as pd
-import os
-from collections import defaultdict
+from datasets import load_dataset, load_from_disk, concatenate_datasets
 import random
-from evaluate import evaluate_sent_order
-
-def check_SCT_ROC_overlap():
-    """
-    This function checks whether the SCT instances are included in the ROCStories corpus.
-    """
-    val_sents = set()
-    with open("data/cloze_test_val__winter2018-cloze_test_ALL_val - 1 - 1.csv", "r", encoding = "utf-8") as f:
-        reader = csv.reader(f, delimiter = ",")
-        for row in reader:
-            val_sents.add(row[1])
-
-    test_sents = set()
-    with open("data/cloze_test_test__winter2018-cloze_test_ALL_test - 1.csv", "r", encoding = "utf-8") as f:
-        reader = csv.reader(f, delimiter = ",")
-        for row in reader:
-            test_sents.add(row[1])
-
-    sct_sents = val_sents.union(test_sents)
-
-    roc_sents = set()
-    with open("data/ROCStories_winter2017 - ROCStories_winter2017.csv", "r", encoding = "utf-8") as f:
-        reader = csv.reader(f, delimiter = ",")
-        for row in reader:
-            roc_sents.add(row[1])
-    print("intersect:", len(test_sents.intersection(roc_sents)))
-    print("intersect:", val_sents.intersection(roc_sents))
+from evaluate import evaluate
 
 def check_left_insts(outdir: str):
     """
@@ -63,7 +33,7 @@ def inspect_instances(outdir: str, rand_idx: int = None):
     
     # assign random idx
     if rand_idx == None:
-        rand_idx = random.randint(0, 100-1)
+        rand_idx = random.randint(0, len(eval_data)-1)
 
     # select instances
     out = exp_data.select([rand_idx])[0]
@@ -82,34 +52,60 @@ def inspect_instances(outdir: str, rand_idx: int = None):
             print(f"\n{k}:\n{v}")
     for k,v in eval.items():
         print(f"\n{k}:\n{v}")
-    # print(out)
-    # print(eval)
+
+def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, structured: bool, data_len: int = 1000):
+    '''
+    This function merges multiple output datasets into one and evaluates the merged dataset.
+
+    @params
+        outdirs: list of paths to the output datasets to be merged
+        outpath: path to save the merged dataset
+        framework: "single" or "multi"
+        task: task name (e.g., "ROCStories", "CMUBookSum")
+        structured: boolean indicating whether the data is structured
+        data_len: maximum number of instances to keep in the merged dataset (default is 1000)
+    '''
+    exp_data = [load_from_disk(outdir) for outdir in outdirs]
+
+    if len(exp_data) > data_len:
+        full_data = concatenate_datasets(exp_data).select(range(1500))
+    else:
+        full_data = concatenate_datasets(exp_data)
+
+    print("New data length: ", len(full_data))
+
+    full_data.save_to_disk(outpath)
+
+    evaluate(outpath, framework, task, structured=structured, all=True)
+
+def fix_outputs(outdir):
+    '''
+    This function fixes the outputs in the dataset by splitting the "thinking_output" field and keeping only the part after the last "</think>" tag.
+
+    @params
+        outdir: path to the output dataset to be fixed
+    '''
+    exp_data = load_from_disk(outdir)
+
+    exp_data = exp_data.map(split_think)
+
+    exp_data.save_to_disk(f"{outdir}_fixed")
+
+def split_think(inst):
+    '''
+    This function splits the "thinking_output" field of an instance and keeps only the part after the last "</think>" tag.
+
+    @params
+        inst: a single instance from the dataset
+    @returns
+        dict: a dictionary with the updated "output" field
+    '''
+    return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    #check_SCT_ROC_overlap()
-    #check_left_insts("outputs/multi/Llama-3.2-1B-Instruct/dev/ckps/outputs_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146_1")
+    qwen8_out1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_0"
+    qwen8_out2 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_1"
+    qwen8_out3 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_2"
+    out_4 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_386_0"
 
-    #qwen14_out = "outputs/single/Qwen3-8B/dev/outputs_single_Qwen3-8B_dev_2025-11-25_14:10:17.428416"
-    qwen8_out1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_342_0"
-    qwen8_out2 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_342_1"
-    qwen8_out3 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_342_2"
-    out_4 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_342_3"
-    #r1_out = "outputs/multi/DeepSeek-R1-Distill-Llama-8B/mini/outputs_257"
-
-    #inspect_instances(out_4, 1)
-    #evaluate(qwen8_out1, "single")
-
-    #fix_outputs(qwen8_out1)
-    #fix_outputs(qwen8_out2)
-
-    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_342", "multi", "rocstories", structured = True)
-
-    # gemini_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021"
-    #llama_out = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
-    # # evaluate_sent_order(outdir, "single")
-    #inspect_instances(qwen14_out, 371)
-    inspect_instances(qwen8_out, 3)
-    #inspect_instances(llama_out, 4)
-
-    # outdir = "outputs/multi/Qwen3-14B/dev/outputs_86"
-    # evaluate_sent_order(outdir, "multi")
+    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_382_386", "multi", "cmu_booksum", structured = False)

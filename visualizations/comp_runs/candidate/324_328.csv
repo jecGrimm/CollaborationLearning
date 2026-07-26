@@ -1,0 +1,55 @@
+;311;315
+zero_percentage;0.0;0.0
+device_id;;
+run_idx;324;328
+do_sample;True;True
+batch_size;4;8
+version_idx;2.0;2.0
+top_p;0.9;0.9
+num_beams;1.0;1.0
+conv_file;;
+system_prompt;You are a player in a conversational game with 5 other players. {rules};You are a player in a conversational game with 3 other players. {rules}
+experiment_file;./outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_324;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328
+length_penalty;1.0;1.0
+final_reorder;False;False
+candidate;chain_base;cmu_chain_base
+arranged_file;;./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl
+names;;
+temperature;0.7;0.7
+interactive;;
+top_k;50.0;50.0
+last_mean_acc;;
+framework;multi;multi
+output_format;;
+device;cuda:0;cuda:0
+conv_format;;
+model;{'transformers_version': '5.5.4', 'architectures': ['LlamaForCausalLM'], 'output_hidden_states': False, 'return_dict': True, 'dtype': 'bfloat16', 'chunk_size_feed_forward': 0, 'is_encoder_decoder': False, 'id2label': {'0': 'LABEL_0', '1': 'LABEL_1'}, 'label2id': {'LABEL_0': 0, 'LABEL_1': 1}, 'problem_type': None, 'vocab_size': 128256, 'hidden_size': 4096, 'intermediate_size': 14336, 'num_hidden_layers': 32, 'num_attention_heads': 32, 'num_key_value_heads': 8, 'hidden_act': 'silu', 'max_position_embeddings': 131072, 'initializer_range': 0.02, 'rms_norm_eps': 1e-05, 'use_cache': True, 'pad_token_id': None, 'bos_token_id': 128000, 'eos_token_id': [128001, 128008, 128009], 'pretraining_tp': 1, 'tie_word_embeddings': False, 'rope_parameters': {'factor': 8.0, 'low_freq_factor': 1.0, 'high_freq_factor': 4.0, 'original_max_position_embeddings': 8192, 'rope_type': 'llama3', 'rope_theta': 500000.0}, 'attention_bias': False, 'attention_dropout': 0.0, 'mlp_bias': False, 'head_dim': 128, '_name_or_path': 'meta-llama/Llama-3.1-8B-Instruct', 'model_type': 'llama', 'output_attentions': False};{'vocab_size': 128256, 'max_position_embeddings': 131072, 'hidden_size': 4096, 'intermediate_size': 14336, 'num_hidden_layers': 32, 'num_attention_heads': 32, 'num_key_value_heads': 8, 'hidden_act': 'silu', 'initializer_range': 0.02, 'rms_norm_eps': 1e-05, 'pretraining_tp': 1, 'use_cache': True, 'rope_theta': 500000.0, 'rope_scaling': {'factor': 8.0, 'low_freq_factor': 1.0, 'high_freq_factor': 4.0, 'original_max_position_embeddings': 8192, 'rope_type': 'llama3'}, 'attention_bias': False, 'attention_dropout': 0.0, 'mlp_bias': False, 'head_dim': 128, 'return_dict': True, 'output_hidden_states': False, 'torchscript': False, 'dtype': 'bfloat16', 'pruned_heads': {}, 'tie_word_embeddings': False, 'chunk_size_feed_forward': 0, 'is_encoder_decoder': False, 'is_decoder': False, 'cross_attention_hidden_size': None, 'add_cross_attention': False, 'tie_encoder_decoder': False, 'architectures': ['LlamaForCausalLM'], 'finetuning_task': None, 'id2label': {'0': 'LABEL_0', '1': 'LABEL_1'}, 'label2id': {'LABEL_0': 0, 'LABEL_1': 1}, 'task_specific_params': None, 'problem_type': None, 'tokenizer_class': None, 'prefix': None, 'bos_token_id': 128000, 'pad_token_id': None, 'eos_token_id': [128001, 128008, 128009], 'sep_token_id': None, 'decoder_start_token_id': None, 'max_length': 20, 'min_length': 0, 'do_sample': False, 'early_stopping': False, 'num_beams': 1, 'temperature': 1.0, 'top_k': 50, 'top_p': 1.0, 'typical_p': 1.0, 'repetition_penalty': 1.0, 'length_penalty': 1.0, 'no_repeat_ngram_size': 0, 'encoder_no_repeat_ngram_size': 0, 'bad_words_ids': None, 'num_return_sequences': 1, 'output_scores': False, 'return_dict_in_generate': False, 'forced_bos_token_id': None, 'forced_eos_token_id': None, 'remove_invalid_values': False, 'exponential_decay_length_penalty': None, 'suppress_tokens': None, 'begin_suppress_tokens': None, 'num_beam_groups': 1, 'diversity_penalty': 0.0, '_name_or_path': 'meta-llama/Llama-3.1-8B-Instruct', 'transformers_version': '4.57.3', 'model_type': 'llama', 'tf_legacy_loss': False, 'use_bfloat16': False, 'output_attentions': False}
+candidates;;
+thinking_budget;0.0;0.0
+start;0.0;0.0
+mid_prompt;Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGenerate an answer to continue the current discussion.\n\n**Sentence:**\n{sentence}\nAnswer:\n;Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGenerate an answer to continue the current discussion.\n\n**Book:**\n{input_samples}\nAnswer:\n
+conversation_rounds;2.0;2.0
+start_prompt;**Sentence:**\n{sentence}\n\nPlease share the sentence you have been given and propose a possible starting point or connection that could help in ordering the sentences.\nAnswer:\n;**Book:**\n{input_samples}\n\nPlease share information about the book you have been given and propose a possible starting point or connection that could help in finding the book with a different genre.\nAnswer:\n
+max_new_tokens;1024.0;1024.0
+shuffle_file;./data/rocstories/ROCStories_shuffled_test_2.jsonl;
+device_map;cuda;cuda
+end;1000.0;1000.0
+wrong_format;0.0022;0.0
+variation;True;True
+mean_acc;0.2418;0.466
+rules;Each player has been given a sentence that is part of a short story with five sentences, and the sentences are causally and temporally related to each other. Your goal is to work together to reassemble the original story by determining the correct order of the sentences through discussion and sharing of your individual sentences. The game will end when a player includes 'STOP' in their response. When your group agrees on the final order, you must present the solution in this exact format:\n['sentence1', 'sentence2', 'sentence3', 'sentence4', 'sentence5']\nAnswer:\n;Each player has been given a book summary. One of the books is in a different genre than the other two. Your goal is to work together by discussing which book is in a different genre than the other two. The game will end when a player includes 'STOP' in their response. When your group agrees on the book in a different genre, you must return only the title of the book with the different genre.\nAnswer:\n
+double_percentage;0.0;0.0
+user_prompt;;
+min_p;;
+task;text-generation;text-generation
+desc;This run tests the chain setup with 1024 tokens with Llama-3.1-8B-Instruct with variation.;This run tests the chain setup with 1024 tokens with Llama-3.1-8B-Instruct with variation.
+quantized;;
+final;True;True
+torch_dtype;torch.bfloat16;torch.bfloat16
+conv_final;;
+model_id;meta-llama/Llama-3.1-8B-Instruct;meta-llama/Llama-3.1-8B-Instruct
+structured;False;False
+duration;36121.155700683594;8229.636429786682
+instances;1000.0;1000.0
+topology;chain;chain
+split;test;test

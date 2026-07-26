@@ -1,0 +1,8 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 3647.70 examples/s]
+Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 163.77ba/s]
+outputs/random/rocstories/test.jsonl
+accuracy: 0.19960000000000003
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
