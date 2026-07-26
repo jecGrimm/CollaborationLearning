@@ -1,15 +1,13 @@
-from datasets import load_dataset, Dataset, load_from_disk
+from datasets import load_dataset, load_from_disk
 import pandas as pd
 from collections import defaultdict
 import matplotlib.pyplot as plt
 import os
 import re
-import ast
 from pySankey.sankey import sankey
 import numpy as np
 from evaluate import Evaluator, evaluate
-import plotly.graph_objects as go # TODO: Full sankey with go https://python-graph-gallery.com/sankey-diagram-with-python-and-plotly/
-import statistics
+import plotly.graph_objects as go
 from scipy.stats.mstats import ttest_ind
 from matplotlib import colors
 from matplotlib.patches import Patch
@@ -17,6 +15,16 @@ import math
 
 class Vis():
     def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories"):
+        '''
+        This class is used to visualize the results of the experiments. It can create bar plots for the mean accuracy of different setups, as well as Sankey diagrams to visualize the flow of beliefs across turns.
+
+        @params
+            experiment_files: A dictionary mapping experiment names to their output file paths.
+            variation: A boolean indicating whether the ROCStories dataset with or without visualization is used.
+            conv_format: The conversational format of the outputs.
+            last: A boolean indicating whether to use only the last turn of the conversation as final answer.
+            task: The task being evaluated (e.g., "rocstories").
+        '''
         self.experiment_files = experiment_files
 
         self.last = last
@@ -45,12 +53,16 @@ class Vis():
             self.initialize_experiment_files()
 
     def initialize_experiment_files(self):
+        '''
+        This method loads the output datasets from disk and creates evaluation dataframes for each experiment setup.
+        '''
         self.exp_data_hf = {k: load_from_disk(v) for k, v in self.experiment_files.items()}
-
         self.create_eval_dfs()
 
-
     def create_eval_dfs(self):
+        '''
+        This method creates evaluation dataframes for each experiment setup. It loads the evaluation data from the corresponding evaluation files and computes the mean predictions for each metric.
+        '''
         if self.last:
             eval_files = defaultdict(str)
             for k, v in self.experiment_files.items():
@@ -59,7 +71,6 @@ class Vis():
                     eval_files[k] = f"{v.replace('outputs', 'eval')}.jsonl"
                 else:
                     eval_files[k] = f"{v.replace('outputs', 'eval')}_last.jsonl"
-            #eval_files = {k: f"{v.replace("outputs", "eval")}_last.jsonl" for k, v in experiment_files.items()}
         else:
             eval_files = {k: f"{v.replace('outputs', 'eval')}.jsonl" for k, v in self.experiment_files.items()}
 
@@ -78,8 +89,17 @@ class Vis():
 
         self.mean_preds_df = pd.DataFrame(mean_preds.values(), index=mean_preds.keys(), columns=self.metrics) 
 
-
     def load_eval_data(self, eval_file, exp_name):
+        '''
+        This method loads the evaluation data from the specified evaluation file. If the evaluation file is not found, it uses the Evaluator class to evaluate the experiment outputs and generate the evaluation data.
+
+        @params
+            eval_file: The path to the evaluation file.
+            exp_name: The name of the experiment setup.
+
+        @returns
+            The evaluation data as a Hugging Face dataset.
+        '''
         try:
             return load_dataset("json", data_files=eval_file, split="train")
         except:
@@ -98,6 +118,9 @@ class Vis():
             return evaluator.eval_data
 
     def plot_performance(self):
+        '''
+        This method creates bar plots for the mean accuracy of different experiment setups. It saves the plots as PNG files in the specified visualization path.
+        '''
         for metric in self.metrics:
             if self.variation:
                 ax = self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: with variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
@@ -120,6 +143,15 @@ class Vis():
             plt.close()
 
     def create_belief_instance_roc(self, index: int, setup: str):
+        '''
+        This method extracts the intermediate predictions for ROCStories.
+
+        @params
+            index: The index of the instance to extract.
+            setup: The experiment setup name.
+        @returns
+            A list of dictionaries containing the beliefs for each turn, including the player, gold sentence index, hypothesis, correctness, and a label.
+        '''
         out = self.exp_data_hf[setup].select([index])[0]
         eval = self.eval_data_hf[setup].select([index])[0]
 
@@ -152,6 +184,15 @@ class Vis():
         return beliefs
     
     def create_belief_instance_cmu(self, index: int, setup: str):
+        '''
+        This method extracts the intermediate predictions for CMU Booksum.
+
+        @params
+            index: The index of the instance to extract.
+            setup: The experiment setup name.
+        @returns
+            A list of dictionaries containing the beliefs for each turn, including the player, gold sentence index, hypothesis, correctness, and a label.
+        '''
         out = self.exp_data_hf[setup].select([index])[0]
         eval = self.eval_data_hf[setup].select([index])[0]
 
@@ -184,33 +225,16 @@ class Vis():
                             })
 
         return {"beliefs": beliefs}
-        
-
-    def plot_instance(self, index: int, setup: str):
-
-        #vis_beliefs_df = pd.DataFrame(vis_beliefs)
-        if self.task == "rocstories":
-            beliefs = self.create_belief_instance_roc(index, setup)
-        else:
-            beliefs = self.create_belief_instance_cmu(index, setup)
-        belief_df = pd.DataFrame(beliefs)
-        belief_pivot = belief_df.pivot(columns = ["correct"], values=["turn", "label"])
-
-        styler = belief_pivot.style
-        styler.hide(axis = 0)\
-            .highlight_null(props="color: transparent;")\
-            .set_properties(props="color: transparent;")
-
-        # styled_beliefs = styled_beliefs.style.highlight_null(props="color: transparent;")
-        # styled_beliefs = styled_beliefs.hide_index()
-        #styled_beliefs = styled_beliefs.set_index("turn")
-
-        html = styler.to_html()
-        with open(f"{self.vispath}/instance.html", "w", encoding = "utf-8") as file:
-            file.write(html)
-        #dfi.export(styled_beliefs, "test.png")
 
     def create_conv_list_roc(self, conv_str: str):
+        '''
+        This method extracts the predictions for ROCStories from the model output.
+
+        @params
+            conv_str: The conversation string from the model output.
+        @returns
+            A list of dictionaries containing the sentence, predicted position, reasoning, and arguments.
+        '''
         conv_list = []
         sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
@@ -253,6 +277,14 @@ class Vis():
         return conv_list
 
     def create_conv_list_cmu(self, conv_str: str):
+        '''
+        This method extracts the predictions for CMU Booksum from the model output.
+
+        @params
+            conv_str: The conversation string from the model output.
+        @returns
+            A list of dictionaries containing the sentence, predicted position, reasoning, and arguments.
+        '''
         conv_list = []
 
         titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
@@ -283,6 +315,14 @@ class Vis():
         return conv_list
     
     def strip_arg(self, item):
+        '''
+        This method removes the prefixes "argument", "position", or "label" from the given item string.
+
+        @params
+            item: The string to be stripped.
+        @returns
+            The stripped string without the specified prefixes.
+        '''
         if "argument" in item:
             item = item.strip("argument")
         elif "position" in item:
@@ -292,11 +332,16 @@ class Vis():
         return item
         
     def plot_sankey(self, setup: str):
+        '''
+        This method creates a Sankey diagram to visualize the flow of beliefs across turns for the specified experiment setup. It saves the diagram as a PNG file in the specified visualization path.
+
+        @params
+            setup: The experiment setup name.
+        '''
         # last hypo == correct/incorrect -> final hypo == correct/incorrect 
         self.sankey_inst = []
         self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_hf(x, idx, setup), with_indices=True)
 
-        #df = pd.read_csv(url, sep=" ", names=["true", "predicted"])
         df = pd.DataFrame(self.sankey_inst, columns = ["last_hypo", "final_hypo"])
 
         colors = {
@@ -314,6 +359,14 @@ class Vis():
             fig.savefig(f"{self.vispath}/sankey_{setup}_no_var.png", bbox_inches="tight", dpi=150)
 
     def create_sankey_hf(self, x, idx, setup):
+        '''
+        This method creates the data for the Sankey diagram by extracting the last and final hypotheses for each instance in the experiment setup.
+
+        @params
+            x: The instance data from the experiment setup.
+            idx: The index of the instance.
+            setup: The experiment setup name.
+        '''
         if self.task == "rocstories":
             beliefs = self.create_belief_instance_roc(idx, setup)
         else:
@@ -326,75 +379,14 @@ class Vis():
                     if final_sent_belief["agent"] == "Player 6" and final_sent_belief["gold_sent"] == belief["gold_sent"]:
                         self.sankey_inst.append([belief["correct"], final_sent_belief["correct"]])
 
-    def create_full_sankey_hf(self, x, idx, setup):
-        """
-        @deprecated
-        """
-        beliefs = self.create_belief_instance(idx, setup)
+    def plot_sankey_full_plotly(self, setup: str, sent_color: bool = False):
+        '''
+        This method creates a Sankey diagram using Plotly to visualize the flow of beliefs across turns for the specified experiment setup. It saves the diagram as an HTML file in the specified visualization path.
 
-        sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
-
-        turn_idx = 0
-        for belief in beliefs:
-            if setup == "chain":
-                turn_idx = belief["turn"]-1
-            elif setup == "star":
-                if belief["agent"] != "Player 6":
-                    turn_idx = 0
-                else:
-                    turn_idx = 1
-            elif setup == "graph":
-                if belief["turn"] < 6:
-                    turn_idx = 0
-                elif belief["turn"] > 6 and belief["agent"] != "Player 6":
-                    turn_idx = 1
-                else:
-                    turn_idx = 2
-
-            sent_beliefs[belief["gold_sent"]-1][turn_idx] = belief["correct"]
-
-            # TODO:graph
-        self.sankey_inst += sent_beliefs
-
-    def plot_sankey_full(self, setup: str):
-        """
-        @deprecated
-        """
-        # last hypo == correct/incorrect -> final hypo == correct/incorrect 
-
-        #df = pd.read_csv(url, sep=" ", names=["true", "predicted"])
-        self.num_turns = 0
-        if setup == "chain":
-            turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
-            self.num_turns = max(turn_lengths)
-        elif setup == "star":
-            self.num_turns = 2
-        elif setup == "graph":
-            self.num_turns = 3
-
-        columns = [f"Turn {i}" for i in range(1, self.num_turns+1)]
-        self.sankey_inst = []
-
-        self.exp_data_hf[setup].map(lambda x, idx: self.create_full_sankey_hf(x, idx, setup), with_indices=True)
-        
-        df = pd.DataFrame(self.sankey_inst, columns = columns) # TODO: define column names
-
-        colors = {
-            "correct": "#f78c1b",
-            "incorrect": "#1b7ef7",
-            "not mentioned": "#f5ee27"
-        }
-
-        sankey(df["last_hypo"], df["final_hypo"], aspect=20, colorDict=colors, fontsize=12)
-
-        fig = plt.gcf()
-
-        if self.variation:
-            fig.savefig(f"{self.vispath}/sankey_{setup}_var__{self.conv_format}.png", bbox_inches="tight", dpi=150)
-        else:
-            fig.savefig(f"{self.vispath}/sankey_{setup}_no_var__{self.conv_format}.png", bbox_inches="tight", dpi=150)
-
-    def plot_sankey_full_plotly(self, setup, sent_color):        
+        @params
+            setup: The experiment setup name.
+            sent_color: A boolean indicating whether to color the links based on the sentence index.
+        '''        
         self.num_turns = 0
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
@@ -404,16 +396,9 @@ class Vis():
         elif "graph" in setup:
             self.num_turns = 3
 
-        # self.sources = []
-        # self.targets = []
-        # self.values = [] # sentence
         self.lbls = [f"{lbl}_{i}" for i in range(self.num_turns) for lbl in ["correct", "incorrect"]]
         colors = [color for i in range(self.num_turns) for color in ["#f78c1b", "#1b7ef7"]]
-        #positions = []
 
-        #self.lbls = [str(i) for i in range(self.num_turns)]
-        #colors = [color for i in range(self.num_turns) for color in ["orange", "blue"]]
-        
         self.links = defaultdict(int)
         self.sent_colors = {
             1: "#ffc7a2",
@@ -436,7 +421,6 @@ class Vis():
         link_color = [col for _, _, col in self.links.keys()]
 
         percentage_lbls = []
-        last_perc_a = 0.0
         last_perc_b = 0.0
         for i in range(0, len(self.lbls)-2, 2):
             sum_a = sum([v for k, v in self.links.items() if k[0] == i])
@@ -451,26 +435,16 @@ class Vis():
                 percentage_lbls.append(f"{self.lbls[i+1]}: {perc_b}%")   
             else:
                 percentage_lbls.append(f"{self.lbls[i]}: {perc_a}%")
-                # if perc_a > last_perc_a:
-                #     percentage_lbls.append(f"{self.lbls[i]}: +{round(perc_a - last_perc_a, 2)}")
-                # else:
-                #     percentage_lbls.append(f"{self.lbls[i]}: -{round(last_perc_a - perc_a, 2)}%")
-
                 if perc_b > last_perc_b:
                     percentage_lbls.append(f"{self.lbls[i+1]}: +{round(perc_b - last_perc_b, 2)}")
                 else:
                     percentage_lbls.append(f"{self.lbls[i+1]}: -{round(last_perc_b - perc_b, 2)}%")
 
-            last_perc_a = perc_a
             last_perc_b = perc_b
 
         perc_a = round(float(self.mean_preds_df.loc[setup]["accuracy"])*100, 2)
         perc_b = 100-perc_a
         percentage_lbls.append(f"{self.lbls[i]}: {perc_a}%")
-        # if perc_a > last_perc_a:
-        #     percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: +{round(perc_a - last_perc_a, 2)}")
-        # else:
-        #     percentage_lbls.append(f"{self.lbls[i].split('_')[0]}: -{round(last_perc_a - perc_a, 2)}%")
 
         if perc_b > last_perc_b:
             percentage_lbls.append(f"{self.lbls[i+1].split('_')[0]}: +{round(perc_b - last_perc_b, 2)}")
@@ -509,10 +483,18 @@ class Vis():
             else:
                 fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var_sent.html")
         
-    def create_sankey_link(self, inst, idx, setup, sent_color):
+    def create_sankey_link(self, inst, idx: int, setup: str, sent_color: bool = False):
+        '''
+        This method creates the links for the Sankey diagram.
+
+        @params
+            inst: The instance data from the experiment setup.
+            idx: The index of the instance.
+            setup: The experiment setup name.
+            sent_color: A boolean indicating whether to color the links based on the sentence index.
+        '''
         beliefs = self.create_belief_instance_roc(idx, setup)
 
-        #sent_beliefs = [["not mentioned" for _ in range(self.num_turns)] for _ in range(5)]
         for sent_idx in range(1, 6):
             sent_beliefs = [belief for belief in beliefs if belief["gold_sent"] == sent_idx]
             turn_idxs = [(belief_idx, self.get_turn_idx(setup, belief)) for belief_idx, belief in enumerate(sent_beliefs)]
@@ -528,18 +510,9 @@ class Vis():
                     # start sources for next beliefs
                     for target_idx, target_turn in next_targets:
                         source_lbl = f"{curr_belief['correct']}_{turn_idx}"
-                        #self.sources.append(self.lbls.index(source_lbl))
-                        #self.sources.append(turn_idx)
-
-                        # if curr_belief["correct"] == "correct":
-                        #     self.values.append("correct")
-                        # else:
-                        #     self.values.append("incorrect")
 
                         target_belief = sent_beliefs[target_idx]
                         target_lbl = f"{target_belief['correct']}_{target_turn}"
-                        #self.targets.append(self.lbls.index(target_lbl))
-                        #self.targets.append(target_turn)
 
                         if sent_color:
                             self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl), self.sent_colors[sent_idx])] += 1
@@ -547,6 +520,15 @@ class Vis():
                             self.links[(self.lbls.index(source_lbl), self.lbls.index(target_lbl), self.correct_colors[curr_belief["correct"]])] += 1
 
     def get_target(self, belief_idx, curr_turn_idx, beliefs, setup):
+        '''
+        This method retrieves the target label for the Sankey diagram.
+
+        @params
+            belief_idx: The index of the current belief.
+            curr_turn_idx: The turn index of the current belief.
+            beliefs: The list of beliefs for the instance.
+            setup: The experiment setup name.
+        '''
         curr_belief = beliefs[belief_idx]
 
         next_belief = None
@@ -564,6 +546,15 @@ class Vis():
                 idx += 1
 
     def get_turn_idx(self, setup, belief):
+        '''
+        This method retrieves the turn index for the given belief based on the experiment setup.
+
+        @params
+            setup: The experiment setup name.
+            belief: The belief dictionary containing the turn information.
+        @returns
+            The turn index for the belief.
+        '''
         turn_idx = 0
         if "chain" in setup:
             turn_idx = belief["turn"]-1
@@ -583,6 +574,13 @@ class Vis():
         return turn_idx
     
     def perform_ttest(self, comparison = "single", exp_name = ""):
+        '''
+        This method performs a Welch's t-test to compare the accuracy of the specified comparison setup against all other setups. It saves the results as a CSV file in the specified visualization path.
+
+        @params
+            comparison: The experiment setup that is tested to be significantly lower than the other setups.
+            exp_name: An optional name for the experiment to include in the output file name.
+        '''
         first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
 
         stats_dict = defaultdict(list)
@@ -617,6 +615,11 @@ class Vis():
         stats_df.to_csv(outfile, sep = ";")
 
     def correlate_last_final(self, setup):
+        '''
+        This method correlates the accuracy of the last turn predictions with the final performance for the specified experiment setup. It creates a scatter plot to visualize the correlation and saves it as a PNG file in the specified visualization path.
+        @params
+            setup: The experiment setup name.
+        '''
         if self.last:
             mean_last = self.mean_preds_df
             
@@ -630,22 +633,10 @@ class Vis():
             self.create_eval_dfs()
             mean_last = self.mean_preds_df
 
-        # fig, ax = plt.subplots()
-        # #colors = ["#ffc7a2", "#e6adc0", "#93c4d5", "#bad0b9"]
         label = [mean_final.index[i].split("_")[1] for i in range(len(mean_final.index))]
-        #label = ["hypo", "full", "reasons", "support"]*2
         df = pd.concat([mean_final["accuracy"].rename("final"), mean_last["accuracy"].rename("last")], axis = 1)
 
         print(df.corr())
-        # nrof_labels = len(label)  
-        # colors = colors = cm.rainbow(np.linspace(0, 1, len(d['f']))) # create a bunch of colors
-
-        # for i, r in df.iterrows():
-        #     ax.plot(r['last'], r['final'], 'o', markersize=10, color=colors[i], linewidth=0.1, label=label[i])
-
-        # #ax = df.plot.scatter(x="last", y = "final", c = ["#ffc7a2", "#e6adc0", "#93c4d5", "#bad0b9"], label = ["hypo", "full", "reasons", "support"])
-        # plt.legend(loc = "best")
-
         colorlist = list(colors.ColorConverter.colors.keys())
         fig, ax = plt.subplots()
         [df.iloc[[i]].plot.scatter('last', 'final', ax=ax, s=50, label=l,
@@ -654,8 +645,6 @@ class Vis():
         
         ax.set_ylim(0, 1)
         ax.set_xlim(0, 1)
-        #setup = mean_final.index[0].split("_")[1]
-        #setup = "all"
         ax.set_title(f"Correlation between MAS and final performance: {setup}")
 
         plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
@@ -664,8 +653,10 @@ class Vis():
     def plot_all_table(self, run_file = "eval/args_hypos_runs_llama_roc.csv"):
         """
         This function plots the accuracy and accuracy changes of the setups in run_file.
+
+        @params
+            run_file: The path to the CSV file containing the experiment setups and their corresponding output files
         """
-        # eval/multi/Qwen3-32B/rocstories/dev/all_runs_rocstories_dev.csv
         df_experiment_files = pd.read_csv(run_file, delimiter = ";").set_index("format")
 
         df_acc = df_experiment_files["run"].map(self.get_avg_metric)
@@ -685,12 +676,10 @@ class Vis():
                 
                 for setup in exp_files.keys():
                     if "single" not in setup and "random" not in setup and "du" not in setup:
-                        #self.plot_sankey_full_plotly(setup, sent_color=False)
-
                         if conv_format != "run":
-                            acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup) # TODO: Test
+                            acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup)
                         else:
-                            acc_changes[f"{setup}"] = self.get_acc_changes(setup) # TODO: Test
+                            acc_changes[f"{setup}"] = self.get_acc_changes(setup)
                     else:
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
 
@@ -702,13 +691,16 @@ class Vis():
         df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
 
     def plot_acc_changes(self, run_file: str = None, df_experiment_files = None):
+        '''
+        This method plots the accuracy changes of the setups in run_file or df_experiment_files.
+
+        @params
+            run_file: The path to the CSV file containing the experiment setups and their corresponding output files
+            df_experiment_files: A DataFrame containing the experiment setups and their corresponding output files
+        '''
         if run_file:
             df_experiment_files = pd.read_csv(run_file, delimiter = ";")
-
             df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
-
-        # plot_last instead to include last results
-        #df_experiment_files.to_csv(f"./visualizations/{self.task}/args_hypos_llama.csv", sep = ";")
 
         # plot sankeys
         df_dict = df_experiment_files.T.to_dict()
@@ -724,9 +716,8 @@ class Vis():
                 
                 self.evaluator = Evaluator(exp_file,"multi", task.lower())
 
-                #self.num_turns = max([len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))])-1
                 if self.task == "rocstories":
-                    self.num_turns = 11 # TODO: fix, bei 302 (reject, llama geht die Berechnung nicht durch)
+                    self.num_turns = 11
                 else:
                     self.num_turns = 7
 
@@ -739,24 +730,16 @@ class Vis():
                     if self.beliefs_per_turn[i] != 0:
                         acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
                 
-                #acc_per_turn[-1] = row["accuracy"]
                 acc_changes[setup] = acc_per_turn
 
         df_acc_changes = pd.DataFrame(acc_changes)
 
-        color_map = {
-            'Hypo': '#cbb2ff',
-            'Full': '#93c4d5',  
-            'Args': '#ffc7a2'               
-        }
-        #df_acc_changes.plot(ylabel="Accuracy", xlabel="Turn", xticks = np.arange(self.num_turns), yticks=np.arange(0, 101, 10), color=list(color_map.values()))
-        
-        #plt.savefig(f"visualizations/{self.task}/args_hypos.png")
-        #df_acc.to_csv(f"./visualizations/{self.task}/acc_changes_llama_roc.csv", sep = ";")
-
         return df_acc_changes
 
     def plot_arg_hypo_changes(self):
+        '''
+        This method plots Fig. 4a, i.e., the accuracy changes of the argument and hypothesis setups for both ROCStories and CMU Booksum tasks.
+        '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
 
@@ -832,7 +815,7 @@ class Vis():
                 color=list(color_map.values()), 
                 title = subtitle[c], 
                 legend = (c==0),
-                figsize=(4.5,2.5),# TODO: kleiner machen
+                figsize=(4.5,2.5)
             )
             axes[c].axvline(linepos, color='lightgray', linestyle='--')
             axes[c].axvline(finalpos, color='darkgray', linestyle='--')
@@ -840,11 +823,13 @@ class Vis():
             if c == 0:
                 axes[c].legend(loc = "upper left")
         
-        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, ncol=7)
-        plt.tight_layout() # TODO: check if it makes whitespace around figure smaller
+        plt.tight_layout() 
         plt.savefig(f"visualizations/args_hypos.png")
 
     def plot_exploration_changes(self):
+        '''
+        This method plots Fig. 4b, i.e., the accuracy changes of the reject and support for both ROCStories and CMU Booksum tasks.
+        '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/exploration_runs_llama_roc.csv", delimiter = ";")
 
@@ -923,13 +908,13 @@ class Vis():
             )
             axes[c].axvline(linepos, color='lightgray', linestyle='--')
             axes[c].axvline(finalpos, color='darkgray', linestyle='--')
-        
-        # plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),
-        #   fancybox=True, ncol=7)
 
         plt.savefig(f"visualizations/exploration.png")
 
     def plot_correctness_changes(self):
+        '''
+        This method plots Fig. 4c, i.e., the accuracy changes of correct and incorrect for both ROCStories and CMU Booksum tasks.
+        '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/correctness_runs_llama_roc.csv", delimiter = ";")
 
@@ -1009,56 +994,17 @@ class Vis():
             axes[c].axvline(linepos, color='lightgray', linestyle='--')
             axes[c].axvline(finalpos, color='darkgray', linestyle='--')
 
-            # if c==0:
-            #     axes[c].legend(["Correct", "Incorrect"])
-        
-        #plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05),fancybox=True, ncol=7)
-
         plt.savefig(f"visualizations/correctness.png")
 
-    def plot_topology_changes(self):
-        "@deprecated, use plot_all_table instead"
-        self.task = "rocstories"
-        df_list = [self.plot_acc_changes("eval/multi/Qwen3-32B/rocstories/dev/topologies_250.csv")]
-        
-        nrow = 1
-        ncol = 1
-        fig, axes = plt.subplots(nrow, ncol)
-
-        # plot counter
-        color_map = {
-            'Hypo': '#cbb2ff',
-            'Full': "#17b2e1",  
-            'Args': '#ffc7a2',
-            'Reject': '#B2FFCB',
-            'Support': '#FFB2E6',
-            'Correct': '#C90D72',
-            'Incorrect': '#0D72C9'                           
-        }
-        #subtitle = ["ROCStories", "CMU_Booksum"]
-        for c in range(ncol):
-            if c == 0:
-                ylabel = "Micro Accuracy"
-                xticks = np.arange(10)
-            else:
-                ylabel = ""
-                xticks = np.arange(6)
-
-            df_list[c].plot(
-                ax=axes[c], 
-                ylabel=ylabel, 
-                xlabel="Turn", 
-                xticks = xticks, 
-                yticks=np.arange(0, 61, 10), 
-                color=list(color_map.values()), 
-                #title = subtitle[c], 
-                legend = (c==0),
-                figsize=(4.5,2.5)
-            )
-
-        plt.savefig(f"visualizations/args_hypos/rocstories/variation/full_full/topologies.png")
-
     def get_acc_per_turn(self, inst, idx, setup):
+        '''
+        This method calculates the accuracy per turn for the specified instance in the experiment setup.
+
+        @params
+            inst: The instance data from the experiment setup.
+            idx: The index of the instance.
+            setup: The experiment setup name.
+        '''
         out = self.exp_data_hf[setup].select([idx])[0]
         eval = self.eval_data_hf[setup].select([idx])[0]
 
@@ -1074,6 +1020,15 @@ class Vis():
             self.beliefs_per_turn[belief["turn"]-1] += 1
         
     def get_avg_metric(self, exp_file, metric = "accuracy"):
+        '''
+        This method calculates the average accuracy for the specified experiment file.
+
+        @params
+            exp_file: The path to the experiment output file.
+            metric: The metric to calculate the average for (default is "accuracy").
+        @returns
+            The average value of the specified metric over all instances.
+        '''
         if "booksum" in exp_file:
             self.task = "cmu_booksum"
         else:
@@ -1083,15 +1038,7 @@ class Vis():
             eval_file = f"{exp_file.replace('outputs', 'eval')}_last.jsonl"
         else:
             eval_file = f"{exp_file.replace('outputs', 'eval')}.jsonl"
-        
-        # try:
-        #     eval_data = load_dataset("json", data_files=eval_file, split="train")
-            
-        #     if metric in eval_data.features:
-        #         acc = float(eval_data.with_format("pandas")[metric].mean())
-        #     else:
-        #         acc = 0.0
-        # except:
+
         if self.last and "single" not in exp_file:
             acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
             acc = acc_last
@@ -1102,6 +1049,14 @@ class Vis():
         return round(acc*100, 2)
     
     def get_sanity_checks(self, exp_file):
+        '''
+        This method performs sanity checks on the specified experiment file.
+
+        @params
+            exp_file: The path to the experiment output file.
+        @returns
+            fraction of instances returned in the wrong format
+        '''
         if "booksum" in exp_file:
             self.task = "cmu_booksum"
         else:
@@ -1121,7 +1076,13 @@ class Vis():
 
         return round(wf, 3)
     
-    def get_acc_changes(self, setup, sent_color = False):  
+    def get_acc_changes(self, setup, sent_color = False):
+        '''
+        This method creates Fig. 7, i.e., the intermediate precision per topology.
+
+        @returns 
+            acc_per_turn: micro precision per turn
+        '''
         self.num_turns = 0
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
@@ -1146,7 +1107,6 @@ class Vis():
             "correct": "#f78c1b", 
             "incorrect": "#1b7ef7"
         }
-
 
         self.exp_data_hf[setup].map(lambda x, idx: self.create_sankey_link(x, idx, setup, sent_color), with_indices=True)
 
@@ -1174,29 +1134,9 @@ class Vis():
 
     def plot_dist_split(self):
         """
-        This function plots distributed knowledge results for llama and qwen in different subplots.
+        This function plots Fig. 2, i.e., distributed knowledge results for llama and qwen in different subplots.
         """
         run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
-
-        # df_list = []
-
-        # for run_file in run_files:
-        #     df_experiment_files = pd.read_csv(run_file, delimiter = ";")
-
-        #     # get avg of three runs
-        #     output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
-        #     output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
-        #     output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
-
-        #     s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
-
-        #     df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
-            
-        #     df_list.append(df_acc)
-
-        # 1. Pivot the data to group by Task on X-axis
-        #plot_df = df_acc.pivot(index='task', columns=['model', 'framework'], values='accuracy')
-        #plot_df = plot_df.dropna(axis=1, how='all')
 
         nrow = 3
         ncol = 2
@@ -1210,7 +1150,6 @@ class Vis():
             'Random': 'lightgray'                    
         }
 
-        #subtitle = ["ROCStories", "CMU_Booksum"]
         for r in range(nrow):
             for c in range(ncol):
                 df_experiment_files = pd.read_csv(run_files[r][c], delimiter = ";")
@@ -1220,15 +1159,13 @@ class Vis():
                 output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
                 output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
 
-                    #s_acc = 34.5 # keep same avg random boundary across 
-                #else:
                 s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
 
                 if "booksum" in self.task:
                     s_acc[0] = 34.5 # keep same avg random boundary across 
 
                 df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
-                plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') # index='task', 
+                plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') 
                 plot_df = plot_df.dropna(axis=1, how='all')
 
                 original_cols = plot_df.columns
@@ -1238,7 +1175,6 @@ class Vis():
                 if c == 0:
                     ylabel = df_acc["model"][1]
                     yticks = np.arange(0, 101, 20)
-                    #xticks = []
                 else:
                     ylabel = ""
 
@@ -1250,7 +1186,6 @@ class Vis():
                     ylabel=ylabel, 
                     yticks=yticks,
                     color=colors, 
-                    #title = subtitle[c], 
                     legend = (c==0 and r==0),
                     figsize=(4.5,5.75), # w x h
                     kind="bar",
@@ -1276,7 +1211,7 @@ class Vis():
                     height = patch.get_height()
                     if not np.isnan(height) and height > 0:
                         ax.annotate(
-                            f"{height:.1f}",                                 # Format the accuracy to 2 decimal places
+                            f"{height:.1f}", # Format the accuracy to 2 decimal places
                             (patch.get_x() + patch.get_width() / 2, height), 
                             ha='center',                                     
                             va='bottom',                                     
@@ -1286,16 +1221,15 @@ class Vis():
                             fontsize=8
                         )
 
-        plt.tight_layout() # TODO: check if it makes figure smaller
+        plt.tight_layout() 
         plt.savefig(f"visualizations/dist_split.png")
 
     def compute_std(self):
         """
-        This function plots distributed knowledge results for llama and qwen in different subplots.
+        This method computes the standard deviation between runs.
         """
         run_file = "eval/final_llama.csv"
 
-        #subtitle = ["ROCStories", "CMU_Booksum"]
         df_experiment_files = pd.read_csv(run_file, delimiter = ";")
 
         # get avg of three runs
@@ -1311,132 +1245,24 @@ class Vis():
 
         df_acc.to_csv("visualizations/final_llama.csv")
 
-    def plot_distributed_base(self):
-        """
-        This function creates a bar plot of the accuracy on both games for the baselines and unstructured MAS setups.
-        """
-        df_experiment_files = pd.read_csv(f"eval/distributed_base_runs.csv", delimiter = ";")
-
-        output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
-        output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
-        output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
-
-        s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
-
-        df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
-
-        # 1. Pivot the data to group by Task on X-axis
-        plot_df = df_acc.pivot(index='task', columns=['model', 'framework'], values='accuracy')
-        plot_df = plot_df.dropna(axis=1, how='all')
-
-        # 2. Assign styles (Colors for Models, Hatches for Frameworks)
-        color_map = {
-            'Random': 'lightgray', 
-            'Llama-3.1-8B-Instruct': '#318CE7',  
-            'Qwen3-32B': '#FF9966'               
-        }
-
-        hatch_map = {
-            'random': '',      # Solid
-            'Single': '',      # Solid
-            'Base': '/',        # Diagonal lines
-            'Improved': '.'
-        }
-
-        original_cols = plot_df.columns
-        colors = [color_map[model] for model, framework in original_cols]
-
-        # 3. Plot the base colored bars (edgecolor is required for hatches to show)
-        ax = plot_df.plot(
-            kind="bar", 
-            figsize=(4.5, 3.5), # w x h
-            color=colors,
-            width=0.85, 
-            yticks=np.arange(0, 101, 10), 
-            #yticks=s_acc,
-            ylabel="Accuracy", 
-            rot=0,
-            edgecolor='black',
-            xlabel=""
-        )
-
-        # 4. Apply spacing, hatches, and accuracy value labels
-        num_tasks = len(plot_df.index)
-        for i, patch in enumerate(ax.patches):
-            
-            # --- SPACING LOGIC ---
-            original_width = patch.get_width()
-            new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
-            patch.set_width(new_width)
-            
-            # Re-center the bar
-            new_x = patch.get_x() + (original_width - new_width) / 2
-            patch.set_x(new_x)
-
-            # --- HATCH LOGIC ---
-            col_idx = i // num_tasks
-            framework = original_cols[col_idx][1]
-            
-            hatch_pattern = hatch_map.get(framework, '')
-            if hatch_pattern:
-                patch.set_hatch(hatch_pattern)
-
-            # --- ANNOTATION (VALUE) LOGIC ---
-            height = patch.get_height()
-            if not np.isnan(height) and height > 0:
-                ax.annotate(
-                    f"{height:.2f}",                                 # Format the accuracy to 2 decimal places
-                    (patch.get_x() + patch.get_width() / 2, height), 
-                    ha='center',                                     
-                    va='bottom',                                     
-                    xytext=(0, 3),                                   
-                    textcoords='offset points',
-                    rotation=0,                                     
-                    fontsize=10
-                )
-
-        # Extend the Y-axis slightly so the highest text labels don't get cut off
-        #ax.set_ylim(0, 120)
-
-        # 5. Create a combined legend for Models and Frameworks
-        legend_elements = [
-            # Model colors
-            Patch(facecolor=color_map['Random'], edgecolor='black', label='Model: Random'),
-            Patch(facecolor=color_map['Llama-3.1-8B-Instruct'], edgecolor='black', label='Model: Llama-3.1-8B-Instruct'),
-            Patch(facecolor=color_map['Qwen3-32B'], edgecolor='black', label='Model: Qwen3-32B'),
-            
-            # Empty patch for spacing in the legend
-            Patch(facecolor='none', edgecolor='none', label=''), 
-            
-            # Framework patterns (represented with white boxes)
-            Patch(facecolor='white', edgecolor='black', hatch='', label='Setup: Single'),
-            Patch(facecolor='white', edgecolor='black', hatch='/', label='Setup: Base'),
-            Patch(facecolor='white', edgecolor='black', hatch='.', label='Setup: Improved')
-        ]
-
-        ax.legend(handles=legend_elements, title = "Model & Setup", loc="upper left")
-
-        plt.tight_layout()
-        #plt.show()
-
-        plt.savefig("./visualizations/distributed_base.png")
-        plt.close()
-        #df_acc.plot(kind="bar", x = "task", y = "accuracy", yticks=np.arange(0, 110, 10), xlabel="Task", ylabel="Accuracy", rot = 0)
-        #df_acc.to_csv("./visualizations/distributed_base_results.csv", sep = ";")
-        #df_acc.to_latex()
-
     def plot_last(self):
+        ''' 
+        This method prints the accuracy of the final answer agent and of the last "player".
+        '''
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_cmu.csv", delimiter = ";")
 
         self.last = False
         df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
 
         self.last = True
-        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric) # last accuracy stimmt nicht
+        df_experiment_files["last_accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
 
         print(df_experiment_files)
 
     def plot_dist_metrics(self):
+        '''
+        This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+        '''
         df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
 
         self.last = False
@@ -1448,6 +1274,9 @@ class Vis():
         df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";") # multi:stimmt nicht
 
     def plot_dist_sanity_checks(self):
+        '''
+        This method prints sanity checks for the distributed base experiments (single vs. base vs. improved).
+        '''
         df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
 
         self.last = False
@@ -1457,6 +1286,9 @@ class Vis():
         df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";") # multi:stimmt nicht
 
     def plot_args_hypos_metrics(self):
+        '''
+        This method prints the final and last accuracy for the argumentative reasoning experiments (args vs. hypo vs. full).
+        '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
 
@@ -1472,6 +1304,9 @@ class Vis():
         df_experiment_files.to_csv("./visualizations/rocstories/args_hypos_llama.csv", sep = ";")
 
     def get_exp_groups(self):
+        '''
+        This method groups all runs that differ only by one configuration (e.g., final answer agent vs. no final answer agent) 
+        '''
         df_runs = pd.read_csv("logs/runs.csv", delimiter = ";")
 
         # important keys for comparison
@@ -1511,28 +1346,6 @@ class Vis():
                         for idx in ids:
                             df_obj = df_runs.iloc[idx]
 
-                            # if type(df_obj["experiment_file"]) == str:
-                            #     task = ""
-                            #     if "booksum" in df_obj["experiment_file"]:
-                            #         task = "cmu_booksum"
-                            #     else:
-                            #         task = "rocstories"
-
-                            #         if "rocstories" not in df_obj["experiment_file"]:
-                            #             split = df_obj["experiment_file"].split(f"/{df_obj["split"]}")
-                            #             df_obj["experiment_file"] = f"{split[0]}/rocstories/{df_obj["split"]}{split[1]}"
-                                
-                            #     if os.path.exists(df_obj["experiment_file"]):
-                            #         try:
-                            #             results = evaluate(df_obj["experiment_file"], df_obj["framework"], task, structured=df_obj["structured"], all = True)
-
-                            #             for metric, res in results.items():
-                            #                 df_obj[metric] = res
-                            #         finally:
-                            #             df_objects.append(df_obj)
-                            #     else:
-                            #         print("experiment file empty")
-
                             df_objects.append(df_obj)
 
                         if df_objects != []:
@@ -1543,12 +1356,15 @@ class Vis():
                             file = f"{path}{"_".join([str(df_obj["run_idx"]) for df_obj in df_objects])}.csv"
 
                             df_compare.to_csv(file, sep=";")
-                    
-                    #print(run_groups)
-
-        print("stop")
 
     def check_val(self, val):
+        '''
+        This method checks whether a value is a float value.
+
+        @param
+            val: checked value
+        @returns: True if value is not float
+        '''
         if type(val) != float:
             return True
         elif type(val) == float and not math.isnan(val):
@@ -1557,30 +1373,5 @@ class Vis():
             return False
 
 if __name__ == "__main__":
-
-    # for last in [False, True]:
-    #     vis = Vis(task = "rocstories", variation = "True", conv_format = "", last = last)
-    #     vis.plot_all_table()
-    # experiment_files = {
-    #     "reject":"outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_352",
-    #     "support": "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_349",
-    # }
-
     vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
     vis.plot_dist_split()
-
-    #vis.plot_all_table(run_file = "eval/multi/Qwen3-32B/rocstories/dev/full_full_topologies_250.csv")
-    
-    #vis.plot_sankey_full_plotly("chain", sent_color=False)
-    #vis.plot_topology_changes("graph", sent_color=False)
-    #vis.plot_sankey_full_plotly("star", sent_color=False)
-    # vis.plot_dist_metrics()
-    #vis.plot_args_hypos_metrics()
-    #vis.plot_distributed_base()
-    #vis.plot_arg_hypo_changes()
-    #vis.plot_dist_sanity_checks()
-    #vis.get_exp_groups()
-
-    #vis.perform_ttest(comparison="support", exp_name = "exploration_2")
-
-    print("Done")

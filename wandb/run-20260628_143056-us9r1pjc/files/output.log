@@ -1,0 +1,19 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|█████████████████████| 250/250 [00:00<00:00, 1665.11 examples/s]
+Creating json from Arrow format: 100%|█████| 1/1 [00:00<00:00, 315.67ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/outputs_228.jsonl
+accuracy: 0.8024
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Generating train split: 250 examples [00:00, 122540.14 examples/s]
+Map: 100%|██████████████████████| 250/250 [00:00<00:00, 453.46 examples/s]
+Map: 100%|█████████████████████| 250/250 [00:00<00:00, 5042.98 examples/s]
+Map: 100%|████████████████████| 250/250 [00:00<00:00, 17773.38 examples/s]
+Creating json from Arrow format: 100%|██████| 1/1 [00:00<00:00, 18.04ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/outputs_228.jsonl
+accuracy: 0.30640000000000006
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+defaultdict(<class 'float'>, {'acc_mean': 0.8024, 'prec_1': 0.9936, 'prec_2': 0.757, 'prec_3': 0.672, 'prec_4': 0.626, 'prec_5': 0.616, 'spearman': 0.8759999999999999, 'kendalltau': 0.8472000000000001, 'instances': 250, 'wrong_format': 0.0, 'zero_percentage': 0.0, 'double_percentage': 0.0, 'acc_last': 0.30640000000000006, 'wrong_format_last': 0.0, 'zero_percentage_last': 0.0, 'double_percentage_last': 0.0, 'prec_1_last': 0.74, 'prec_2_last': 0.247, 'prec_3_last': 0.116, 'prec_4_last': 0.056, 'prec_5_last': 0.004, 'spearman_last': 0.0056, 'kendalltau_last': 0.008})

@@ -1,0 +1,6 @@
+{"time":"2026-07-09T15:19:18.806862+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
+{"time":"2026-07-09T15:19:19.093197+02:00","level":"INFO","msg":"stream: created new stream","id":"som46blc"}
+{"time":"2026-07-09T15:19:19.09324+02:00","level":"INFO","msg":"handler: started","stream_id":"som46blc"}
+{"time":"2026-07-09T15:19:19.093392+02:00","level":"INFO","msg":"stream: started","id":"som46blc"}
+{"time":"2026-07-09T15:19:19.093401+02:00","level":"INFO","msg":"writer: started","stream_id":"som46blc"}
+{"time":"2026-07-09T15:19:19.093406+02:00","level":"INFO","msg":"sender: started","stream_id":"som46blc"}

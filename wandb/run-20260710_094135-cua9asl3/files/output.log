@@ -1,0 +1,81 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Backend macosx is interactive backend. Turning interactive mode on.
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 275.85 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 274.21 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 271.81 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:17<00:00,  3.89 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:24<00:00,  3.78 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 276.37 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 272.95 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 276.92 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 267.19 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 268.74 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:14<00:00,  3.93 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:25<00:00,  3.76 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 280.90 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 270.42 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 278.37 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 267.62 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 269.00 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:16<00:00,  3.89 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [04:26<00:00,  3.75 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 275.83 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 270.99 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 405.32 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 403.61 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 406.30 examples/s]
+Generating train split: 1000 examples [00:00, 462743.16 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████| 1000/1000 [02:44<00:00,  6.08 examples/s]
+Generating train split: 1000 examples [00:00, 457444.00 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [02:44<00:00,  6.09 examples/s]
+Generating train split: 1000 examples [00:00, 339922.52 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 408.48 examples/s]
+Generating train split: 1000 examples [00:00, 606025.72 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 405.94 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 412.38 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 402.82 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 394.05 examples/s]
+Generating train split: 1000 examples [00:00, 561486.48 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [02:41<00:00,  6.17 examples/s]
+Generating train split: 1000 examples [00:00, 240844.33 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [02:45<00:00,  6.05 examples/s]
+Generating train split: 1000 examples [00:00, 233744.09 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 413.61 examples/s]
+Generating train split: 1000 examples [00:00, 575429.28 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 409.88 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 407.16 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 402.85 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 407.31 examples/s]
+Generating train split: 1000 examples [00:00, 598502.28 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [02:42<00:00,  6.14 examples/s]
+Generating train split: 1000 examples [00:00, 321033.60 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████| 1000/1000 [02:44<00:00,  6.08 examples/s]
+Generating train split: 1000 examples [00:00, 411327.25 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 416.11 examples/s]
+Generating train split: 1000 examples [00:00, 567564.82 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 411.84 examples/s]
+Done

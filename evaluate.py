@@ -1,9 +1,7 @@
-from datasets import load_dataset, Dataset, load_from_disk
-from cli import CLI
+from datasets import load_dataset, load_from_disk
 import ast
 from data import get_sent_list
 import os
-import json
 import re
 import pandas as pd
 from log import ExperimentLog
@@ -13,9 +11,22 @@ import csv
 from tqdm import tqdm
 from scipy import stats
 import random
-import pdb
 
 def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False):
+    '''
+    This function evaluates the model predictions for a given experiment output file.
+
+    @params
+        outfile: path to the output dataset
+        framework: single/multi-agent setup
+        task: rocstories/cmu_booksum
+        logger: experiment logging object
+        structured: whether the model output is structured or not
+        sanity_checks: whether to return the number of wrong format instances or not
+        all: whether to return all evaluation results or just the mean accuracy
+    @returns
+        results: dictionary with the evaluation results/mean accuracy, or the number of wrong format instances if sanity_checks is True
+    '''
     evaluator = Evaluator(experiment_file= outfile, framework= framework, logger = logger, last = False, task = task, instances = instances)
 
     results = defaultdict(float)
@@ -70,6 +81,18 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
 
 class Evaluator:
     def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False, instances = None):
+        '''
+        This class evaluates the model predictions for a given experiment output file.
+
+        @params
+            experiment_file: path to the output dataset
+            framework: single/multi-agent setup
+            task: rocstories/cmu_booksum
+            logger: experiment logging object
+            idx: index of the instance to evaluate, if None evaluates all instances
+            last: whether to evaluate the last beliefs or not
+            instances: number of instances to evaluate, if None evaluates all instances
+        '''
         self.experiment_file = experiment_file
         if idx:
             self.exp_data = load_from_disk(experiment_file).select([idx])
@@ -112,6 +135,12 @@ class Evaluator:
             self.kendalltau = []
 
     def save_eval_data(self, eval_file = None):
+        '''
+        This method saves the evaluation results to a jsonl file.
+
+        @params
+            eval_file: path to the evaluation file, if None saves to the default location
+        '''
         if eval_file == None:
             # save evaluation output
             if os.path.isdir(self.experiment_file):
@@ -123,36 +152,39 @@ class Evaluator:
         self.eval_data.to_json(eval_file)
 
     def report_accuracy(self):
+        '''
+        This method reports the mean accuracy of the evaluation results and logs it to the experiment logger.
+
+        @returns
+            acc_mean: mean accuracy over all instances
+        '''
         # report mean accuracy
         acc_mean = float(self.eval_data.with_format("pandas")["accuracy"].mean())
 
         if self.last:
             self.logger.run_data.update({"last_mean_acc": acc_mean})
-            self.logger.run.log({"last_mean_acc": acc_mean}) # TODO: last accuracy
+            self.logger.run.log({"last_mean_acc": acc_mean})
         else:
             self.logger.run_data.update({"mean_acc": acc_mean})
-            self.logger.run.log({"mean_acc": acc_mean}) # TODO: last accuracy
+            self.logger.run.log({"mean_acc": acc_mean})
 
         if "run_idx" in self.logger.run_data.keys():
             print(f"{self.logger.run_data['run_idx']}: {acc_mean}")
         else:
             print(self.experiment_file)
             print(f"accuracy: {acc_mean}")
-        # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
 
         self.zero_percentage = self.zero_counter/(len(self.eval_data)*self.pred_len)
         print("zero percentage:", self.zero_percentage)
         self.logger.run_data.update({"zero_percentage": self.zero_percentage})
         self.logger.run.log({"zero_percentage": self.zero_percentage})
 
-        #print("double_counter:", self.double_counter)
         self.double_percentage = self.double_counter/(len(self.eval_data)*self.pred_len)
         print("double percentage:", self.double_percentage)
         self.logger.run_data.update({"double_percentage": self.double_percentage})
         self.logger.run.log({"double_percentage": self.double_percentage})
 
-        self.wrong_format = self.wrong_format/len(self.eval_data) # für not-last gibts eine Chance pro inst
+        self.wrong_format = self.wrong_format/len(self.eval_data) # for not-last, there is one chance per instance
         print("wrong format:", self.wrong_format)
         self.logger.run_data.update({"wrong_format": self.wrong_format})
         self.logger.run.log({"wrong_format": self.wrong_format})
@@ -161,12 +193,8 @@ class Evaluator:
 
     def evaluate_sent_order(self):
         """
-        This function evaluates the model predictions. 
+        This function evaluates the model predictions for ROCStories. 
 
-        @params
-            experiment_file: Huggingface folder containing the dataset with the outputs
-            self.framework: single/multi-agent setup
-            self.logger: experiment logging object 
         @returns
             acc_mean: mean accuracy over all instances
         """
@@ -181,11 +209,15 @@ class Evaluator:
         self.save_eval_data()
 
         acc_mean = self.report_accuracy()
-        # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
         return acc_mean
 
     def evaluate_odd_one(self):
+        """
+        This function evaluates the model predictions for CMU Booksum. 
+
+        @returns
+            acc_mean: mean accuracy over all instances
+        """
         if self.framework == "single":
             self.eval_data = self.exp_data.map(self.evaluate_odd_answer_single, batched=True, remove_columns=self.exp_data.column_names)
         elif self.framework == "multi":
@@ -196,11 +228,17 @@ class Evaluator:
         self.save_eval_data()
 
         acc_mean = self.report_accuracy()
-        # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
         return acc_mean
 
     def evaluate_odd_answer_single(self, batch):
+        '''
+        This method collects the evaluation results for the single-agent outputs for the CMU Booksum task.
+
+        @param
+            batch: batch of instances
+        @returns
+            dictionary with the storyids, accuracy per instance, model prediction, gold standard
+        '''
         pred_lists = []
         acc = []
         gold_lbls = []
@@ -228,7 +266,7 @@ class Evaluator:
 
     def evaluate_order_answer_single(self, batch):
         """
-        This function collect the evaluation results for the single-agent outputs.
+        This function collect the evaluation results for the single-agent outputs for ROCStories.
 
         @param
             batch: batch of instances
@@ -273,7 +311,7 @@ class Evaluator:
 
     def evaluate_order_answer_multi(self, batch):
         """
-        This function collect the evaluation results for the multi-agent outputs.
+        This function collect the evaluation results for the multi-agent outputs for ROCStories.
 
         @param
             batch: batch of instances
@@ -309,6 +347,14 @@ class Evaluator:
         return {"storyid": batch["storyid"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": self.gold_sents, "prec_1": self.prec_1, "prec_2": self.prec_2, "prec_3": self.prec_3, "prec_4": self.prec_4, "prec_5": self.prec_5, "spearman": self.spearman, "kendalltau": self.kendalltau}
         
     def evaluate_odd_answer_multi(self, batch):
+        '''
+        This method collects the evaluation results for the multi-agent outputs for the CMU Booksum task.
+
+        @param
+            batch: batch of instances
+        @returns
+            dictionary with the storyids, accuracy per instance, model prediction, gold standard
+        '''
         self.initiate_metric_lists()
         for i in range(len(batch["id"])):
             gold = batch["gold_title"][i]
@@ -327,6 +373,15 @@ class Evaluator:
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
         
     def extract_pred_odd(self, pred, titles):
+        '''
+        This method extracts the predicted title from the model output for the CMU Booksum task.
+
+        @param
+            pred: model output
+            titles: list of possible titles
+        @returns
+            string with the predicted title
+        '''
         if type(pred) == str:
             match = re.search(r"different genre is:\n\n([\w *]+)", pred)
             if match:
@@ -400,6 +455,14 @@ class Evaluator:
         return {"storyid": batch["storyid"], "accuracy": acc, "predictions": pred_lists, "gold": gold_sents, "prec_1": prec_1, "prec_2": prec_2, "prec_3": prec_3, "prec_4": prec_4, "prec_5": prec_5, "spearman": spearman, "kendalltau": kendalltau}
 
     def evaluate_odd_answer_random(self, batch):
+        '''
+        This method collects the evaluation results for the random outputs for the CMU Booksum task.
+
+        @param
+            batch: batch of instances
+        @returns
+            dictionary with the storyids, accuracy per instance, model prediction, gold standard
+        '''
         acc = []
         pred_lists = []
 
@@ -423,14 +486,11 @@ class Evaluator:
         @returns
             list with the model prediction
         """
-        #print("model out", model_out)
         try:
             model_answer = self.clean_out(model_out)
             model_answer = self.clean_match(model_answer)
-            #print("model answer", model_answer)
             # model only returned output list
             model_pred = ast.literal_eval(model_answer)
-            #print("model pred", model_pred)
             
             if type(model_pred) in (list, tuple):
                 return self.clean_preds(model_pred, gold)
@@ -457,6 +517,14 @@ class Evaluator:
                 return model_answer
             
     def extract_structured_answer(self, model_answer):
+        '''
+        This method extracts the structured answer from the model output for both ROCStories and CMU Booksum tasks.
+
+        @param
+            model_answer: model output
+        @returns
+            conv_list: list with the model predictions in the correct format
+        '''
         conv_str = model_answer.split("</think>")[-1].strip()
         conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
         # remove newlines to make matching possible
@@ -503,8 +571,6 @@ class Evaluator:
 
                     if i < len(labels):
                         conv_dict["label"] = labels[i]
-                    # else:
-                    #     print("Could not find a label")
                     
                     conv_list.append(conv_dict)
 
@@ -554,14 +620,11 @@ class Evaluator:
         @returns
             str_list: string match with escaped quotation marks and as raw string
         """
-        #print("str_list:", str_list)
         # escape single quote strings
         str_list = re.sub(r"(\b|\b )'(\b| )", r"\1\\'\2", str_list)
         str_list = re.sub(r'(\b|\b )"(\b| )', r'\1\\"\2', str_list)
 
         # remove double quotation marks
-        # str_list = re.sub(r"('|\"|\\\"){2,}(.*?)('|\"|\\)+([,\]])", r'"\2"\4', str_list)
-        #str_list = re.sub(r'("|\'){2,}', r'"', str_list)
         str_list = re.sub(r"('|\\\'|\"|\\\"){2,}", r'"', str_list)
 
         # remove escaped brackets
@@ -640,7 +703,6 @@ class Evaluator:
                 type_i += 1
         else:
             # turn model prediction into list if the format is already correct
-            #print("returning list")
             cleaned_pred = [sent.strip("\"'") for sent in model_pred]
 
         return cleaned_pred[:self.pred_len] # only use first 5 sentences
@@ -671,6 +733,16 @@ class Evaluator:
             return 0.0
         
     def compute_accuracy_odd(self, pred: str, gold_title: str, gold_title_id: str):
+        '''
+        This method compares the predicted title with the gold standard title for the CMU Booksum task.
+
+        @param
+            pred: model prediction
+            gold_title: gold standard title
+            gold_title_id: index of the gold standard title in the list of possible titles
+        @returns
+            accuracy of the model prediction (1 if correct, 0 if incorrect)
+        '''
         num_correct = 0
         subtitles = gold_title.split(":")
 
@@ -678,12 +750,20 @@ class Evaluator:
             subtitle = subtitle.strip().lower()
             if subtitle in pred.lower() or str(gold_title_id) in pred.lower():
                 return 1
-            # else:
-            #     print("incorrect prediction")
         
         return num_correct
         
     def compute_correlations(self, pred: list, gold: list):
+        '''
+        This method computes the Spearman and Kendall correlation coefficients between the predicted and gold standard sentence orders for the ROCStories task.
+
+        @param
+            pred: model prediction
+            gold: gold standard sentence order
+        @returns
+            spearman: Spearman correlation coefficient
+            kendall: Kendall correlation coefficient
+        '''
         pred = [self.clean_sent(item) for item in pred]
         gold = [item.lower().strip('.') for item in gold]
 
@@ -703,10 +783,27 @@ class Evaluator:
         return spearman, kendall
 
     def clean_sent(self, sent: str):
+        '''
+        This method cleans the sentence by converting it to lowercase and stripping any trailing periods.
+
+        @param
+            sent: sentence to be cleaned
+        @returns
+            cleaned sentence
+        '''
         sent = sent.lower().strip(".")
         return sent
         
     def compute_precision(self, pred: list, gold: list):
+        '''
+        This method computes the precision of the model predictions compared to the gold standard for ROCStories.
+
+        @param
+            pred: model prediction
+            gold: gold standard sentence order
+        @returns
+            precision: list of precision scores for each n (1-5)
+        '''
         prec_n = []
         for i in range(5):
             prec_n.append(self.compute_n_precision(pred, gold, i+1))
@@ -714,6 +811,16 @@ class Evaluator:
         return prec_n
 
     def compute_n_precision(self, pred: list, gold: list, n: int):
+        '''
+        This method computes the n-gram precision of the model predictions compared to the gold standard for ROCStories.
+
+        @param
+            pred: model prediction
+            gold: gold standard sentence order
+            n: n-gram size
+        @returns
+            n-gram precision score
+        '''
         pred = [self.clean_sent(item) for item in pred]
         gold = [item.lower().strip('.') for item in gold]
 
@@ -727,103 +834,21 @@ class Evaluator:
         return correct_ngrams/len(gold_ngrams)
 
     def create_gold_ngrams(self, gold: list, n: int):
+        '''
+        This method creates a list of n-grams from the gold standard sentence order for ROCStories.
+
+        @param
+            gold: gold standard sentence order
+            n: n-gram size
+        @returns
+            gold_ngrams: list of n-grams from the gold standard
+        '''
         gold_ngrams = []
 
         for i in range((len(gold)-n)+1):
             gold_ngrams.append(gold[i:i+n]) 
         
         return gold_ngrams
-        
-    def compare_instances(self, eval_files: dict, output_file: str = None, insts: int = None):
-        """
-        This function compares a bunch of experiments against each other.
-
-        @params
-            eval_files: dictionary mapping the experiment name to the evaluation file.
-        """
-        # load datasets
-        eval_datasets = defaultdict()
-        results = defaultdict(lambda: defaultdict(float))
-        metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
-        for exp_name, eval_file in eval_files.items():
-            #eval_datasets[exp_name] = load_dataset("json", data_files=eval_file, split="train").select(range(10))
-            eval_data = load_dataset("json", data_files=eval_file, split="train").select(range(insts))
-
-            # store mean accuracy per experiment
-            for metric in metrics:
-                results[exp_name][f"mean_{metric}"] = float(eval_data.with_format("pandas")[metric].mean())
-
-            eval_datasets[exp_name] = eval_data
-
-        # compare evaluation on instance level
-        for i in tqdm(range(len(eval_data)), desc="Processing instances", total = len(eval_data)):
-            for metric in metrics:
-                results = compare_metrics(metric, eval_data, eval_datasets, results, i)
-
-        # save comparison data in csv
-        if not output_file:
-            output_file = f"{'/'.join(eval_files[exp_name].split('/')[:-1])}/eval_compare.csv"
-        with open(output_file, 'w', encoding="utf-8") as csvfile:
-            fieldnames = ["experiment_name", "candidates", "experiment_file", "wrong_format"]
-            for metric in metrics:
-                fieldnames.append(f"mean_{metric}")
-                fieldnames.append(f"max_{metric}")
-                fieldnames.append(f"min_{metric}")
-                fieldnames.append(f"equal_{metric}")
-
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=";")
-            
-            writer.writeheader()
-            for exp, file in eval_files.items():
-                writing_dict = defaultdict()
-                writing_dict.update({
-                    "experiment_name": exp, 
-                    "candidates": list(eval_datasets.keys()), 
-                    "experiment_file": file, 
-                    "wrong_format": results[exp]["wrong_format"]/len(eval_data)
-                })
-
-                for metric in metrics:
-                    writing_dict[f"mean_{metric}"] =  results[exp][f"mean_{metric}"]
-                    writing_dict[f"max_{metric}"] =  results[exp][f"max_{metric}"]/len(eval_data)
-                    writing_dict[f"min_{metric}"] =  results[exp][f"min_{metric}"]/len(eval_data)
-                    writing_dict[f"equal_{metric}"] =  results[exp][f"equal_{metric}"]/len(eval_data)
-
-                writer.writerow(writing_dict)
-
-    def compare_metrics(self, metric_name: str, eval_data, eval_datasets: defaultdict, results: defaultdict, i: int):
-        """
-        @deprecated?
-        """
-        all_metrics = defaultdict()
-
-        # check if accuracy is the same for all experiments
-        same = True
-        comp_metric = eval_data[metric_name][i]
-
-        for curr_exp, curr_eval_data in eval_datasets.items():
-            curr_metric = curr_eval_data[metric_name][i]
-            all_metrics[curr_exp] = curr_metric
-
-            if curr_metric != comp_metric:
-                same = False # accuracy between experiments differs
-
-            if metric_name == "accuracy" and curr_eval_data["predictions"][i] == ["", "", "", "", ""]:
-                # check whether model returned prediction in the correct format
-                results[curr_exp]["wrong_format"] += 1
-
-        # compare accuracies between experiments
-        for curr_exp in eval_datasets.keys():
-            if max(all_metrics.values()) == all_metrics[curr_exp]:
-                results[curr_exp][f"max_{metric_name}"] += 1 # experiment has the best accuracy
-
-            if min(all_metrics.values()) == all_metrics[curr_exp]:
-                results[curr_exp][f"min_{metric_name}"] += 1 # experiment has the worst accuracy
-
-            if same:
-                results[curr_exp][f"equal_{metric_name}"] += 1 # instance is not affected by experiment
-            
-        return results
 
     def evaluate_all_outputs(self, splitdir = "outputs/single/Llama-3.2-1B-Instruct/dev/"):
         """
@@ -835,65 +860,34 @@ class Evaluator:
         """
         outdirs = os.listdir(splitdir)
 
-        #evals = defaultdict()
         for outdir in outdirs:
             if outdir != "ckps" and not outdir.endswith("jsonl"):
-                #evals[outdir] = evaluate_sent_order(splitdir + outdir, "single")
                 self.experiment_file = splitdir + outdir
                 
                 self.exp_data = load_from_disk(self.experiment_file)
 
                 if "rocstories" in self.experiment_file:
-                    acc_mean = self.evaluate_sent_order()
+                    self.evaluate_sent_order()
                 else:
-                    acc_mean = self.evaluate_odd_one()
+                    self.evaluate_odd_one()
 
                 self.last = True
                 self.zero_counter = 0
                 self.double_counter = 0
                 self.wrong_format = 0
 
-                acc_last = 0.0
-
                 if self.framework == "multi":
                     self.evaluate_last_beliefs()
 
-                
-                # self.exp_data = load_from_disk(self.experiment_file)
-                # if self.last:
-                #     print(f"\n{outdir}: {self.evaluate_last_beliefs()}\n")
-                # else:
-                #     print(f"\n{outdir}: {self.evaluate_sent_order()}\n")
-
-        #print(evals)
-
-    def create_compare_dict(self, split):
-        df = pd.read_csv("./logs/runs.csv", sep = ";")
-
-        filtered_df = df
-        
-        if self.framework != None:
-            filtered_df = filtered_df.loc[df["self.framework"] == self.framework]
-        
-        if split != None: 
-            filtered_df = filtered_df.loc[df["split"] == split]
-
-        files = filtered_df["experiment_file"].dropna()
-        min_insts = None
-        run2files = defaultdict(str)
-
-        for file in files:
-            if not file.endswith(".jsonl") and "ckps" not in file:
-                run_data = df.loc[df["experiment_file"] == file]
-                run2files[int(run_data["run_idx"].values[0])] = f"{file.replace('outputs', 'eval')}.jsonl"
-
-                insts = int(run_data["instances"].values[0])
-                if min_insts == None or min_insts > insts:
-                    min_insts = insts
-        
-        return run2files, min_insts
-
     def update_evaluation_files(self, frameworks = ["single", "multi"], splits = ["mini", "dev", "test"], tasks = ["rocstories", "cmu_booksum", "booksum"]):
+        '''
+        This method updates the evaluation files for all frameworks, splits, and tasks.
+
+        @params
+            frameworks: list of frameworks to evaluate
+            splits: list of data splits to evaluate
+            tasks: list of tasks to evaluate
+        '''
         for fw in frameworks: 
             self.framework = fw
             models = os.listdir(f"outputs/{fw}/")
@@ -908,6 +902,15 @@ class Evaluator:
                             self.evaluate_all_outputs(dir_path)
 
     def create_belief_instance_roc(self, out, eval):
+        '''
+        This method collects the intermediate predictions (beliefs) for the ROCStories task.
+
+        @param
+            out: model output
+            eval: gold standard evaluation data
+        @returns
+            dictionary with the beliefs for each turn in the conversation
+        '''
         sent2gold = {sent:idx for idx, sent in enumerate(eval["gold"], start = 1)}
         beliefs = []
         if "turns" in out.keys():
@@ -964,6 +967,15 @@ class Evaluator:
         return {"beliefs": beliefs}
     
     def create_belief_instance_cmu(self, out, eval):
+        '''
+        This method collects the intermediate predictions (beliefs) for the CMU Booksum task.
+
+        @param
+            out: model output
+            eval: gold standard evaluation data
+        @returns
+            dictionary with the beliefs for each turn in the conversation
+        '''
         beliefs = []
         if "turns" in out.keys():
             for i, turn in enumerate(out["turns"]):
@@ -1001,6 +1013,12 @@ class Evaluator:
         return {"beliefs": beliefs}
 
     def evaluate_last_beliefs(self):
+        '''
+        This method evaluates the last hypothesis of the multi-agent outputs for both ROCStories and CMU Booksum tasks.
+
+        @returns
+            accuracy of the last hypothesis for each instance
+        '''
         eval_file = f"{self.experiment_file.replace('outputs', 'eval').split('.jsonl')[0]}.jsonl"
 
         full_eval_data = self.load_eval_data(eval_file)
@@ -1017,12 +1035,18 @@ class Evaluator:
         self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
 
         acc_mean = self.report_accuracy()
-        # with open("eval/acc_log.jsonl", "a", encoding="utf-8") as f:
-        #     json.dump({eval_file.split("/")[-1]: acc_mean}, f, indent=4)
         return acc_mean
 
 
     def create_pred_from_belief_roc(self, beliefs):
+        '''
+        This method gets the final prediction from the beliefs for the ROCStories task.
+
+        @param
+            beliefs: dictionary with the beliefs for each turn in the conversation
+        @returns
+            dictionary with the final prediction for each instance
+        '''
         # list of beliefs with dict, describing the belief
         pred = [""]*5
 
@@ -1033,6 +1057,13 @@ class Evaluator:
         return {"pred": pred}
     
     def create_pred_from_belief_cmu(self, beliefs):
+        '''
+        This method gets the final prediction from the beliefs for the CMU Booksum task.
+        
+        @param
+            beliefs: dictionary with the beliefs for each turn in the conversation
+        @returns
+            dictionary with the final prediction for each instance'''
         # list of beliefs with dict, describing the belief
         pred = ""
 
@@ -1043,6 +1074,14 @@ class Evaluator:
         return {"pred": pred}
     
     def calculate_metrics_roc(self, batch):
+        '''
+        This method calculates the evaluation metrics for the ROCStories task.
+
+        @param
+            batch: batch of instances
+        @returns
+            dictionary with the storyids, accuracy per instance, model prediction, gold standard, precision scores
+        '''
         self.initiate_metric_lists()
         self.pred_lists = list(batch["pred"])
         for i in range(len(batch["storyid"])):
@@ -1066,6 +1105,14 @@ class Evaluator:
         return {"storyid": batch["storyid"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": self.gold_sents, "prec_1": self.prec_1, "prec_2": self.prec_2, "prec_3": self.prec_3, "prec_4": self.prec_4, "prec_5": self.prec_5, "spearman": self.spearman, "kendalltau": self.kendalltau}
 
     def calculate_metrics_cmu(self, batch):
+        '''
+        This method calculates the evaluation metrics for the CMU Booksum task.
+
+        @param
+            batch: batch of instances
+        @returns
+            dictionary with the storyids, accuracy per instance, model prediction, gold standard
+        '''
         self.initiate_metric_lists()
         self.pred_lists = list(batch["pred"])
         for i in range(len(batch["id"])):
@@ -1074,8 +1121,15 @@ class Evaluator:
         
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
 
-
     def load_eval_data(self, eval_file):
+        '''
+        This method loads the evaluation data from a JSON file.
+
+        @param
+            eval_file: path to the evaluation file
+        @returns
+            dataset: loaded evaluation dataset
+        '''
         try:
             return load_dataset("json", data_files=eval_file, split="train")
         except:
@@ -1086,65 +1140,8 @@ class Evaluator:
             return load_dataset("json", data_files=eval_file, split="train")
 
 if __name__ == "__main__":
-    #cli = CLI()
-
-    #eval = Evaluator(experiment_file="outputs/multi/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_284", framework = "multi", task = "cmu_booksum")
-
-    #eval.update_evaluation_files(tasks=["rocstories", "cmu_booksum", "booksum"], splits=["test"])
-    #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-14_10:24:56.857093.jsonl"
-    #outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_08:48:25.663742"
-
-    # outfile = "outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881"
-    # #evaluate_sent_order("test.jsonl", "single")
-    #evaluate_sent_order("./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021", "single")
-
-    #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
-    #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
-    #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
     outdir = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_379"
-    #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
     results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=False, all = True, instances = 1000)
     print(results)
-
-    # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
-    # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
-
-    # evaluator = Evaluator(outdir, "single", last = True)
-    # evaluator.evaluate_sent_order()
-    #evaluator.update_evaluation_files(frameworks=["multi"], splits = ["dev"])
-    #evaluator.evaluate_sent_order(turn_idx = -2)
-    #evaluator.evaluate_last_beliefs()
-
-    # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", self.framework="multi")
-    # evaluate_all_outputs(splitdir="outputs/multi/Llama-3.2-1B-Instruct/dev/", self.framework="multi")
-    # evaluate_all_outputs(splitdir="outputs/multi/Qwen3-8B/dev/", self.framework="multi")
-
-    # prompt_dev_files = {
-    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
-    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
-    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
-    # }
-    # compare_instances(prompt_dev_files)
-
-    # prompt_dev_files_multi = {
-    #     "self": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-17_11:52:54.422881.jsonl",
-    #     "gemini": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:22:00.500021.jsonl",
-    #     "llama": "./eval/single/Llama-3.2-1B-Instruct/dev/eval_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743.jsonl"
-    # }
-    #compare_instance_acc(prompt_dev_files_multi)
-
-    # dev_multi_models = {
-    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_13:45:49.929179.jsonl",
-    #     "Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-17_17:55:13.130931.jsonl",
-    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_00:13:58.547826.jsonl",
-    #     "Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146": "eval/multi/Llama-3.2-1B-Instruct/dev/eval_multi_Llama-3.2-1B-Instruct_dev_2025-11-18_11:43:21.920146.jsonl",
-    #     "73": "eval/multi/Qwen3-8B/dev/eval_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646.jsonl",
-    #     "75": "eval/multi/Qwen3-14B/dev/eval_75.jsonl",
-    #     "81": "eval/multi/Qwen3-8B/dev/eval_81.jsonl",
-    # } 
-
-    #update_evaluation_files(self.frameworks=["multi"], splits=["dev"])
-    # dev_multi_models, insts = create_compare_dict(self.framework="multi", split="dev")
-    # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 

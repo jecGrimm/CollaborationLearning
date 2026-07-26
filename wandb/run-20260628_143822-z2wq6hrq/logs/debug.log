@@ -1,0 +1,5 @@
+2026-06-28 14:38:22,235 INFO    MainThread:3461 [wandb_init.py:setup_run_log_directory():713] Logging user logs to /Users/jgrimm/Desktop/code/CollaborationLearning/wandb/run-20260628_143822-z2wq6hrq/logs/debug.log
+2026-06-28 14:38:22,235 INFO    MainThread:3461 [wandb_init.py:setup_run_log_directory():714] Logging internal logs to /Users/jgrimm/Desktop/code/CollaborationLearning/wandb/run-20260628_143822-z2wq6hrq/logs/debug-internal.log
+2026-06-28 14:38:22,235 INFO    MainThread:3461 [wandb_init.py:init():840] calling init triggers
+2026-06-28 14:38:22,235 INFO    MainThread:3461 [wandb_init.py:init():845] wandb.init called with sweep_config: {}
+config: {'_wandb': {}}

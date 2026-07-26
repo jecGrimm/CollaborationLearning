@@ -1,0 +1,19 @@
+{"time":"2026-07-21T16:22:08.292932+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
+{"time":"2026-07-21T16:22:08.58356+02:00","level":"INFO","msg":"stream: created new stream","id":"16n6y8n0"}
+{"time":"2026-07-21T16:22:08.583605+02:00","level":"INFO","msg":"handler: started","stream_id":"16n6y8n0"}
+{"time":"2026-07-21T16:22:08.583773+02:00","level":"INFO","msg":"stream: started","id":"16n6y8n0"}
+{"time":"2026-07-21T16:22:08.583781+02:00","level":"INFO","msg":"sender: started","stream_id":"16n6y8n0"}
+{"time":"2026-07-21T16:22:08.583782+02:00","level":"INFO","msg":"writer: started","stream_id":"16n6y8n0"}
+{"time":"2026-07-21T16:22:44.351434+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":920}
+{"time":"2026-07-21T16:22:44.64293+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":5}
+{"time":"2026-07-21T16:22:44.670125+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":958}
+{"time":"2026-07-21T16:22:44.977414+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":41}
+{"time":"2026-07-21T16:23:16.109615+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":1368}
+{"time":"2026-07-21T16:23:16.351594+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":183}
+{"time":"2026-07-21T16:23:16.35847+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":1585}
+{"time":"2026-07-21T16:23:16.726535+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":182}
+{"time":"2026-07-21T16:24:13.270561+02:00","level":"INFO","msg":"stream: closing","id":"16n6y8n0"}
+{"time":"2026-07-21T16:24:13.970364+02:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2026-07-21T16:24:14.373452+02:00","level":"INFO","msg":"handler: closed","stream_id":"16n6y8n0"}
+{"time":"2026-07-21T16:24:14.373782+02:00","level":"INFO","msg":"sender: closed","stream_id":"16n6y8n0"}
+{"time":"2026-07-21T16:24:14.373816+02:00","level":"INFO","msg":"stream: closed","id":"16n6y8n0"}

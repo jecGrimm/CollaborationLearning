@@ -1,0 +1,12 @@
+{"time":"2026-06-10T16:07:09.082528+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
+{"time":"2026-06-10T16:07:09.382611+02:00","level":"INFO","msg":"stream: created new stream","id":"c7pnua19"}
+{"time":"2026-06-10T16:07:09.382654+02:00","level":"INFO","msg":"handler: started","stream_id":"c7pnua19"}
+{"time":"2026-06-10T16:07:09.383088+02:00","level":"INFO","msg":"stream: started","id":"c7pnua19"}
+{"time":"2026-06-10T16:07:09.383263+02:00","level":"INFO","msg":"sender: started","stream_id":"c7pnua19"}
+{"time":"2026-06-10T16:07:09.383259+02:00","level":"INFO","msg":"writer: started","stream_id":"c7pnua19"}
+{"time":"2026-06-10T16:07:30.100402+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":119}
+{"time":"2026-06-10T16:07:30.123173+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":4}
+{"time":"2026-06-10T16:07:46.958564+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":159}
+{"time":"2026-06-10T16:07:47.121316+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":3}
+{"time":"2026-06-10T16:08:23.183176+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":273}
+{"time":"2026-06-10T16:08:23.375741+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":111}

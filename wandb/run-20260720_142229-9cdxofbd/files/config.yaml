@@ -1,0 +1,55 @@
+_wandb:
+    value:
+        cli_version: 0.23.0
+        e:
+            x96b6n6fgnlygjkofw7o61uj4cld2945:
+                apple:
+                    ecpuCores: 6
+                    gpuCores: 10
+                    memoryGb: 16
+                    name: Apple M4
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                codePath: helper.py
+                codePathLocal: helper.py
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "405102600192"
+                email: j.grimm@lmu.de
+                executable: /Users/jgrimm/miniconda3/envs/collab_learn/bin/python
+                git:
+                    commit: 4814d0fd10f2e0636967905b2f8acdb4bf539f78
+                    remote: git@github.com:jecGrimm/CollaborationLearning.git
+                host: LsBPLt31.local
+                memory:
+                    total: "17179869184"
+                os: macOS-15.7.7-arm64-arm-64bit-Mach-O
+                program: /Users/jgrimm/Desktop/code/CollaborationLearning/helper.py
+                python: CPython 3.13.9
+                root: /Users/jgrimm/Desktop/code/CollaborationLearning
+                startedAt: "2026-07-20T12:22:29.363161Z"
+                writerId: x96b6n6fgnlygjkofw7o61uj4cld2945
+        m: []
+        python_version: 3.13.9
+        t:
+            "1":
+                - 1
+                - 49
+                - 51
+                - 100
+                - 105
+            "2":
+                - 1
+                - 49
+                - 51
+                - 100
+                - 105
+            "3":
+                - 24
+            "4": 3.13.9
+            "5": 0.23.0
+            "12": 0.23.0
+            "13": darwin-arm64

@@ -3,7 +3,6 @@ import os
 import json
 import csv
 import pandas as pd
-import re
 import wandb
 import torch
 
@@ -15,7 +14,6 @@ class ExperimentLog:
         @params
             config: configuration data that should be logged
         """
-        #wandb.login()
         self.run = wandb.init(
             # Set the wandb entity where your project will be logged (generally your team name).
             entity="j-grimm-ludwig-maximilian-university-of-munich",
@@ -24,8 +22,6 @@ class ExperimentLog:
             # Track hyperparameters and run metadata.
             config=config
         )
-
-        # self.output_artifact = wandb.Artifact(name="output", type="dataset")
         
         # init logger
         self.run_data = defaultdict()
@@ -146,21 +142,13 @@ class ExperimentLog:
             for run_dict in sorted(run_dicts, key= lambda x: x["run_idx"]):
                 writer.writerow(run_dict)
 
-        # run_csv = "./logs/runs.csv"
-        # if os.path.isfile(run_csv):
-        #     prev_runs = pd.read_csv(run_csv, sep = ";")
-        #     #curr_run = pd.Series(self.run_data)
-        #     all_runs = prev_runs._append(self.run_data, ignore_index = True)
-        #     all_runs.to_csv(run_csv, sep = ";", index = False)
-        # else:
-        #     with open(run_csv, "w", encoding="utf-8") as f:
-        #         fieldnames = self.run_data.keys()
-        #         writer = csv.DictWriter(f, fieldnames=fieldnames, delimiter=";")
-
-        #         writer.writeheader()
-        #         writer.writerow(self.run_data)
-
     def get_run_idx(self):
+        '''
+        This function assigns a run index to the current run. If a run index already exists in the run data, it uses that index. Otherwise, it finds the maximum existing run index in the logs/runs directory and assigns the next index.
+
+        @returns
+            run_idx: the assigned run index for the current run
+        '''
         run_dir = "./logs/runs"
         os.makedirs(run_dir, exist_ok=True)
         if "run_idx" not in self.run_data.keys():
@@ -231,16 +219,5 @@ class ExperimentLog:
             print(f"\nThere are no runs with framework {framework}, split {split} and a duration value!")
 
 if __name__ == "__main__":
-    # with open("configs/mini_cpu_multi_exp.json", "r", encoding="utf-8") as f:
-    #     config = json.load(f)
-
-    # logger = ExperimentLog(config)
-    # logger.store_run_data()
-    # logger.print_best_run()
-
     logger = ExperimentLog()
-    # with open("logs/runs/80.json", "r", encoding="utf-8") as f:
-    #     logger.run_data = json.load(f)
-
-    # logger.store_run_data()
     logger.print_best_run(framework="multi", split = "dev")

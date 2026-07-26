@@ -1,0 +1,19 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|████████████████████████████████████████████████████████████████████████████████| 750/750 [00:45<00:00, 16.50 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 130.12ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0.jsonl
+accuracy: 0.6255999999999999
+zero percentage: 0.0021333333333333334
+double percentage: 0.005066666666666666
+wrong format: 0.0026666666666666666
+Generating train split: 750 examples [00:00, 152779.41 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████████████| 750/750 [00:01<00:00, 411.98 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 750/750 [00:00<00:00, 3925.63 examples/s]
+Map: 100%|█████████████████████████████████████████████████████████████████████████████| 750/750 [00:00<00:00, 28313.87 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  6.94ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0.jsonl
+accuracy: 0.22240000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.006666666666666667
+defaultdict(<class 'float'>, {'acc_mean': 0.6255999999999999, 'prec_1': 0.9861333333333334, 'prec_2': 0.574, 'prec_3': 0.448, 'prec_4': 0.4053333333333333, 'prec_5': 0.3973333333333333, 'spearman': 0.6891999999999998, 'kendalltau': 0.6512, 'instances': 750, 'wrong_format': 0.0026666666666666666, 'zero_percentage': 0.0021333333333333334, 'double_percentage': 0.005066666666666666, 'acc_last': 0.22240000000000001, 'wrong_format_last': 0.006666666666666667, 'zero_percentage_last': 0.0, 'double_percentage_last': 0.0, 'prec_1_last': 0.7621333333333332, 'prec_2_last': 0.196, 'prec_3_last': 0.06577777777777777, 'prec_4_last': 0.028, 'prec_5_last': 0.0, 'spearman_last': 0.0011999999999999997, 'kendalltau_last': 0.001333333333333333})

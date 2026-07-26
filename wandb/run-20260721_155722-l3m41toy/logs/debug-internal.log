@@ -1,0 +1,17 @@
+{"time":"2026-07-21T15:57:23.335855+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
+{"time":"2026-07-21T15:57:23.626854+02:00","level":"INFO","msg":"stream: created new stream","id":"l3m41toy"}
+{"time":"2026-07-21T15:57:23.626898+02:00","level":"INFO","msg":"handler: started","stream_id":"l3m41toy"}
+{"time":"2026-07-21T15:57:23.627043+02:00","level":"INFO","msg":"stream: started","id":"l3m41toy"}
+{"time":"2026-07-21T15:57:23.62705+02:00","level":"INFO","msg":"sender: started","stream_id":"l3m41toy"}
+{"time":"2026-07-21T15:57:23.627052+02:00","level":"INFO","msg":"writer: started","stream_id":"l3m41toy"}
+{"time":"2026-07-21T15:57:41.618943+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":155}
+{"time":"2026-07-21T15:57:41.634341+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":4}
+{"time":"2026-07-21T15:58:09.799827+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":380}
+{"time":"2026-07-21T15:58:09.851084+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":4}
+{"time":"2026-07-21T15:58:46.280438+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":505}
+{"time":"2026-07-21T15:58:46.57777+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":28}
+{"time":"2026-07-21T15:59:13.489986+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":570}
+{"time":"2026-07-21T15:59:13.64877+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":3}
+{"time":"2026-07-21T15:59:34.924073+02:00","level":"INFO","msg":"api: retrying HTTP error","status":500,"url":"https://api.wandb.ai/files/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/l3m41toy/file_stream","body":"{\"error\":\"context deadline exceeded\"}"}
+{"time":"2026-07-21T15:59:35.954886+02:00","level":"INFO","msg":"flowcontrol: backed up, offloading to disk","recordNumber":691}
+{"time":"2026-07-21T15:59:36.174487+02:00","level":"INFO","msg":"flowcontrol: unblocked","totalOffloaded":28}

@@ -1,0 +1,19 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 500/500 [00:00<00:00, 3028.98 examples/s]
+Creating json from Arrow format: 100%|██████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 245.76ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0.jsonl
+accuracy: 0.6432
+zero percentage: 0.0024
+double percentage: 0.0036
+wrong format: 0.004
+Generating train split: 500 examples [00:00, 147189.22 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████████████| 500/500 [00:01<00:00, 399.58 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████████████| 500/500 [00:00<00:00, 3793.54 examples/s]
+Map: 100%|█████████████████████████████████████████████████████████████████████████████| 500/500 [00:00<00:00, 25600.31 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 10.14ba/s]
+outputs/multi/Qwen3-32B/rocstories/dev/ckps/outputs_169_0_177_0_183_0.jsonl
+accuracy: 0.21840000000000004
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.01
+defaultdict(<class 'float'>, {'acc_mean': 0.6432, 'prec_1': 0.9867999999999999, 'prec_2': 0.5895, 'prec_3': 0.466, 'prec_4': 0.43, 'prec_5': 0.422, 'spearman': 0.7061999999999998, 'kendalltau': 0.6695999999999999, 'instances': 500, 'wrong_format': 0.004, 'zero_percentage': 0.0024, 'double_percentage': 0.0036, 'acc_last': 0.21840000000000004, 'wrong_format_last': 0.01, 'zero_percentage_last': 0.0, 'double_percentage_last': 0.0, 'prec_1_last': 0.7636000000000002, 'prec_2_last': 0.1995, 'prec_3_last': 0.06933333333333333, 'prec_4_last': 0.028, 'prec_5_last': 0.0, 'spearman_last': 0.0023999999999999994, 'kendalltau_last': 0.0023999999999999994})

@@ -1,0 +1,20 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Backend macosx is interactive backend. Turning interactive mode on.
+Generating train split: 1000 examples [00:00, 228996.72 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 303.97 examples/s]
+Generating train split: 1000 examples [00:00, 140137.12 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 297.30 examples/s]
+Generating train split: 1000 examples [00:00, 186157.03 examples/s]
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot locate reference to <class '__main__.Vis'>.
+  StockPickler.save(self, obj, save_persistent_id)
+/Users/jgrimm/miniconda3/envs/collab_learn/lib/python3.13/site-packages/dill/_dill.py:422: PicklingWarning: Cannot pickle <class '__main__.Vis'>: __main__.Vis has recursive self-references that trigger a RecursionError.
+  StockPickler.save(self, obj, save_persistent_id)
+Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:03<00:00, 294.18 examples/s]

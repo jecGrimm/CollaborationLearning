@@ -1,0 +1,19 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Map: 100%|██████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 1734.43 examples/s]
+Creating json from Arrow format: 100%|█████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 71.12ba/s]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302.jsonl
+accuracy: 0.40540000000000004
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.051
+Generating train split: 1000 examples [00:00, 153138.27 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:04<00:00, 210.54 examples/s]
+Map: 100%|███████████████████████████████████████████████████████████████████████| 1000/1000 [00:02<00:00, 461.94 examples/s]
+Map: 100%|██████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 1511.50 examples/s]
+Creating json from Arrow format: 100%|█████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.93s/ba]
+outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302.jsonl
+accuracy: 0.2778
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 1.928
+defaultdict(<class 'float'>, {'acc_mean': 0.40540000000000004, 'prec_1': 0.9416, 'prec_2': 0.36775, 'prec_3': 0.217, 'prec_4': 0.16, 'prec_5': 0.148, 'spearman': 0.47879999999999995, 'kendalltau': 0.42579999999999996, 'instances': 1000, 'wrong_format': 0.051, 'zero_counter': 0, 'zero_percentage': 0.0, 'double_counter': 0, 'double_percentage': 0.0, 'acc_last': 0.2778, 'wrong_format_last': 1.928, 'zero_percentage_last': 0.0, 'double_percentage_last': 0.0, 'prec_1_last': 0.7878000000000002, 'prec_2_last': 0.23125, 'prec_3_last': 0.09833333333333333, 'prec_4_last': 0.0415, 'prec_5_last': 0.0, 'spearman_last': 0.0, 'kendalltau_last': 0.0})

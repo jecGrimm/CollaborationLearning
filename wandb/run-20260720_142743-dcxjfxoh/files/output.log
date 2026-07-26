@@ -1,0 +1,10 @@
+[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+New data length:  1000
+Saving the dataset (1/1 shards): 100%|████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 55857.02 examples/s]
+Map: 100%|████████████████████████████████████████████████████████████████████████████████████████| 1000/1000 [00:00<00:00, 71229.94 examples/s]
+Creating json from Arrow format: 100%|███████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 395.24ba/s]
+outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_379_384.jsonl
+accuracy: 0.471
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.049

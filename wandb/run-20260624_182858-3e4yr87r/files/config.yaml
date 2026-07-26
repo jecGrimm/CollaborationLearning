@@ -1,0 +1,54 @@
+_wandb:
+    value:
+        cli_version: 0.23.0
+        e:
+            g2ruxd8jrgrll4bqh3zz4xjdztxjz5u2:
+                apple:
+                    ecpuCores: 6
+                    gpuCores: 10
+                    memoryGb: 16
+                    name: Apple M4
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                    swapTotalBytes: "1073741824"
+                codePath: evaluate.py
+                codePathLocal: evaluate.py
+                cpu_count: 10
+                cpu_count_logical: 10
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "383464226816"
+                email: j.grimm@lmu.de
+                executable: /Users/jgrimm/miniconda3/envs/collab_learn/bin/python
+                git:
+                    commit: b1770b444e1bcf9c4fbb88dc361f84cc2f7b8eca
+                    remote: git@github.com:jecGrimm/CollaborationLearning.git
+                host: Mac.fritz.box
+                memory:
+                    total: "17179869184"
+                os: macOS-15.7.7-arm64-arm-64bit-Mach-O
+                program: /Users/jgrimm/Desktop/code/CollaborationLearning/evaluate.py
+                python: CPython 3.13.9
+                root: /Users/jgrimm/Desktop/code/CollaborationLearning
+                startedAt: "2026-06-24T16:28:58.274636Z"
+                writerId: g2ruxd8jrgrll4bqh3zz4xjdztxjz5u2
+        m: []
+        python_version: 3.13.9
+        t:
+            "1":
+                - 1
+                - 49
+                - 51
+                - 105
+            "2":
+                - 1
+                - 49
+                - 51
+                - 105
+            "3":
+                - 24
+            "4": 3.13.9
+            "5": 0.23.0
+            "12": 0.23.0
+            "13": darwin-arm64

@@ -1,12 +1,9 @@
 from prompt import SingleAgent, MultiAgent
 import os 
 from cli import CLI
-from evaluate import Evaluator, evaluate
+from evaluate import evaluate
 from log import ExperimentLog
-import pandas as pd
 import torch
-import json
-import pdb
 
 def run_experiment(config: dict = None, logger: ExperimentLog = None):
     """
@@ -16,15 +13,9 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
         config: configurations for the experiment
         logger: experiment logger
     """
-    # # prepare configuration
-    # if "device" not in config.keys():
-    #     config["device"] = "cuda:0" if torch.cuda.is_available() else "cpu"
-
     # saves computation time
     print(torch.cuda.is_available())
     torch.set_grad_enabled(False)
-    os.environ["HF_DATASETS_CACHE"] = "/nfs/gdata/jgrimm/hf_cache/dataset_cache" # TODO: Doku remove
-    os.environ["HF_HUB_CACHE"] = "/nfs/gdata/llms/hf-models/model/" # TODO: Doku remove
 
     if logger == None:
         logger = ExperimentLog(config)
@@ -38,11 +29,11 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             
             logger.log_single(single)
 
-            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) # TODO: ADD version_idx
+            single.prompt_model(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], start = config["start"], end = config["end"], version_idx = config["version_idx"]) 
 
             outfile = single.define_outfile(logger, hf = True)
         else:
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"], task=config["task"], final = config["final"]) # TODO: final
+            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"], topology=config["topology"], max_new_tokens = config["max_new_tokens"], structured=config["structured"], output_format=config["output_format"], task=config["task"], final = config["final"]) 
 
             logger.log_multi(multi)
 
@@ -57,10 +48,6 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
 
     # evaluate 
     evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"], structured=config["structured"])
-    # evaluator = Evaluator(outfile, config["framework"], logger, last = False, task = config["task"])
-    # evaluator.evaluate_sent_order()
-    # evaluator.last = True
-    # evaluator.evaluate_last_beliefs()
 
     logger.store_run_data()
 
@@ -103,32 +90,6 @@ def test_llm_rewritten_prompts(config: dict):
         config: experiment configuration
     """
     # file with rewritten prompts
-    prompt_candidates = json.load(open("./prompts/prompt_candidates.json", 'r', encoding="utf-8"))
-    # prompt_candidates = {
-    #     "gemini-2.5-pro": { 
-    #         "single":"""\
-    #             Arrange the following sentences into a coherent paragraph, ordered by time and logic.\n\
-    #             \n\
-    #             Sentences to order:\n\
-    #             {shuffled_sents}\n\
-    #             \n\
-    #             Return your answer as a single Python list of strings.\n\
-    #             Answer:\n\
-    #             """
-    #     },
-    #     "llama-3.3-70b-instruct": {
-    #         "single":'''\
-    #         Reorder the following sentences to reflect their logical causal and temporal relationships. Please arrange the sentences in a coherent and chronological order, ensuring that the events described are in a logical sequence. The reordered sentences should be returned as a list in the format:\n\
-    #         [<sentence1>, <sentence2>, <sentence3>, <sentence4>, <sentence5>]\n\
-    #         where <sentence1> is the first event in the sequence, <sentence2> is the second event, and so on.\n\
-    #         The sentences to be reordered are:\n\
-    #         {shuffled_sents}\n\
-    #         Please provide the reordered list of sentences.\n\
-    #         Answer:\n\
-    #         '''
-    #     }
-    # }
-
     framework = config["framework"]
     for i, candidate in enumerate(config["candidates"]):
         print("\n")
@@ -143,59 +104,10 @@ def test_llm_rewritten_prompts(config: dict):
         config["candidate"] = candidate
         run_experiment(config, logger)
 
-        #print(f"Accuracy of prompt {model}:", logger.run_data["mean_acc"])
-
     print("\n")
     logger.print_fastest_run(framework=framework, split = config["split"])
     logger.print_best_run(framework = framework, split=config["split"])
-        
-def run_final_only(config: dict = None, logger: ExperimentLog = None):
-    """
-    @deprecated
-    This function runs the experiment.
-
-    @params
-        config: configurations for the experiment
-        logger: experiment logger
-    """
-    if logger == None:
-        logger = ExperimentLog(config)
-
-    outfile = config["experiment_file"]
-
-    if not (os.path.isfile(outfile) or os.path.isdir(outfile)):
-            multi = MultiAgent(model_id = config["model_id"], split = config["split"], conversation_rounds = config["conversation_rounds"], prompt_candidate = config["candidate"])
-
-            logger.log_multi(multi)
-
-            #multi.prompt_models(logger, device = config["device"], batch_size = config["batch_size"])
-            multi.prompt_final_only(logger, device = config["device"], batch_size = config["batch_size"], conv_file = config["conv_file"], variation = config["variation"])
-
-            outfile = multi.define_outfile(logger, hf = True)
-
-    # evaluate
-    evaluate_sent_order(outfile, config["framework"], logger)
-
-    logger.store_run_data()
 
 if __name__ == "__main__":
     cli = CLI()
     run_experiment(cli.config)
-
-    #run_final_only(cli.config)
-    
-    #test_batch_size(split = cli.config["split"], batch_sizes=cli.config["batch_sizes"], frameworks=cli.config["frameworks"])
-
-    #test_batch_size(split = "dev", device = device, batch_sizes=[256], frameworks=["multi"])
-
-    # config = {
-    #     "split": "dev",
-    #     "device": device,
-    #     "framework": "single",
-    #     "experiment_file": "",
-    #     "model_id": "meta-llama/Llama-3.2-1B-Instruct",
-    #     "batch_size": 8
-    # }
-    # run_experiment(config)
-
-    #test_llm_rewritten_prompts(config = cli.config)
