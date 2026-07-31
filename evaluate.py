@@ -1071,11 +1071,11 @@ if __name__ == "__main__":
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-17_13:10:53.603867"
     #outdir = "./outputs/single/Llama-3.2-1B-Instruct/dev/outputs_single_Llama-3.2-1B-Instruct_dev_2025-11-19_09:17:22.874743"
     #outdir = "./outputs/multi/Qwen3-8B/dev/outputs_multi_Qwen3-8B_dev_2025-11-25_13:47:22.215646" # 73
-    outdir = "outputs/multi/Qwen3-32B/rocstories/dev/outputs_162"
+    #outdir = "outputs/multi/Qwen3-32B/rocstories/dev/outputs_162"
     #evaluate_sent_order(outdir, "multi", turn_idx=-2)
 
-    results = evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True, all = True, instances = 25)
-    print(results)
+    #results = evaluate(outfile = outdir,framework= "multi", task = "rocstories", structured=True, all = True, instances = 25)
+    #print(results)
 
     # bookout = "outputs/single/Llama-3.2-1B-Instruct/cmu_booksum/mini/outputs_260"
     # evaluate(outfile=bookout, framework="single", task = "cmu_booksum")
@@ -1118,3 +1118,4 @@ if __name__ == "__main__":
     # dev_multi_models, insts = create_compare_dict(self.framework="multi", split="dev")
     # compare_instances(dev_multi_models, "./eval/multi/eval_compare_models_dev.csv", insts)
 
+    print(load_from_disk("outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_303"))
