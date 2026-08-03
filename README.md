@@ -137,7 +137,7 @@ Class that stops the generation of thinking tokens after a specified number of g
 Class that creates all experimental visualizations, including the figures in the paper.
 
 ## AI usage
-- plot_distributed_base(): generate code to improved styling (= added bar labels, hatches, etc.) by Max (Google, LMArena.ai) 
+- plot_distributed_base(): generate code to improve styling (= added bar labels, hatches, etc.) by Max (Google, LMArena.ai) 
 - documentation of the code
 - suggestions for prompt formulations
 
