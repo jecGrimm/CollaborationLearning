@@ -12,9 +12,10 @@ from scipy.stats.mstats import ttest_ind
 from matplotlib import colors
 from matplotlib.patches import Patch
 import math
+from matplotlib.lines import Line2D
 
 class Vis():
-    def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories"):
+    def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories", instances: int = 1000):
         '''
         This class is used to visualize the results of the experiments. It can create bar plots for the mean accuracy of different setups, as well as Sankey diagrams to visualize the flow of beliefs across turns.
 
@@ -42,7 +43,6 @@ class Vis():
                 self.vispath = f"visualizations/{self.task}/no_variation/{conv_format}"
         else:
             self.vispath = f"visualizations/{self.task}/{conv_format}"
-        os.makedirs(self.vispath, exist_ok = True)
 
         if self.last:
             self.last_app = "_last"
@@ -50,13 +50,14 @@ class Vis():
             self.last_app = ""
 
         if experiment_files != {}:
-            self.initialize_experiment_files()
+            self.initialize_experiment_files(instances)
 
-    def initialize_experiment_files(self):
+    def initialize_experiment_files(self, instances: int = 1000):
         '''
         This method loads the output datasets from disk and creates evaluation dataframes for each experiment setup.
         '''
-        self.exp_data_hf = {k: load_from_disk(v) for k, v in self.experiment_files.items()}
+        self.exp_data_hf = {k: load_from_disk(v).select(range(instances)) for k, v in self.experiment_files.items()}
+
         self.create_eval_dfs()
 
     def create_eval_dfs(self):
@@ -112,9 +113,13 @@ class Vis():
             evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last, task = self.task)
             
             if self.last and fw == "multi":
-                evaluator.evaluate_last_beliefs()
+                    evaluator.evaluate_last_beliefs()
             else:
-                evaluator.evaluate_sent_order()
+                if self.task == "rocstories":
+                    evaluator.evaluate_sent_order()
+                else:
+                    evaluator.evaluate_odd_one()
+            
             return evaluator.eval_data
 
     def plot_performance(self):
@@ -127,6 +132,7 @@ class Vis():
 
                 ax.bar_label(ax.containers[0])
 
+                os.makedirs(self.vispath, exist_ok = True)
                 if self.last:
                     plt.savefig(f"{self.vispath}/{metric}_var_{self.conv_format}_last.png")
                 else:
@@ -135,6 +141,7 @@ class Vis():
                 ax = self.mean_preds_df[metric].plot(kind = "bar", title= f"Reordering: without variation", rot=0, ylim=[0.0, 1.0], ylabel=metric) 
                 ax.bar_label(ax.containers[0])
                 
+                os.makedirs(self.vispath, exist_ok = True)
                 if self.last:
                     plt.savefig(f"{self.vispath}/{metric}_no_var_{self.conv_format}_last.png")
                 else:
@@ -353,6 +360,7 @@ class Vis():
 
         fig = plt.gcf()
 
+        os.makedirs(self.vispath, exist_ok = True)
         if self.variation:
             fig.savefig(f"{self.vispath}/sankey_{setup}_var.png", bbox_inches="tight", dpi=150)
         else:
@@ -393,7 +401,7 @@ class Vis():
             self.num_turns = max(turn_lengths)
         elif "star" in setup:
             self.num_turns = 2
-        elif "graph" in setup:
+        elif "graph" in setup.lower() or "layered" in setup.lower():
             self.num_turns = 3
 
         self.lbls = [f"{lbl}_{i}" for i in range(self.num_turns) for lbl in ["correct", "incorrect"]]
@@ -471,6 +479,7 @@ class Vis():
             fig.update_layout(title_text=f"{setup} with variation: {self.conv_format}", font_size=10)
             fig.show()
 
+            os.makedirs(self.vispath, exist_ok = True)
             if sent_color:
                 fig.write_html(f"{self.vispath}/full_sankey_{setup}_var_sent.html")
             else:
@@ -478,6 +487,8 @@ class Vis():
         else:
             fig.update_layout(title_text=f"{setup} without variation: {self.conv_format}", font_size=10)
             fig.show()
+
+            os.makedirs(self.vispath, exist_ok = True)
             if sent_color:
                 fig.write_html(f"{self.vispath}/full_sankey_{setup}_no_var.html")
             else:
@@ -502,7 +513,7 @@ class Vis():
             for belief_idx, turn_idx in turn_idxs:
                 curr_belief = sent_beliefs[belief_idx]
 
-                if turn_idx < turn_idxs[-1][1]:
+                if turn_idx <= turn_idxs[-1][1]:
                     next_idx = [next_item[1] for next_item in turn_idxs if next_item[1] > turn_idx][0]
 
                     next_targets = [item for item in turn_idxs if item[1] == next_idx]
@@ -563,7 +574,7 @@ class Vis():
                 turn_idx = 0
             else:
                 turn_idx = 1
-        elif "graph" in setup:
+        elif "graph" in setup.lower() or "layered" in setup.lower():
             if belief["turn"] < 6:
                 turn_idx = 0
             elif belief["turn"] > 6 and belief["agent"] != "Player 6":
@@ -590,8 +601,11 @@ class Vis():
                 
                 stats = ttest_ind(first_accs, second_accs, equal_var=False, alternative="less")
 
+                stats_dict["first_exp_file"].append(self.experiment_files[comparison])
                 stats_dict["first_setup"].append(comparison)
                 stats_dict["first_mean"].append(np.mean(first_accs))
+
+                stats_dict["second_exp_file"].append(self.experiment_files[setup])
                 stats_dict["second_setup"].append(setup)
                 stats_dict["second_mean"].append(np.mean(second_accs))
                 stats_dict["Welch's t-test"].append(stats.statistic)
@@ -604,6 +618,7 @@ class Vis():
 
         stats_df = pd.DataFrame(stats_dict)
 
+        os.makedirs(self.vispath, exist_ok = True)
         outfile = f"{self.vispath}significance_{comparison}"
         if exp_name != "":
             outfile += f"_{exp_name}"
@@ -647,6 +662,7 @@ class Vis():
         ax.set_xlim(0, 1)
         ax.set_title(f"Correlation between MAS and final performance: {setup}")
 
+        os.makedirs(self.vispath, exist_ok = True)
         plt.savefig(f"{self.vispath}/last_final_correlation_{setup}.png")
         plt.close()
 
@@ -684,13 +700,14 @@ class Vis():
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
 
             df_acc_changes = pd.DataFrame(acc_changes)
-            df_acc_changes.plot(ylabel="Micro accuracy", xlabel="Turn", xticks = np.arange(11), yticks=np.arange(0, 101, 10))
+            df_acc_changes.plot(ylabel="Micro precision", xlabel="Turn", xticks = np.arange(11), yticks=np.arange(0, 101, 10))
 
+            os.makedirs(self.vispath, exist_ok = True)
             plt.savefig(f"{self.vispath}/acc_changes.png")
         
         df_acc.to_csv(f"./visualizations/{self.task}/all{self.last_app}.csv", sep = ";")
 
-    def plot_acc_changes(self, run_file: str = None, df_experiment_files = None):
+    def plot_acc_changes(self, run_file: str = None, df_experiment_files = None, instances: int = 1000, one_model: bool = False):
         '''
         This method plots the accuracy changes of the setups in run_file or df_experiment_files.
 
@@ -700,19 +717,35 @@ class Vis():
         '''
         if run_file:
             df_experiment_files = pd.read_csv(run_file, delimiter = ";")
-            df_experiment_files["accuracy"] = df_experiment_files["run"].map(self.get_avg_metric)
+            df_experiment_files["accuracy"] = df_experiment_files["output"].map(lambda x: self.get_avg_metric(x, instances=instances))
 
         # plot sankeys
         df_dict = df_experiment_files.T.to_dict()
         acc_changes = defaultdict(list)
         for row in df_dict.values():
             conv_format = row["format"]
-            task = row["task"]
-            exp_file = row["run"]
-            setup = conv_format
+
+            if row["task"].lower() == "storycon":
+                task = "rocstories"
+            elif row["task"].lower() == "bookdiff":
+                task = "cmu_booksum"
+            else:
+                task = row["task"]
+
+            if "llama" in row["model"].lower():
+                model = "llama"
+            else:
+                model = "qwen"
+
+            exp_file = row["output"]
+
+            if one_model:
+                setup = conv_format
+            else:
+                setup = f"{conv_format}_{model}"
 
             if conv_format.lower() not in ["single", "random", "base", "improved"]:
-                self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower())
+                self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower(), instances = instances)
                 
                 self.evaluator = Evaluator(exp_file,"multi", task.lower())
 
@@ -723,7 +756,7 @@ class Vis():
 
                 self.corr_per_turn = [0]*self.num_turns
                 self.beliefs_per_turn = [0]*self.num_turns
-                self.exp_data_hf[setup] = self.exp_data_hf[setup].map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
+                self.exp_data_hf[setup] = self.exp_data_hf[setup].select(range(instances)).map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
 
                 acc_per_turn = [0]*self.num_turns
                 for i in range(self.num_turns):
@@ -741,9 +774,9 @@ class Vis():
         This method plots Fig. 4a, i.e., the accuracy changes of the argument and hypothesis setups for both ROCStories and CMU Booksum tasks.
         '''
         self.task = "rocstories"
-        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_roc.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_roc.csv", delimiter = ";")
 
-        llama_roc_dfs = [] 
+        roc_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -752,18 +785,19 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
-        for col in llama_roc_dfs[0].columns:
-            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
+        roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        # , index=["Hypo_llama", "Full_llama", "Args_llama", "Hypo_qwen", "Full_qwen", "Args_qwen"]
+        for col in roc_dfs[0].columns:
+            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
 
         self.task = "cmu_booksum"
-        df_experiment_files = pd.read_csv("eval/args_hypo_runs_llama_cmu.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/args_hypo_runs_cmu.csv", delimiter = ";")
 
-        llama_cmu_dfs = [] 
+        cmu_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -772,15 +806,15 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
-        for col in llama_cmu_dfs[0].columns:
-            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
+        cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        for col in cmu_dfs[0].columns:
+            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
 
-        df_list = [llama_roc, llama_cmu]
+        df_list = [cmu, roc]
         
         nrow = 1
         ncol = 2
@@ -788,52 +822,125 @@ class Vis():
 
         # plot counter
         color_map = {
-            'Hypo': '#ffc7a2',
-            'Full': "#17b2e1",  
-            'Args': '#cbb2ff',                  
+            'Hypo_llama': "#F08F2D",
+            'Full_llama': "#3C63E2",
+            'Args_llama': '#BE77E4',
+            'Hypo_qwen': "#ffc7a2",
+            'Full_qwen': "#17b2e1",
+            'Args_qwen': "#cbb2ff"               
         }
-        subtitle = ["ROCStories", "CMU_Booksum"]
+
+        linestyle = {
+            'Hypo_llama': 'dashed',# dashdot
+            'Full_llama': "dashed",
+            'Args_llama': 'dashed',
+            'Hypo_qwen': '-',
+            'Full_qwen': '-',
+            'Args_qwen': '-'
+        }
+
+        marker_map = {
+            'Hypo_llama': '^',
+            'Hypo_qwen':  's',
+            'Full_llama': '^',
+            'Full_qwen':  's',
+            'Args_llama': '^',
+            'Args_qwen':  's',
+        }
+        subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
             if c == 0:
                 ylabel = "Micro Precision"
-                xticks = np.arange(11)
-                linepos = 4
-                finalpos = 9
-            else:
-                ylabel = ""
                 xticks = np.arange(7)
+                yticks=np.arange(0, 81, 10)
                 linepos = 2
                 finalpos = 5
+            else:
+                ylabel = ""
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9,
+                #yticks = None
 
             df_list[c].plot(
                 ax=axes[c], 
                 ylabel=ylabel, 
-                xlabel="Turn", 
+                xlabel=f"Turn in {subtitle[c]}", 
                 xticks = xticks, 
-                yticks=np.arange(0, 81, 10), 
-                color=list(color_map.values()), 
-                title = subtitle[c], 
-                legend = (c==0),
-                figsize=(4.5,2.5)
+                yticks=yticks, 
+                color=color_map,
+                #title = subtitle[c], 
+                legend = False,
+                #figsize=(4.5,2.5),
+                figsize=(4,2.25), #wxh
+                #marker='o',
+                #markersize=3
+                zorder= 2
             )
-            axes[c].axvline(linepos, color='lightgray', linestyle='--')
-            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
+            axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
+
+            # make Qwen3-8B dashed
+            for line in axes[c].get_lines():
+                col_name = line.get_label()
+                if col_name in linestyle:
+                    line.set_linestyle(linestyle[col_name])
+                    #line.set_marker(marker_map.get(col_name, 'o'))
+                    #line.set_markersize(4)
+                    #line.set_markeredgecolor('black')  
+                    #line.set_markeredgewidth(0.1)
+
+            # if c == 0:
+            #     axes[c].legend(loc = "upper left")
 
             if c == 0:
-                axes[c].legend(loc = "upper left")
+                # First legend: Colors (upper left)
+                color_legend = [
+                    Line2D([0], [0], color='#cbb2ff', lw=2, linestyle='-', label='Args'),
+                    Line2D([0], [0], color='#ffc7a2', lw=2, linestyle='-', label='Hypo'),
+                    Line2D([0], [0], color='#17b2e1', lw=2, linestyle='-', label='Full'),
+                ]
+                legend1 = axes[c].legend(
+                    handles=color_legend, 
+                    loc="lower left", 
+                    fontsize='small',
+                    handletextpad=0.4,     # Less space between line and text (default is 0.8)
+                    borderpad=0.3,         # Less padding inside the box (default is 0.4)
+                    borderaxespad=0.2,     # Less space between legend and axes edge
+                )
+                axes[c].add_artist(legend1)  # <-- This keeps the first legend!
+                
+                # Second legend: Line styles (upper right)
+                style_legend = [
+                    Line2D([0], [0], color='darkgray', lw=1.5, linestyle='dashed', label='Llama'),
+                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='-', label='Qwen')
+                ]
+                axes[c].legend(
+                    handles=style_legend, 
+                    loc="lower right", 
+                    fontsize='small',
+                    #handlelength=1.0,      # Shorter line sample (default is 2.0)
+                    handletextpad=0.4,     # Less space between line and text (default is 0.8)
+                    borderpad=0.3,         # Less padding inside the box (default is 0.4)
+                    borderaxespad=0.2,     # Less space between legend and axes edge
+                )
+
+            if c == 1:
+                axes[c].tick_params(labelleft=False)    
         
         plt.tight_layout() 
-        plt.savefig(f"visualizations/args_hypos.png")
+        plt.subplots_adjust(wspace=0.05)
+        plt.savefig(f"visualizations/args_hypos.pdf")
 
     def plot_exploration_changes(self):
         '''
         This method plots Fig. 4b, i.e., the accuracy changes of the reject and support for both ROCStories and CMU Booksum tasks.
         '''
         self.task = "rocstories"
-        df_experiment_files = pd.read_csv("eval/exploration_runs_llama_roc.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/exploration_runs_roc.csv", delimiter = ";")
 
-        llama_roc_dfs = [] 
+        roc_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -842,18 +949,18 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
-        for col in llama_roc_dfs[0].columns:
-            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
+        roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        for col in roc_dfs[0].columns:
+            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
 
         self.task = "cmu_booksum"
-        df_experiment_files = pd.read_csv("eval/exploration_runs_llama_cmu.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/exploration_runs_cmu.csv", delimiter = ";")
 
-        llama_cmu_dfs = [] 
+        cmu_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -862,15 +969,15 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
-        for col in llama_cmu_dfs[0].columns:
-            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
+        cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        for col in cmu_dfs[0].columns:
+            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
 
-        df_list = [llama_roc, llama_cmu]
+        df_list = [cmu, roc]
         
         nrow = 1
         ncol = 2
@@ -878,47 +985,98 @@ class Vis():
 
         # plot counter
         color_map = {
-            'Reject': '#cbb2ff',
-            'Support': '#ffc7a2',                    
+            'Reject_llama': '#BE77E4',
+            'Support_llama': '#F08F2D',  
+            'Reject_qwen': '#cbb2ff',
+            'Support_qwen': '#ffc7a2',                     
         }
-        subtitle = ["ROCStories", "CMU_Booksum"]
+
+        linestyle = {
+            'Reject_llama': 'dashed',
+            'Support_llama': "dashed",
+            'Reject_qwen': '-',
+            'Support_qwen': '-',
+        }
+
+        marker_map = {
+            'Reject_llama': '^',
+            'Support_llama':  '^',
+            'Reject_qwen': 's',
+            'Support_qwen':  's',
+        }
+        subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
             if c == 0:
                 ylabel = "Micro Precision"
-                xticks = np.arange(11)
-                linepos = 4
-                finalpos = 9
-            else:
-                ylabel = ""
+                yticks=np.arange(0, 81, 10)
                 xticks = np.arange(7)
                 linepos = 2
                 finalpos = 5
+            else:
+                ylabel = ""
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9
 
             df_list[c].plot(
                 ax=axes[c], 
                 ylabel=ylabel, 
-                xlabel="Turn", 
+                xlabel=f"Turn in {subtitle[c]}", 
                 xticks = xticks, 
-                yticks=np.arange(0, 81, 10), 
-                color=list(color_map.values()), 
-                title = subtitle[c], 
-                legend = (c==0),
-                figsize=(4.5,2.5),
+                yticks=yticks, 
+                color=color_map, 
+                legend = False,
+                figsize=(4,2.25),
+                zorder=2
             )
-            axes[c].axvline(linepos, color='lightgray', linestyle='--')
-            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
+            axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
 
-        plt.savefig(f"visualizations/exploration.png")
+            # make Qwen3-8B dashed
+            for line in axes[c].get_lines():
+                col_name = line.get_label()
+                if col_name in linestyle:
+                    line.set_linestyle(linestyle[col_name])
+                    #line.set_marker(marker_map[col_name])
+                    #line.set_markersize(3)
+                    #line.set_markeredgecolor('black')  
+                    #line.set_markeredgewidth(0.1)
+
+            # if c == 0:
+            #     axes[c].legend(loc = "upper left")
+
+            if c == 0:
+                # First legend: Colors (upper left)
+                color_legend = [
+                    Line2D([0], [0], color='#cbb2ff', lw=2, linestyle='-', label='Reject'),
+                    Line2D([0], [0], color='#ffc7a2', lw=2, linestyle='-', label='Support'),
+                ]
+                legend1 = axes[c].legend(
+                    handles=color_legend, 
+                    loc="lower left", 
+                    fontsize='small',
+                    handletextpad=0.4,     # Less space between line and text (default is 0.8)
+                    borderpad=0.3,         # Less padding inside the box (default is 0.4)
+                    borderaxespad=0.2,     # Less space between legend and axes edge
+                )
+                axes[c].add_artist(legend1)  # <-- This keeps the first legend!
+
+            if c == 1:
+                axes[c].tick_params(labelleft=False)    
+        
+        plt.tight_layout() 
+        plt.subplots_adjust(wspace=0.05)
+        plt.savefig(f"visualizations/exploration.pdf")
 
     def plot_correctness_changes(self):
         '''
         This method plots Fig. 4c, i.e., the accuracy changes of correct and incorrect for both ROCStories and CMU Booksum tasks.
         '''
         self.task = "rocstories"
-        df_experiment_files = pd.read_csv("eval/correctness_runs_llama_roc.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/correctness_runs_roc.csv", delimiter = ";")
 
-        llama_roc_dfs = [] 
+        roc_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -927,18 +1085,18 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_roc = pd.DataFrame(columns=llama_roc_dfs[0].columns)
-        for col in llama_roc_dfs[0].columns:
-            llama_roc[col] = (llama_roc_dfs[0][col] + llama_roc_dfs[1][col] + llama_roc_dfs[2][col])/3
+        roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        for col in roc_dfs[0].columns:
+            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
 
         self.task = "cmu_booksum"
-        df_experiment_files = pd.read_csv("eval/correctness_runs_llama_cmu.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv("eval/correctness_runs_cmu.csv", delimiter = ";")
 
-        llama_cmu_dfs = [] 
+        cmu_dfs = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
             drop = [idx for idx in version_ids if idx != i]
@@ -947,15 +1105,15 @@ class Vis():
             for drop_idx in drop:
                 df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
 
-            df = df.rename(columns={f"output_{i}":"run"})
+            df = df.rename(columns={f"output_{i}":"output"})
 
-            llama_cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
+            cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
-        llama_cmu = pd.DataFrame(columns=llama_cmu_dfs[0].columns)
-        for col in llama_cmu_dfs[0].columns:
-            llama_cmu[col] = (llama_cmu_dfs[0][col] + llama_cmu_dfs[1][col] + llama_cmu_dfs[2][col])/3
+        cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        for col in cmu_dfs[0].columns:
+            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
 
-        df_list = [llama_roc, llama_cmu]
+        df_list = [cmu, roc]
         
         nrow = 1
         ncol = 2
@@ -963,38 +1121,89 @@ class Vis():
 
         # plot counter
         color_map = {
-            'Correct': '#cbb2ff',
-            'Incorrect': '#ffc7a2',                    
+            'Correct_llama': '#BE77E4',
+            'Incorrect_llama': '#F08F2D',
+            'Correct_qwen': '#cbb2ff',
+            'Incorrect_qwen': '#ffc7a2',                       
         }
-        subtitle = ["ROCStories", "CMU_Booksum"]
+
+        linestyle = {
+            'Correct_llama': 'dashed',
+            'Incorrect_llama': "dashed",
+            'Correct_qwen': '-',
+            'Incorrect_qwen': '-',
+        }
+
+        marker_map = {
+            'Correct_llama': '^',
+            'Incorrect_llama':  '^',
+            'Correct_qwen': 's',
+            'Incorrect_qwen':  's',
+        }
+        subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
             if c == 0:
                 ylabel = "Micro Precision"
-                xticks = np.arange(11)
-                linepos = 4
-                finalpos = 9
-            else:
-                ylabel = ""
                 xticks = np.arange(7)
                 linepos = 2
                 finalpos = 5
+                yticks=np.arange(0, 81, 10)
+            else:
+                ylabel = ""
+                xticks = np.arange(11)
+                linepos = 4
+                finalpos = 9
 
             df_list[c].plot(
                 ax=axes[c], 
                 ylabel=ylabel, 
-                xlabel="Turn", 
+                xlabel=f"Turn in {subtitle[c]}",
                 xticks = xticks, 
-                yticks=np.arange(0, 81, 10), 
-                color=list(color_map.values()), 
-                title = subtitle[c], 
-                legend = (c==0),
-                figsize=(4.5,2.5),
+                yticks=yticks, 
+                color=color_map,  
+                legend = False,
+                figsize=(4,2.25),
+                zorder = 2
             )
-            axes[c].axvline(linepos, color='lightgray', linestyle='--')
-            axes[c].axvline(finalpos, color='darkgray', linestyle='--')
+            axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
+            axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
+            
+            # make Qwen3-8B dashed
+            for line in axes[c].get_lines():
+                col_name = line.get_label()
+                if col_name in linestyle:
+                    line.set_linestyle(linestyle[col_name])
+                    #line.set_marker(marker_map[col_name])
+                    #line.set_markersize(3)
+                    #line.set_markeredgecolor('black')  
+                    #line.set_markeredgewidth(0.1)
 
-        plt.savefig(f"visualizations/correctness.png")
+            # if c == 0:
+            #     axes[c].legend(loc = "upper left")
+
+            if c == 0:
+                # First legend: Colors (upper left)
+                color_legend = [
+                    Line2D([0], [0], color='#cbb2ff', lw=2, linestyle='-', label='Correct'),
+                    Line2D([0], [0], color='#ffc7a2', lw=2, linestyle='-', label='Incorrect'),
+                ]
+                legend1 = axes[c].legend(
+                    handles=color_legend, 
+                    loc="lower left", 
+                    fontsize='small',
+                    handletextpad=0.4,     # Less space between line and text (default is 0.8)
+                    borderpad=0.3,         # Less padding inside the box (default is 0.4)
+                    borderaxespad=0.2,     # Less space between legend and axes edge
+                )
+                axes[c].add_artist(legend1)  # <-- This keeps the first legend!
+
+            if c == 1:
+                axes[c].tick_params(labelleft=False)    
+        
+        plt.tight_layout() 
+        plt.subplots_adjust(wspace=0.05)
+        plt.savefig(f"visualizations/correctness.pdf")
 
     def get_acc_per_turn(self, inst, idx, setup):
         '''
@@ -1019,7 +1228,7 @@ class Vis():
 
             self.beliefs_per_turn[belief["turn"]-1] += 1
         
-    def get_avg_metric(self, exp_file, metric = "accuracy"):
+    def get_avg_metric(self, exp_file: str, metric: str = "accuracy", round_acc: bool = True, instances: int = 1000):
         '''
         This method calculates the average accuracy for the specified experiment file.
 
@@ -1034,19 +1243,24 @@ class Vis():
         else:
             self.task = "rocstories"
 
-        if self.last and "single" not in exp_file:
-            eval_file = f"{exp_file.replace('outputs', 'eval')}_last.jsonl"
+        if "multi" in exp_file:
+            framework = "multi"
+        elif "single" in exp_file:
+            framework = "single"
         else:
-            eval_file = f"{exp_file.replace('outputs', 'eval')}.jsonl"
+            framework = "random"
 
-        if self.last and "single" not in exp_file:
-            acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = True)
-            acc = acc_last
+        if self.last and framework != "single":
+            results = evaluate(exp_file, framework = framework, task = self.task, structured = True, all=True, instances=instances)
+            avg_metric = results[f"{metric}_last"]
         else:
-            acc_mean, acc_last = evaluate(exp_file, framework = eval_file.split("/")[1], task = self.task, structured = False)
-            acc = acc_mean
+            results = evaluate(exp_file, framework = framework, task = self.task, structured = False, all=True, instances=instances)
+            avg_metric = results[metric]
 
-        return round(acc*100, 2)
+        if round_acc:
+            return round(avg_metric*100, 2)
+        else:
+            return avg_metric
     
     def get_sanity_checks(self, exp_file):
         '''
@@ -1087,9 +1301,9 @@ class Vis():
         if "chain" in setup:
             turn_lengths = [len(self.exp_data_hf[setup]["player"][i]) for i in range(len(self.exp_data_hf[setup]["player"]))]
             self.num_turns = max(turn_lengths)
-        elif "star" in setup:
+        elif "star" in setup.lower():
             self.num_turns = 2
-        elif "graph" in setup:
+        elif "graph" in setup.lower() or "layered" in setup.lower():
             self.num_turns = 3
 
         self.lbls = [f"{lbl}_{i}" for i in range(self.num_turns) for lbl in ["correct", "incorrect"]]
@@ -1120,9 +1334,10 @@ class Vis():
             sum_b = sum([v for k, v in self.links.items() if k[0] == i+1])
             total_beliefs = sum_a + sum_b
             
-            perc_correct = round((sum_a/total_beliefs)*100, 2)
+            if total_beliefs != 0:
+                perc_correct = round((sum_a/total_beliefs)*100, 2)
 
-            acc_per_turn.append(perc_correct)       
+                acc_per_turn.append(perc_correct)       
 
         avg_acc = round(float(self.mean_preds_df.loc[setup]["accuracy"])*100, 2)
         acc_per_turn.append(avg_acc)
@@ -1136,7 +1351,8 @@ class Vis():
         """
         This function plots Fig. 2, i.e., distributed knowledge results for llama and qwen in different subplots.
         """
-        run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
+        #run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
+        run_files = [["eval/dist_llama_cmu.csv", "eval/dist_llama_roc.csv"], ["eval/dist_qwen8_cmu.csv", "eval/dist_qwen8_roc.csv"], ["eval/dist_qwen32_cmu.csv", "eval/dist_qwen32_roc.csv"]]
 
         nrow = 3
         ncol = 2
@@ -1155,9 +1371,9 @@ class Vis():
                 df_experiment_files = pd.read_csv(run_files[r][c], delimiter = ";")
 
                 # get avg of three runs
-                output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
-                output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
-                output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+                output_0_acc = df_experiment_files["output_0"].map(lambda x: self.get_avg_metric(x, round_acc = True))
+                output_1_acc = df_experiment_files["output_1"].map(lambda x: self.get_avg_metric(x, round_acc = True))
+                output_2_acc = df_experiment_files["output_2"].map(lambda x: self.get_avg_metric(x, round_acc = True))
 
                 s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
 
@@ -1186,8 +1402,9 @@ class Vis():
                     ylabel=ylabel, 
                     yticks=yticks,
                     color=colors, 
-                    legend = (c==0 and r==0),
-                    figsize=(4.5,5.75), # w x h
+                    legend = (c==1 and r==0),
+                    #figsize=(4.25,5.5), # w x h
+                    figsize=(4,5.25), # w x h
                     kind="bar",
                     rot=0,
                     xlabel = "",
@@ -1195,7 +1412,7 @@ class Vis():
                     width = 0.85
                 )
 
-                if r == 0 and c == 0:
+                if r == 0 and c == 1:
                     ax.legend(title=None, loc="upper left", fontsize=8)
 
                 if c == 1:
@@ -1222,28 +1439,37 @@ class Vis():
                         )
 
         plt.tight_layout() 
-        plt.savefig(f"visualizations/dist_split.png")
+        #plt.subplots_adjust(wspace=0., hspace=0.)
+        plt.subplots_adjust(wspace=0.05, hspace=0.2)
+        plt.savefig(f"visualizations/dist_split.pdf")
 
     def compute_std(self):
         """
         This method computes the standard deviation between runs.
         """
-        run_file = "eval/final_llama.csv"
+        run_file = "eval/final.csv"
 
         df_experiment_files = pd.read_csv(run_file, delimiter = ";")
 
         # get avg of three runs
-        output_0_acc = df_experiment_files["output_0"].map(self.get_avg_metric)
-        output_1_acc = df_experiment_files["output_1"].map(self.get_avg_metric)
-        output_2_acc = df_experiment_files["output_2"].map(self.get_avg_metric)
+        output_0_acc = df_experiment_files["output_0"].map(lambda x: self.get_avg_metric(x))
+        output_1_acc = df_experiment_files["output_1"].map(lambda x: self.get_avg_metric(x))
+        output_2_acc = df_experiment_files["output_2"].map(lambda x: self.get_avg_metric(x))
 
-        s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+        s_acc = round(((output_0_acc + output_1_acc + output_2_acc)/3), 2)
 
-        df_std = s_acc.std()
+        df_std = round(pd.concat([output_0_acc, output_1_acc, output_2_acc], axis = 1).std(axis=1), 2)
 
-        df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+        df_acc = pd.concat([
+            df_experiment_files,
+            output_0_acc.rename("accuracy_0"),
+            output_1_acc.rename("accuracy_1"),
+            output_2_acc.rename("accuracy_2"),
+            s_acc.rename("accuracy"), 
+            df_std.rename("std")],
+            axis=1)
 
-        df_acc.to_csv("visualizations/final_llama.csv")
+        df_acc.to_csv("visualizations/final.csv")
 
     def plot_last(self):
         ''' 
@@ -1259,19 +1485,51 @@ class Vis():
 
         print(df_experiment_files)
 
-    def plot_dist_metrics(self):
+    def plot_roc_metrics_single_run(self, exp_file: str = "", instances: int = 1000):
         '''
         This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
         '''
-        df_experiment_files = pd.read_csv("eval/distributed_base_runs.csv", delimiter = ";")
+        df_experiment_files = pd.read_csv(exp_file, delimiter = ";")
 
+        self.task = "rocstories"
         self.last = False
         self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
         for metric in self.metrics:
-            df_experiment_files[metric] = df_experiment_files["output"].map(lambda x: vis.get_avg_metric(x, metric=metric))
+            df_experiment_files[metric] = df_experiment_files["output"].map(lambda x: vis.get_avg_metric(x, metric=metric, round_acc=True, instances=instances))
 
         print(df_experiment_files)
-        df_experiment_files.to_csv("./visualizations/distributed_base_results.csv", sep = ";") # multi:stimmt nicht
+        df_experiment_files.to_csv(exp_file.replace("eval", "visualizations"), sep = ";")
+
+    def plot_roc_metrics_three_runs(self, exp_file: str = "eval/final.csv", instances: int = 1000):
+        '''
+        This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+        '''
+        df_experiment_files = pd.read_csv(exp_file, delimiter = ";") 
+
+        df_roc_files = df_experiment_files.where(df_experiment_files["task"]=="StoryCon").dropna()   
+
+        self.task = "rocstories"
+        self.last = False
+        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau"]
+
+        output_0 = pd.DataFrame()
+        output_1 = pd.DataFrame()
+        output_2 = pd.DataFrame()
+        for metric in self.metrics:
+            # get avg of three runs
+            output_0[metric] = df_roc_files["output_0"].map(lambda x: self.get_avg_metric(x, metric=metric, round_acc=True, instances=instances))
+            output_1[metric] = df_roc_files["output_1"].map(lambda x: self.get_avg_metric(x, metric=metric, round_acc=True, instances=instances))
+            output_2[metric] = df_roc_files["output_2"].map(lambda x: self.get_avg_metric(x, metric=metric, round_acc=True, instances=instances))
+
+        s_metrics = round(((output_0 + output_1 + output_2)/3), 2)
+
+        df_metrics = pd.concat([
+            df_roc_files,
+            s_metrics
+            ],
+            axis=1)
+
+        df_metrics.to_csv("visualizations/secondary_roc.csv", sep = ";")
 
     def plot_dist_sanity_checks(self):
         '''
@@ -1372,6 +1630,42 @@ class Vis():
         else: 
             return False
 
+    def plot_topology_changes(self, topology: str = "Chain"):
+        """
+        This method plots the intermediate micro precision per topology.
+
+        @params
+        """
+        df_experiment_files = pd.read_csv("eval/topologies_dev.csv", delimiter = ";")
+
+        df_top_files = df_experiment_files.where(df_experiment_files["framework"]==topology).dropna()
+
+        acc_per_turn = self.plot_acc_changes(df_experiment_files=df_top_files, instances=250, one_model = True)
+        df_acc_changes = pd.DataFrame()
+        if topology == "Star":
+            self.num_turns = 2
+            df_acc_changes[0] = acc_per_turn.loc[0:4].mean()
+            df_acc_changes[1] = acc_per_turn.loc[5]
+        
+        df_acc_changes.T.plot(xticks=np.arange(self.num_turns), yticks = np.arange(0, 101, 10), ylabel = "Micro precision", xlabel = "Turn")
+
+        plt.savefig(f"./visualizations/{topology}_changes.pdf")
+        
 if __name__ == "__main__":
     vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
-    vis.plot_dist_split()
+    #vis.plot_topology_changes("Star")
+
+    # Compute average experiment results and std -> ./visualizations/final.csv
+    #vis.compute_std()
+
+    # Create Figure 2 -> ./visualizations/dist_split.pdf
+    #vis.plot_dist_split() 
+
+    # Create Figure 4a -> ./visualizations/args_hypos.pdf
+    #vis.plot_arg_hypo_changes()
+
+    # Create Figure 4b -> ./visualizations/exploration.pdf
+    vis.plot_exploration_changes()
+
+    # Create Figure 4c -> ./visualizations/correctness.pdf
+    #vis.plot_correctness_changes()

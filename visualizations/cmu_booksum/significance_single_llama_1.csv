@@ -1,0 +1,3 @@
+;first_exp_file;first_setup;first_mean;second_exp_file;second_setup;second_mean;Welch's t-test;p-value;significant
+0;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;single;0.369;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326;base;0.476;-4.869950535676304;6.020353812125078e-07;True
+1;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;single;0.369;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314;improved;0.43;-2.7888576271881313;0.002669800482469673;True

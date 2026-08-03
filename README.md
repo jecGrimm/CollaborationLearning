@@ -1,5 +1,5 @@
 # CollaborationLearning
-This repository contains the experiments for the paper **Can Multi-Agent Systems Synthesize Knowledge through Discussions? Analyzing Argumentative Reasoning in Distributed Knowledge Settings**. In this work, we study the knowledge synthesis abilities of MAS and the impact of argumentative reasoning in distributed knowledge settings.
+This repository contains the experiments for the paper **Can Multi-Agent Systems Synthesize Knowledge through Discussions? Analyzing Argumentative Reasoning in Distributed Knowledge Settings**. In this work, we study the knowledge synthesis abilities of MAS and the impact of argumentative reasoning in distributed knowledge settings on two communication games (BookDiff and StoryCon).
 
 ## Environment
 ``conda create -f env.yml``
@@ -10,11 +10,13 @@ To use Llama with restricted access:
 3. type "hf auth login" in terminal and paste token in it
 
 ## Data sources
+### BookDiff
 CMU Booksum (Bamman and Smith, 2013)
 | ID	| title	| genre	| summary | 
 | ---- | ----| ----- | ---- | 
 | 2	| The Plague	| 'Existentialism, Fiction, Absurdist fiction, Novel'	| The text of The Plague is divided into five parts...	| 
 
+### StoryCon
 ROCStories (Mostafazadeh et al., 2016)
 | storyid |	storytitle |	sentence1 |	sentence2 |	sentence3 |	sentence4 |	sentence5
 | ---- | ----| ----- | ---- | ---- | ---- | ---- |
@@ -23,6 +25,16 @@ ROCStories (Mostafazadeh et al., 2016)
 ## File Tree
 ### annotation
 Annotated conversation samples.
+
+#### annotated
+##### first_iteration
+Annotated samples from the first annotation iteration. We use these samples to develop our taxonomy of generated conversational statements.
+
+##### second_iteration
+Annotated samples from the second annotation iteration. We use these samples to validate the taxonomy of generated conversational statements (in-domain: Llama-3.1-8B-Instruct, Qwen3-32B; out-of-domain: Qwen3-8B).
+
+##### instances
+This folder contains the instances before annotation.
 
 ### configs
 Experiment configuration files.
@@ -68,24 +80,24 @@ This file contains the results from prompts rewritten by LLMs.
 This file contains all prompts used for the experiments:
 | Task |	Setup |	Prompt |
 | ---- | ----| ----- | 
-| ROCStories | Single |	single_unstructured |
-| ROCStories | Base | chain_base |
-| ROCStories | Improved | chain_improved |
-| ROCStories | Args/Hypo/Full/Reject/Support/Correct/Incorrect | roc_structured_chain |
-| CMU Booksum | Single |	cmu_single_unstructured |
-| CMU Booksum | Base | cmu_chain_base |
-| CMU Booksum | Improved | cmu_chain_improved |
-| CMU Booksum | Args/Hypo/Full/Reject/Support/Correct/Incorrect | cmu_structured_chain |
+| BookDiff | Single |	cmu_single_unstructured |
+| BookDiff | Base | cmu_chain_base |
+| BookDiff | Improved | cmu_chain_improved |
+| BookDiff | Args/Hypo/Full/Reject/Support/Correct/Incorrect | cmu_structured_chain |
+| StoryCon | Single |	single_unstructured |
+| StoryCon | Base | chain_base |
+| StoryCon | Improved | chain_improved |
+| StoryCon | Args/Hypo/Full/Reject/Support/Correct/Incorrect | roc_structured_chain |
 
 ### visualizations
 #### cmu_booksum
-Visualizations for CMU Booksum, including an example output and significance tests.
+Visualizations for BookDiff, including an example output and significance tests.
 
 #### comp_runs
 Comparable run configurations.
 
 #### rocstories
-Visualizations for ROCStories, incl. Fig. 7 in the paper (micro precision per turn and topology).
+Visualizations for StoryCon, incl. Fig. 7 in the paper (micro precision per turn and topology).
 
 The files `args_hypos.png`, `exploration.png`, and `correctness.png` show the subfigures of Fig. 4 in the paper (micro precision per conversation manipulation).
 

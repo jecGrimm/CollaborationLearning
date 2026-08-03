@@ -1,5 +1,5 @@
 model;framework;task;output_0;output_1;output_2
-Random;Random;ROCStories;outputs/random/rocstories/test;outputs/random/rocstories/test_1;outputs/random/rocstories/test_2
-Qwen3-8B;Single;ROCStories;outputs/single/Qwen3-8B/rocstories/test/outputs_357;outputs/single/Qwen3-8B/rocstories/test/outputs_388;outputs/single/Qwen3-8B/rocstories/test/outputs_389
-Qwen3-8B;Base;ROCStories;outputs/multi/Qwen3-8B/rocstories/test/outputs_390;outputs/multi/Qwen3-8B/rocstories/test/outputs_391;outputs/multi/Qwen3-8B/rocstories/test/outputs_392
-Qwen3-8B;Improved;ROCStories;outputs/multi/Qwen3-8B/rocstories/test/outputs_393;outputs/multi/Qwen3-8B/rocstories/test/outputs_394;outputs/multi/Qwen3-8B/rocstories/test/outputs_395
+Random;Random;StoryCon;outputs/random/rocstories/test;outputs/random/rocstories/test_1;outputs/random/rocstories/test_2
+Qwen3-8B;Single;StoryCon;outputs/single/Qwen3-8B/rocstories/test/outputs_357;outputs/single/Qwen3-8B/rocstories/test/outputs_388;outputs/single/Qwen3-8B/rocstories/test/outputs_389
+Qwen3-8B;Base;StoryCon;outputs/multi/Qwen3-8B/rocstories/test/outputs_390;outputs/multi/Qwen3-8B/rocstories/test/outputs_391;outputs/multi/Qwen3-8B/rocstories/test/outputs_392
+Qwen3-8B;Improved;StoryCon;outputs/multi/Qwen3-8B/rocstories/test/outputs_393;outputs/multi/Qwen3-8B/rocstories/test/outputs_394;outputs/multi/Qwen3-8B/rocstories/test/outputs_395

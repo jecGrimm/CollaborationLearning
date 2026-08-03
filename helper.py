@@ -16,7 +16,7 @@ def check_left_insts(outdir: str):
 
     print(len(filtered_data))
 
-def inspect_instances(outdir: str, rand_idx: int = None):
+def inspect_instances(outdir: str, rand_idx: int = None, outfile: str = None):
     """
     This function prints the output and evaluation results for a random or specified instance.
 
@@ -40,18 +40,22 @@ def inspect_instances(outdir: str, rand_idx: int = None):
     eval = eval_data.select([rand_idx])[0]
 
     # print information 
-    print("Output File: ", outdir)
-    print("IDX: ", rand_idx)
+    outstr = f"Output File: {outdir}\nIDX: {rand_idx}\n"
     for k, v in out.items():
         if k == "turns":
-            print(f"\n{k}:\n")
+            outstr += f"\n{k}:\n\n"
             for turn in v:
-                print("\n")
-                print(turn)
+                outstr += f"\n{turn}\n"
         else:
-            print(f"\n{k}:\n{v}")
+            outstr += f"\n{k}:\n{v}\n"
     for k,v in eval.items():
-        print(f"\n{k}:\n{v}")
+        outstr += f"\n{k}:\n{v}\n"
+    
+    if outfile:
+        with open(outfile, "w", encoding="utf-8") as f:
+            f.write(outstr)
+    else:
+        print(outstr)
 
 def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, structured: bool, data_len: int = 1000):
     '''
@@ -103,9 +107,8 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    qwen8_out1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_0"
-    qwen8_out2 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_1"
-    qwen8_out3 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_382_2"
-    out_4 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_386_0"
+    #conv_output = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_304"
+    conv_output = "outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_435"
+    outfile = "visualizations/cmu_booksum/example_instance.txt"
 
-    merge_outputs([qwen8_out1, qwen8_out2, qwen8_out3, out_4], "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_382_386", "multi", "cmu_booksum", structured = False)
+    inspect_instances(conv_output, rand_idx=2, outfile=outfile)

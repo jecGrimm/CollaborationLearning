@@ -87,3 +87,5 @@ outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-b102d46126
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-7cd4475b7108fbe2.arrow
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-00cb468eb6c64e2c.arrow
 outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302/cache-ff63b3ddb1806685.arrow
+
+wandb/*

@@ -1,3 +1,0 @@
-model;format;task;output_0;output_1;output_2
-Llama-3.1-8B-Instruct;Reject;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_304;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_351;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_352
-Llama-3.1-8B-Instruct;Support;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_305;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_348;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_349

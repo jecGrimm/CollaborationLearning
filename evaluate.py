@@ -32,7 +32,7 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     results = defaultdict(float)
 
     if task == "rocstories":
-        results["acc_mean"] = evaluator.evaluate_sent_order()
+        results["accuracy"] = evaluator.evaluate_sent_order()
 
         results["prec_1"] = float(evaluator.eval_data.with_format("pandas")["prec_1"].mean())
         results["prec_2"] = float(evaluator.eval_data.with_format("pandas")["prec_2"].mean())
@@ -42,7 +42,7 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
         results["spearman"] = float(evaluator.eval_data.with_format("pandas")["spearman"].mean())
         results["kendalltau"] = float(evaluator.eval_data.with_format("pandas")["kendalltau"].mean())
     else:
-        results["acc_mean"] = evaluator.evaluate_odd_one()
+        results["accuracy"] = evaluator.evaluate_odd_one()
 
     results["instances"] = instances
     results["wrong_format"] = evaluator.wrong_format
@@ -57,7 +57,7 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     evaluator.wrong_format = 0
 
     if structured == True and last == True:
-        results["acc_last"] = evaluator.evaluate_last_beliefs()
+        results["accuracy_last"] = evaluator.evaluate_last_beliefs()
 
         results["wrong_format_last"] = evaluator.wrong_format
         results["zero_percentage_last"] = evaluator.zero_percentage
@@ -77,7 +77,7 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     elif sanity_checks:
         return results["wrong_format"], results["wrong_format_last"]
     else:
-        return results["acc_mean"], results["acc_last"]
+        return results["accuracy"], results["accuracy_last"]
 
 class Evaluator:
     def __init__(self, experiment_file: str, framework: str, task: str, logger: ExperimentLog = ExperimentLog(), idx = None, last = False, instances = None):
@@ -940,7 +940,7 @@ class Evaluator:
                     zero_count = True in [0 in conv_dir.values() for conv_dir in conv_list]
 
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
+                        if type(conv_dir) in [defaultdict, dict] and "sentence" in conv_dir.keys() and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
                             if zero_count:
                                 pos = conv_dir["position"]+1
                             else:
@@ -1140,8 +1140,11 @@ class Evaluator:
             return load_dataset("json", data_files=eval_file, split="train")
 
 if __name__ == "__main__":
-    outdir = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_379"
+    outdir = "./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_354"
 
-    results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=False, all = True, instances = 1000)
+    results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True, last=False, all = False, instances = 1000)
+    
+    #results = evaluate(outdir, framework = "single", task = "cmu_booksum", structured = False)
+    
     print(results)
 

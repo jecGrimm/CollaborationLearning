@@ -1,3 +1,0 @@
-model;format;task;output_0;output_1;output_2
-Llama-3.1-8B-Instruct;Reject;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_302;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_342;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350
-Llama-3.1-8B-Instruct;Support;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_303;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_340;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_341

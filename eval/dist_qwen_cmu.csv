@@ -1,5 +1,0 @@
-model;framework;task;output_0;output_1;output_2
-Random;Random;CMU Booksum;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test
-Qwen3-32B;Single;CMU Booksum;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_375;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_376;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_377
-Qwen3-32B;Base;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_378_383;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_374;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_379_384
-Qwen3-32B;Improved;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_380_385;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_381_387;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_382_386
