@@ -1,185 +1,0 @@
-Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:02<00:40,  2.50s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:04<00:37,  2.47s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:07<00:34,  2.46s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:09<00:31,  2.45s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:12<00:29,  2.44s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:14<00:26,  2.43s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:17<00:24,  2.43s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:19<00:21,  2.43s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:21<00:19,  2.43s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:24<00:16,  2.43s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:26<00:14,  2.43s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:29<00:12,  2.43s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:31<00:09,  2.43s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:34<00:07,  2.43s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:36<00:04,  2.42s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [00:38<00:02,  2.42s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:40<00:00,  2.27s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:40<00:00,  2.40s/it]
-Device set to use cuda:0
-`torch_dtype` attribute is deprecated. Use `dtype` instead!
-Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 15172.79 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 54302.23 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11420.90 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:  93%|█████████▎| 232/250 [00:00<00:00, 2317.78it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 2447.05it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 5828.14 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 149.11 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 148.54 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 3358.40 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9808.85 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:  44%|████▍     | 111/250 [00:00<00:00, 1108.25it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1916.12it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 3429.54 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 155.55 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 155.17 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 58632.07 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8669.28 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:26,  9.25it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1294.93it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 2003.17 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1902.73 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 154.51 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 153.95 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 51300.20 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2785.44 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:31,  7.95it/s][A
-Processing prompts:  87%|████████▋ | 218/250 [00:00<00:00, 1156.05it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1040.75it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1403.42 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1105.71 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 153.26 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 152.78 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 8069.38 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 5769.52 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:33,  7.52it/s][A
-Processing prompts:  73%|███████▎  | 182/250 [00:00<00:00, 940.18it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 925.34it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1172.24 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 926.92 examples/s] 
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 152.34 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 145.32 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 54596.27 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2390.11 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:59,  4.22it/s][A
-Processing prompts:  74%|███████▎  | 184/250 [00:00<00:00, 690.15it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 668.95it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 703.96 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 692.65 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 132.89 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 132.58 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 11704.56 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2554.18 examples/s]
-Processing shards:   0%|          | 0/6 [6:45:19<?, ?it/s]
-Traceback (most recent call last):
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 171, in <module>
-    run_experiment(cli.config)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 43, in run_experiment
-    multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"])
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 722, in prompt_chain
-    
-    ...<2 lines>...
-    # batch processing
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/text_generation.py", line 331, in __call__
-    return super().__call__(list(chats), **kwargs)
-           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/base.py", line 1448, in __call__
-    outputs = list(final_iterator)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/pt_utils.py", line 126, in __next__
-    item = next(self.iterator)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/pt_utils.py", line 127, in __next__
-    processed = self.infer(item, **self.params)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/base.py", line 1374, in forward
-    model_outputs = self._forward(model_inputs, **forward_params)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/pipelines/text_generation.py", line 432, in _forward
-    output = self.model.generate(input_ids=input_ids, attention_mask=attention_mask, **generate_kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/utils/_contextlib.py", line 120, in decorate_context
-    return func(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/generation/utils.py", line 2564, in generate
-    result = decoding_method(
-        self,
-    ...<5 lines>...
-        **model_kwargs,
-    )
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/generation/utils.py", line 2784, in _sample
-    outputs = self(**model_inputs, return_dict=True)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/utils/generic.py", line 918, in wrapper
-    output = func(self, *args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 480, in forward
-    outputs: BaseModelOutputWithPast = self.model(
-                                       ~~~~~~~~~~^
-        input_ids=input_ids,
-        ^^^^^^^^^^^^^^^^^^^^
-    ...<6 lines>...
-        **kwargs,
-        ^^^^^^^^^
-    )
-    ^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/utils/generic.py", line 1072, in wrapper
-    outputs = func(self, *args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 410, in forward
-    hidden_states = decoder_layer(
-        hidden_states,
-    ...<6 lines>...
-        **kwargs,
-    )
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/modeling_layers.py", line 94, in __call__
-    return super().__call__(*args, **kwargs)
-           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
-    return func(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 275, in forward
-    hidden_states = self.mlp(hidden_states)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1775, in _wrapped_call_impl
-    return self._call_impl(*args, **kwargs)
-           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/torch/nn/modules/module.py", line 1786, in _call_impl
-    return forward_call(*args, **kwargs)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 82, in forward
-    down_proj = self.down_proj(self.act_fn(self.gate_proj(x)) * self.up_proj(x))
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~
-torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.70 GiB. GPU 0 has a total capacity of 79.15 GiB of which 1.11 GiB is free. Including non-PyTorch memory, this process has 78.03 GiB memory in use. Of the allocated memory 74.25 GiB is allocated by PyTorch, and 3.28 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-srun: error: lrz-dgx-a100-004: task 0: Exited with exit code 1

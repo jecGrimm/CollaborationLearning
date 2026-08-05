@@ -1,3 +1,0 @@
-;first_setup;first_mean;second_setup;second_mean;Welch's t-test;p-value;significant
-0;hypo;0.6255999999999999;full_chain_1000;0.7172;-5.619415626427918;1.136178336830603e-08;True
-1;hypo;0.6255999999999999;support_chain_293;0.6675767918088737;-1.8114370472402623;0.03530398237629199;True

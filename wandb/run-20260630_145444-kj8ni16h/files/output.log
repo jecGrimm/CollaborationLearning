@@ -1,4 +1,0 @@
-[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
-Saving the dataset (1/1 shards): 100%|█████████████████████████████████████████████████████| 250/250 [00:00<00:00, 17776.99 examples/s]
-Map: 100%|█████████████████████████████████████████████████████████████████████████████████| 250/250 [00:00<00:00, 10070.94 examples/s]
-Saving the dataset (1/1 shards): 100%|█████████████████████████████████████████████████████| 250/250 [00:00<00:00, 28942.20 examples/s]

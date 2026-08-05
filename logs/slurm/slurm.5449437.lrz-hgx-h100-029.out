@@ -1,25 +1,0 @@
-Current run_idx: 173
-
-Batch size: 1
-Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<02:00,  7.51s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:14<01:50,  7.39s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:21<01:42,  7.29s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:29<01:34,  7.24s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:36<01:26,  7.17s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:43<01:18,  7.13s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:50<01:11,  7.10s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:57<01:03,  7.10s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:04<00:56,  7.09s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:11<00:49,  7.08s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:18<00:42,  7.07s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:25<00:35,  7.06s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:32<00:28,  7.07s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:39<00:21,  7.06s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:46<00:14,  7.06s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:53<00:07,  7.05s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:59<00:00,  6.58s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:59<00:00,  7.02s/it]
-Device set to use cuda:0
-`torch_dtype` attribute is deprecated. Use `dtype` instead!
-Processing shards:   0%|          | 0/4 [00:00<?, ?it/s]
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 4504.89 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 28067.56 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 5495.97 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:  18%|█▊        | 45/250 [00:00<00:00, 449.57it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1999.29it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 5197.25 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 146.21 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 145.74 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 50502.14 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9843.66 examples/s]

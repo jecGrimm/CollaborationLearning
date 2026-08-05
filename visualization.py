@@ -693,9 +693,9 @@ class Vis():
                 for setup in exp_files.keys():
                     if "single" not in setup and "random" not in setup and "du" not in setup:
                         if conv_format != "run":
-                            acc_changes[f"{setup}_{conv_format}"] = self.get_acc_changes(setup)
+                            acc_changes[f"{setup}_{conv_format}"] = self.get_perf_changes(setup)
                         else:
-                            acc_changes[f"{setup}"] = self.get_acc_changes(setup)
+                            acc_changes[f"{setup}"] = self.get_perf_changes(setup)
                     else:
                         acc_changes[f"{setup}"] = [float(df_acc[setup][conv_format])]*11
 
@@ -1290,9 +1290,9 @@ class Vis():
 
         return round(wf, 3)
     
-    def get_acc_changes(self, setup, sent_color = False):
+    def get_perf_changes(self, setup, sent_color = False):
         '''
-        This method creates Fig. 7, i.e., the intermediate precision per topology.
+        This method computes the intermediate precision per turn.
 
         @returns 
             acc_per_turn: micro precision per turn
@@ -1632,9 +1632,10 @@ class Vis():
 
     def plot_topology_changes(self, topology: str = "Chain"):
         """
-        This method plots the intermediate micro precision per topology.
+        This method creates the plots for Fig. 7, i.e., the intermediate micro precision per topology.
 
         @params
+            topology: Chain/Layered/Star
         """
         df_experiment_files = pd.read_csv("eval/topologies_dev.csv", delimiter = ";")
 
@@ -1653,7 +1654,6 @@ class Vis():
         
 if __name__ == "__main__":
     vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
-    #vis.plot_topology_changes("Star")
 
     # Compute average experiment results and std -> ./visualizations/final.csv
     #vis.compute_std()

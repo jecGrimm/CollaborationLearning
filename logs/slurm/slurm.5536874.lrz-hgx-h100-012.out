@@ -1,48 +1,0 @@
-Current run_idx: 194
-
-Batch size: 1
-Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<01:55,  7.23s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:14<01:47,  7.18s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:21<01:40,  7.17s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:28<01:32,  7.15s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:35<01:25,  7.12s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:42<01:18,  7.13s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:49<01:11,  7.12s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:57<01:04,  7.12s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:04<00:56,  7.10s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:11<00:49,  7.10s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:18<00:42,  7.09s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:25<00:35,  7.10s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:32<00:28,  7.09s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:39<00:21,  7.08s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:46<00:14,  7.07s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:53<00:07,  7.07s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:59<00:00,  6.61s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:59<00:00,  7.01s/it]
-Device set to use cuda:0
-`torch_dtype` attribute is deprecated. Use `dtype` instead!
-Processing shards:   0%|          | 0/18 [00:00<?, ?it/s]
-Map:   0%|          | 0/293 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 293/293 [00:00<00:00, 2197.64 examples/s][AMap: 100%|██████████| 293/293 [00:00<00:00, 2099.49 examples/s]
-
-Filter:   0%|          | 0/293 [00:00<?, ? examples/s][AFilter: 100%|██████████| 293/293 [00:00<00:00, 7245.97 examples/s]
-
-Map:   0%|          | 0/293 [00:00<?, ? examples/s][AMap:   0%|          | 0/293 [00:00<?, ? examples/s]
-Processing shards:   0%|          | 0/18 [00:00<?, ?it/s]
-Traceback (most recent call last):
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 178, in <module>
-    run_experiment(cli.config)
-    ~~~~~~~~~~~~~~^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/run_experiment.py", line 46, in run_experiment
-    multi.prompt_chain(logger, device = config["device"], batch_size = config["batch_size"], thinking_budget=config["thinking_budget"], variation = config["variation"], final_reorder=config["final_reorder"], conv_format = config["conv_format"], start = config["start"], end = config["end"])
-    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 795, in prompt_chain
-    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 562, in wrapper
-    out: Union["Dataset", "DatasetDict"] = func(self, *args, **kwargs)
-                                           ~~~~^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3341, in map
-    for rank, done, content in Dataset._map_single(**unprocessed_kwargs):
-                               ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3697, in _map_single
-    for i, batch in iter_outputs(shard_iterable):
-                    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3647, in iter_outputs
-    yield i, apply_function(example, i, offset=offset)
-             ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/miniconda3/envs/collab_learn/lib/python3.13/site-packages/datasets/arrow_dataset.py", line 3570, in apply_function
-    processed_inputs = function(*fn_args, *additional_args, **fn_kwargs)
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 795, in <lambda>
-    filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
-                                                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 571, in create_prompts
-    messages.append(self.create_message(conv_round, turn, conversation_history, batch["roles"][i], player_name, final, shuffled_sents=batch["shuffled_sents"][i], init_answer = init_turn))
-                    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/dss/dsshome1/0F/di97pub/CollaborationLearning/prompt.py", line 396, in create_message
-    sample = f"[\n{self.OUTPUT_FORMAT.format(sentence = player_sent)}\n]"
-                   ^^^^^^^^^^^^^^^^^^
-AttributeError: 'MultiAgent' object has no attribute 'OUTPUT_FORMAT'. Did you mean: 'OUTPUT_FORMAT_HYPO'?
-srun: error: lrz-hgx-h100-012: task 0: Exited with exit code 1

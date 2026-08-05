@@ -1,251 +1,0 @@
-Assigning run_idx: 166
-
-Batch size: 1
-Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:03<00:53,  3.35s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:06<00:49,  3.32s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:09<00:46,  3.31s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:13<00:42,  3.27s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:16<00:38,  3.17s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:19<00:33,  3.07s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:21<00:30,  3.01s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:24<00:26,  2.97s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:27<00:23,  2.93s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:30<00:20,  2.90s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:33<00:17,  2.88s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:36<00:14,  2.86s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:38<00:11,  2.83s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:41<00:08,  2.81s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:44<00:05,  2.80s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [00:47<00:02,  2.78s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:49<00:00,  2.59s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:49<00:00,  2.90s/it]
-Device set to use cuda:0
-`torch_dtype` attribute is deprecated. Use `dtype` instead!
-Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 14957.65 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 35883.10 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9797.49 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   9%|▉         | 22/250 [00:00<00:01, 219.94it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1953.51it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 5080.95 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 149.29 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 148.84 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 46559.92 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9065.86 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.91it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1565.37it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 3039.08 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 149.44 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 149.05 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 48495.79 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8582.22 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.58it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1304.96it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 2188.08 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 2083.59 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 149.58 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 149.17 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 50173.50 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3561.63 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:39,  6.24it/s][A
-Processing prompts:  86%|████████▌ | 214/250 [00:00<00:00, 1006.89it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 903.34it/s] 
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1236.84 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1002.09 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 132.59 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 129.68 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 46135.87 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2901.71 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<02:16,  1.83it/s][A
-Processing prompts:  58%|█████▊    | 145/250 [00:00<00:00, 299.35it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 351.52it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 380.33 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 361.36 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 146.64 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 142.62 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 8807.71 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3121.36 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:57,  4.36it/s][A
-Processing prompts:  67%|██████▋   | 168/250 [00:00<00:00, 643.40it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 658.71it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 759.97 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 651.75 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 145.64 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 142.48 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 41809.25 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2549.05 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<01:00,  4.12it/s][A
-Processing prompts:  67%|██████▋   | 167/250 [00:00<00:00, 617.56it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 636.51it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 668.91 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 658.68 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 139.46 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 139.04 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 44281.08 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:00<00:00, 2297.61 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2163.05 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<01:04,  3.88it/s][A
-Processing prompts:  68%|██████▊   | 169/250 [00:00<00:00, 601.37it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 614.61it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 651.93 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 641.03 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 140.51 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 140.09 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 45713.49 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:00<00:00, 2060.81 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1923.99 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<01:43,  2.40it/s][A
-Processing prompts:  67%|██████▋   | 167/250 [00:00<00:00, 425.07it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 440.07it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 426.58 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 420.52 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 138.34 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 137.90 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 7100.57 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:00<00:00, 1880.47 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1779.23 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<01:00,  4.14it/s][A
-Processing prompts:  67%|██████▋   | 168/250 [00:00<00:00, 622.57it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 639.12it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 688.11 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 676.74 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 136.88 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 136.49 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:00<00:00, 1718.72 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1650.59 examples/s]
-You seem to be using the pipelines sequentially on GPU. In order to maximize efficiency please use a dataset
-
-Generating final answers:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Generating final answers:   0%|          | 1/250 [00:00<00:36,  6.77it/s][AGenerating final answers: 100%|██████████| 250/250 [00:00<00:00, 1349.89it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1487.24 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1429.42 examples/s]
-Current run_idx: 166
-
-
-Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
-Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2630.99 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2623.22 examples/s]
-Current run_idx: 166
-
-Processing shards:  17%|█▋        | 1/6 [35:29:03<177:25:16, 127743.28s/it]
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3473.91 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 45614.06 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10077.04 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:24,  9.97it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1906.71it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 5296.61 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 150.08 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 149.65 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 44906.90 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9690.11 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:34,  7.24it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1265.71it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 2287.09 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 2181.02 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 148.14 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 147.73 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 47203.39 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8507.85 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:28,  8.65it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1222.88it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 2237.09 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 2124.86 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 148.61 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 148.13 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 47163.05 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2974.33 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:39,  6.28it/s][A
-Processing prompts:  85%|████████▌ | 213/250 [00:00<00:00, 1004.81it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 899.37it/s] 
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1351.59 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1071.81 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 148.38 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 144.76 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 43980.20 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3009.53 examples/s]
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** JOB 5446218 ON lrz-hgx-h100-015 CANCELLED AT 2026-01-18T15:20:18 DUE TO TIME LIMIT ***
-slurmstepd: error: *** STEP 5446218.0 ON lrz-hgx-h100-015 CANCELLED AT 2026-01-18T15:20:18 DUE TO TIME LIMIT ***

@@ -1,6 +1,0 @@
-{"time":"2026-07-10T09:35:59.375919+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
-{"time":"2026-07-10T09:35:59.648547+02:00","level":"INFO","msg":"stream: created new stream","id":"cb392ago"}
-{"time":"2026-07-10T09:35:59.648611+02:00","level":"INFO","msg":"handler: started","stream_id":"cb392ago"}
-{"time":"2026-07-10T09:35:59.64881+02:00","level":"INFO","msg":"stream: started","id":"cb392ago"}
-{"time":"2026-07-10T09:35:59.648822+02:00","level":"INFO","msg":"sender: started","stream_id":"cb392ago"}
-{"time":"2026-07-10T09:35:59.648826+02:00","level":"INFO","msg":"writer: started","stream_id":"cb392ago"}

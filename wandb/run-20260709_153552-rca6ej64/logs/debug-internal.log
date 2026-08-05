@@ -1,8 +1,0 @@
-{"time":"2026-07-09T15:35:52.372151+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
-{"time":"2026-07-09T15:35:52.664735+02:00","level":"INFO","msg":"stream: created new stream","id":"rca6ej64"}
-{"time":"2026-07-09T15:35:52.664774+02:00","level":"INFO","msg":"handler: started","stream_id":"rca6ej64"}
-{"time":"2026-07-09T15:35:52.664915+02:00","level":"INFO","msg":"stream: started","id":"rca6ej64"}
-{"time":"2026-07-09T15:35:52.664923+02:00","level":"INFO","msg":"writer: started","stream_id":"rca6ej64"}
-{"time":"2026-07-09T15:35:52.664942+02:00","level":"INFO","msg":"sender: started","stream_id":"rca6ej64"}
-{"time":"2026-07-09T15:38:48.598369+02:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/rca6ej64/file_stream\": dial tcp 34.8.250.101:443: connect: network is unreachable"}
-{"time":"2026-07-09T15:38:50.888727+02:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/rca6ej64/file_stream\": dial tcp: lookup api.wandb.ai: no such host"}

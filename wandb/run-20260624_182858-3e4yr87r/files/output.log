@@ -1,8 +1,0 @@
-[34m[1mwandb[0m: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
-Map: 100%|██████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 2231.84 examples/s]
-Creating json from Arrow format: 100%|████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 122.13ba/s]
-outputs/multi/Llama-3.1-8B-Instruct/rocstories/dev/outputs_316.jsonl
-accuracy: 0.02
-zero percentage: 0.0
-double percentage: 0.0
-wrong format: 0.86

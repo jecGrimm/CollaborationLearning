@@ -1,6 +1,0 @@
-{"time":"2026-07-01T15:33:56.718404+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
-{"time":"2026-07-01T15:33:57.024877+02:00","level":"INFO","msg":"stream: created new stream","id":"1pcmc85x"}
-{"time":"2026-07-01T15:33:57.024919+02:00","level":"INFO","msg":"handler: started","stream_id":"1pcmc85x"}
-{"time":"2026-07-01T15:33:57.02506+02:00","level":"INFO","msg":"stream: started","id":"1pcmc85x"}
-{"time":"2026-07-01T15:33:57.025068+02:00","level":"INFO","msg":"writer: started","stream_id":"1pcmc85x"}
-{"time":"2026-07-01T15:33:57.025071+02:00","level":"INFO","msg":"sender: started","stream_id":"1pcmc85x"}

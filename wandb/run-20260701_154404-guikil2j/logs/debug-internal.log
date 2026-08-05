@@ -1,6 +1,0 @@
-{"time":"2026-07-01T15:44:04.779866+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
-{"time":"2026-07-01T15:44:05.102663+02:00","level":"INFO","msg":"stream: created new stream","id":"guikil2j"}
-{"time":"2026-07-01T15:44:05.102718+02:00","level":"INFO","msg":"handler: started","stream_id":"guikil2j"}
-{"time":"2026-07-01T15:44:05.102869+02:00","level":"INFO","msg":"stream: started","id":"guikil2j"}
-{"time":"2026-07-01T15:44:05.102877+02:00","level":"INFO","msg":"writer: started","stream_id":"guikil2j"}
-{"time":"2026-07-01T15:44:05.102875+02:00","level":"INFO","msg":"sender: started","stream_id":"guikil2j"}

@@ -1,6 +1,0 @@
-{"time":"2026-07-01T14:28:50.051736+02:00","level":"INFO","msg":"stream: starting","core version":"0.23.0"}
-{"time":"2026-07-01T14:28:50.360857+02:00","level":"INFO","msg":"stream: created new stream","id":"xlmods5j"}
-{"time":"2026-07-01T14:28:50.360905+02:00","level":"INFO","msg":"handler: started","stream_id":"xlmods5j"}
-{"time":"2026-07-01T14:28:50.361051+02:00","level":"INFO","msg":"stream: started","id":"xlmods5j"}
-{"time":"2026-07-01T14:28:50.361058+02:00","level":"INFO","msg":"writer: started","stream_id":"xlmods5j"}
-{"time":"2026-07-01T14:28:50.361061+02:00","level":"INFO","msg":"sender: started","stream_id":"xlmods5j"}
