@@ -6,17 +6,16 @@ import os
 import time
 from datetime import datetime
 from tqdm import tqdm
-from datasets import Dataset, concatenate_datasets, load_from_disk
+from datasets import concatenate_datasets, load_from_disk
 from thinking_budget_processor import ThinkingTokenBudgetProcessor
 import json
 import ast
 from collections import defaultdict
 from data import get_sent_list
 from transformers.utils import logging
-import pdb
 
 class Agent:
-    def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, task: str, interactive = True):
+    def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, task: str, interactive: bool = True):
         """
         This class provides functionalities that are shared by the single- and multi-agent frameworks.
 
@@ -24,6 +23,9 @@ class Agent:
             model_id: str with the model_id from Huggingface
             split: data split
             framework: multi or single agent
+            max_new_tokens: maximum number of tokens to generate
+            task: rocstories or cmu_booksum
+            interactive: single/star: False, graph/chain: True
         """
         # surpresses unneccessary warnings
         logging.set_verbosity_error()
@@ -48,6 +50,18 @@ class Agent:
 
 
     def init_pipe(self, device, logger, thinking_budget):
+        '''
+        This method initializes the Huggingface pipeline for the model.
+
+        @params
+            device: device to run the model on
+            logger: ExperimentLog object to log the pipeline information
+            thinking_budget: float, the fraction of max_new_tokens to be used for thinking tokens
+        @returns
+            pipe: Huggingface pipeline object
+            logger: ExperimentLog object with updated run_data
+            processor: ThinkingTokenBudgetProcessor object if the model is Qwen, None otherwise
+        '''
         if "llama" in self.model_id.lower():
             pipe = pipeline(
                 "text-generation",
@@ -55,8 +69,6 @@ class Agent:
                 dtype=torch.bfloat16,
                 device_map=device,
                 max_new_tokens = self.max_new_tokens,
-                #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
-                # cache_dir = "/nfs/gdata/jgrimm/CollaborationLearning/hf_cache/"
             )
             pipe.model.generation_config.pad_token_id = pipe.model.config.eos_token_id[0]
             pipe.tokenizer.pad_token_id = pipe.model.config.eos_token_id[0]
@@ -74,7 +86,6 @@ class Agent:
                 top_p = 0.8
 
             if "32" in self.model_id and "booksum" in self.task:
-            #if "700" in self.model_id: # TODO: remove
                 # https://huggingface.co/Qwen/Qwen3-14B: Do not use greedy decoding but best thinking configuration
                 pipe = pipeline(
                     "text-generation", 
@@ -106,7 +117,6 @@ class Agent:
                     top_p = top_p,
                     top_k = 20,
                     min_p = 0,
-                    #model_kwargs={"quantization_config": BitsAndBytesConfig(load_in_8bit=True)}
                 )
                 logger.run_data["quantized"] = False
                 print("Running without quantization!")
@@ -122,6 +132,7 @@ class Agent:
 
         @warning Huggingface load_dataset cannot load big json files.
         @params
+            logger: ExperimentLog object to log the output file path
             outputs: Huggingface dataset containing the model outputs
             shard_idx: index of the current data shard
         @returns
@@ -137,6 +148,7 @@ class Agent:
         This function saves the model outputs in a Huggingface directory.
 
         @params
+            logger: ExperimentLog object to log the output file path
             outputs: Huggingface dataset containing the model outputs
             shard_idx: index of the current data shard
         @returns
@@ -152,6 +164,7 @@ class Agent:
         This function returns the name of the output file.
 
         @params
+            logger: ExperimentLog object to log the output file path
             shard_idx: index of the current data shard
             hf: True if output path should lead to a huggingface dataset, False for a json file
         @returns
@@ -165,9 +178,7 @@ class Agent:
             if hf == False:
                 os.makedirs(output_path, exist_ok = True)
                 return f"{output_path}/outputs_{run_idx}.jsonl"
-                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}.jsonl"
             else:
-                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}"
                 path = f"{output_path}/outputs_{run_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
@@ -175,12 +186,9 @@ class Agent:
             if hf == False:
                 os.makedirs(f"{output_path}/ckps/", exist_ok = True)
                 return f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}.jsonl"
-                #os.makedirs(f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/", exist_ok = True)
-                #return f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}.jsonl"
             else:
                 path = f"{output_path}/ckps/outputs_{run_idx}_{shard_idx}"
 
-                #path = f"./outputs/{self.framework}/{self.model_name}/{self.split}/ckps/outputs_{self.framework}_{self.model_name}_{self.split}_{self.date}_{shard_idx}"
                 os.makedirs(path, exist_ok = True)
                 return path
 
@@ -192,6 +200,11 @@ class SingleAgent(Agent):
         @params
             model_id: str with the model_id from Huggingface
             split: data split
+            prompt_candidate: str with the prompt candidate to use
+            max_new_tokens: maximum number of tokens to generate
+            structured: boolean indicating whether the output should be structured
+            output_format: str indicating the output format, can be "hypo", "full", "support", or "reject"
+            task: str indicating the task to perform
         """
         self.model_id = model_id
         self.split = split
@@ -222,7 +235,7 @@ class SingleAgent(Agent):
 
     def create_message(self, batch):
         """
-        This method creates a message for a Llama model.
+        This method creates a message for ROCStories.
 
         @params
             batch: batch of instances
@@ -231,23 +244,16 @@ class SingleAgent(Agent):
         """
         batch_messages = []
         for i in range(len(batch["storyid"])):
-            #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
-            message = [] # TODO: Fix box
+            message = []
 
             if self.structured:
                 message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
 
-                #sample_hypo = self.HYPO_FORMAT
-                #for sent_n, sent in enumerate(batch["shuffled_sents"][i], start=1):
                 sample = self.OUTPUT_FORMAT.format(**{f"sentence{n}": sent for n, sent in enumerate(batch["shuffled_sents"][i], start=1)})
                 message.append({"role": "user", "content": self.PROMPT.format(sample = sample, shuffled_sents = batch["shuffled_sents"][i])})
             else:
                 message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
                 message.append({"role": "user", "content": self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i])})
-            #batch_messages.append(self.PROMPT.format(shuffled_sents = batch["shuffled_sents"][i]))
-
-            # if not thinking:
-            #     message.append({"role": "assitant", "content": "<think>\n\n</think>\n\n"})
             
             batch_messages.append(message)
 
@@ -255,7 +261,7 @@ class SingleAgent(Agent):
     
     def create_message_booksum(self, batch):
         """
-        This method creates a message for a Llama model.
+        This method creates a message for CMU Booksum.
 
         @params
             batch: batch of instances
@@ -264,12 +270,9 @@ class SingleAgent(Agent):
         """
         batch_messages = []
         for i in range(len(batch["id"])):
-            #messages.append({"role": "system", "content": self.SYSTEM_PROMPT})
-            message = [] # TODO: Fix box
+            message = [] 
 
             message.append({"role": "system", "content": self.SYSTEM_PROMPT.format(rules = self.RULES)})
-
-            #sample = self.OUTPUT_FORMAT.format(**{f"title{n}": title for n, title in enumerate(batch["titles"][i], start=1)})
             
             input_samples = ""
             for n in range(len(batch["ids"][i])):
@@ -290,6 +293,11 @@ class SingleAgent(Agent):
             logger: experiment logger
             device: cpu/cuda
             batch_size: batch size
+            thinking_budget: fraction of max_new_tokens to be used for thinking tokens
+            variation: whether to use the variation of the dataset
+            start: start index of the dataset
+            end: end index of the dataset
+            version_idx: index of the dataset version
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -297,7 +305,7 @@ class SingleAgent(Agent):
     
         # prepare prompts
         if self.task == "rocstories":
-            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx)
             logger.run_data.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
             logger.run.config.update({"shuffle_file": roc_data.shuffle_file, "batch_size": batch_size})
 
@@ -336,10 +344,6 @@ class SingleAgent(Agent):
                 output_list.append(final_answer)
                 thinking_answer.append(model_answer)
 
-            # output_list = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("</think>")[-1].strip() for conv in outputs for turn in conv]
-            # thinking_answer = [re.sub(r".*Answer:[ \n]*", "", turn["generated_text"]).split("<think>")[-1].strip() for conv in outputs for turn in conv]
-
-            #output_list = [turn["generated_text"].split("Answer:\n")[-1] for conv in outputs for turn in conv]
             full_output_list += output_list
             full_thinking_answer += thinking_answer
 
@@ -356,23 +360,12 @@ class SingleAgent(Agent):
 
             torch.cuda.empty_cache()
 
-
         end = time.time()
         logger.run_data.update({"duration": end - start}) # track processing time
-
-        #print(outputs[0][0]["generated_text"])
-
-        # output_list = [turn["generated_text"] for conv in outputs for turn in conv]
-        # num_missing = len(prompt_data) - len(output_list)
-        # output_list = output_list + [""] * num_missing
 
         # save full output
         output_data = prompt_data.add_column("output", full_output_list)
 
-        # model_name = model_id.split("/")[-1]
-        # os.makedirs(f"./outputs/single/{model_name}/{split}", exist_ok = True)
-        # outfile = f"./outputs/single/{model_name}/{split}/outputs_single_{model_name}_{split}_{str(datetime.now()).replace(" ", "_")}.jsonl"
-        # output_data.to_json(outfile, indent=4)
         outpath = self.save_outputs_hf(logger, output_data)
         logger.run_data.update({"instances": len(full_output_list), "experiment_file": outpath})
         logger.run.log({"instances": len(full_output_list), "experiment_file": outpath})
@@ -380,7 +373,7 @@ class SingleAgent(Agent):
         logger.store_run_data()
 
 class MultiAgent(Agent):
-    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full", task: str = "rocstories", final: bool = True):
+    def __init__(self, model_id: str, split: str, conversation_rounds: int = 2, prompt_candidate: str = "adapted-agashe-2025_str_gemini-final", topology = "chain", max_new_tokens=256, structured = True, output_format = "full", task: str = "rocstories", final: bool = True):
         """
         This class defines multi-agents.
 
@@ -388,6 +381,13 @@ class MultiAgent(Agent):
             model_id: str with the model_id from Huggingface
             split: data split
             conversation_rounds: round of conversations
+            prompt_candidate: str with the prompt candidate to use
+            topology: str with the topology of the conversation, can be "chain", "graph", or "panel"
+            max_new_tokens: maximum number of tokens to generate
+            structured: boolean indicating whether the output should be structured
+            output_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            task: rocstories or cmu_booksum
+            final: boolean indicating whether to use the final answer agent
         """
         self.topology = topology
 
@@ -417,7 +417,6 @@ class MultiAgent(Agent):
             self.NAMES = self.prompt_candidates[prompt_candidate]["names"]
         except:
             self.NAMES = None
-        #self.NAMES = ["Soraya", "Nimrod", "Odett", "Wangui", "Cyrene"]
 
         self.conversation_rounds = conversation_rounds 
 
@@ -456,14 +455,19 @@ class MultiAgent(Agent):
             turn: current turn in the conversation
             roles: dictionary with the player names and sentences
             player_name: name of the current player
+            final: boolean indicating whether to use the final answer agent
+            shuffled_sents: list of shuffled sentences for ROCStories
+            titles: list of titles for CMU Booksum
+            summaries: list of summaries for CMU Booksum
+            init_answer: indicates whether this is the intial answer or a mid-conversation answer
         @returns
             message: list of system and user prompt
         """
         # define agent state
         if self.NAMES:
-            other_players  = [name for name in self.NAMES if name != player_name] # TODO: base
+            other_players  = [name for name in self.NAMES if name != player_name] 
         else:
-            other_players = None # TODO: base
+            other_players = None 
         
         if not final:
             player_sent = ""
@@ -548,7 +552,6 @@ class MultiAgent(Agent):
 
                         sample = "[\n"
                         for idx in range(max_sent_idx):
-                            # TODO: add hypo format
                             sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
 
                             if idx != max_sent_idx -1:
@@ -588,7 +591,7 @@ class MultiAgent(Agent):
 
                         sample = "[\n"
                         for idx in range(max_sent_idx):
-                            sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx]) # TODO: add hypo generation
+                            sample += self.OUTPUT_FORMAT.format(sentence = shuffled_sents[idx])
 
                             if idx != max_sent_idx -1:
                                 sample += ",\n"
@@ -612,7 +615,7 @@ class MultiAgent(Agent):
 
                         sample = "[\n"
                         for idx in range(max_title_idx):
-                            sample += self.OUTPUT_FORMAT.format(title = list(roles.values())[0][0]) # TODO: add hypo generation
+                            sample += self.OUTPUT_FORMAT.format(title = list(roles.values())[0][0])
 
                             if idx != max_title_idx -1:
                                 sample += ",\n"
@@ -690,7 +693,6 @@ class MultiAgent(Agent):
                         }
                     )
                 elif self.structured:
-                    # TODO: Test for Rocstories -> sollte eigl nicht funktionieren, weil kein sample mehr im prompt ist.
                     max_sent_idx = len(shuffled_sents)
 
                     sample = "[\n"
@@ -731,6 +733,9 @@ class MultiAgent(Agent):
             conv_round: iteration in the conversational round
             turn: number of the turn in the conversation
             player_name: name of the current player
+            final: boolean indicating whether to use the final answer agent
+            shuffled_sents: boolean indicating whether to use the shuffled sentences
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         @returns
             dictionary with the prompts for the batch of instances
         """
@@ -768,6 +773,8 @@ class MultiAgent(Agent):
             batch: batch of instances
             outputs: model outputs
             player_name: name of the current player
+            final: boolean indicating whether to use the final answer agent
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         @returns batch: updated batch of instances
         """
         for i, model_out in enumerate(outputs):
@@ -776,7 +783,6 @@ class MultiAgent(Agent):
                     self.gold = get_sent_list(batch, i)
                 else:
                     self.gold = batch["gold_title"][i] # correct, incorrect
-            #shard_inst = shard_data.filter(lambda x: x["storyid"] == batch["storyid"][i])
 
             model_answer = model_out[0]["generated_text"][2]["content"]
 
@@ -789,12 +795,11 @@ class MultiAgent(Agent):
             else:
                 conv_name = player_name
 
-            #batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
             if conv_answer != "":
                 batch["conversation_history"][i] += f"\n{conv_name}: {conv_answer}\n"
 
             if last_hypos != None:
-                batch["last_hypos"][i] = last_hypos.copy() # TODO: reject, support
+                batch["last_hypos"][i] = last_hypos.copy() 
 
             batch["turns"][i].append(model_answer)
             batch["player"][i].append(player_name)
@@ -805,6 +810,18 @@ class MultiAgent(Agent):
         return batch
     
     def create_conv_answer(self, batch, i, model_answer, conv_format = "full", final=False):
+        '''
+        This method creates the conversation answer from the model output.
+
+        @params
+            batch: batch of instances
+            i: index of the instance in the batch
+            model_answer: model output
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            final: boolean indicating whether this is the final answer
+        @returns
+            conv_answer: conversation answer
+        '''
         conv_str = model_answer.split("</think>")[-1].strip()
         conv_str = re.sub(r"Answer:[ \n]*", "", conv_str).strip()
         # remove newlines to make matching possible
@@ -829,16 +846,24 @@ class MultiAgent(Agent):
                 if self.task == "rocstories":
                     return self.formulate_conv_roc(batch, i, conv_list, conv_format)
                 else: 
-                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format) # TODO: support
+                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format) 
             except:
                 if self.task == "rocstories":
                     conv_list = self.extract_conv_dict_rocstories(conv_str)
                     return self.formulate_conv_roc(batch, i, conv_list, conv_format)
                 else:
                     conv_list = self.extract_conv_dict_cmu(conv_str)
-                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format) # TODO: support
+                    return self.formulate_conv_cmu(batch, i, conv_list, conv_format)
                 
     def extract_conv_dict_rocstories(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for ROCStories.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
         conv_list = []
         sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
         
@@ -881,6 +906,14 @@ class MultiAgent(Agent):
         return conv_list
 
     def extract_conv_dict_cmu(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for CMU.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
         conv_list = []
 
         titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
@@ -911,6 +944,14 @@ class MultiAgent(Agent):
         return conv_list
 
     def strip_arg(self, item):
+        '''
+        This method strips the argument, position, or label from the item.
+
+        @params
+            item: string to be stripped
+        @returns
+            item: stripped string
+        '''
         if "argument" in item:
             item = item.strip("argument")
         elif "position" in item:
@@ -920,6 +961,18 @@ class MultiAgent(Agent):
         return item
 
     def formulate_conv_roc(self, batch, idx, conv_list, conv_format):
+        '''
+        This method turns the returned dictionary in the conversation answer for ROCStories.
+
+        @params
+            batch: batch of instances
+            idx: index of the instance in the batch
+            conv_list: list of dictionaries containing the conversation
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+        @returns
+            conv_answer: conversation answer
+            new_last_hypos: dictionary with the last hypotheses for each sentence (reused for support and reject formats)
+        '''
         new_last_hypos = None
         if conv_format in ["reject", "support"]: 
             prev_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy() # remove None
@@ -1006,7 +1059,7 @@ class MultiAgent(Agent):
             elif conv_format == "correct":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["sentence"] in self.gold: # TODO: correct, incorrect
+                if conv_dir["sentence"] in self.gold: 
                     correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     if correct_key in conv_dir.keys():
@@ -1014,7 +1067,7 @@ class MultiAgent(Agent):
             elif conv_format == "incorrect":
                 conv_answer += f"Sentence: '{conv_dir['sentence']}'. {conv_dir['reasoning']}"
                 
-                if conv_dir["sentence"] in self.gold: # TODO: correct, incorrect
+                if conv_dir["sentence"] in self.gold: 
                     correct_key = f"argument_{self.gold.index(conv_dir['sentence'])+1}"
 
                     for k, v in conv_dir.items():
@@ -1026,6 +1079,18 @@ class MultiAgent(Agent):
         return conv_answer, new_last_hypos
 
     def formulate_conv_cmu(self, batch, idx, conv_list, conv_format):
+        '''
+        This method turns the returned dictionary in the conversation answer for CMU.
+
+        @params
+            batch: batch of instances
+            idx: index of the instance in the batch
+            conv_list: list of dictionaries containing the conversation
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+        @returns
+            conv_answer: conversation answer
+            new_last_hypos: dictionary with the last hypotheses for each title (reused for support and reject formats)
+        '''
         new_last_hypos = None
         if conv_format in ["reject", "support"]: 
             prev_last_hypos = {k:v for k,v in batch["last_hypos"][idx].items() if v}.copy() # remove None
@@ -1145,6 +1210,8 @@ class MultiAgent(Agent):
         @params
             batch: batch of shard data instances
             filtered_data: processed instances
+            dataset_len: length of the dataset
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         @returns
             updated batch of instances 
         """
@@ -1157,7 +1224,7 @@ class MultiAgent(Agent):
         for i in range(len(batch[id_name])):
             if batch["stop"][i] == False:
                 if len(filtered_data) != dataset_len:
-                    processed_inst = filtered_data.filter(lambda x: x[id_name] == batch[id_name][i]) # find instance, TODO: make it faster
+                    processed_inst = filtered_data.filter(lambda x: x[id_name] == batch[id_name][i]) # find instance
                 else:
                     processed_inst = filtered_data.select([i])
 
@@ -1165,7 +1232,6 @@ class MultiAgent(Agent):
                     batch["conversation_history"][i] = processed_inst["conversation_history"][0]
                     batch["turns"][i] = processed_inst["turns"][0]
                     batch["player"][i] = processed_inst["player"][0] 
-                    #batch["roles"][i] = processed_inst["roles"][0] # TODO: check whether role exists
                     batch["stop"][i] = processed_inst["stop"][0]
 
                     if self.structured and conv_format in ["reject", "support"]:
@@ -1173,15 +1239,22 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None, version_idx: int = 0):
+    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation: bool = False, final_reorder: bool = True, conv_format: str = "hypo", start: int = 0, end = None, version_idx: int = 0):
         """
-        This function prompts the multi-agent framework.
+        This function prompts the multi-agent framework in a chain topology.
 
         @params
             logger: experiment logger
             device: cpu/cuda
             batch_size: batch size
             thinking_budget: percentage of tokens allowed for "thinking" tokens
+            variation: boolean indicating whether the ROCStories dataset with or witout variations is used
+            thinking_budget: percentage of tokens allowed for "thinking" tokens
+            final_reorder: boolean indicating whether to use the final answer agent for reordering
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            start: start index of the dataset
+            end: end index of the dataset
+            version_idx: index of the ROCStories dataset version
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1227,12 +1300,6 @@ class MultiAgent(Agent):
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
-            # single processing
-            # outputs = shard_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size)
-            # self.save_outputs_hf(outputs, shard_idx=shard_idx)
-
-            # full_output_list += outputs["output"]
-
             # batch processing
             # add conversation to data
             shard_data = shard_data.add_column("stop", [False]*len(shard_data))
@@ -1242,14 +1309,14 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             shard_data = shard_data.map(self.define_roles, batched=True)
 
-            if conv_format in ["reject", "support"]: # TODO: cmu support
+            if conv_format in ["reject", "support"]: 
                 shard_data = shard_data.add_column("last_hypos", [dict()]*len(shard_data))
 
             #filtered_data = shard_data
             conv_round = 0
             while conv_round < self.conversation_rounds:
                 turn = 0
-                while turn < (self.num_agents-1): # TODO: base
+                while turn < (self.num_agents-1):
                     # filter out early stopping
                     if self.task == "rocstories":
                         filtered_data = shard_data.filter(lambda batch: [batch["stop"][i] == False for i in range(len(batch["storyid"]))], batched = True)
@@ -1258,9 +1325,9 @@ class MultiAgent(Agent):
 
                     if len(filtered_data) > 0:
                         if self.NAMES:
-                            player_name = self.NAMES[turn] # TODO: base
+                            player_name = self.NAMES[turn]
                         else:
-                            player_name = f"Player {turn +1}" # TODO: base
+                            player_name = f"Player {turn +1}" 
                         
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
 
@@ -1275,32 +1342,18 @@ class MultiAgent(Agent):
 
                         shard_data = shard_data.map(lambda batch: self.update_shard(batch, filtered_data, len(shard_data), conv_format), batched = True)
 
-                        # if processor:
-                        #     processor.tokens_generated = 0 # allow thinking for the next answer
                         torch.cuda.empty_cache()
                     else:
                         # stop when all conversations have been stopped by a model
-                        turn = self.num_agents-1 # TODO: base
+                        turn = self.num_agents-1
                         conv_round = self.conversation_rounds
-
-                    # shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name), batched = True)
-
-                    # # prompt 
-                    # turn_outputs = tqdm([out for out in pipe(
-                    #         list(shard_data["prompt"]),
-                    #         max_new_tokens=256,
-                    #         batch_size = batch_size
-                    #     )], desc = "Processing prompts", total = len(shard_data["start_prompt"]))
-
-                    # # add model answer to conversation history
-                    # shard_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name))
 
                     turn += 1
                 conv_round += 1
             
             # get final answer
             if self.use_final:
-                shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format=conv_format) # TODO: base
+                shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format=conv_format) 
 
             # save ouput
             outpath = self.save_outputs_hf(logger, outputs=shard_data, shard_idx=shard_idx)
@@ -1319,22 +1372,25 @@ class MultiAgent(Agent):
         end = time.time()
         logger.run_data.update({"duration": end - start})
 
-        #output_data = prompt_data.add_column("output", full_output_list)
-        #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
-    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: int = 0, end = None):
+    def prompt_panel(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation: bool = False, final_reorder: bool = True, conv_format: str = "hypo", start: int = 0, end = None):
         """
-        This function prompts the multi-agent framework.
+        This function prompts the multi-agent framework in a star/panel topology.
 
         @params
             logger: experiment logger
             device: cpu/cuda
             batch_size: batch size
             thinking_budget: percentage of tokens allowed for "thinking" tokens
+            variation: boolean indicating whether the ROCStories dataset with or witout variations is used
+            final_reorder: boolean indicating whether to use the final answer agent with complete information
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            start: start index of the dataset
+            end: end index of the dataset
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1364,12 +1420,6 @@ class MultiAgent(Agent):
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
-            # single processing
-            # outputs = shard_data.map(lambda batch: self.play_games(batch, pipe), batched=True, batch_size=batch_size)
-            # self.save_outputs_hf(outputs, shard_idx=shard_idx)
-
-            # full_output_list += outputs["output"]
-
             # batch processing
             # add conversation to data
             shard_data = shard_data.add_column("stop", [False]*len(shard_data))
@@ -1378,10 +1428,10 @@ class MultiAgent(Agent):
             shard_data = shard_data.add_column("player", [[]]*len(shard_data))
             shard_data = shard_data.add_column("roles", [dict()]*len(shard_data))
             shard_data = shard_data.map(self.define_roles, batched=True)
-            #filtered_data = shard_data
+
             turn = 0
             while turn < 5:
-                player_name = self.NAMES[turn] # TODO: base
+                player_name = self.NAMES[turn]
                 
                 filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, 0, 0, player_name, final = False, shuffled_sents = False, conv_format = conv_format), batched = True)
 
@@ -1399,7 +1449,6 @@ class MultiAgent(Agent):
                 turn += 1
             
             # get final answer
-            # TODO: base
             shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
@@ -1419,22 +1468,25 @@ class MultiAgent(Agent):
         end = time.time()
         logger.run_data.update({"duration": end - start})
 
-        #output_data = prompt_data.add_column("output", full_output_list)
-        #outpath = self.save_outputs_hf(output_data)
         outpath = self.save_outputs_hf(logger, full_output)
         logger.run_data.update({"experiment_file": outpath})
         logger.run.config.update({"experiment_file": outpath}, allow_val_change=True)
         logger.store_run_data()
 
-    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, final_reorder = True, conv_format: str = "hypo", start: str = 0, end = None):
+    def prompt_graph(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation: bool = False, final_reorder = True, conv_format: str = "hypo", start: str = 0, end = None):
         """
-        This function prompts the multi-agent framework.
+        This function prompts the multi-agent framework in a graph/layered topology.
 
         @params
             logger: experiment logger
             device: cpu/cuda
             batch_size: batch size
             thinking_budget: percentage of tokens allowed for "thinking" tokens
+            variation: boolean indicating whether the ROCStories dataset with or witout variations is used
+            final_reorder: boolean indicating whether to use the final answer agent with complete information
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            start: start index of the dataset
+            end: end index of the dataset
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1459,7 +1511,6 @@ class MultiAgent(Agent):
         start = time.time()
         # process shards
         num_shards = int((len(prompt_data)/300))+1
-        #num_shards = int((len(prompt_data)/1))+1
         processed_inst = 0
         
         for shard_idx in tqdm(range(num_shards), desc = "Processing shards"):
@@ -1478,7 +1529,7 @@ class MultiAgent(Agent):
             while conv_round < self.conversation_rounds:
                 turn = 0
                 while turn < 5:
-                    player_name = self.NAMES[turn] # TODO: base
+                    player_name = self.NAMES[turn]
                     
                     filtered_data = shard_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = True, conv_format = conv_format), batched = True)
 
@@ -1498,7 +1549,6 @@ class MultiAgent(Agent):
                 conv_round += 1
             
             # get final answer
-            # TODO: base
             shard_data = self.get_final_answer(shard_data, pipe, batch_size, shuffled_sents = final_reorder, conv_format = conv_format)
 
             # save ouput
@@ -1524,23 +1574,43 @@ class MultiAgent(Agent):
         logger.store_run_data()
 
     def define_roles(self, batch):
+        '''
+        This method defines the roles of the players in the conversation and assigns the individual information pieces.
+
+        @params
+            batch: batch of instances
+        @returns
+            batch: batch of instances with roles defined
+        '''
         if self.task == "rocstories":
             for i in range(len(batch["storyid"])):
                 if self.NAMES:
-                    batch["roles"][i] = dict(zip(self.NAMES[:-1], batch["shuffled_sents"][i])) # TODO: base
+                    batch["roles"][i] = dict(zip(self.NAMES[:-1], batch["shuffled_sents"][i])) 
                 else:
                     batch["roles"][i] = dict(zip(["Player 1", "Player 2", "Player 3", "Player 4", "Player 5"], batch["shuffled_sents"][i]))
         else:
             for i in range(len(batch["id"])):
                 if self.NAMES:
-                    batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i])))) # TODO: base
+                    batch["roles"][i] = dict(zip(self.NAMES[:-1], list(zip(batch["titles"][i], batch["summaries"][i])))) 
                 else:
-                    batch["roles"][i] = dict(zip(["Player 1", "Player 2", "Player 3"], list(zip(batch["titles"][i], batch["summaries"][i])))) # TODO: base
+                    batch["roles"][i] = dict(zip(["Player 1", "Player 2", "Player 3"], list(zip(batch["titles"][i], batch["summaries"][i]))))
         
         return batch
 
 
     def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
+        '''
+        This method prompts the final answer agent to get the final answer for each instance in the shard data.
+
+        @params
+            shard_data: shard of instances
+            pipe: pipeline for prompting
+            batch_size: batch size for prompting
+            shuffled_sents: complete information or False
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+        @returns
+            shard_data: shard of instances with final answers
+        '''
         if self.NAMES:
             player_name = self.NAMES[-1]
         else:
@@ -1557,9 +1627,9 @@ class MultiAgent(Agent):
         
         return shard_data
 
-    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final = True, variation = False, conv_format = "hypo"):
+    def prompt_final_only(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, conv_file: str = "outputs/multi/Qwen3-32B/dev/outputs_88", conv_final: bool = True, variation: bool = False, conv_format: str = "hypo"):
         """
-        This function prompts the multi-agent framework.
+        This method creates the final answer for a given conversation history.
 
         @params
             logger: experiment logger
@@ -1567,6 +1637,9 @@ class MultiAgent(Agent):
             batch_size: batch size
             thinking_budget: percentage of tokens allowed for "thinking" tokens
             conv_final: whether conv_file contains conversations with a final answer agent
+            conv_file: path to the conversation history file
+            variation: boolean indicating whether the ROCStories dataset with or witout variations is used
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1627,6 +1700,14 @@ class MultiAgent(Agent):
         logger.store_run_data()
 
     def remove_final(self, batch):
+        '''
+        Remove the final turn from each conversation in the batch. Used to create the conversation history without the final answer agent's turn.
+
+        @params
+            batch: batch of instances
+        @returns
+            batch: batch of instances with final turn removed
+        '''
         for i in range(len(batch["storyid"])):
             final_turn = batch["turns"][i][-1].split("</think>")[-1].strip()
             final_turn = re.sub(r"Answer:[ \n]*", "", final_turn).strip()
@@ -1640,23 +1721,42 @@ class MultiAgent(Agent):
 
         return batch
 
-    def get_other_conv(self, players, turns, player_turn, conv_round, conv_format = "full"):
+    def get_other_conv(self, players: list, turns: list, player_turn: int, conv_round: int, conv_format: str = "full"):
+        '''
+        This method returns the conversation history of all players except the current player.
+
+        @params
+            players: list of players in the conversation
+            turns: list of turns in the conversation
+            player_turn: index of the current player's turn
+            conv_round: index of the current conversation round
+            conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+        @returns
+            init_turn: the current player's turn
+            other_conv: the conversation history of all other players
+        '''
         turn_idx = conv_round * len(turns) - len(turns) + player_turn # last guess
         conv_idx = conv_round * len(turns) 
         player = players[turn_idx]
 
         init_turn = self.create_conv_answer(turns[turn_idx], conv_format)
-        #init_turn = self.remove_thinking(turns[turn_idx])
         
         other_conv = ""
         for i in range(len(turns[:conv_idx])):
             if player != players[i]: # remove all player turns
-                #other_conv += f"\n{players[i]}: {self.remove_thinking(turns[i])}\n"
                 other_conv += f"\n{players[i]}: {self.create_conv_answer(turns[i])}\n"
 
         return init_turn, other_conv
     
     def remove_thinking(self, answer):
+        '''
+        This method removes the "thinking" part of the answer and returns only the final answer.
+
+        @params
+            answer: the answer string from the model
+        @returns
+            cleaned_answer: the final answer string without the "thinking" part
+        '''
         cleaned_answer = answer.split("</think>")[-1].strip()
         cleaned_answer = re.sub(r"Answer:[ \n]*", "", cleaned_answer).strip()
 
@@ -1665,7 +1765,7 @@ class MultiAgent(Agent):
 
     
 if __name__ == "__main__":
-    roc_data = ROCStories(split = "dev") # TODO: ADD version_idx
+    roc_data = ROCStories(split = "dev")
     multi = MultiAgent(model_id = "Qwen/Qwen3-0.6B", split = "dev")
 
     prompt_data = load_from_disk("outputs/multi/Qwen3-32B/dev/outputs_88")

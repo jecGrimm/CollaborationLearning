@@ -1,0 +1,2 @@
+;first_exp_file;first_setup;first_mean;second_exp_file;second_setup;second_mean;Welch's t-test;p-value;significant
+0;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_308;single;0.5518;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_344;correct;0.7534;-13.955856285886561;1.3218116567265067e-42;True

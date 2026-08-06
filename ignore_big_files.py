@@ -1,3 +1,4 @@
+# Source: https://github.com/EmptyDeck/Large-File-Ignorer-for-Github/blob/main/ignore_big_files.py
 import os
 import sys
 

@@ -1,101 +1,0 @@
-Assigning run_idx: 165
-
-Batch size: 1
-Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:03<00:53,  3.36s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:06<00:50,  3.37s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:10<00:46,  3.35s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:13<00:42,  3.29s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:16<00:38,  3.19s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:19<00:34,  3.10s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:22<00:30,  3.03s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:25<00:26,  3.00s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:27<00:23,  2.95s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:30<00:20,  2.93s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:33<00:17,  2.90s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:36<00:14,  2.87s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:39<00:11,  2.84s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:41<00:08,  2.82s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:44<00:05,  2.80s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [00:47<00:02,  2.79s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:49<00:00,  2.61s/it]Loading checkpoint shards: 100%|██████████| 17/17 [00:49<00:00,  2.92s/it]
-Device set to use cuda:0
-`torch_dtype` attribute is deprecated. Use `dtype` instead!
-Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 14241.35 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 33886.25 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9302.65 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   8%|▊         | 19/250 [00:00<00:01, 189.82it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1956.94it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 5080.97 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 150.06 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 149.66 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 47906.43 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11183.26 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   4%|▍         | 11/250 [00:00<00:02, 109.87it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1685.97it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 3670.64 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 147.90 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 147.52 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 49024.08 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 4734.36 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:26,  9.33it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1387.78it/s]
-Map: 100%|██████████| 250/250 [00:00<00:00, 2569.06 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 142.12 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 141.76 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 48816.39 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 9342.85 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:25,  9.86it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1270.98it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 2104.26 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 2005.31 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 128.68 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 128.37 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 49249.73 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 7928.20 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:28,  8.76it/s][A
-Processing prompts:  83%|████████▎ | 207/250 [00:00<00:00, 1148.78it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 1066.12it/s]
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1641.20 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1276.70 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 146.51 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 146.08 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 47382.56 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3439.00 examples/s]
-
-Processing prompts:   0%|          | 0/250 [00:00<?, ?it/s][A
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
-Processing prompts:   0%|          | 1/250 [00:00<00:38,  6.47it/s][A
-Processing prompts:  86%|████████▋ | 216/250 [00:00<00:00, 1036.30it/s][AProcessing prompts: 100%|██████████| 250/250 [00:00<00:00, 922.96it/s] 
-
-
-Map: 100%|██████████| 250/250 [00:00<00:00, 1291.88 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1024.00 examples/s]
-
-Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
-Map: 100%|██████████| 250/250 [00:01<00:00, 145.30 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 141.76 examples/s]
-
-Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 44444.37 examples/s]
-
-Map:   0%|          | 0/245 [00:00<?, ? examples/s][AMap: 100%|██████████| 245/245 [00:00<00:00, 4028.97 examples/s]
-srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
-slurmstepd: error: *** STEP 5444601.0 ON lrz-hgx-h100-015 CANCELLED AT 2026-01-16T12:05:23 ***
-slurmstepd: error: *** JOB 5444601 ON lrz-hgx-h100-015 CANCELLED AT 2026-01-16T12:05:23 ***

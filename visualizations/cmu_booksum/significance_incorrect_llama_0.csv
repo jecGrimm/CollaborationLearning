@@ -1,0 +1,2 @@
+;first_setup;first_mean;second_setup;second_mean;Welch's t-test;p-value;significant
+0;incorrect;0.305;correct;0.52;-10.00230434371844;2.5838293456911202e-23;True

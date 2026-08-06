@@ -1,0 +1,28 @@
+{
+  "_data_files": [
+    {
+      "filename": "data-00000-of-00001.arrow"
+    }
+  ],
+  "_fingerprint": "2567d4db0040bc2d",
+  "_format_columns": [
+    "id",
+    "title",
+    "genres",
+    "summary",
+    "ids",
+    "gold_title",
+    "titles",
+    "same_genre",
+    "summaries",
+    "stop",
+    "conversation_history",
+    "turns",
+    "player",
+    "roles"
+  ],
+  "_format_kwargs": {},
+  "_format_type": null,
+  "_output_all_columns": false,
+  "_split": null
+}

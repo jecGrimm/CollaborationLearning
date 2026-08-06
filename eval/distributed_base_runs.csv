@@ -1,11 +1,15 @@
-model;framework;task;output
-Random;random;ROCStories;outputs/random/rocstories/test
-Llama-3.1-8B-Instruct;Single;ROCStories;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253
-Llama-3.1-8B-Instruct;MAS;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_257
-Qwen3-32B;Single;ROCStories;outputs/single/Qwen3-32B/rocstories/test/outputs_254
-Qwen3-32B;MAS;ROCStories;outputs/multi/Qwen3-32B/test/outputs_258_259
-Random;random;CMU Booksum;outputs/random/cmu_booksum/test
-Llama-3.1-8B-Instruct;Single;CMU Booksum;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264
-Llama-3.1-8B-Instruct;MAS;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_265
-Qwen3-32B;Single;CMU Booksum;outputs/single/Qwen3-32B/booksum/test/outputs_269
-Qwen3-32B;MAS;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268
+model;framework;task;output_0;output_1;output_2
+Random;random;ROCStories;outputs/random/rocstories/test;outputs/random/rocstories/test_1;outputs/random/rocstories/test_2
+Llama-3.1-8B-Instruct;Single;ROCStories;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_253;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_308;outputs/single/Llama-3.1-8B-Instruct/rocstories/test/outputs_309
+Llama-3.1-8B-Instruct;Base;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_322;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_323;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_324
+Llama-3.1-8B-Instruct;Improved;ROCStories;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_257;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_310;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_311
+Qwen3-32B;Single;ROCStories;outputs/single/Qwen3-32B/rocstories/test/outputs_254;outputs/single/Qwen3-32B/rocstories/test/outputs_359;outputs/single/Qwen3-32B/rocstories/test/outputs_360
+Qwen3-32B;Base;ROCStories;outputs/multi/Qwen3-32B/rocstories/test/outputs_361;outputs/multi/Qwen3-32B/rocstories/test/outputs_362;outputs/multi/Qwen3-32B/rocstories/test/outputs_363
+Qwen3-32B;Improved;ROCStories;outputs/multi/Qwen3-32B/test/outputs_258_259;outputs/multi/Qwen3-32B/rocstories/test/outputs_364;outputs/multi/Qwen3-32B/rocstories/test/outputs_365
+Random;random;CMU Booksum;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test
+Llama-3.1-8B-Instruct;Single;CMU Booksum;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_313
+Llama-3.1-8B-Instruct;Base;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_325;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328
+Llama-3.1-8B-Instruct;Improved;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_267;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_315
+Qwen3-32B;Single;CMU Booksum;outputs/single/Qwen3-32B/booksum/test/outputs_269;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_366_0_1_371;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_366_0_1_371
+Qwen3-32B;Base;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268
+Qwen3-32B;Improved;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268

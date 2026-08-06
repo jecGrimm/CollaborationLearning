@@ -1,0 +1,5 @@
+model;framework;task;output_0;output_1;output_2
+Random;Random;StoryCon;outputs/random/rocstories/test;outputs/random/rocstories/test_1;outputs/random/rocstories/test_2
+Qwen3-32B;Single;StoryCon;outputs/single/Qwen3-32B/rocstories/test/outputs_254;outputs/single/Qwen3-32B/rocstories/test/outputs_359;outputs/single/Qwen3-32B/rocstories/test/outputs_360
+Qwen3-32B;Base;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_361;outputs/multi/Qwen3-32B/rocstories/test/outputs_362;outputs/multi/Qwen3-32B/rocstories/test/outputs_363
+Qwen3-32B;Improved;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_258_259;outputs/multi/Qwen3-32B/rocstories/test/outputs_364;outputs/multi/Qwen3-32B/rocstories/test/outputs_365

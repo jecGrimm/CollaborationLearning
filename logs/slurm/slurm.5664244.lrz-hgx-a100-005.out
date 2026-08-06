@@ -1,71 +1,0 @@
-wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
-wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
-wandb: Tracking run with wandb version 0.27.0
-wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260604_194844-6mhlcio9
-wandb: Run `wandb offline` to turn off syncing.
-wandb: Syncing run graceful-dragon-77
-wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
-wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/6mhlcio9
-wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
-True
-wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
-Current run_idx: 313
-
-Batch size: 8
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:06<00:18,  6.32s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:12<00:12,  6.34s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:18<00:06,  6.20s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:20<00:00,  4.38s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:20<00:00,  5.08s/it]
-Map:   0%|          | 0/1000 [00:00<?, ? examples/s]Map: 100%|██████████| 1000/1000 [00:00<00:00, 3238.58 examples/s]Map: 100%|██████████| 1000/1000 [00:00<00:00, 2747.86 examples/s]
-Processing shards:   0%|          | 0/4 [00:00<?, ?it/s]
-Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 560735.83it/s]
-Current run_idx: 313
-
-
-Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
-Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 16950.52 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 16573.82 examples/s]
-Current run_idx: 313
-
-Processing shards:  25%|██▌       | 1/4 [04:31<13:34, 271.35s/it]
-Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 189171.21it/s]
-Current run_idx: 313
-
-
-Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
-Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17585.89 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17149.57 examples/s]
-Current run_idx: 313
-
-Processing shards:  50%|█████     | 2/4 [09:06<09:07, 273.58s/it]
-Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 261164.63it/s]
-Current run_idx: 313
-
-
-Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
-Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17851.14 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17434.13 examples/s]
-Current run_idx: 313
-
-Processing shards:  75%|███████▌  | 3/4 [12:38<04:05, 245.58s/it]
-Processing batches:   0%|          | 0/250 [00:00<?, ?it/s][AProcessing batches: 100%|██████████| 250/250 [00:00<00:00, 222108.88it/s]
-Current run_idx: 313
-
-
-Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
-Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17464.91 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 17048.91 examples/s]
-Current run_idx: 313
-
-Processing shards: 100%|██████████| 4/4 [15:52<00:00, 225.02s/it]Processing shards: 100%|██████████| 4/4 [15:52<00:00, 238.06s/it]
-Current run_idx: 313
-
-Saving the dataset (0/1 shards):   0%|          | 0/1000 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 1000/1000 [00:00<00:00, 76963.94 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 1000/1000 [00:00<00:00, 74766.11 examples/s]
-Current run_idx: 313
-
-Current run_idx: 313
-
-Map:   0%|          | 0/1000 [00:00<?, ? examples/s]Map: 100%|██████████| 1000/1000 [00:00<00:00, 20734.73 examples/s]
-Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00, 170.13ba/s]
-313: 0.38
-zero percentage: 0.0
-double percentage: 0.0
-wrong format: 0.0
-Current run_idx: 313
-
-[1;34mwandb[0m: 
-[1;34mwandb[0m: 🚀 View run [33mgraceful-dragon-77[0m at: [34mhttps://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/6mhlcio9[0m
-[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20260604_194844-6mhlcio9/logs[0m
