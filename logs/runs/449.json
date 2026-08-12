@@ -3,7 +3,7 @@
     "version_idx": 0,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/rocstories/test/ckps/outputs_449_0",
+    "experiment_file": "./outputs/multi/Qwen3-32B/rocstories/test/outputs_449",
     "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests hypo with Qwen32-8b.",
@@ -160,5 +160,10 @@
     "top_k": 20,
     "min_p": 0,
     "shuffle_file": "./data/rocstories/ROCStories_shuffled_test.jsonl",
-    "instances": 250
+    "instances": 1000,
+    "duration": 179215.11092281342,
+    "mean_acc": 0.7178,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.001
 }
