@@ -4,7 +4,7 @@
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 4,
+    "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests hypo with Qwen32-8b.",
     "candidate": "roc_structured_chain",
@@ -20,7 +20,7 @@
     "structured": "True",
     "output_format": "full",
     "conv_format": "full",
-    "start": 0,
+    "start": 750,
     "end": 1000,
-    "run_idx": 457
+    "run_idx": 469
 }
