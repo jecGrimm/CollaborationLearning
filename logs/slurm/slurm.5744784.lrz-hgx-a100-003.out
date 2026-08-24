@@ -1,0 +1,331 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
+wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.27.0
+wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260814_113753-gat6zlwp
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run noble-sky-775
+wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
+wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/gat6zlwp
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+True
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Current run_idx: 457
+
+Batch size: 4
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:04<01:19,  4.97s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:08<01:04,  4.29s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:12<00:56,  4.06s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:16<00:51,  3.94s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:20<00:46,  3.88s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:23<00:42,  3.84s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:27<00:38,  3.82s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [00:31<00:34,  3.80s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [00:35<00:30,  3.79s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [00:38<00:26,  3.78s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [00:42<00:22,  3.77s/it]Loading checkpoint shards:  71%|███████   | 12/17 [00:46<00:18,  3.77s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [00:50<00:15,  3.76s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [00:53<00:11,  3.76s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [00:57<00:07,  3.76s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [01:01<00:03,  3.76s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:04<00:00,  3.52s/it]Loading checkpoint shards: 100%|██████████| 17/17 [01:04<00:00,  3.79s/it]
+Running without quantization!
+Processing shards:   0%|          | 0/4 [00:00<?, ?it/s]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2435.74 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 24014.11 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 11620.63 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/250 [00:00<?, ?it/s][AParameter 'function'=<function MultiAgent.prompt_chain.<locals>.<lambda> at 0x7d66fadf5c60> of the transform datasets.arrow_dataset.Dataset._map_single couldn't be hashed properly, a random hash was used instead. Make sure your transforms and parameters are serializable with pickle or dill for the dataset fingerprinting and caching to work. If you reuse this transform, the caching mechanism will consider it to be different from the previous calls and recompute everything. This warning is only shown once. Subsequent hashing failures won't be shown.
+
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:  86%|████████▌ | 214/250 [00:00<00:00, 2138.58it/s][ARound 0, Turn: 0: 100%|██████████| 250/250 [00:00<00:00, 2379.02it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 5012.27 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 188.36 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 187.62 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 38239.89 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 10088.77 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:  46%|████▌     | 114/250 [00:00<00:00, 1139.03it/s][ARound 0, Turn: 1: 100%|██████████| 250/250 [00:00<00:00, 1889.20it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 3087.46 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 187.02 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 186.31 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 41780.93 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8896.94 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   0%|          | 1/250 [00:00<00:32,  7.76it/s][A
+Round 0, Turn: 2: 100%|██████████| 250/250 [00:00<00:00, 1311.15it/s][ARound 0, Turn: 2: 100%|██████████| 250/250 [00:00<00:00, 1089.68it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1574.71 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1255.43 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 182.75 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 181.93 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 45994.21 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2693.93 examples/s]
+
+Round 0, Turn: 3:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 3:   0%|          | 1/250 [00:00<00:31,  7.79it/s][A
+Round 0, Turn: 3:  78%|███████▊  | 195/250 [00:00<00:00, 1024.52it/s][ARound 0, Turn: 3: 100%|██████████| 250/250 [00:00<00:00, 974.37it/s] 
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1250.22 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 990.47 examples/s] 
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 177.70 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 169.63 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 30864.98 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3015.20 examples/s]
+
+Round 0, Turn: 4:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 4:   0%|          | 1/250 [00:00<00:52,  4.76it/s][A
+Round 0, Turn: 4:  65%|██████▌   | 163/250 [00:00<00:00, 656.94it/s][ARound 0, Turn: 4: 100%|██████████| 250/250 [00:00<00:00, 696.06it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 753.52 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 654.93 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 181.90 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 173.03 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 31696.27 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2103.46 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   0%|          | 1/250 [00:00<01:00,  4.10it/s][A
+Round 1, Turn: 0:  70%|██████▉   | 174/250 [00:00<00:00, 640.97it/s][ARound 1, Turn: 0: 100%|██████████| 250/250 [00:00<00:00, 647.53it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 643.70 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 620.62 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:02<00:00, 124.04 examples/s][AMap: 100%|██████████| 250/250 [00:02<00:00, 123.42 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 36170.27 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1587.20 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1426.04 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   0%|          | 1/250 [00:00<00:59,  4.19it/s][A
+Round 1, Turn: 1:  73%|███████▎  | 182/250 [00:00<00:00, 679.35it/s][ARound 1, Turn: 1: 100%|██████████| 250/250 [00:00<00:00, 662.35it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 537.99 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 521.28 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 168.09 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 166.45 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 31766.37 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2314.70 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2035.32 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   0%|          | 1/250 [00:00<01:01,  4.02it/s][A
+Round 1, Turn: 2:  66%|██████▋   | 166/250 [00:00<00:00, 603.24it/s][ARound 1, Turn: 2: 100%|██████████| 250/250 [00:00<00:00, 631.68it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 598.53 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 579.94 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 170.54 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 169.30 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 33953.18 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2096.81 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1843.89 examples/s]
+
+Round 1, Turn: 3:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 3:   0%|          | 1/250 [00:00<01:12,  3.41it/s][A
+Round 1, Turn: 3:  71%|███████   | 177/250 [00:00<00:00, 578.17it/s][ARound 1, Turn: 3: 100%|██████████| 250/250 [00:00<00:00, 576.50it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 550.16 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 534.10 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 169.92 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 168.34 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 36104.26 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1977.13 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1760.63 examples/s]
+
+Round 1, Turn: 4:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 4:   0%|          | 1/250 [00:00<01:08,  3.64it/s][A
+Round 1, Turn: 4:  72%|███████▏  | 179/250 [00:00<00:00, 611.02it/s][ARound 1, Turn: 4: 100%|██████████| 250/250 [00:00<00:00, 604.58it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 576.40 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 557.17 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 166.88 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 165.32 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1878.90 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1781.69 examples/s]
+
+Generating final answers:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Generating final answers:   0%|          | 1/250 [00:00<00:27,  8.95it/s][AGenerating final answers: 100%|██████████| 250/250 [00:00<00:00, 1877.43it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1330.68 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1241.41 examples/s]
+Current run_idx: 457
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (0/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2144.23 examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2144.23 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2104.98 examples/s]
+Current run_idx: 457
+
+Processing shards:  25%|██▌       | 1/4 [27:33:05<82:39:17, 99185.94s/it]
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 6664.31 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 27208.18 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 7979.91 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   0%|          | 1/250 [00:00<00:25,  9.91it/s][ARound 0, Turn: 0: 100%|██████████| 250/250 [00:00<00:00, 1829.12it/s]
+Map: 100%|██████████| 250/250 [00:00<00:00, 4306.39 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 180.58 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 178.89 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 24277.09 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 7194.40 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   0%|          | 1/250 [00:00<00:31,  7.85it/s][ARound 0, Turn: 1: 100%|██████████| 250/250 [00:00<00:00, 1212.43it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1949.89 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1836.96 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 181.29 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 180.58 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 38350.38 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 8011.19 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   0%|          | 1/250 [00:00<00:40,  6.12it/s][A
+Round 0, Turn: 2:  94%|█████████▍| 236/250 [00:00<00:00, 1098.49it/s][ARound 0, Turn: 2: 100%|██████████| 250/250 [00:00<00:00, 927.89it/s] 
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1378.29 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1087.15 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 180.78 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 180.02 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 37035.14 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2735.64 examples/s]
+
+Round 0, Turn: 3:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 3:   0%|          | 1/250 [00:00<00:43,  5.71it/s][A
+Round 0, Turn: 3:  76%|███████▌  | 189/250 [00:00<00:00, 845.84it/s][ARound 0, Turn: 3: 100%|██████████| 250/250 [00:00<00:00, 813.79it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1088.81 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 886.12 examples/s] 
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 177.44 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 170.39 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 33041.63 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 3011.97 examples/s]
+
+Round 0, Turn: 4:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 4:   0%|          | 1/250 [00:00<00:56,  4.44it/s][A
+Round 0, Turn: 4:  62%|██████▏   | 156/250 [00:00<00:00, 603.67it/s][ARound 0, Turn: 4: 100%|██████████| 250/250 [00:00<00:00, 659.85it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 781.31 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 682.26 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 179.74 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 174.69 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 30330.21 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2720.29 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   0%|          | 1/250 [00:00<00:56,  4.42it/s][A
+Round 1, Turn: 0:  70%|███████   | 175/250 [00:00<00:00, 675.23it/s][ARound 1, Turn: 0: 100%|██████████| 250/250 [00:00<00:00, 677.45it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 504.17 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 489.83 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 175.69 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 174.46 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 34853.78 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2375.00 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   0%|          | 1/250 [00:00<00:37,  6.58it/s][A
+Round 1, Turn: 1:  68%|██████▊   | 170/250 [00:00<00:00, 821.22it/s][ARound 1, Turn: 1: 100%|██████████| 250/250 [00:00<00:00, 842.22it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 831.13 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 793.81 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 173.94 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 172.32 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 31960.99 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2422.95 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2102.13 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   0%|          | 1/250 [00:00<00:40,  6.11it/s][A
+Round 1, Turn: 2:  71%|███████   | 177/250 [00:00<00:00, 822.43it/s][ARound 1, Turn: 2: 100%|██████████| 250/250 [00:00<00:00, 819.57it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 827.86 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 794.93 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 173.05 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 171.79 examples/s]
+
+Filter:   0%|          | 0/250 [00:00<?, ? examples/s][AFilter: 100%|██████████| 250/250 [00:00<00:00, 38608.79 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 2303.71 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 2004.84 examples/s]
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd: error: *** STEP 5744784.0 ON lrz-hgx-a100-003 CANCELLED AT 2026-08-16T11:36:31 DUE TO TIME LIMIT ***
+slurmstepd: error: *** JOB 5744784 ON lrz-hgx-a100-003 CANCELLED AT 2026-08-16T11:36:31 DUE TO TIME LIMIT ***
