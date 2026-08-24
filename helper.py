@@ -107,9 +107,9 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    conv_output = "outputs/multi/Qwen3-32B/rocstories/test/outputs_451"
-    conv_output1 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_452"
-    outfile = "outputs/multi/Qwen3-32B/rocstories/test/outputs_451_452"
+    conv_output = "outputs/multi/Qwen3-32B/rocstories/test/ckps/outputs_462_0"
+    conv_output1 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_465"
+    outfile = "outputs/multi/Qwen3-32B/rocstories/test/outputs_462_465"
 
     #inspect_instances(conv_output, rand_idx=2, outfile=outfile)
 
