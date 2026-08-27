@@ -163,3 +163,53 @@ Running without quantization!
 
 Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
 Map: 100%|██████████| 250/250 [00:00<00:00, 2166.27 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1930.23 examples/s]
+
+Round 1, Turn: 4:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 4:   0%|          | 1/250 [00:00<01:13,  3.40it/s][A
+Round 1, Turn: 4:  74%|███████▎  | 184/250 [00:00<00:00, 599.72it/s][ARound 1, Turn: 4: 100%|██████████| 250/250 [00:00<00:00, 580.63it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 515.63 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 504.99 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:01<00:00, 149.51 examples/s][AMap: 100%|██████████| 250/250 [00:01<00:00, 148.26 examples/s]
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 250/250 [00:00<00:00, 1473.93 examples/s][AMap: 100%|██████████| 250/250 [00:00<00:00, 1402.00 examples/s]
+
+Generating final answers:   0%|          | 0/250 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s][A[A
+Generating final answers:  21%|██        | 52/250 [00:00<00:00, 519.79it/s][AGenerating final answers: 100%|██████████| 250/250 [00:00<00:00, 2122.12it/s]
+
+
+Map: 100%|██████████| 250/250 [00:00<00:00, 1564.57 examples/s][A[AMap: 100%|██████████| 250/250 [00:00<00:00, 1436.21 examples/s]
+Current run_idx: 469
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s][A
+Saving the dataset (0/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2460.85 examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2460.85 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 2419.85 examples/s]
+Current run_idx: 469
+
+Processing shards: 100%|██████████| 1/1 [36:54:33<00:00, 132873.63s/it]Processing shards: 100%|██████████| 1/1 [36:54:33<00:00, 132873.63s/it]
+Current run_idx: 469
+
+Saving the dataset (0/1 shards):   0%|          | 0/250 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 3190.88 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 250/250 [00:00<00:00, 3154.23 examples/s]
+Current run_idx: 469
+
+Current run_idx: 469
+
+Map:   0%|          | 0/250 [00:00<?, ? examples/s]Map: 100%|██████████| 250/250 [00:00<00:00, 335.52 examples/s]Map: 100%|██████████| 250/250 [00:00<00:00, 332.47 examples/s]
+Creating json from Arrow format:   0%|          | 0/1 [00:00<?, ?ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00,  3.16ba/s]Creating json from Arrow format: 100%|██████████| 1/1 [00:00<00:00,  3.15ba/s]
+469: 0.7592000000000001
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.0
+Current run_idx: 469
+
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33micy-fire-791[0m at: [34mhttps://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/klr6btf2[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20260825_234849-klr6btf2/logs[0m
