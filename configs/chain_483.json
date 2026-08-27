@@ -19,8 +19,8 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "full",
-    "start": 250,
-    "end": 500,
-    "run_idx": 466
+    "conv_format": "correct",
+    "start": 500,
+    "end": 750,
+    "run_idx": 483
 }
