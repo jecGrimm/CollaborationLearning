@@ -1,6 +1,6 @@
 {
     "task": "rocstories",
-    "version_idx": 0,
+    "version_idx": 1,
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
@@ -19,8 +19,8 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "support",
-    "start": 250,
+    "conv_format": "correct",
+    "start": 0,
     "end": 1000,
-    "run_idx": 473
+    "run_idx": 485
 }
