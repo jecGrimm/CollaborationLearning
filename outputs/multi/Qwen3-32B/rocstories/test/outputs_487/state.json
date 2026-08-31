@@ -1,0 +1,27 @@
+{
+  "_data_files": [
+    {
+      "filename": "data-00000-of-00001.arrow"
+    }
+  ],
+  "_fingerprint": "38727877f3708319",
+  "_format_columns": [
+    "storyid",
+    "storytitle",
+    "sentence1",
+    "sentence2",
+    "sentence3",
+    "sentence4",
+    "sentence5",
+    "shuffled_sents",
+    "stop",
+    "conversation_history",
+    "turns",
+    "player",
+    "roles"
+  ],
+  "_format_kwargs": {},
+  "_format_type": null,
+  "_output_all_columns": false,
+  "_split": null
+}
