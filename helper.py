@@ -107,12 +107,12 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    conv_output = "outputs/multi/Qwen3-32B/rocstories/test/outputs_474"
-    conv_output1 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_475"
-    conv_output2 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_476"
-    conv_output3 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_477"
-    outfile = "outputs/multi/Qwen3-32B/rocstories/test/outputs_474_475_476_477"
+    conv_output = "outputs/multi/Qwen3-32B/rocstories/test/outputs_482"
+    conv_output1 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_483"
+    conv_output2 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_484"
+    conv_output3 = "outputs/multi/Qwen3-32B/rocstories/test/outputs_481"
+    outfile = "outputs/multi/Qwen3-32B/rocstories/test/outputs_482_483_484"
 
     #inspect_instances(conv_output, rand_idx=2, outfile=outfile)
 
-    merge_outputs([conv_output, conv_output1, conv_output2, conv_output3], outfile, framework="multi", task="rocstories", structured=True)
+    merge_outputs([conv_output, conv_output1, conv_output2], outfile, framework="multi", task="rocstories", structured=True)
