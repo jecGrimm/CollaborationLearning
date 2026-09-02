@@ -4,9 +4,9 @@
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
-    "batch_size": 2,
+    "batch_size": 8,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests hypo with Qwen32-8b.",
+    "desc": "This run tests hypo with Qwen32-32b.",
     "candidate": "roc_structured_chain",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
@@ -19,8 +19,8 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "support",
-    "start": 750,
+    "conv_format": "incorrect",
+    "start": 250,
     "end": 1000,
-    "run_idx": 477
+    "run_idx": 491
 }

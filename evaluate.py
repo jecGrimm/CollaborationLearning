@@ -12,7 +12,7 @@ from tqdm import tqdm
 from scipy import stats
 import random
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False):
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False, save_eval: bool = False):
     '''
     This function evaluates the model predictions for a given experiment output file.
 
@@ -191,10 +191,12 @@ class Evaluator:
 
         return acc_mean
 
-    def evaluate_sent_order(self):
+    def evaluate_sent_order(self, save_eval: bool = False):
         """
         This function evaluates the model predictions for ROCStories. 
-
+        
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             acc_mean: mean accuracy over all instances
         """
@@ -206,15 +208,18 @@ class Evaluator:
         else:
             self.eval_data = self.exp_data.map(self.evaluate_order_answer_random, batched=True, remove_columns=self.exp_data.column_names)
         
-        self.save_eval_data()
+        if save_eval:
+            self.save_eval_data()
 
         acc_mean = self.report_accuracy()
         return acc_mean
 
-    def evaluate_odd_one(self):
+    def evaluate_odd_one(self, save_eval: bool = False):
         """
         This function evaluates the model predictions for CMU Booksum. 
 
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             acc_mean: mean accuracy over all instances
         """
@@ -225,7 +230,8 @@ class Evaluator:
         else:
             self.eval_data = self.exp_data.map(self.evaluate_odd_answer_random, batched=True, remove_columns=self.exp_data.column_names)
         
-        self.save_eval_data()
+        if save_eval: 
+            self.save_eval_data()
 
         acc_mean = self.report_accuracy()
         return acc_mean
@@ -1012,10 +1018,12 @@ class Evaluator:
 
         return {"beliefs": beliefs}
 
-    def evaluate_last_beliefs(self):
+    def evaluate_last_beliefs(self, save_eval: bool = False):
         '''
         This method evaluates the last hypothesis of the multi-agent outputs for both ROCStories and CMU Booksum tasks.
 
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             accuracy of the last hypothesis for each instance
         '''
@@ -1032,7 +1040,8 @@ class Evaluator:
             preds = exp_beliefs.map(self.create_pred_from_belief_cmu, batched = False)
             self.eval_data = preds.map(lambda batch: self.calculate_metrics_cmu(batch), batched = True)
         
-        self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
+        if save_eval: 
+            self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
 
         acc_mean = self.report_accuracy()
         return acc_mean
