@@ -1,13 +1,13 @@
 {
-    "task": "rocstories",
-    "version_idx": 0,
+    "task": "cmu_booksum",
+    "version_idx": 2,
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests hypo with Qwen32-8b.",
-    "candidate": "roc_structured_chain",
+    "desc": "This run tests hypo with Qwen32-32b.",
+    "candidate": "cmu_structured_chain",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
@@ -19,8 +19,8 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "correct",
+    "conv_format": "hypo",
     "start": 750,
     "end": 1000,
-    "run_idx": 484
+    "run_idx": 501
 }
