@@ -1655,15 +1655,17 @@ class Vis():
         plt.savefig(f"./visualizations/{topology}_changes.pdf")
         
 if __name__ == "__main__":
-    experiment_files = {
-        "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
-        "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
-    }
+    # experiment_files = {
+    #     "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
+    #     "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
+    # }
+    experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
-    vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
+    #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
 
     # Compute average experiment results and std -> ./visualizations/final.csv
-    #vis.compute_std()
+    vis.compute_std()
+    vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
     #vis.plot_dist_split() 
