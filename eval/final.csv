@@ -47,3 +47,10 @@ Qwen3-32B;Improved;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_380
 Qwen3-32B;Single;StoryCon;outputs/single/Qwen3-32B/rocstories/test/outputs_254;outputs/single/Qwen3-32B/rocstories/test/outputs_359;outputs/single/Qwen3-32B/rocstories/test/outputs_360
 Qwen3-32B;Base;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_361;outputs/multi/Qwen3-32B/rocstories/test/outputs_362;outputs/multi/Qwen3-32B/rocstories/test/outputs_363
 Qwen3-32B;Improved;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_258_259;outputs/multi/Qwen3-32B/rocstories/test/outputs_364;outputs/multi/Qwen3-32B/rocstories/test/outputs_365
+Qwen3-32B;Hypo;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_449;outputs/multi/Qwen3-32B/rocstories/test/outputs_450;outputs/multi/Qwen3-32B/rocstories/test/outputs_451_452
+Qwen3-32B;Full;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_453_466_454;outputs/multi/Qwen3-32B/rocstories/test/outputs_455_456;outputs/multi/Qwen3-32B/rocstories/test/outputs_457_467_468_469
+Qwen3-32B;Args;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_458_470_459;outputs/multi/Qwen3-32B/rocstories/test/outputs_460;outputs/multi/Qwen3-32B/rocstories/test/outputs_461
+Qwen3-32B;Reject;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_462_465;outputs/multi/Qwen3-32B/rocstories/test/outputs_463;outputs/multi/Qwen3-32B/rocstories/test/outputs_464_471
+Qwen3-32B;Support;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_472_473;outputs/multi/Qwen3-32B/rocstories/test/outputs_474_475_476_477;outputs/multi/Qwen3-32B/rocstories/test/outputs_478_479_480_481
+Qwen3-32B;Correct;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_482_483_484;outputs/multi/Qwen3-32B/rocstories/test/outputs_485;outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487
+Qwen3-32B;Incorrect;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_488_489;outputs/multi/Qwen3-32B/rocstories/test/outputs_490_491;outputs/multi/Qwen3-32B/rocstories/test/outputs_492

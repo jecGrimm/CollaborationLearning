@@ -37,10 +37,12 @@ class Vis():
         self.evaluator = None
 
         if task == "rocstories":
-            if self.variation:
+            if self.variation == True:
                 self.vispath = f"visualizations/{self.task}/variation/{conv_format}"
-            else:
+            elif self.variation == False:
                 self.vispath = f"visualizations/{self.task}/no_variation/{conv_format}"
+            else:
+                self.vispath = f"visualizations/{self.task}/{conv_format}"
         else:
             self.vispath = f"visualizations/{self.task}/{conv_format}"
 
@@ -1653,7 +1655,12 @@ class Vis():
         plt.savefig(f"./visualizations/{topology}_changes.pdf")
         
 if __name__ == "__main__":
-    vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
+    experiment_files = {
+        "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
+        "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
+    }
+    vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
+    vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
 
     # Compute average experiment results and std -> ./visualizations/final.csv
     #vis.compute_std()
@@ -1665,7 +1672,7 @@ if __name__ == "__main__":
     #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    vis.plot_exploration_changes()
+    #vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
