@@ -1665,6 +1665,8 @@ if __name__ == "__main__":
 
     # Compute average experiment results and std -> ./visualizations/final.csv
     vis.compute_std()
+
+    # Create Table 13 -> ./visualizations/rocstories/secondary_roc.csv
     vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
