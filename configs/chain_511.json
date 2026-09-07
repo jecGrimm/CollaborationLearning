@@ -1,6 +1,6 @@
 {
     "task": "cmu_booksum",
-    "version_idx": 0,
+    "version_idx": 2,
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
@@ -19,8 +19,8 @@
     "max_new_tokens": 1024,
     "structured": "True",
     "output_format": "full",
-    "conv_format": "hypo",
+    "conv_format": "reasons",
     "start": 0,
-    "end": 250,
-    "run_idx": 493
+    "end": 500,
+    "run_idx": 511
 }
