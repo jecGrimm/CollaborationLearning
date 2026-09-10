@@ -1,0 +1,2575 @@
+wandb: [wandb.login()] Loaded credentials for https://api.wandb.ai from /dss/dsshome1/0F/di97pub/.netrc.
+wandb: Currently logged in as: j-grimm (j-grimm-ludwig-maximilian-university-of-munich) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+wandb: setting up run sgcnk7si
+wandb: Tracking run with wandb version 0.27.0
+wandb: Run data is saved locally in /dss/dsshome1/0F/di97pub/CollaborationLearning/wandb/run-20260907_162214-sgcnk7si
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run devout-shadow-863
+wandb: ⭐️ View project at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning
+wandb: 🚀 View run at https://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/sgcnk7si
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+True
+wandb: wandb.init() called while a run is active and reinit is set to 'default', so returning the previous run.
+Current run_idx: 508
+
+Batch size: 2
+Loading checkpoint shards:   0%|          | 0/17 [00:00<?, ?it/s]Loading checkpoint shards:   6%|▌         | 1/17 [00:07<02:00,  7.56s/it]Loading checkpoint shards:  12%|█▏        | 2/17 [00:15<01:56,  7.80s/it]Loading checkpoint shards:  18%|█▊        | 3/17 [00:23<01:50,  7.87s/it]Loading checkpoint shards:  24%|██▎       | 4/17 [00:31<01:43,  7.94s/it]Loading checkpoint shards:  29%|██▉       | 5/17 [00:39<01:35,  7.92s/it]Loading checkpoint shards:  35%|███▌      | 6/17 [00:47<01:26,  7.89s/it]Loading checkpoint shards:  41%|████      | 7/17 [00:55<01:18,  7.88s/it]Loading checkpoint shards:  47%|████▋     | 8/17 [01:03<01:11,  7.90s/it]Loading checkpoint shards:  53%|█████▎    | 9/17 [01:10<01:02,  7.82s/it]Loading checkpoint shards:  59%|█████▉    | 10/17 [01:18<00:54,  7.78s/it]Loading checkpoint shards:  65%|██████▍   | 11/17 [01:26<00:46,  7.76s/it]Loading checkpoint shards:  71%|███████   | 12/17 [01:33<00:38,  7.74s/it]Loading checkpoint shards:  76%|███████▋  | 13/17 [01:41<00:30,  7.74s/it]Loading checkpoint shards:  82%|████████▏ | 14/17 [01:49<00:23,  7.74s/it]Loading checkpoint shards:  88%|████████▊ | 15/17 [01:56<00:15,  7.73s/it]Loading checkpoint shards:  94%|█████████▍| 16/17 [02:04<00:07,  7.71s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:09<00:00,  6.93s/it]Loading checkpoint shards: 100%|██████████| 17/17 [02:09<00:00,  7.63s/it]
+Quantized!
+Processing shards:   0%|          | 0/6 [00:00<?, ?it/s]
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 1523.39 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 6466.99 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 1490.27 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/84 [00:00<?, ?it/s][AParameter 'function'=<function MultiAgent.prompt_chain.<locals>.<lambda> at 0x721db9810860> of the transform datasets.arrow_dataset.Dataset._map_single couldn't be hashed properly, a random hash was used instead. Make sure your transforms and parameters are serializable with pickle or dill for the dataset fingerprinting and caching to work. If you reuse this transform, the caching mechanism will consider it to be different from the previous calls and recompute everything. This warning is only shown once. Subsequent hashing failures won't be shown.
+
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/84 [00:00<00:08,  9.76it/s][ARound 0, Turn: 0: 100%|██████████| 84/84 [00:00<00:00, 756.66it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 3019.97 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 107.67 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 106.96 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 14972.02 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3270.41 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   1%|          | 1/84 [00:00<00:08,  9.32it/s][ARound 0, Turn: 1: 100%|██████████| 84/84 [00:00<00:00, 704.51it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2517.41 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.64 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.94 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 15460.16 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3253.17 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/84 [00:00<00:09,  9.11it/s][ARound 0, Turn: 2: 100%|██████████| 84/84 [00:00<00:00, 647.31it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2100.19 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 105.92 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.20 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 14743.34 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 1880.54 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/84 [00:00<00:08,  9.31it/s][ARound 1, Turn: 0: 100%|██████████| 84/84 [00:00<00:00, 663.02it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2097.65 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.89 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 106.18 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 15499.61 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3243.65 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/84 [00:00<00:08,  9.24it/s][ARound 1, Turn: 1: 100%|██████████| 84/84 [00:00<00:00, 664.08it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2081.80 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.54 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.81 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 15376.49 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 2957.43 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/84 [00:00<00:09,  8.99it/s][ARound 1, Turn: 2: 100%|██████████| 84/84 [00:00<00:00, 636.55it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 1845.16 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.04 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.30 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3797.35 examples/s]
+
+Generating final answers:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/84 [00:00<00:09,  9.22it/s][AGenerating final answers: 100%|██████████| 84/84 [00:00<00:00, 764.04it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 4282.19 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/84 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 84/84 [00:00<00:00, 6439.68 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 84/84 [00:00<00:00, 6273.53 examples/s]
+Current run_idx: 508
+
+Processing shards:  17%|█▋        | 1/6 [7:33:30<37:47:31, 27210.38s/it]
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 844.75 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 9518.86 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 2324.62 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/84 [00:00<00:08,  9.67it/s][ARound 0, Turn: 0: 100%|██████████| 84/84 [00:00<00:00, 751.46it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 1068.74 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 107.40 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 106.75 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 15673.36 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3409.28 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   1%|          | 1/84 [00:00<00:09,  9.04it/s][ARound 0, Turn: 1: 100%|██████████| 84/84 [00:00<00:00, 682.43it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2682.88 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.38 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.69 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 15328.99 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 1925.51 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/84 [00:00<01:20,  1.03it/s][ARound 0, Turn: 2: 100%|██████████| 84/84 [00:00<00:00, 84.47it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 1808.78 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 99.80 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 99.16 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 13804.08 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3119.44 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/84 [00:00<00:08,  9.60it/s][ARound 1, Turn: 0: 100%|██████████| 84/84 [00:00<00:00, 684.93it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 2048.08 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 84/84 [00:00<00:00, 106.28 examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 105.61 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 16027.73 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 3142.58 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/82 [00:00<00:08,  9.66it/s][ARound 1, Turn: 1: 100%|██████████| 82/82 [00:00<00:00, 672.99it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 1969.18 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4316.64 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5929.78 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6095.62 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6004.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6065.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6096.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6186.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6087.63 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6092.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5381.01 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2492.11 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6054.62 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6138.15 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5995.10 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6104.70 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6032.32 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6114.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6124.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6003.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5972.61 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5989.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6079.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6170.09 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6085.26 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5802.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6032.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6143.52 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6107.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6094.32 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5922.32 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5888.25 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5957.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5985.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5659.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5968.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6058.14 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6001.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5921.51 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6114.91 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6115.99 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2527.28 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6084.83 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6084.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5981.13 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6072.15 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6163.89 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6125.03 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6096.80 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6106.55 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6011.97 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6069.37 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6053.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6156.28 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6219.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6200.90 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6016.28 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6231.01 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6140.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5972.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5994.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6032.43 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6031.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6186.18 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6158.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6181.95 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6179.51 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6165.99 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6077.84 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6164.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6174.52 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6132.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6124.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6152.54 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6021.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6207.84 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6111.21 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6126.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5627.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2362.84 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6048.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2615.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6134.10 examples/s]
+
+Map: 100%|██████████| 84/84 [00:03<00:00, 25.66 examples/s][AMap: 100%|██████████| 84/84 [00:03<00:00, 25.62 examples/s]
+
+Filter:   0%|          | 0/84 [00:00<?, ? examples/s][AFilter: 100%|██████████| 84/84 [00:00<00:00, 3515.45 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 2915.90 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/82 [00:00<00:08,  9.45it/s][ARound 1, Turn: 2: 100%|██████████| 82/82 [00:00<00:00, 658.77it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 1943.86 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4141.33 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5852.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2652.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6006.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2579.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2600.94 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6106.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2717.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2595.11 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5956.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2538.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6060.81 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6082.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6122.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6024.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6001.38 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5890.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5924.97 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6044.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5837.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5972.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5866.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5672.84 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5975.83 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6025.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5959.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6016.49 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6020.08 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5991.86 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5940.43 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6037.72 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5963.81 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5956.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5976.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5867.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6038.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6013.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5993.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5998.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5975.83 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5891.99 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5961.95 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6018.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5961.12 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5867.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5930.59 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5933.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6021.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6067.76 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5964.22 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6033.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6046.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5961.95 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5888.76 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5938.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5982.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5998.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5766.72 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5906.05 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6013.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6117.63 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6058.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6065.09 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6063.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5895.22 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5990.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6023.03 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6034.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6064.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6054.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5909.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6084.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5923.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5976.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2541.51 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2558.32 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5892.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6062.95 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5949.26 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6046.00 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6006.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6027.78 examples/s]
+
+Map: 100%|██████████| 84/84 [00:03<00:00, 24.67 examples/s][AMap: 100%|██████████| 84/84 [00:03<00:00, 24.63 examples/s]
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][AMap: 100%|██████████| 84/84 [00:00<00:00, 3637.73 examples/s]
+
+Generating final answers:   0%|          | 0/84 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/84 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/84 [00:00<00:08,  9.65it/s][AGenerating final answers: 100%|██████████| 84/84 [00:00<00:00, 795.58it/s]
+Map: 100%|██████████| 84/84 [00:00<00:00, 4018.95 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/84 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 84/84 [00:00<00:00, 6355.69 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 84/84 [00:00<00:00, 6192.92 examples/s]
+Current run_idx: 508
+
+Processing shards:  33%|███▎      | 2/6 [15:39:47<31:31:08, 28367.12s/it]
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 4988.14 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15233.99 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3860.45 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/83 [00:00<00:08,  9.53it/s][ARound 0, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 734.02it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 3153.44 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 107.27 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.60 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15912.21 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3470.44 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   1%|          | 1/83 [00:00<00:08,  9.47it/s][ARound 0, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 707.76it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2679.78 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 107.31 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.65 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 16033.86 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3385.00 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/83 [00:00<00:08,  9.50it/s][A<unknown>:1: SyntaxWarning: invalid escape sequence '\&'
+Round 0, Turn: 2: 100%|██████████| 83/83 [00:00<00:00, 664.21it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2062.33 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.64 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 105.96 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15573.38 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3263.71 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/83 [00:00<00:08,  9.39it/s][ARound 1, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 667.11it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2049.34 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.94 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.26 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15750.94 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 3171.61 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/82 [00:00<00:08,  9.46it/s][ARound 1, Turn: 1: 100%|██████████| 82/82 [00:00<00:00, 670.08it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 2082.44 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4325.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6127.98 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6261.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6079.78 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6176.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6260.61 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6297.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6260.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6199.89 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6252.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6172.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6204.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5594.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6182.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6215.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6253.21 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6134.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6273.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6267.23 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6040.80 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6092.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6196.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6083.86 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6290.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6305.03 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6077.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6182.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6150.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2307.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6213.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6219.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6284.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2449.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6281.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6067.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6220.64 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6154.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6215.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6173.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6153.31 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5904.23 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6128.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6160.80 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6237.22 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6139.25 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6136.18 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6172.74 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6031.27 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6150.01 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5757.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6119.15 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6205.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6072.15 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5902.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6046.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2645.05 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5626.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5973.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6025.67 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5797.05 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5945.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6147.81 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6141.00 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6161.57 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6215.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6050.90 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6168.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6113.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6140.78 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6169.86 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6150.67 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6167.98 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6015.23 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6174.74 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6199.11 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6119.69 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6167.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6209.97 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6157.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5997.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6227.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6187.74 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 25.63 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 25.59 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 16360.90 examples/s]
+
+Map:   0%|          | 0/81 [00:00<?, ? examples/s][AMap: 100%|██████████| 81/81 [00:00<00:00, 3058.59 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/81 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/81 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/81 [00:00<00:08,  8.98it/s][ARound 1, Turn: 2: 100%|██████████| 81/81 [00:00<00:00, 621.49it/s]
+Map: 100%|██████████| 81/81 [00:00<00:00, 1849.68 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 3909.63 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5486.20 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5689.91 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5696.39 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5619.04 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5732.15 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5734.95 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5612.36 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5785.94 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5832.92 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5773.65 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5547.75 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5514.16 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5529.96 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5651.95 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5670.72 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5622.21 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5587.25 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5588.45 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5581.11 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5913.23 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5864.03 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5741.35 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5897.52 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5868.39 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5680.11 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6041.95 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6017.76 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5862.72 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6031.97 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5803.93 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6047.32 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5878.03 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 2584.02 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6045.82 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5787.81 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6054.87 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5908.81 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5841.95 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5879.87 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5820.63 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5992.81 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5787.51 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5851.91 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5965.77 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5920.03 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5913.64 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6031.33 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6050.12 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6028.65 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5581.20 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5893.02 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5747.37 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5530.77 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5634.14 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5265.55 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5573.32 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5361.70 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5665.33 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5667.13 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5478.42 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5075.50 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5808.79 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5884.35 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5739.02 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5568.03 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5636.66 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5456.25 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5862.21 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5993.55 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5708.55 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5993.77 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5591.67 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5607.73 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5553.83 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5712.58 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5840.04 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5664.01 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5896.81 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6020.53 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5777.87 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 24.61 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 24.58 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3678.55 examples/s]
+
+Generating final answers:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/83 [00:00<00:09,  9.05it/s][AGenerating final answers: 100%|██████████| 83/83 [00:00<00:00, 741.29it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 3782.84 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/83 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6497.21 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6321.20 examples/s]
+Current run_idx: 508
+
+Processing shards:  50%|█████     | 3/6 [23:32:24<23:38:07, 28362.49s/it]
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 266.86 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 255.74 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 5917.81 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 1660.46 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/83 [00:00<00:08,  9.39it/s][ARound 0, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 725.50it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 3147.94 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 105.99 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 105.27 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 11700.97 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 2450.27 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   1%|          | 1/83 [00:00<00:09,  9.05it/s][ARound 0, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 675.82it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2550.20 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.86 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.14 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 3517.57 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3360.04 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/83 [00:00<00:10,  7.55it/s][A<unknown>:1: SyntaxWarning: invalid escape sequence '\_'
+Round 0, Turn: 2: 100%|██████████| 83/83 [00:00<00:00, 536.73it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1209.42 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 100.88 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 100.26 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15715.39 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3309.16 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/83 [00:00<00:09,  8.83it/s][ARound 1, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 623.24it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1896.88 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 104.96 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 104.23 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 13812.93 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 2963.56 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/82 [00:00<00:08,  9.09it/s][ARound 1, Turn: 1: 100%|██████████| 82/82 [00:00<00:00, 645.39it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 2008.19 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4275.22 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5850.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6156.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6065.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6185.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6105.14 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6230.10 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6024.50 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5903.62 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6186.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5961.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6103.84 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6235.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5650.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5722.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6182.73 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5720.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4014.91 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5932.54 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5747.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5589.95 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5399.35 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5707.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5754.27 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5651.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5820.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5945.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5564.00 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5868.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6025.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5675.18 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5915.60 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5970.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5722.49 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5812.72 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5592.13 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5804.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5863.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5687.10 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5745.72 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6013.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6150.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6179.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6044.09 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6097.78 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6020.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6061.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6137.39 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6008.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6112.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2552.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6166.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6020.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2631.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6159.59 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5977.39 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5834.91 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6115.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6169.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5931.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5968.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6208.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6219.85 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2647.98 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2712.64 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6126.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6223.45 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6265.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6253.55 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5877.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5850.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5786.32 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5777.86 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5756.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5724.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5528.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5604.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5686.63 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5623.86 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5936.53 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5929.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5674.81 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 24.68 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 24.64 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 14939.16 examples/s]
+
+Map:   0%|          | 0/81 [00:00<?, ? examples/s][AMap: 100%|██████████| 81/81 [00:00<00:00, 2965.88 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/81 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/81 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/81 [00:00<00:08,  9.01it/s][A<unknown>:1: SyntaxWarning: invalid escape sequence '\ '
+<unknown>:1: SyntaxWarning: invalid escape sequence '\D'
+Round 1, Turn: 2: 100%|██████████| 81/81 [00:00<00:00, 615.18it/s]
+Map: 100%|██████████| 81/81 [00:00<00:00, 1796.68 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 4147.86 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5791.95 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5940.94 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6050.45 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5940.01 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5983.53 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6032.51 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5940.52 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5987.85 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5956.36 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6081.75 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5924.05 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5821.93 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5529.15 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5779.93 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5840.75 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5763.85 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5566.29 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5504.16 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5519.18 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5564.20 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5747.76 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5795.61 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5597.47 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5666.09 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5338.44 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5559.55 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5537.35 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5577.26 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5757.99 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5684.86 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5684.38 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5610.97 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5547.12 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5660.14 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5673.85 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5642.75 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5867.07 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5748.64 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5485.67 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5736.02 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5726.16 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 2520.05 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5647.81 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5689.24 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5648.85 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5604.86 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5752.14 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5820.33 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5954.27 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5962.73 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6029.94 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5789.58 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5749.61 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6030.68 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5874.98 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6063.30 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6036.26 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5915.39 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5800.26 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5749.80 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5936.06 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6092.44 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5986.16 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6040.33 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5941.15 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6093.75 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5862.52 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6061.24 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5813.56 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 6086.43 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 3851.74 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5678.49 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5774.23 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5821.53 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5447.15 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5723.36 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5909.73 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5849.29 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5921.58 examples/s]
+
+
+Filter:   0%|          | 0/81 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 81/81 [00:00<00:00, 5910.25 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 24.79 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 24.75 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3807.42 examples/s]
+
+Generating final answers:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/83 [00:03<04:19,  3.16s/it][AGenerating final answers: 100%|██████████| 83/83 [00:03<00:00, 26.22it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2462.42 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/83 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 2595.12 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 2532.70 examples/s]
+Current run_idx: 508
+
+Processing shards:  67%|██████▋   | 4/6 [31:41:25<15:58:17, 28748.89s/it]
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 1176.79 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 7825.55 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 2109.87 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/83 [00:00<00:13,  6.22it/s][ARound 0, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 488.73it/s]
+
+
+Map: 100%|██████████| 83/83 [00:00<00:00, 353.52 examples/s][A[AMap: 100%|██████████| 83/83 [00:00<00:00, 342.41 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 102.98 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 102.32 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 14773.69 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3123.39 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 1:   1%|          | 1/83 [00:00<00:09,  8.99it/s][ARound 0, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 672.94it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2439.33 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 105.50 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 104.80 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15625.80 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3355.67 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/83 [00:00<00:09,  8.80it/s][ARound 0, Turn: 2: 100%|██████████| 83/83 [00:00<00:00, 624.26it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1983.70 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 104.18 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 103.46 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 14606.33 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 1771.55 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/83 [00:00<00:09,  9.08it/s][ARound 1, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 646.80it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1991.21 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 104.71 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 104.03 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15246.67 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3046.27 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/83 [00:00<00:09,  8.95it/s][ARound 1, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 639.34it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1932.92 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 105.82 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 105.04 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 14244.16 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 2678.90 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/82 [00:00<00:09,  8.95it/s][A<unknown>:1: SyntaxWarning: invalid escape sequence '\ '
+Round 1, Turn: 2: 100%|██████████| 82/82 [00:00<00:00, 618.83it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 1796.56 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 3972.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5778.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5862.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5784.08 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5763.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5652.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5885.53 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5787.00 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5930.29 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5905.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5764.01 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5976.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5873.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5822.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5793.24 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5717.54 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5548.74 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5465.50 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5616.52 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5711.46 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5581.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5798.61 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5866.56 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5728.59 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5822.46 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6001.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5919.57 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5890.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5799.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5929.26 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5888.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5800.17 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5423.36 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5971.99 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5796.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5935.30 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5980.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5907.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5928.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5954.31 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5815.47 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5806.74 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5672.93 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5626.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5774.08 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5789.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4692.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5753.60 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5531.25 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5725.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5711.18 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5734.70 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2452.35 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5689.83 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5913.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5962.47 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5967.43 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5932.13 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5693.69 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5827.69 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5956.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5922.73 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6014.60 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5953.80 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5771.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5984.98 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5983.42 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5929.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5970.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5955.14 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5882.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5700.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5900.38 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5999.70 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5946.59 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5961.33 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5855.07 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5773.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5918.25 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5936.63 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6010.50 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5837.19 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 24.35 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 24.32 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3420.79 examples/s]
+
+Generating final answers:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/83 [00:00<00:09,  9.01it/s][AGenerating final answers: 100%|██████████| 83/83 [00:00<00:00, 737.42it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 3940.77 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/83 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6339.61 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6162.74 examples/s]
+Current run_idx: 508
+
+Processing shards:  83%|████████▎ | 5/6 [39:21:24<7:52:14, 28334.31s/it] 
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 789.90 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 7592.74 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 2214.89 examples/s]
+
+Round 0, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 0:   1%|          | 1/83 [00:00<00:08,  9.11it/s][ARound 0, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 698.78it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2979.39 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 103.75 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 103.11 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 16799.89 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3426.96 examples/s]
+
+Round 0, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[ARound 0, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 1002.62it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 2601.77 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 107.44 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.73 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15740.97 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3436.53 examples/s]
+
+Round 0, Turn: 2:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 0, Turn: 2:   1%|          | 1/83 [00:00<00:09,  8.92it/s][ARound 0, Turn: 2: 100%|██████████| 83/83 [00:00<00:00, 487.77it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 987.94 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.78 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.11 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15872.30 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3334.87 examples/s]
+
+Round 1, Turn: 0:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 0:   1%|          | 1/83 [00:00<00:09,  8.90it/s][ARound 1, Turn: 0: 100%|██████████| 83/83 [00:00<00:00, 631.38it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1985.54 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.39 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 105.69 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15568.50 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3210.23 examples/s]
+
+Round 1, Turn: 1:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 1:   1%|          | 1/83 [00:00<00:09,  8.63it/s][ARound 1, Turn: 1: 100%|██████████| 83/83 [00:00<00:00, 619.75it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 1956.05 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+Map: 100%|██████████| 83/83 [00:00<00:00, 106.86 examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 106.15 examples/s]
+
+Filter:   0%|          | 0/83 [00:00<?, ? examples/s][AFilter: 100%|██████████| 83/83 [00:00<00:00, 15742.39 examples/s]
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][AMap: 100%|██████████| 82/82 [00:00<00:00, 3144.99 examples/s]
+
+Round 1, Turn: 2:   0%|          | 0/82 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/82 [00:00<?, ? examples/s][A[A
+Round 1, Turn: 2:   1%|          | 1/82 [00:00<00:08,  9.96it/s][ARound 1, Turn: 2: 100%|██████████| 82/82 [00:00<00:00, 689.18it/s]
+Map: 100%|██████████| 82/82 [00:00<00:00, 1325.54 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 4117.33 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5871.67 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6106.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6104.60 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5972.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6097.99 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6065.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6031.58 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6036.88 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5724.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5758.71 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5736.04 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5894.31 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6086.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5972.41 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6107.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5985.40 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6043.13 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6117.63 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5867.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6056.44 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6083.43 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5987.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5840.66 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6037.72 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6105.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5949.57 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6114.69 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5966.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6062.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6137.82 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6088.06 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5864.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6052.49 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5949.16 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6062.31 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6069.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5994.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6090.33 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6051.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6019.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6076.55 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6018.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6009.87 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6058.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6033.81 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5875.18 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6006.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6046.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5815.28 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6054.73 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5987.90 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5831.25 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6055.90 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6090.11 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6038.68 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5986.02 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5923.55 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5754.08 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5658.37 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6017.55 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6074.94 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6068.08 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 2615.78 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5923.75 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5987.79 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6077.20 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6086.12 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6068.51 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6116.65 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5888.96 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6067.76 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6036.35 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5960.92 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6024.19 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5955.34 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5925.69 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6044.09 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 5945.77 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6041.33 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6063.48 examples/s]
+
+
+Filter:   0%|          | 0/82 [00:00<?, ? examples/s][A[AFilter: 100%|██████████| 82/82 [00:00<00:00, 6104.38 examples/s]
+
+Map: 100%|██████████| 83/83 [00:03<00:00, 24.34 examples/s][AMap: 100%|██████████| 83/83 [00:03<00:00, 24.30 examples/s]
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][AMap: 100%|██████████| 83/83 [00:00<00:00, 3757.08 examples/s]
+
+Generating final answers:   0%|          | 0/83 [00:00<?, ?it/s][A
+
+Map:   0%|          | 0/83 [00:00<?, ? examples/s][A[A
+Generating final answers:   1%|          | 1/83 [00:00<00:08,  9.36it/s][AGenerating final answers: 100%|██████████| 83/83 [00:00<00:00, 766.84it/s]
+Map: 100%|██████████| 83/83 [00:00<00:00, 4110.31 examples/s]
+Current run_idx: 508
+
+
+Saving the dataset (0/1 shards):   0%|          | 0/83 [00:00<?, ? examples/s][A
+Saving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6509.00 examples/s][ASaving the dataset (1/1 shards): 100%|██████████| 83/83 [00:00<00:00, 6337.31 examples/s]
+Current run_idx: 508
+
+Processing shards: 100%|██████████| 6/6 [47:44:41<00:00, 28967.59s/it]  Processing shards: 100%|██████████| 6/6 [47:44:41<00:00, 28646.92s/it]
+Current run_idx: 508
+
+Saving the dataset (0/1 shards):   0%|          | 0/500 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 500/500 [00:00<00:00, 6146.26 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 500/500 [00:00<00:00, 6095.20 examples/s]
+Current run_idx: 508
+
+Current run_idx: 508
+
+Map:   0%|          | 0/500 [00:00<?, ? examples/s]Map: 100%|██████████| 500/500 [00:00<00:00, 17039.63 examples/s]
+508: 0.462
+zero percentage: 0.0
+double percentage: 0.0
+wrong format: 0.002
+Current run_idx: 508
+
+[1;34mwandb[0m: 
+[1;34mwandb[0m: 🚀 View run [33mdevout-shadow-863[0m at: [34mhttps://wandb.ai/j-grimm-ludwig-maximilian-university-of-munich/CollaborationLearning/runs/sgcnk7si[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/run-20260907_162214-sgcnk7si/logs[0m
