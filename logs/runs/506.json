@@ -3,7 +3,7 @@
     "version_idx": 2,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_506_6",
+    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_506_9",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests hypo with Qwen32-32b.",
@@ -173,5 +173,5 @@
     "top_k": 20,
     "min_p": 0,
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl",
-    "instances": 637
+    "instances": 910
 }
