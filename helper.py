@@ -111,6 +111,7 @@ if __name__ == "__main__":
     conv_output1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_511"
     conv_output2 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_513"
     conv_output3 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_512"
+    
     outfile = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_511_513"
 
     #inspect_instances(conv_output, outfile=outfile)

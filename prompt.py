@@ -399,7 +399,6 @@ class SingleAgent(Agent):
                     if thinking_budget > 0.0:
                         thinking_answer.append(model_answer)
             else:
-                torch.manual_seed(gen_seed)
                 outputs = tqdm([out for out in pipe(
                         list(shard_data["prompt"]),
                         batch_size = batch_size
@@ -1743,7 +1742,7 @@ class MultiAgent(Agent):
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         
         @warning
-            This function is not yet updated to seeds and vllm!
+            This function is not yet updated to vllm!
         """
         # initialize pipeline
         torch.cuda.empty_cache()
