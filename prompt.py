@@ -13,6 +13,7 @@ import ast
 from collections import defaultdict
 from data import get_sent_list
 from transformers.utils import logging
+from vllm import LLM, SamplingParams
 
 class Agent:
     def __init__(self, model_id: str, split: str, framework: str, max_new_tokens: int, task: str, interactive: bool = True):
@@ -125,6 +126,41 @@ class Agent:
         logger.log_pipe(pipe)
     
         return pipe, logger, processor
+    
+    def init_vllm(self, logger):
+        quant_models = ["qwen/qwen3-32b"]
+
+        if self.model_id.lower() in quant_models:
+            # quantization="bitsandbytes",
+            self.llm = LLM(
+                model=self.model_id,
+                dtype="bfloat16",
+                trust_remote_code=True,
+                limit_mm_per_prompt={}, # text-only version
+                gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
+                max_model_len=32768,          # Kontext testweise halbieren
+                quantization="bitsandbytes"
+            )
+        else:
+            self.llm = LLM(
+                model=self.model_id,
+                dtype="bfloat16",
+                trust_remote_code=True,
+                limit_mm_per_prompt={}, # text-only version
+                gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
+                max_model_len=32768          # Kontext testweise halbieren
+            )
+
+        self.sampling_params = SamplingParams(
+            max_tokens=self.max_new_tokens,
+            stop=["<|im_end|>", "<|endoftext|>"]
+            #thinking_token_budget=int(self.max_new_tokens * thinking_budget),
+        )
+
+        model_config = self.llm.llm_engine.model_config
+        logger.log_vllm(model_config, self.sampling_params)
+
+        return logger
 
     def save_outputs(self, logger, outputs, shard_idx: int = None):
         """
@@ -285,7 +321,7 @@ class SingleAgent(Agent):
 
         return {"prompt": batch_messages}
     
-    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None, version_idx = 0):
+    def prompt_model(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation = False, start = 0, end = None, version_idx = 0, vllm: bool = True):
         """
         This method prompts the model.
 
@@ -298,10 +334,19 @@ class SingleAgent(Agent):
             start: start index of the dataset
             end: end index of the dataset
             version_idx: index of the dataset version
+
+        @warning
+            For VLLM, enabled/disabled thinking is not tested yet!
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
+
+        if vllm:
+            # VLLM raises an error if this is not set
+            os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+            self.init_vllm(logger = logger, thinking_budget=thinking_budget)
+        else:
+            pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
         # prepare prompts
         if self.task == "rocstories":
@@ -317,6 +362,12 @@ class SingleAgent(Agent):
 
             prompt_data = booksum_data.arranged_data.map(self.create_message_booksum, batched=True)
 
+        # TODO: test
+        if thinking_budget == 0:
+            enable_think = False
+        else:
+            enable_think = True
+        
         full_output_list = []
         full_thinking_answer = []
 
@@ -337,18 +388,38 @@ class SingleAgent(Agent):
             # store shard output
             output_list = []
             thinking_answer = []
-            for model_out in outputs:
-                model_answer = model_out[0]["generated_text"][-1]["content"]
-                final_answer = model_answer.split("</think>")[-1].strip()
+            if vllm:
+                outputs = self.llm.chat(messages = list(shard_data["prompt"]), sampling_params = self.sampling_params, chat_template_kwargs={"enable_thinking": enable_think}) # TODO: test thinking
 
-                output_list.append(final_answer)
-                thinking_answer.append(model_answer)
+                for output in outputs:
+                    #print(f"Antwort: {output.outputs[0].text}\n")
+                    model_answer = output.outputs[0].text
+                    output_list.append(model_answer.split("</think>")[-1].strip())
+
+                    if thinking_budget > 0.0:
+                        thinking_answer.append(model_answer)
+            else:
+                torch.manual_seed(gen_seed)
+                outputs = tqdm([out for out in pipe(
+                        list(shard_data["prompt"]),
+                        batch_size = batch_size
+                    )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
+            
+                # store shard output
+                for model_out in outputs:
+                    model_answer = model_out[0]["generated_text"][-1]["content"]
+                    output_list.append(model_answer.split("</think>")[-1].strip())
+
+                    if thinking_budget > 0.0:
+                        thinking_answer.append(model_answer)
 
             full_output_list += output_list
-            full_thinking_answer += thinking_answer
+            #full_thinking_answer += thinking_answer
 
             output_data = shard_data.add_column("output", output_list)
-            output_data = shard_data.add_column("thinking_output", thinking_answer)
+            if thinking_budget > 0.0:
+                full_thinking_answer += thinking_answer
+                output_data = shard_data.add_column("thinking_output", thinking_answer)
             
             outpath = self.save_outputs_hf(logger, outputs=output_data, shard_idx=shard_idx)
 
@@ -765,7 +836,7 @@ class MultiAgent(Agent):
 
         return {"prompt": messages}
 
-    def get_conversation_history(self, batch, outputs, player_name: str, final: bool = False, conv_format: str = "hypo"):
+    def get_conversation_history(self, batch, outputs, player_name: str, final: bool = False, conv_format: str = "hypo", vllm: bool = True):
         """
         This function saves the output in the dataset.
 
@@ -775,6 +846,8 @@ class MultiAgent(Agent):
             player_name: name of the current player
             final: boolean indicating whether to use the final answer agent
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            vllm: if True, model output is formatted according to vllm, otherwise to huggingface
+        
         @returns batch: updated batch of instances
         """
         for i, model_out in enumerate(outputs):
@@ -784,7 +857,10 @@ class MultiAgent(Agent):
                 else:
                     self.gold = batch["gold_title"][i] # correct, incorrect
 
-            model_answer = model_out[0]["generated_text"][2]["content"]
+            if vllm:
+                model_answer = model_out.outputs[0].text
+            else:
+                model_answer = model_out[0]["generated_text"][2]["content"]
 
             conv_answer, last_hypos = self.create_conv_answer(batch, i, model_answer, conv_format, final)
             
@@ -1239,7 +1315,7 @@ class MultiAgent(Agent):
 
         return batch
 
-    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation: bool = False, final_reorder: bool = True, conv_format: str = "hypo", start: int = 0, end = None, version_idx: int = 0):
+    def prompt_chain(self, logger, device: str = "cpu", batch_size: int = 1, thinking_budget = 0.2, variation: bool = False, final_reorder: bool = True, conv_format: str = "hypo", start: int = 0, end = None, version_idx: int = 0, vllm: bool = True):
         """
         This function prompts the multi-agent framework in a chain topology.
 
@@ -1255,11 +1331,18 @@ class MultiAgent(Agent):
             start: start index of the dataset
             end: end index of the dataset
             version_idx: index of the ROCStories dataset version
+            vllm: if True, runs inference via vllm (offline), otherwise via huggingface
         """
         # initialize pipeline
         torch.cuda.empty_cache()
-        pipe, logger, processor = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
-        
+        if vllm:
+            # VLLM raises an error if this is not set
+            os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+            logger = self.init_vllm(logger = logger)
+            pipe = None
+        else:
+            pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget)
+
         # prepare dataset
         if self.task == "rocstories":
             roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
@@ -1290,6 +1373,11 @@ class MultiAgent(Agent):
 
             prompt_data = cmu_data.arranged_data
 
+        if thinking_budget == 0:
+            enable_think = False
+        else:
+            enable_think = True
+        
         full_output = None
 
         start = time.time()
@@ -1331,12 +1419,15 @@ class MultiAgent(Agent):
                         
                         filtered_data = filtered_data.map(lambda batch: self.create_prompts(batch, conv_round, turn, player_name, final = False, shuffled_sents = self.structured, conv_format = conv_format), batched = True)
 
-                        # prompt 
-                        turn_outputs = tqdm([out for out in pipe(
-                                list(filtered_data["prompt"]),
-                                batch_size = batch_size
-                            )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
-
+                        if vllm:
+                            turn_outputs = self.llm.chat(messages = list(filtered_data["prompt"]), sampling_params = self.sampling_params, chat_template_kwargs={"enable_thinking": enable_think})
+                        else:
+                            # prompt 
+                            turn_outputs = tqdm([out for out in pipe(
+                                    list(filtered_data["prompt"]),
+                                    batch_size = batch_size
+                                )], desc = f"Round {conv_round}, Turn: {turn}", total = len(filtered_data["prompt"]))
+                            
                         # add model answer to conversation history
                         filtered_data = filtered_data.map(lambda batch: self.get_conversation_history(batch, turn_outputs, player_name, final = False, conv_format = conv_format), batched = True)
 
@@ -1391,6 +1482,9 @@ class MultiAgent(Agent):
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
             start: start index of the dataset
             end: end index of the dataset
+
+        @warning
+            This function is not yet updated to vllm (including thinking).
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1487,6 +1581,9 @@ class MultiAgent(Agent):
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
             start: start index of the dataset
             end: end index of the dataset
+
+        @warning
+            This function is not yet updated to vllm (including thinking).
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1598,7 +1695,7 @@ class MultiAgent(Agent):
         return batch
 
 
-    def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo"):
+    def get_final_answer(self, shard_data, pipe, batch_size, shuffled_sents: bool = False, conv_format: str = "hypo", vllm: bool = True):
         '''
         This method prompts the final answer agent to get the final answer for each instance in the shard data.
 
@@ -1608,6 +1705,7 @@ class MultiAgent(Agent):
             batch_size: batch size for prompting
             shuffled_sents: complete information or False
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+            vllm: uses vllm for inference if True, else huggingface
         @returns
             shard_data: shard of instances with final answers
         '''
@@ -1618,10 +1716,13 @@ class MultiAgent(Agent):
         
         prompt_data = shard_data.map(lambda batch: self.create_prompts(batch, player_name = player_name, final = True, shuffled_sents = shuffled_sents, conv_format = conv_format), batched = True)
 
-        final_outputs = tqdm([out for out in pipe(
-            list(prompt_data["prompt"]),
-            batch_size = batch_size
-        )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
+        if vllm:
+            final_outputs = self.llm.chat(messages = list(prompt_data["prompt"]), sampling_params = self.sampling_params)
+        else:
+            final_outputs = tqdm([out for out in pipe(
+                list(prompt_data["prompt"]),
+                batch_size = batch_size
+            )], desc = "Generating final answers", total = len(prompt_data["prompt"]))
 
         shard_data = shard_data.map(lambda batch: self.get_conversation_history(batch, final_outputs, player_name, final = True, conv_format=conv_format), batched = True)
         
@@ -1640,6 +1741,9 @@ class MultiAgent(Agent):
             conv_file: path to the conversation history file
             variation: boolean indicating whether the ROCStories dataset with or witout variations is used
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
+        
+        @warning
+            This function is not yet updated to seeds and vllm!
         """
         # initialize pipeline
         torch.cuda.empty_cache()

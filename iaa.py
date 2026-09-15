@@ -21,7 +21,7 @@ import pandas as pd
 from pprint import pp
 
 TAG_RE = re.compile(r"<([A-Z_]+)>(.*?)</\1>", re.DOTALL)
-LABELS = ["COORDINATION", "CORRECT_ARG", "CORRECT_HYPO", "CORRECT_INFORMATION", "CORRECT_SUPPORT_ARG", "CORRECT_SUPPORT_HYPO", "INCORRECT_REJECT_ARG", "INCORRECT_REJECT_HYPO", "INCORRECT_SUPPORT_ARG", "INCORRECT_SUPPORT_HYPO", "REASONING"]
+LABELS = ["COORDINATION", "CORRECT_ARG", "CORRECT_HYPO", "CORRECT_INFORMATION", "CORRECT_REJECT_ARG", "CORRECT_REJECT_HYPO", "CORRECT_SUPPORT_ARG", "CORRECT_SUPPORT_HYPO", "INCORRECT_ARG", "INCORRECT_HYPO", "INCORRECT_REJECT_ARG", "INCORRECT_REJECT_HYPO", "INCORRECT_SUPPORT_ARG", "INCORRECT_SUPPORT_HYPO", "REASONING"]
 
 def parse_file(path):
     """Return (plain_text, spans) where spans is a list of (start, end, label)
@@ -211,9 +211,9 @@ def span_level_report(spans1, spans2):
     return results
 
 
-def compare_all_files():
+def compare_all_files(task: str):
     # Compare CMU
-    task_path = "annotation/multi/cmu_booksum"
+    task_path = f"annotation/multi/{task}"
     model_dirs = os.listdir(task_path)
     token_results_per_model = defaultdict(lambda: defaultdict(dict)) # model x instances x metrics 
     span_results_per_model = defaultdict(lambda: defaultdict(dict)) # model x instances x metrics
@@ -247,6 +247,7 @@ def compare_all_files():
                             "aligned via difflib and only comparing shared tokens.\n")
 
                     print("=" * 60)
+                    print("INSTANCE: ", inst)
                     print("TOKEN-LEVEL AGREEMENT")
                     print("=" * 60)
                     token_inst_results = token_level_report(pairs)
@@ -267,11 +268,17 @@ def compare_all_files():
     token_kappa_per_model_avg = {model: round((kappa/num_insts_model)*100, 2) for model,kappa in token_kappa_per_model.items()}
     token_f1_per_label_avg = {lbl: round((f1/num_insts_total)*100, 2) for lbl, f1 in token_f1_per_label.items()} 
 
-    print(f"token_kappa_avg:", token_kappa_avg)
-    print("token_kappa_highest:", round(max(token_kappa_list)*100, 2))
-    print("token_kappa_lowest:", round(min(token_kappa_list)*100, 2))
+    print("=" * 60)
+    print("AVERAGE TOKEN-LEVEL AGREEMENT")
+    print("=" * 60)
+    print(f"AVG TOKEN-LEVEL KAPPA OVER ALL INSTANCES:", token_kappa_avg)
+    print("HIGHEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES:", round(max(token_kappa_list)*100, 2))
+    print("LOWEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES:", round(min(token_kappa_list)*100, 2))
 
+    print("AVERAGE TOKEN-LEVEL KAPPA PER MODEL")
     pp(token_kappa_per_model_avg)
+
+    print("AVERAGE TOKEN-LEVEL KAPPA PER LABEL")
     pp(token_f1_per_label_avg)
 
 def main():
@@ -302,4 +309,4 @@ def main():
 
 
 if __name__ == "__main__":
-    compare_all_files()
+    compare_all_files(task = "cmu_booksum")

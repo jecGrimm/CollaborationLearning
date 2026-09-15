@@ -1,0 +1,434 @@
+============================================================
+INSTANCE:  257_823.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1615
+Raw agreement (accuracy): 0.7926
+Cohen's Kappa: 0.7393
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.849   1.000   0.919      457
+CORRECT_ARG                      0.640   1.000   0.781      210
+CORRECT_HYPO                     0.738   1.000   0.850       48
+CORRECT_INFORMATION              1.000   0.290   0.449      138
+CORRECT_SUPPORT_ARG              0.000   0.000   0.000        0
+CORRECT_SUPPORT_HYPO             0.377   1.000   0.547       26
+HALLUCINATION                    1.000   0.962   0.980       26
+INCORRECT_ARG                    1.000   0.871   0.931      163
+O                                1.000   1.000   1.000       10
+REASONING                        0.942   0.600   0.733      537
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 54, annotator2: 33, matched: 12
+Precision: 0.3636  Recall: 0.2222  F1: 0.2759
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.500 R=0.385 F1=0.435  (ann1=13, ann2=10)
+  CORRECT_ARG                  P=0.200 R=0.333 F1=0.250  (ann1=3, ann2=5)
+  CORRECT_HYPO                 P=0.333 R=1.000 F1=0.500  (ann1=1, ann2=3)
+  CORRECT_INFORMATION          P=0.250 R=0.071 F1=0.111  (ann1=14, ann2=4)
+  CORRECT_SUPPORT_ARG          P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  CORRECT_SUPPORT_HYPO         P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=2)
+  HALLUCINATION                P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=1)
+  INCORRECT_ARG                P=1.000 R=0.667 F1=0.800  (ann1=3, ann2=2)
+  REASONING                    P=0.400 R=0.133 F1=0.200  (ann1=15, ann2=5)
+============================================================
+INSTANCE:  257_340.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1558
+Raw agreement (accuracy): 0.8472
+Cohen's Kappa: 0.8248
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.929   0.962   0.945      420
+CORRECT_ARG                      0.699   0.722   0.710      158
+CORRECT_HYPO                     0.000   0.000   0.000        0
+CORRECT_INFORMATION              0.974   0.435   0.602       85
+CORRECT_REJECT_ARG               0.000   0.000   0.000       39
+CORRECT_REJECT_HYPO              1.000   1.000   1.000      115
+CORRECT_SUPPORT_ARG              1.000   1.000   1.000       17
+CORRECT_SUPPORT_HYPO             0.851   1.000   0.920       80
+HALLUCINATION                    1.000   0.759   0.863       29
+INCORRECT_ARG                    0.667   0.676   0.671       74
+INCORRECT_HYPO                   1.000   1.000   1.000       35
+INCORRECT_REJECT_HYPO            1.000   1.000   1.000       59
+INCORRECT_SUPPORT_ARG            0.947   1.000   0.973      126
+INCORRECT_SUPPORT_HYPO           0.810   0.989   0.891      177
+O                                1.000   1.000   1.000       10
+REASONING                        0.776   0.639   0.700      119
+SUPPORT_ARG                      0.000   0.000   0.000       15
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 67, annotator2: 67, matched: 39
+Precision: 0.5821  Recall: 0.5821  F1: 0.5821
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.727 R=0.842 F1=0.780  (ann1=19, ann2=22)
+  CORRECT_ARG                  P=0.333 R=0.333 F1=0.333  (ann1=6, ann2=6)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=2)
+  CORRECT_INFORMATION          P=0.200 R=0.167 F1=0.182  (ann1=6, ann2=5)
+  CORRECT_REJECT_ARG           P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  CORRECT_REJECT_HYPO          P=1.000 R=1.000 F1=1.000  (ann1=4, ann2=4)
+  CORRECT_SUPPORT_ARG          P=1.000 R=1.000 F1=1.000  (ann1=1, ann2=1)
+  CORRECT_SUPPORT_HYPO         P=0.750 R=0.750 F1=0.750  (ann1=4, ann2=4)
+  HALLUCINATION                P=1.000 R=0.500 F1=0.667  (ann1=2, ann2=1)
+  INCORRECT_ARG                P=0.500 R=0.500 F1=0.500  (ann1=2, ann2=2)
+  INCORRECT_HYPO               P=0.667 R=0.667 F1=0.667  (ann1=3, ann2=3)
+  INCORRECT_REJECT_HYPO        P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
+  INCORRECT_SUPPORT_ARG        P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=1)
+  INCORRECT_SUPPORT_HYPO       P=0.444 R=0.667 F1=0.533  (ann1=6, ann2=9)
+  REASONING                    P=0.400 R=0.286 F1=0.333  (ann1=7, ann2=5)
+  SUPPORT_ARG                  P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
+============================================================
+INSTANCE:  257_152.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 2954
+Raw agreement (accuracy): 0.6977
+Cohen's Kappa: 0.6658
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.674   0.924   0.779      302
+CORRECT_ARG                      0.531   0.809   0.641       94
+CORRECT_HYPO                     0.000   0.000   0.000        0
+CORRECT_INFORMATION              0.892   0.961   0.925      103
+CORRECT_REJECT_ARG               0.000   0.000   0.000       82
+CORRECT_SUPPORT_ARG              0.615   0.190   0.291      252
+CORRECT_SUPPORT_HYPO             1.000   0.483   0.652      269
+HALLUCINATION                    0.992   0.931   0.961      131
+INCORRECT_ARG                    0.741   0.974   0.841      305
+INCORRECT_HYPO                   0.912   0.988   0.949       84
+INCORRECT_REJECT_ARG             0.000   0.000   0.000      101
+INCORRECT_REJECT_HYPO            0.907   0.715   0.800      137
+INCORRECT_SUPPORT_ARG            0.371   0.512   0.430      297
+INCORRECT_SUPPORT_HYPO           0.727   0.946   0.822      372
+O                                1.000   1.000   1.000       15
+REASONING                        0.769   0.756   0.763      410
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 128, annotator2: 103, matched: 46
+Precision: 0.4466  Recall: 0.3594  F1: 0.3983
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.625 R=0.556 F1=0.588  (ann1=18, ann2=16)
+  CORRECT_ARG                  P=0.400 R=0.400 F1=0.400  (ann1=5, ann2=5)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=4)
+  CORRECT_INFORMATION          P=0.471 R=0.533 F1=0.500  (ann1=15, ann2=17)
+  CORRECT_REJECT_ARG           P=0.000 R=0.000 F1=0.000  (ann1=5, ann2=0)
+  CORRECT_SUPPORT_ARG          P=0.250 R=0.111 F1=0.154  (ann1=9, ann2=4)
+  CORRECT_SUPPORT_HYPO         P=0.600 R=0.333 F1=0.429  (ann1=9, ann2=5)
+  HALLUCINATION                P=0.333 R=0.333 F1=0.333  (ann1=6, ann2=6)
+  INCORRECT_ARG                P=0.500 R=0.625 F1=0.556  (ann1=8, ann2=10)
+  INCORRECT_HYPO               P=0.333 R=0.333 F1=0.333  (ann1=3, ann2=3)
+  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=6, ann2=0)
+  INCORRECT_REJECT_HYPO        P=0.000 R=0.000 F1=0.000  (ann1=5, ann2=1)
+  INCORRECT_SUPPORT_ARG        P=0.400 R=0.250 F1=0.308  (ann1=16, ann2=10)
+  INCORRECT_SUPPORT_HYPO       P=0.357 R=0.417 F1=0.385  (ann1=12, ann2=14)
+  REASONING                    P=0.625 R=0.455 F1=0.526  (ann1=11, ann2=8)
+============================================================
+INSTANCE:  258_259_791.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 756
+Raw agreement (accuracy): 0.5847
+Cohen's Kappa: 0.5351
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     1.000   0.931   0.964      216
+CORRECT_ARG                      0.172   0.471   0.252       34
+CORRECT_HYPO                     0.000   0.000   0.000        0
+CORRECT_INFORMATION              0.943   1.000   0.971       50
+CORRECT_REJECT_ARG               0.000   0.000   0.000      117
+CORRECT_REJECT_HYPO              1.000   1.000   1.000       47
+CORRECT_SUPPORT_ARG              0.000   0.000   0.000        0
+CORRECT_SUPPORT_HYPO             1.000   1.000   1.000       31
+INCORRECT_ARG                    0.000   0.000   0.000        0
+INCORRECT_HYPO                   0.140   0.189   0.161       37
+INCORRECT_REJECT_ARG             0.000   0.000   0.000       43
+INCORRECT_REJECT_HYPO            1.000   0.656   0.792       96
+INCORRECT_SUPPORT_ARG            0.000   0.000   0.000        0
+INCORRECT_SUPPORT_HYPO           1.000   0.613   0.760       31
+O                                1.000   1.000   1.000        8
+REJECT_ARG                       0.000   0.000   0.000       46
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 40, annotator2: 40, matched: 25
+Precision: 0.6250  Recall: 0.6250  F1: 0.6250
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.917 R=0.786 F1=0.846  (ann1=14, ann2=12)
+  CORRECT_ARG                  P=0.333 R=0.500 F1=0.400  (ann1=2, ann2=3)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
+  CORRECT_INFORMATION          P=0.800 R=0.800 F1=0.800  (ann1=5, ann2=5)
+  CORRECT_REJECT_ARG           P=0.000 R=0.000 F1=0.000  (ann1=3, ann2=0)
+  CORRECT_REJECT_HYPO          P=1.000 R=1.000 F1=1.000  (ann1=3, ann2=3)
+  CORRECT_SUPPORT_ARG          P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  CORRECT_SUPPORT_HYPO         P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
+  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=2)
+  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=3)
+  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  INCORRECT_REJECT_HYPO        P=1.000 R=0.750 F1=0.857  (ann1=4, ann2=3)
+  INCORRECT_SUPPORT_ARG        P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=2)
+  INCORRECT_SUPPORT_HYPO       P=1.000 R=0.500 F1=0.667  (ann1=2, ann2=1)
+  REJECT_ARG                   P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
+============================================================
+INSTANCE:  258_259_327.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 838
+Raw agreement (accuracy): 0.9332
+Cohen's Kappa: 0.9222
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     1.000   0.925   0.961      173
+CORRECT_ARG                      0.883   1.000   0.938      182
+CORRECT_HYPO                     0.000   0.000   0.000        0
+CORRECT_INFORMATION              0.956   0.985   0.970       66
+CORRECT_REJECT_ARG               0.884   1.000   0.938      129
+CORRECT_REJECT_HYPO              1.000   0.789   0.882       57
+CORRECT_SUPPORT_ARG              1.000   1.000   1.000       23
+CORRECT_SUPPORT_HYPO             1.000   1.000   1.000       68
+INCORRECT_ARG                    1.000   1.000   1.000       36
+INCORRECT_HYPO                   1.000   1.000   1.000       37
+INCORRECT_REJECT_HYPO            1.000   1.000   1.000       17
+INCORRECT_SUPPORT_HYPO           1.000   1.000   1.000       12
+O                                1.000   1.000   1.000        8
+REASONING                        0.000   0.000   0.000       30
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 42, annotator2: 40, matched: 30
+Precision: 0.7500  Recall: 0.7143  F1: 0.7317
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.917 R=0.846 F1=0.880  (ann1=13, ann2=12)
+  CORRECT_ARG                  P=0.571 R=0.667 F1=0.615  (ann1=6, ann2=7)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  CORRECT_INFORMATION          P=0.714 R=0.714 F1=0.714  (ann1=7, ann2=7)
+  CORRECT_REJECT_ARG           P=0.500 R=0.333 F1=0.400  (ann1=3, ann2=2)
+  CORRECT_REJECT_HYPO          P=1.000 R=0.500 F1=0.667  (ann1=2, ann2=1)
+  CORRECT_SUPPORT_ARG          P=1.000 R=1.000 F1=1.000  (ann1=1, ann2=1)
+  CORRECT_SUPPORT_HYPO         P=1.000 R=1.000 F1=1.000  (ann1=3, ann2=3)
+  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=2)
+  INCORRECT_HYPO               P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
+  INCORRECT_REJECT_HYPO        P=1.000 R=1.000 F1=1.000  (ann1=1, ann2=1)
+  INCORRECT_SUPPORT_HYPO       P=1.000 R=1.000 F1=1.000  (ann1=1, ann2=1)
+  REASONING                    P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
+============================================================
+INSTANCE:  258_259_34.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1541
+Raw agreement (accuracy): 0.6379
+Cohen's Kappa: 0.5919
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.977   0.820   0.892      316
+CORRECT_ARG                      0.204   0.226   0.215      168
+CORRECT_HYPO                     0.000   0.000   0.000        0
+CORRECT_INFORMATION              0.859   0.693   0.767       88
+CORRECT_REJECT_ARG               0.985   0.482   0.647      274
+CORRECT_REJECT_HYPO              1.000   0.865   0.928       52
+CORRECT_SUPPORT_ARG              0.836   0.823   0.829      192
+CORRECT_SUPPORT_HYPO             0.570   1.000   0.726       77
+INCORRECT_ARG                    0.000   0.000   0.000       10
+INCORRECT_HYPO                   0.283   1.000   0.441       28
+INCORRECT_REJECT_ARG             0.000   0.000   0.000       21
+INCORRECT_REJECT_HYPO            0.000   0.000   0.000       72
+INCORRECT_SUPPORT_HYPO           0.600   1.000   0.750       27
+O                                1.000   1.000   1.000        9
+REASONING                        0.550   0.720   0.623      207
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 79, annotator2: 66, matched: 29
+Precision: 0.4394  Recall: 0.3671  F1: 0.4000
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.647 R=0.500 F1=0.564  (ann1=22, ann2=17)
+  CORRECT_ARG                  P=0.200 R=0.200 F1=0.200  (ann1=5, ann2=5)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
+  CORRECT_INFORMATION          P=0.500 R=0.357 F1=0.417  (ann1=14, ann2=10)
+  CORRECT_REJECT_ARG           P=0.250 R=0.125 F1=0.167  (ann1=8, ann2=4)
+  CORRECT_REJECT_HYPO          P=1.000 R=0.500 F1=0.667  (ann1=2, ann2=1)
+  CORRECT_SUPPORT_ARG          P=0.500 R=0.400 F1=0.444  (ann1=10, ann2=8)
+  CORRECT_SUPPORT_HYPO         P=0.250 R=0.500 F1=0.333  (ann1=2, ann2=4)
+  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=3)
+  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=1)
+  INCORRECT_REJECT_HYPO        P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=0)
+  INCORRECT_SUPPORT_HYPO       P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=1)
+  REASONING                    P=0.556 R=0.625 F1=0.588  (ann1=8, ann2=9)
+============================================================
+INSTANCE:  393_14.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1963
+Raw agreement (accuracy): 0.8569
+Cohen's Kappa: 0.8292
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.869   0.988   0.925      337
+CORRECT_ARG                      0.976   0.919   0.946      394
+CORRECT_HYPO                     0.342   1.000   0.510       26
+CORRECT_INFORMATION              0.962   0.870   0.914      146
+CORRECT_REJECT_ARG               1.000   0.524   0.688       42
+CORRECT_SUPPORT_ARG              0.923   0.973   0.947      516
+CORRECT_SUPPORT_HYPO             1.000   0.870   0.931      131
+HALLUCINATION                    0.000   0.000   0.000        0
+INCORRECT_ARG                    0.308   1.000   0.471       32
+INCORRECT_HYPO                   0.000   0.000   0.000        0
+INCORRECT_REJECT_ARG             1.000   0.110   0.198      146
+INCORRECT_SUPPORT_ARG            0.000   0.000   0.000       11
+O                                0.824   0.933   0.875       15
+REASONING                        0.838   0.876   0.856      153
+SUPPORT_ARG                      0.000   0.000   0.000       14
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 113, annotator2: 103, matched: 40
+Precision: 0.3883  Recall: 0.3540  F1: 0.3704
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.520 R=0.448 F1=0.481  (ann1=29, ann2=25)
+  CORRECT_ARG                  P=0.364 R=0.364 F1=0.364  (ann1=11, ann2=11)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=7)
+  CORRECT_INFORMATION          P=0.238 R=0.227 F1=0.233  (ann1=22, ann2=21)
+  CORRECT_REJECT_ARG           P=1.000 R=0.500 F1=0.667  (ann1=2, ann2=1)
+  CORRECT_SUPPORT_ARG          P=0.435 R=0.400 F1=0.417  (ann1=25, ann2=23)
+  CORRECT_SUPPORT_HYPO         P=0.667 R=0.400 F1=0.500  (ann1=5, ann2=3)
+  HALLUCINATION                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  INCORRECT_ARG                P=0.333 R=1.000 F1=0.500  (ann1=1, ann2=3)
+  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  INCORRECT_REJECT_ARG         P=1.000 R=0.200 F1=0.333  (ann1=5, ann2=1)
+  INCORRECT_SUPPORT_ARG        P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  REASONING                    P=0.500 R=0.429 F1=0.462  (ann1=7, ann2=6)
+  SUPPORT_ARG                  P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+============================================================
+INSTANCE:  393_317.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 2882
+Raw agreement (accuracy): 0.8036
+Cohen's Kappa: 0.7566
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     0.660   0.912   0.766      194
+CORRECT_ARG                      0.709   0.997   0.829      318
+CORRECT_HYPO                     0.000   0.000   0.000        7
+CORRECT_INFORMATION              0.826   0.991   0.901      110
+CORRECT_SUPPORT_ARG              1.000   0.750   0.857       48
+CORRECT_SUPPORT_HYPO             0.571   0.615   0.593       26
+HALLUCINATION                    0.984   0.885   0.932      139
+INCORRECT_ARG                    0.840   0.936   0.885      928
+INCORRECT_HYPO                   0.604   0.611   0.608       90
+INCORRECT_REJECT_ARG             0.000   0.000   0.000       58
+INCORRECT_REJECT_HYPO            0.000   0.000   0.000        7
+INCORRECT_SUPPORT_ARG            0.456   0.425   0.440      134
+INCORRECT_SUPPORT_HYPO           0.522   0.800   0.632       45
+O                                0.833   1.000   0.909       15
+REASONING                        0.996   0.663   0.796      763
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 127, annotator2: 120, matched: 37
+Precision: 0.3083  Recall: 0.2913  F1: 0.2996
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.500 R=0.478 F1=0.489  (ann1=46, ann2=44)
+  CORRECT_ARG                  P=0.100 R=0.143 F1=0.118  (ann1=7, ann2=10)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  CORRECT_INFORMATION          P=0.083 R=0.091 F1=0.087  (ann1=11, ann2=12)
+  CORRECT_SUPPORT_ARG          P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=1)
+  CORRECT_SUPPORT_HYPO         P=0.500 R=0.333 F1=0.400  (ann1=3, ann2=2)
+  HALLUCINATION                P=0.000 R=0.000 F1=0.000  (ann1=9, ann2=8)
+  INCORRECT_ARG                P=0.350 R=0.412 F1=0.378  (ann1=17, ann2=20)
+  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=9, ann2=4)
+  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  INCORRECT_REJECT_HYPO        P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  INCORRECT_SUPPORT_ARG        P=0.000 R=0.000 F1=0.000  (ann1=3, ann2=3)
+  INCORRECT_SUPPORT_HYPO       P=0.333 R=0.250 F1=0.286  (ann1=4, ann2=3)
+  REASONING                    P=0.308 R=0.286 F1=0.296  (ann1=14, ann2=13)
+============================================================
+INSTANCE:  393_764.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1469
+Raw agreement (accuracy): 0.8366
+Cohen's Kappa: 0.8132
+
+Label                             Prec     Rec      F1  Support
+COORDINATION                     1.000   0.947   0.973      114
+CORRECT_ARG                      0.851   0.867   0.859      271
+CORRECT_HYPO                     0.385   1.000   0.556       25
+CORRECT_INFORMATION              0.885   0.908   0.896      152
+CORRECT_REJECT_ARG               0.000   0.000   0.000       32
+CORRECT_REJECT_HYPO              0.000   0.000   0.000        0
+CORRECT_SUPPORT_ARG              1.000   1.000   1.000       74
+CORRECT_SUPPORT_HYPO             1.000   1.000   1.000       48
+HALLUCINATION                    1.000   0.589   0.742       56
+INCORRECT_ARG                    0.712   0.722   0.717      205
+INCORRECT_HYPO                   0.741   1.000   0.851       40
+INCORRECT_SUPPORT_ARG            1.000   0.629   0.772       35
+INCORRECT_SUPPORT_HYPO           1.000   1.000   1.000       77
+O                                0.391   1.000   0.562        9
+REASONING                        0.928   0.822   0.872      331
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans -- annotator1: 90, annotator2: 85, matched: 42
+Precision: 0.4941  Recall: 0.4667  F1: 0.4800
+
+Per-label exact-match F1:
+  COORDINATION                 P=0.647 R=0.500 F1=0.564  (ann1=22, ann2=17)
+  CORRECT_ARG                  P=0.583 R=0.700 F1=0.636  (ann1=10, ann2=12)
+  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=4)
+  CORRECT_INFORMATION          P=0.417 R=0.417 F1=0.417  (ann1=12, ann2=12)
+  CORRECT_REJECT_ARG           P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  CORRECT_REJECT_HYPO          P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
+  CORRECT_SUPPORT_ARG          P=1.000 R=1.000 F1=1.000  (ann1=3, ann2=3)
+  CORRECT_SUPPORT_HYPO         P=0.250 R=0.250 F1=0.250  (ann1=4, ann2=4)
+  HALLUCINATION                P=0.667 R=0.333 F1=0.444  (ann1=6, ann2=3)
+  INCORRECT_ARG                P=0.500 R=0.500 F1=0.500  (ann1=14, ann2=14)
+  INCORRECT_HYPO               P=0.333 R=0.500 F1=0.400  (ann1=2, ann2=3)
+  INCORRECT_SUPPORT_ARG        P=1.000 R=0.667 F1=0.800  (ann1=3, ann2=2)
+  INCORRECT_SUPPORT_HYPO       P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=4)
+  REASONING                    P=0.500 R=0.429 F1=0.462  (ann1=7, ann2=6)
+============================================================
+AVERAGE TOKEN-LEVEL AGREEMENT
+============================================================
+AVG TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 74.2
+HIGHEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 92.22
+LOWEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 53.51
+AVERAGE TOKEN-LEVEL KAPPA PER MODEL
+{'Llama-3.1-8B-Instruct': 74.33, 'Qwen3-32B': 68.31, 'Qwen3-8B': 79.97}
+AVERAGE TOKEN-LEVEL KAPPA PER LABEL
+{'COORDINATION': 90.26,
+ 'CORRECT_ARG': 68.57,
+ 'CORRECT_HYPO': 21.28,
+ 'CORRECT_INFORMATION': 82.17,
+ 'CORRECT_REJECT_ARG': 25.25,
+ 'CORRECT_REJECT_HYPO': 42.34,
+ 'CORRECT_SUPPORT_ARG': 65.83,
+ 'CORRECT_SUPPORT_HYPO': 81.87,
+ 'INCORRECT_ARG': 61.29,
+ 'INCORRECT_HYPO': 55.66,
+ 'INCORRECT_REJECT_ARG': 2.19,
+ 'INCORRECT_REJECT_HYPO': 39.92,
+ 'INCORRECT_SUPPORT_ARG': 29.06,
+ 'INCORRECT_SUPPORT_HYPO': 65.05,
+ 'REASONING': 59.37}
