@@ -1263,6 +1263,33 @@ class Vis():
             return round(avg_metric*100, 2)
         else:
             return avg_metric
+        
+    def get_avg_metrics(self, exp_file: str, instances: int = 1000, inlcude_random: bool = False):
+        '''
+        This method calculates the average accuracy for the specified experiment file.
+
+        @params
+            exp_file: The path to the experiment output file.
+            metric: The metric to calculate the average for (default is "accuracy").
+        @returns
+            The average value of the specified metric over all instances.
+        '''
+        if "booksum" in exp_file:
+            self.task = "cmu_booksum"
+        else:
+            self.task = "rocstories"
+
+        if "multi" in exp_file:
+            framework = "multi"
+        elif "single" in exp_file:
+            framework = "single"
+        else:
+            framework = "random"
+
+        if self.last and framework != "single":
+            return evaluate(exp_file, framework = framework, task = self.task, structured = True, all=True, instances=instances)
+        else:
+            return evaluate(exp_file, framework = framework, task = self.task, structured = False, all=True, instances=instances)
     
     def get_sanity_checks(self, exp_file):
         '''
@@ -1473,6 +1500,48 @@ class Vis():
 
         df_acc.to_csv("visualizations/final.csv")
 
+    def compute_all_metrics(self, exp_file: str = "./eval/final.csv", instances: int = 1000):
+        """
+        This method computes all metrics for all main experiments.
+        """
+        df_experiment_files = pd.read_csv(exp_file, delimiter = ";")    
+
+        self.last = False
+
+        # get result dicts for all three runs
+        res_0 = df_experiment_files["output_0"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+        res_1 = df_experiment_files["output_1"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+        res_2 = df_experiment_files["output_2"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+
+        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau", "conv_length_faa", "stop", "stop_percentage", "instances", "wrong_format", "zero_counter", "zero_percentage", "double_counter", "double_percentage"]
+        dict_output_0 = defaultdict(list)
+        dict_output_1 = defaultdict(list)
+        dict_output_2 = defaultdict(list)
+        for metric in self.metrics:
+            for row in res_0.items():
+                if metric not in ["conv_length_faa", "stop", "instances", "wrong_format", "zero_counter", "double_counter"]:
+                    dict_output_0[metric].append(round(row[1][metric]*100, 2))
+                    dict_output_1[metric].append(round(res_1[row[0]][metric]*100, 2))
+                    dict_output_2[metric].append(round(res_2[row[0]][metric]*100, 2))
+                else:
+                    dict_output_0[metric].append(row[1][metric])
+                    dict_output_1[metric].append(res_1[row[0]][metric])
+                    dict_output_2[metric].append(res_2[row[0]][metric])
+
+        output_0 = pd.DataFrame.from_dict(dict_output_0)
+        output_1 = pd.DataFrame.from_dict(dict_output_1)
+        output_2 = pd.DataFrame.from_dict(dict_output_2)
+        # compute average
+        s_metrics = round(((output_0 + output_1 + output_2)/3), 2)
+
+        df_metrics = pd.concat([
+            df_experiment_files,
+            s_metrics
+            ],
+            axis=1)
+
+        df_metrics.to_csv("visualizations/all_final.csv", sep = ";")
+
     def plot_last(self):
         ''' 
         This method prints the accuracy of the final answer agent and of the last "player".
@@ -1662,12 +1731,10 @@ if __name__ == "__main__":
     experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
     #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
-
-    # Compute average experiment results and std -> ./visualizations/final.csv
-    vis.compute_std()
+    vis.compute_all_metrics("./eval/final.csv")
 
     # Create Table 13 -> ./visualizations/rocstories/secondary_roc.csv
-    vis.plot_roc_metrics_three_runs()
+    #vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
     #vis.plot_dist_split() 

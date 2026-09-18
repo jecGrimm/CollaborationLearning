@@ -11,6 +11,8 @@ import csv
 from tqdm import tqdm
 from scipy import stats
 import random
+import nltk
+from nltk.tokenize import word_tokenize
 
 def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False, save_eval: bool = False):
     '''
@@ -43,6 +45,11 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
         results["kendalltau"] = float(evaluator.eval_data.with_format("pandas")["kendalltau"].mean())
     else:
         results["accuracy"] = evaluator.evaluate_odd_one()
+
+    if framework == "multi":
+        results["conv_length_faa"] = sum(evaluator.conv_length_faa)/instances
+        results["stop"] = evaluator.stop
+        results["stop_percentage"] = evaluator.stop/instances
 
     results["instances"] = instances
     results["wrong_format"] = evaluator.wrong_format
@@ -114,15 +121,25 @@ class Evaluator:
         self.zero_counter = 0
         self.double_counter = 0
         self.wrong_format = 0
+        
+        # length: avg per run -> one number per instance
 
         if self.task == "rocstories":
             self.pred_len = 5
+            self.idx_name = "storyid"
         else:
             self.pred_len = 3
+            self.idx_name = "id"
+        
+        if self.framework == "multi":
+            self.stop = len(self.exp_data.filter(lambda batch: [batch["stop"][i] == True for i in range(len(batch[self.idx_name]))], batched = True)) # amount of instances with a stop token in the second conversation round, i.e., early stopped conversations
         
     def initiate_metric_lists(self):
         self.pred_lists = []
         self.acc = []
+
+        if self.framework == "multi":
+            self.conv_length_faa = [] # per instance: amount of tokens in conversation history forwarded to faa
 
         if self.task == "rocstories":
             self.gold_sents = []
@@ -334,6 +351,13 @@ class Evaluator:
             else:
                 pred = self.extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip(), gold)
             
+            # compute length of conversation history for final answer agent
+            try: 
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+            except:
+                nltk.download('punkt_tab')
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+
             self.pred_lists.append(pred)
 
             # metrics
@@ -370,12 +394,19 @@ class Evaluator:
             else:
                 out = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
 
+            # compute length of conversation history for final answer agent
+            try: 
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+            except:
+                nltk.download('punkt_tab')
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+
             pred = self.extract_pred_odd(out, batch["titles"][i])
             self.pred_lists.append(pred)
 
             # metrics
             self.acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
-        
+
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
         
     def extract_pred_odd(self, pred, titles):

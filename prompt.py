@@ -783,14 +783,26 @@ class MultiAgent(Agent):
                         }
                     )
                 else:
-                    message.append(
-                        {
-                            "role": "user",
-                            "content": self.FINAL.format(
-                                conversation = conversation
-                            )
-                        }
-                    )
+                    try:
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.FINAL.format(
+                                    conversation = conversation
+                                )
+                            }
+                        )
+                    except:
+                        self.FINAL = self.FINAL.replace("\n\n**Sentences:**\n{shuffled_sents}", "") # without complete knowledge for improved
+
+                        message.append(
+                            {
+                                "role": "user",
+                                "content": self.FINAL.format(
+                                    conversation = conversation
+                                )
+                            }
+                        )
         return message
     
     def create_prompts(self, batch, conv_round: int = -1, turn: int = -1, player_name: str = "", final: bool = False, shuffled_sents: bool = False, conv_format: str = "full"):

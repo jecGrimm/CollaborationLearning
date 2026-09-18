@@ -80,7 +80,7 @@ def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, struct
 
     full_data.save_to_disk(outpath)
 
-    evaluate(outpath, framework, task, structured=structured, all=True)
+    evaluate(outpath, framework, task, structured=structured, all=True, instances=len(full_data))
 
 def fix_outputs(outdir):
     '''
@@ -107,20 +107,20 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    conv_output = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_510_{i}"
-    conv_output1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_511"
+    conv_output = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_350_{i}"
+    conv_output1 = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/ckps/outputs_343_0"
     conv_output2 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_513"
     conv_output3 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_512"
     
-    outfile = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_511_513"
+    outfile = "outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_343_350"
 
     #inspect_instances(conv_output, outfile=outfile)
 
     merge_files = []
-    ckp_files = [conv_output.format(i= i) for i in range(5)]
+    ckp_files = [conv_output.format(i= i) for i in range(3)]
     merge_files.append(conv_output1) 
-    # for f in ckp_files:
-    #     merge_files.append(f) 
-    merge_files.append(conv_output2)
+    for f in ckp_files:
+        merge_files.append(f) 
+    #merge_files.append(conv_output2)
 
-    merge_outputs(merge_files, outfile, framework="multi", task="cmu_booksum", structured=True)
+    merge_outputs(merge_files, outfile, framework="multi", task="rocstories", structured=True)
