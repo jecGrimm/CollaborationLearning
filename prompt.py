@@ -128,6 +128,9 @@ class Agent:
         return pipe, logger, processor
     
     def init_vllm(self, logger):
+        '''
+        @warning reasoning not implemented
+        '''
         quant_models = ["qwen/qwen3-32b"]
 
         if self.model_id.lower() in quant_models:
@@ -138,7 +141,7 @@ class Agent:
                 trust_remote_code=True,
                 limit_mm_per_prompt={}, # text-only version
                 gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
-                max_model_len=32768,          # Kontext testweise halbieren
+                max_model_len=32768,         
                 quantization="bitsandbytes"
             )
         else:
@@ -148,12 +151,24 @@ class Agent:
                 trust_remote_code=True,
                 limit_mm_per_prompt={}, # text-only version
                 gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
-                max_model_len=32768          # Kontext testweise halbieren
+                max_model_len=32768         
             )
+
+        # define decoding specs
+        if self.model_id == "Llama-3.1-8B-Instruct":
+            top_p = 0.9
+            top_k = 50
+        else:
+            top_p = 0.8
+            top_k = 20
 
         self.sampling_params = SamplingParams(
             max_tokens=self.max_new_tokens,
-            stop=["<|im_end|>", "<|endoftext|>"]
+            stop=["<|im_end|>", "<|endoftext|>"],
+            temperature = 0.7,
+            top_p = top_p,
+            top_k=top_k,
+            min_p = 0
             #thinking_token_budget=int(self.max_new_tokens * thinking_budget),
         )
 

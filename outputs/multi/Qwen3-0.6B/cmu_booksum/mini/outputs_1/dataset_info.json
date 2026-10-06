@@ -144,21 +144,7 @@
         },
         "_type": "List"
       },
-      "Jonathan Strange": {
-        "feature": {
-          "dtype": "string",
-          "_type": "Value"
-        },
-        "_type": "List"
-      },
       "Jonathan Strange ": {
-        "feature": {
-          "dtype": "string",
-          "_type": "Value"
-        },
-        "_type": "List"
-      },
-      "Ruth Hall": {
         "feature": {
           "dtype": "string",
           "_type": "Value"
