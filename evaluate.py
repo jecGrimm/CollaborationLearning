@@ -977,7 +977,7 @@ class Evaluator:
                     zero_count = True in [0 in conv_dir.values() for conv_dir in conv_list]
 
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and "sentence" in conv_dir.keys() and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
+                        if type(conv_dir) in [defaultdict, dict] and "sentence" in conv_dir.keys() and type(conv_dir["sentence"])==str and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
                             if zero_count:
                                 pos = conv_dir["position"]+1
                             else:
@@ -1028,7 +1028,7 @@ class Evaluator:
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                        if type(conv_dir) in [defaultdict, dict] and "title" in conv_dir.keys() and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
                             # Player, sentence, position, time-step
                             if "true" in conv_dir["label"].lower() and conv_dir["title"] == eval["gold"]:
                                 correct = "correct"

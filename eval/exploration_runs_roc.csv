@@ -3,3 +3,5 @@ Llama-3.1-8B-Instruct;Reject;StoryCon;outputs/multi/Llama-3.1-8B-Instruct/rocsto
 Llama-3.1-8B-Instruct;Support;StoryCon;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_303;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_340;outputs/multi/Llama-3.1-8B-Instruct/rocstories/test/outputs_341
 Qwen3-8B;Reject;StoryCon;outputs/multi/Qwen3-8B/rocstories/test/outputs_414;outputs/multi/Qwen3-8B/rocstories/test/outputs_415;outputs/multi/Qwen3-8B/rocstories/test/outputs_416
 Qwen3-8B;Support;StoryCon;outputs/multi/Qwen3-8B/rocstories/test/outputs_417;outputs/multi/Qwen3-8B/rocstories/test/outputs_418;outputs/multi/Qwen3-8B/rocstories/test/outputs_419
+Qwen3-32B;Reject;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_462_465;outputs/multi/Qwen3-32B/rocstories/test/outputs_463;outputs/multi/Qwen3-32B/rocstories/test/outputs_464_471
+Qwen3-32B;Support;StoryCon;outputs/multi/Qwen3-32B/rocstories/test/outputs_472_473;outputs/multi/Qwen3-32B/rocstories/test/outputs_474_475_476_477;outputs/multi/Qwen3-32B/rocstories/test/outputs_478_479_480_481

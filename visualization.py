@@ -736,8 +736,10 @@ class Vis():
 
             if "llama" in row["model"].lower():
                 model = "llama"
-            else:
+            elif row["model"].lower() == "qwen3-8b":
                 model = "qwen"
+            else:
+                model = "qwen32"
 
             exp_file = row["output"]
 
@@ -829,7 +831,10 @@ class Vis():
             'Args_llama': '#BE77E4',
             'Hypo_qwen': "#ffc7a2",
             'Full_qwen': "#17b2e1",
-            'Args_qwen': "#cbb2ff"               
+            'Args_qwen': "#cbb2ff",
+            'Hypo_qwen32': "#F17C08",
+            'Full_qwen32': "#0339EC",                
+            'Args_qwen32': "#A824EE",
         }
 
         linestyle = {
@@ -838,17 +843,20 @@ class Vis():
             'Args_llama': 'dashed',
             'Hypo_qwen': '-',
             'Full_qwen': '-',
-            'Args_qwen': '-'
+            'Args_qwen': '-',
+            'Hypo_qwen32': 'dotted',
+            'Full_qwen32': 'dotted',
+            'Args_qwen32': 'dotted'
         }
 
-        marker_map = {
-            'Hypo_llama': '^',
-            'Hypo_qwen':  's',
-            'Full_llama': '^',
-            'Full_qwen':  's',
-            'Args_llama': '^',
-            'Args_qwen':  's',
-        }
+        # marker_map = {
+        #     'Hypo_llama': '^',
+        #     'Hypo_qwen':  's',
+        #     'Full_llama': '^',
+        #     'Full_qwen':  's',
+        #     'Args_llama': '^',
+        #     'Args_qwen':  's',
+        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -915,8 +923,9 @@ class Vis():
                 
                 # Second legend: Line styles (upper right)
                 style_legend = [
-                    Line2D([0], [0], color='darkgray', lw=1.5, linestyle='dashed', label='Llama'),
-                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='-', label='Qwen')
+                    Line2D([0], [0], color='darkgray', lw=1.5, linestyle='dashed', label='Llama3-8B'),
+                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='-', label='Qwen3-8B'),
+                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='dotted', label='Qwen3-32B')
                 ]
                 axes[c].legend(
                     handles=style_legend, 
@@ -990,7 +999,9 @@ class Vis():
             'Reject_llama': '#BE77E4',
             'Support_llama': '#F08F2D',  
             'Reject_qwen': '#cbb2ff',
-            'Support_qwen': '#ffc7a2',                     
+            'Support_qwen': '#ffc7a2',
+            'Correct_qwen32': "#A824EE",
+            'Incorrect_qwen32': "#F17C08",                        
         }
 
         linestyle = {
@@ -998,14 +1009,16 @@ class Vis():
             'Support_llama': "dashed",
             'Reject_qwen': '-',
             'Support_qwen': '-',
+            'Reject_qwen32': 'dotted',
+            'Support_qwen32': 'dotted',
         }
 
-        marker_map = {
-            'Reject_llama': '^',
-            'Support_llama':  '^',
-            'Reject_qwen': 's',
-            'Support_qwen':  's',
-        }
+        # marker_map = {
+        #     'Reject_llama': '^',
+        #     'Support_llama':  '^',
+        #     'Reject_qwen': 's',
+        #     'Support_qwen':  's',
+        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1124,9 +1137,11 @@ class Vis():
         # plot counter
         color_map = {
             'Correct_llama': '#BE77E4',
-            'Incorrect_llama': '#F08F2D',
+            'Incorrect_llama': "#EA9D50",
             'Correct_qwen': '#cbb2ff',
-            'Incorrect_qwen': '#ffc7a2',                       
+            'Incorrect_qwen': '#ffc7a2',       
+            'Correct_qwen32': "#A824EE",
+            'Incorrect_qwen32': "#F17C08",                
         }
 
         linestyle = {
@@ -1134,14 +1149,16 @@ class Vis():
             'Incorrect_llama': "dashed",
             'Correct_qwen': '-',
             'Incorrect_qwen': '-',
+            'Correct_qwen32': 'dotted',
+            'Incorrect_qwen32': 'dotted',
         }
 
-        marker_map = {
-            'Correct_llama': '^',
-            'Incorrect_llama':  '^',
-            'Correct_qwen': 's',
-            'Incorrect_qwen':  's',
-        }
+        # marker_map = {
+        #     'Correct_llama': '^',
+        #     'Incorrect_llama':  '^',
+        #     'Correct_qwen': 's',
+        #     'Incorrect_qwen':  's',
+        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1731,7 +1748,7 @@ if __name__ == "__main__":
     experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
     #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
-    vis.compute_all_metrics("./eval/final.csv")
+    #vis.compute_all_metrics("./eval/final.csv")
 
     # Create Table 13 -> ./visualizations/rocstories/secondary_roc.csv
     #vis.plot_roc_metrics_three_runs()
@@ -1740,10 +1757,10 @@ if __name__ == "__main__":
     #vis.plot_dist_split() 
 
     # Create Figure 4a -> ./visualizations/args_hypos.pdf
-    #vis.plot_arg_hypo_changes()
+    vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    #vis.plot_exploration_changes()
+    vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
