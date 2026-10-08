@@ -9,6 +9,7 @@ import numpy as np
 from evaluate import Evaluator, evaluate
 import plotly.graph_objects as go
 from scipy.stats.mstats import ttest_ind
+from scipy.stats import bootstrap
 from matplotlib import colors
 from matplotlib.patches import Patch
 import math
@@ -92,7 +93,7 @@ class Vis():
 
         self.mean_preds_df = pd.DataFrame(mean_preds.values(), index=mean_preds.keys(), columns=self.metrics) 
 
-    def load_eval_data(self, eval_file, exp_name):
+    def load_eval_data(self, eval_file, exp_name, instances: int = None):
         '''
         This method loads the evaluation data from the specified evaluation file. If the evaluation file is not found, it uses the Evaluator class to evaluate the experiment outputs and generate the evaluation data.
 
@@ -109,10 +110,12 @@ class Vis():
             fw = ""
             if "single" in eval_file:
                 fw = "single"
+            elif "random" in eval_file:
+                fw = "random"
             else:
                 fw = "multi"
 
-            evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last, task = self.task)
+            evaluator = Evaluator(eval_file.replace("eval", "outputs"), fw, last = self.last, task = self.task, instances=instances)
             
             if self.last and fw == "multi":
                     evaluator.evaluate_last_beliefs()
@@ -631,6 +634,123 @@ class Vis():
         outfile += ".csv"
         stats_df.to_csv(outfile, sep = ";")
 
+    def perform_paired_bootstrap(self):
+        '''
+        This method performs a paired bootstrap test to compare the accuracy of the specified comparison setup against all other setups. It saves the results as a CSV file in the specified visualization path.
+
+        @params
+            comparison: The experiment setup that is tested to be significantly lower than the other setups.
+            exp_name: An optional name for the experiment to include in the output file name.
+        '''
+        self.last = False
+        stats_dict = defaultdict(list)
+
+        # 1. load all experiment files
+        run_file = "eval/final.csv"
+
+        df_experiment_files = pd.read_csv(run_file, delimiter = ";")
+
+        tasks = ["StoryCon", "BookDiff"]
+        models = ["Llama-3.1-8B-Instruct", "Qwen3-8B", "Qwen3-32B"]
+        exp_comparisons = {
+            "Single": ["Base", "Improved", "Hypo", "Full", "Args", "Reject", "Support", "Correct", "Incorrect"],
+            "Hypo": ["Args"],
+            "Support": ["Reject"],
+            "Incorrect": ["Correct"]
+        }
+
+        # hyperparameters
+        m = len(tasks) * len(models) * sum([len(higher_exps) for higher_exps in exp_comparisons.values()]) # number of comparisons for bonferroni correction
+        alpha = 0.05
+        
+
+        # 2. bootstrapping
+        for task in tasks:
+            if task == "StoryCon":
+                self.task = "rocstories"
+            else:
+                self.task = "cmu_booksum"
+
+            stats_dict["task"].append(task)
+            for model in models:
+                stats_dict["model"].append(model)
+                for lower_exp, higher_exps in exp_comparisons.items():
+                    # 2.1 get scores for lower comparisons 
+                    # get exp files for all three runs
+                    lower_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == lower_exp]
+                    stats_dict["first_setup"].append(lower_exp)
+
+                    # get eval data for all three runs
+                    lower_eval_0 = self.load_eval_data(lower_exp_row["output_0"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+                    lower_eval_1 = self.load_eval_data(lower_exp_row["output_1"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+                    lower_eval_2 = self.load_eval_data(lower_exp_row["output_2"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+
+                    stats_dict["first_exp_files"].append(", ".join([lower_exp_row[f"output_{i}"].item() for i in range(3)]))
+
+                    # compute mean per instance across runs
+                    scores_A = pd.DataFrame([lower_eval_0["accuracy"], lower_eval_1["accuracy"], lower_eval_2["accuracy"]]).mean(axis=0)
+
+                    # 2.2 get higher comparison
+                    for higher_exp in higher_exps:
+                        # get exp files for all three runs
+                        higher_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == higher_exp]
+                        stats_dict["second_setup"].append(higher_exp)
+
+                        # get eval data for all three runs
+                        higher_eval_0 = self.load_eval_data(higher_exp_row["output_0"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+                        higher_eval_1 = self.load_eval_data(higher_exp_row["output_1"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+                        higher_eval_2 = self.load_eval_data(higher_exp_row["output_2"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+
+                        stats_dict["second_exp_files"].append(", ".join([higher_exp_row[f"output_{i}"].item() for i in range(3)]))
+
+                        # compute mean per instance across runs
+                        scores_B = pd.DataFrame([higher_eval_0["accuracy"], higher_eval_1["accuracy"], higher_eval_2["accuracy"]]).mean(axis=0)
+
+                        # 2.3 compute difference between compared runs
+                        d = scores_A - scores_B
+
+                        # 2.4 perform bootstrap
+                        res = bootstrap((d, ), np.mean, n_resamples=100000, confidence_level=1-alpha/m, method = "percentile", alternative = "less", rng = 0)
+                        stats_dict["corrected_alpha"].append(alpha/m)
+
+                        # 2.5 compute p-value, significance, confidence interval
+                        low, high = res.confidence_interval
+                        stats_dict["confidence_interval"].append(res.confidence_interval) 
+                        stats_dict["significant"].append(high < 0) 
+                        stats_dict["standard_error"].append(res.standard_error)
+
+                        null = res.bootstrap_distribution - d.mean()
+                        stats_dict["p-value"].append((np.sum(null <= d.mean()) + 1) / (len(null) + 1))
+
+        # first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
+
+        # stats_dict = defaultdict(list)
+        # for setup, eval_data in self.eval_data_hf.items():
+        #     if comparison not in setup:
+        #         second_accs = list(eval_data['accuracy'])
+                
+        #         stats = ttest_ind(first_accs, second_accs, equal_var=False, alternative="less")
+
+        #         stats_dict["first_exp_file"].append(self.experiment_files[comparison])
+        #         stats_dict["first_setup"].append(comparison)
+        #         stats_dict["first_mean"].append(np.mean(first_accs))
+
+        #         stats_dict["second_exp_file"].append(self.experiment_files[setup])
+        #         stats_dict["second_setup"].append(setup)
+        #         stats_dict["second_mean"].append(np.mean(second_accs))
+        #         stats_dict["Welch's t-test"].append(stats.statistic)
+        #         stats_dict["p-value"].append(stats.pvalue)
+
+        #         if stats.pvalue < 0.05:
+        #             stats_dict["significant"] = True
+        #         else:
+        #             stats_dict["significant"] = False
+
+        stats_df = pd.DataFrame(stats_dict)
+
+        outfile = f"./variations/paired_bootstrap.csv"
+        stats_df.to_csv(outfile, sep = ";")
+
     def correlate_last_final(self, setup):
         '''
         This method correlates the accuracy of the last turn predictions with the final performance for the specified experiment setup. It creates a scatter plot to visualize the correlation and saves it as a PNG file in the specified visualization path.
@@ -923,15 +1043,15 @@ class Vis():
                 
                 # Second legend: Line styles (upper right)
                 style_legend = [
-                    Line2D([0], [0], color='darkgray', lw=1.5, linestyle='dashed', label='Llama3-8B'),
-                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='-', label='Qwen3-8B'),
-                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='dotted', label='Qwen3-32B')
+                    Line2D([0], [0], color='darkgray', lw=2, linestyle=(0, (2.5, 0.5, 2.5, 0.5)), label='Llama'),
+                    Line2D([0], [0], color='lightgray', lw=2, linestyle='-', label='Qwen-8B'),
+                    Line2D([0], [0], color='dimgray', lw=2, linestyle='dotted', label='Qwen-32B')
                 ]
                 axes[c].legend(
                     handles=style_legend, 
                     loc="lower right", 
                     fontsize='small',
-                    #handlelength=1.0,      # Shorter line sample (default is 2.0)
+                    handlelength=1.0,      # Shorter line sample (default is 2.0)
                     handletextpad=0.4,     # Less space between line and text (default is 0.8)
                     borderpad=0.3,         # Less padding inside the box (default is 0.4)
                     borderaxespad=0.2,     # Less space between legend and axes edge
@@ -1000,8 +1120,8 @@ class Vis():
             'Support_llama': '#F08F2D',  
             'Reject_qwen': '#cbb2ff',
             'Support_qwen': '#ffc7a2',
-            'Correct_qwen32': "#A824EE",
-            'Incorrect_qwen32': "#F17C08",                        
+            'Reject_qwen32': "#A824EE",
+            'Support_qwen32': "#F17C08",                        
         }
 
         linestyle = {
@@ -1748,6 +1868,8 @@ if __name__ == "__main__":
     experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
     #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
+    vis.perform_paired_bootstrap()
+
     #vis.compute_all_metrics("./eval/final.csv")
 
     # Create Table 13 -> ./visualizations/rocstories/secondary_roc.csv
@@ -1757,10 +1879,10 @@ if __name__ == "__main__":
     #vis.plot_dist_split() 
 
     # Create Figure 4a -> ./visualizations/args_hypos.pdf
-    vis.plot_arg_hypo_changes()
+    #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    vis.plot_exploration_changes()
+    #vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
