@@ -359,6 +359,10 @@ class SingleAgent(Agent):
         if vllm:
             # VLLM raises an error if this is not set
             os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducability
+
+            logger.run.config.update({"enable_batch_invariant": True})
+
             self.init_vllm(logger = logger, thinking_budget=thinking_budget)
         else:
             pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
@@ -1361,8 +1365,12 @@ class MultiAgent(Agent):
         # initialize pipeline
         torch.cuda.empty_cache()
         if vllm:
-            # VLLM raises an error if this is not set
+            # VLLM raises an error if this is not set, control how dependencies are loaded
             os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
+
+            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducability
+
+            logger.run.config.update({"enable_batch_invariant": True})
             logger = self.init_vllm(logger = logger)
             pipe = None
         else:

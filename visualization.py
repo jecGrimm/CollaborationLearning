@@ -674,27 +674,28 @@ class Vis():
             else:
                 self.task = "cmu_booksum"
 
-            stats_dict["task"].append(task)
             for model in models:
-                stats_dict["model"].append(model)
                 for lower_exp, higher_exps in exp_comparisons.items():
+
                     # 2.1 get scores for lower comparisons 
                     # get exp files for all three runs
                     lower_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == lower_exp]
-                    stats_dict["first_setup"].append(lower_exp)
 
                     # get eval data for all three runs
                     lower_eval_0 = self.load_eval_data(lower_exp_row["output_0"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
                     lower_eval_1 = self.load_eval_data(lower_exp_row["output_1"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
                     lower_eval_2 = self.load_eval_data(lower_exp_row["output_2"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
 
-                    stats_dict["first_exp_files"].append(", ".join([lower_exp_row[f"output_{i}"].item() for i in range(3)]))
-
                     # compute mean per instance across runs
                     scores_A = pd.DataFrame([lower_eval_0["accuracy"], lower_eval_1["accuracy"], lower_eval_2["accuracy"]]).mean(axis=0)
 
                     # 2.2 get higher comparison
                     for higher_exp in higher_exps:
+                        stats_dict["task"].append(task)
+                        stats_dict["model"].append(model)
+                        stats_dict["first_setup"].append(lower_exp)
+                        stats_dict["first_exp_files"].append(", ".join([lower_exp_row[f"output_{i}"].item() for i in range(3)]))
+
                         # get exp files for all three runs
                         higher_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == higher_exp]
                         stats_dict["second_setup"].append(higher_exp)
@@ -718,40 +719,16 @@ class Vis():
 
                         # 2.5 compute p-value, significance, confidence interval
                         low, high = res.confidence_interval
-                        stats_dict["confidence_interval"].append(res.confidence_interval) 
-                        stats_dict["significant"].append(high < 0) 
-                        stats_dict["standard_error"].append(res.standard_error)
+                        stats_dict["confidence_interval"].append(tuple((float(res.confidence_interval[0]), float(res.confidence_interval[1])))) 
+                        stats_dict["significant"].append(bool(high < 0)) 
+                        stats_dict["standard_error"].append(float(res.standard_error))
 
                         null = res.bootstrap_distribution - d.mean()
-                        stats_dict["p-value"].append((np.sum(null <= d.mean()) + 1) / (len(null) + 1))
-
-        # first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
-
-        # stats_dict = defaultdict(list)
-        # for setup, eval_data in self.eval_data_hf.items():
-        #     if comparison not in setup:
-        #         second_accs = list(eval_data['accuracy'])
-                
-        #         stats = ttest_ind(first_accs, second_accs, equal_var=False, alternative="less")
-
-        #         stats_dict["first_exp_file"].append(self.experiment_files[comparison])
-        #         stats_dict["first_setup"].append(comparison)
-        #         stats_dict["first_mean"].append(np.mean(first_accs))
-
-        #         stats_dict["second_exp_file"].append(self.experiment_files[setup])
-        #         stats_dict["second_setup"].append(setup)
-        #         stats_dict["second_mean"].append(np.mean(second_accs))
-        #         stats_dict["Welch's t-test"].append(stats.statistic)
-        #         stats_dict["p-value"].append(stats.pvalue)
-
-        #         if stats.pvalue < 0.05:
-        #             stats_dict["significant"] = True
-        #         else:
-        #             stats_dict["significant"] = False
+                        stats_dict["p-value"].append(float((np.sum(null <= d.mean()) + 1) / (len(null) + 1)))
 
         stats_df = pd.DataFrame(stats_dict)
 
-        outfile = f"./variations/paired_bootstrap.csv"
+        outfile = f"./visualizations/paired_bootstrap.csv"
         stats_df.to_csv(outfile, sep = ";")
 
     def correlate_last_final(self, setup):
