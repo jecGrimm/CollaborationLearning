@@ -78,7 +78,10 @@ class Vis():
         else:
             eval_files = {k: f"{v.replace('outputs', 'eval')}.jsonl" for k, v in self.experiment_files.items()}
 
-        self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
+        try:
+            self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
+        except:
+            self.eval_data_hf = {k: self.load_eval_data(v[:-6], k) for k, v in eval_files.items()}
 
         mean_preds = defaultdict(list)
 
@@ -899,6 +902,7 @@ class Vis():
         '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_roc.csv", delimiter = ";")
+        #df_experiment_files = pd.read_csv("eval/debug.csv", delimiter = ";")
 
         roc_dfs = [] 
         version_ids = [0, 1, 2]
@@ -917,7 +921,7 @@ class Vis():
         # , index=["Hypo_llama", "Full_llama", "Args_llama", "Hypo_qwen", "Full_qwen", "Args_qwen"]
         for col in roc_dfs[0].columns:
             roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
-
+    
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_cmu.csv", delimiter = ";")
 
@@ -1868,7 +1872,7 @@ if __name__ == "__main__":
     experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
     #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
-    vis.perform_paired_bootstrap()
+    #vis.perform_paired_bootstrap()
 
     #vis.compute_all_metrics("./eval/final.csv")
 
@@ -1882,7 +1886,7 @@ if __name__ == "__main__":
     #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    #vis.plot_exploration_changes()
+    vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
