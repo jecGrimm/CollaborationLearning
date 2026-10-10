@@ -19,6 +19,8 @@ from collections import defaultdict, Counter
 import os
 import pandas as pd
 from pprint import pp
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 TAG_RE = re.compile(r"<([A-Z_]+)>(.*?)</\1>", re.DOTALL)
 LABELS = ["COORDINATION", "CORRECT_ARG", "CORRECT_HYPO", "CORRECT_INFORMATION", "CORRECT_REJECT_ARG", "CORRECT_REJECT_HYPO", "CORRECT_SUPPORT_ARG", "CORRECT_SUPPORT_HYPO", "INCORRECT_ARG", "INCORRECT_HYPO", "INCORRECT_REJECT_ARG", "INCORRECT_REJECT_HYPO", "INCORRECT_SUPPORT_ARG", "INCORRECT_SUPPORT_HYPO", "REASONING"]
@@ -77,7 +79,7 @@ def align_and_tokenize(plain1, spans1, plain2, spans2):
     """If the two plain texts differ slightly, align them with difflib so we
     still compare like-for-like tokens instead of crashing on an offset mismatch."""
     if plain1 == plain2:
-        toks = tokenize_with_offsets(plain1)
+        toks = tokenize_with_offsets(plain1) # manual tokenizer
         pairs = []
         for start, end, tok in toks:
             l1 = label_at(spans1, start)
@@ -129,38 +131,42 @@ def token_level_report(pairs):
     acc = sum(1 for a, b in labels_pairs if a == b) / n if n else float("nan")
     kappa = cohen_kappa(labels_pairs)
 
+    disagr = Counter((a, b) for a, b in labels_pairs if a != b).most_common()
+
     # per-label precision/recall/F1, treating annotator1 as reference, annotator2 as hypothesis
-    labels = sorted(set(l for pair in labels_pairs for l in pair))
-    tp = Counter()
-    fp = Counter()
-    fn = Counter()
-    for a, b in labels_pairs:
-        if a == b:
-            tp[a] += 1
-        else:
-            fn[a] += 1  # annotator1 said 'a' but annotator2 didn't match
-            fp[b] += 1  # annotator2 said 'b' but annotator1 didn't match
+    # labels = sorted(set(l for pair in labels_pairs for l in pair))
+    # tp = Counter()
+    # fp = Counter()
+    # fn = Counter()
+    # for a, b in labels_pairs:
+    #     if a == b:
+    #         tp[a] += 1
+    #     else:
+    #         fn[a] += 1  # annotator1 said 'a' but annotator2 didn't match
+    #         fp[b] += 1  # annotator2 said 'b' but annotator1 didn't match
 
     results = defaultdict(float)
     results["tokens_compared"] = n
     results["accuracy"] = acc
     results["kappa"] = kappa
+    results["disagreements"] = disagr
     print(f"Tokens compared: {n}")
     print(f"Raw agreement (accuracy): {acc:.4f}")
     print(f"Cohen's Kappa: {kappa:.4f}")
+    print(f"Disagreements: {disagr}")
     print()
-    print(f"{'Label':30s} {'Prec':>7s} {'Rec':>7s} {'F1':>7s} {'Support':>8s}")
-    for l in labels:
-        support = tp[l] + fn[l]
-        prec = tp[l] / (tp[l] + fp[l]) if (tp[l] + fp[l]) else 0.0
-        rec = tp[l] / (tp[l] + fn[l]) if (tp[l] + fn[l]) else 0.0
-        f1 = 2 * prec * rec / (prec + rec) if (prec + rec) else 0.0
-        print(f"{l:30s} {prec:7.3f} {rec:7.3f} {f1:7.3f} {support:8d}")
+    # print(f"{'Label':30s} {'Prec':>7s} {'Rec':>7s} {'F1':>7s} {'Support':>8s}")
+    # for l in labels:
+    #     #support = tp[l] + fn[l] # same + 
+    #     #prec = tp[l] / (tp[l] + fp[l]) if (tp[l] + fp[l]) else 0.0
+    #     #rec = tp[l] / (tp[l] + fn[l]) if (tp[l] + fn[l]) else 0.0
+    #     #f1 = 2 * prec * rec / (prec + rec) if (prec + rec) else 0.0
+    #     #print(f"{l:30s} {prec:7.3f} {rec:7.3f} {f1:7.3f}")
 
-        results[f"{l}_precision"] = prec
-        results[f"{l}_recall"] = rec
-        results[f"{l}_f1"] = f1
-        results[f"{l}_support"] = support
+    #     results[f"{l}_precision"] = prec
+    #     results[f"{l}_recall"] = rec
+    #     results[f"{l}_f1"] = f1
+    #     #results[f"{l}_support"] = support
     
     return results
 
@@ -169,47 +175,76 @@ def span_level_report(spans1, spans2):
     """Exact-match span comparison: merge consecutive same-label O-spans aren't
     merged here since original spans already come from distinct tags, but we
     compare (start,end,label) tuples directly (excluding 'O')."""
-    set1 = {(s, e, l) for s, e, l in spans1 if l != "O"}
-    set2 = {(s, e, l) for s, e, l in spans2 if l != "O"}
+    # only comparing labelled spans
+    # set1 = {(s, e, l) for s, e, l in spans1 if l != "O"}
+    # set2 = {(s, e, l) for s, e, l in spans2 if l != "O"}
+    # tp = set1 & set2
+    
+    # comparing labelled and outside spans
+    set1_w_o = set(spans1)
+    set2_w_o = set(spans2)
+    tp_w_o = set1_w_o & set2_w_o
 
-    tp = set1 & set2
-    fp = set2 - set1
-    fn = set1 - set2
+   
+    #fp = set2 - set1 # assumes that one annotator has the correct answers
+    #fn = set1 - set2
 
-    prec = len(tp) / len(set2) if set2 else 0.0
-    rec = len(tp) / len(set1) if set1 else 0.0
-    f1 = 2 * prec * rec / (prec + rec) if (prec + rec) else 0.0
+    #prec = len(tp) / len(set2) if set2 else 0.0
+    #rec = len(tp) / len(set1) if set1 else 0.0
+    #f1 = 2 * prec * rec / (prec + rec) if (prec + rec) else 0.0
 
     results = defaultdict(float)
-    results["num_spans_anno1"] = len(set1)
-    results["num_spans_anno2"] = len(set2)
-    results["matching_spans"] = len(tp)
-    results["precision"] = prec
-    results["recall"] = rec
-    results["f1"] = f1
+    # results["num_spans_anno1"] = len(set1)
+    # results["num_spans_anno2"] = len(set2)
+    # results["matching_spans"] = len(tp)
 
-    print(f"Exact-match spans -- annotator1: {len(set1)}, annotator2: {len(set2)}, matched: {len(tp)}")
-    print(f"Precision: {prec:.4f}  Recall: {rec:.4f}  F1: {f1:.4f}")
-    print()
-    print("Per-label exact-match F1:")
-    labels = sorted(set(l for _, _, l in set1) | set(l for _, _, l in set2))
-    for l in labels:
-        s1 = {(s, e) for s, e, ll in set1 if ll == l}
-        s2 = {(s, e) for s, e, ll in set2 if ll == l}
-        m = s1 & s2
-        p = len(m) / len(s2) if s2 else 0.0
-        r = len(m) / len(s1) if s1 else 0.0
-        f = 2 * p * r / (p + r) if (p + r) else 0.0
-        print(f"  {l:28s} P={p:.3f} R={r:.3f} F1={f:.3f}  (ann1={len(s1)}, ann2={len(s2)})")
+    results["num_spans_anno1_with_O"] = len(set1_w_o)
+    results["num_spans_anno2_with_O"] = len(set2_w_o)
+    results["matching_spans_with_O"] = len(tp_w_o)
+    #results["precision"] = prec
+    #results["recall"] = rec
+    #results["f1"] = f1
 
-        results[f"{l}_num_spans_anno1"] = len(set1)
-        results[f"{l}_num_spans_anno2"] = len(set2)
-        results[f"{l}_precision"] = prec
-        results[f"{l}_recall"] = rec
-        results[f"{l}_f1"] = f1
+#     print(f"Exact-match spans -- annotator1: {len(set1)}, annotator2: {len(set2)}, matched: {len(tp)}")
+#    # print(f"Precision: {prec:.4f}  Recall: {rec:.4f}  F1: {f1:.4f}")
+#     print()
+#     #print("Per-label exact-match F1:")
+#     labels = sorted(set(l for _, _, l in set1) | set(l for _, _, l in set2))
+#     for l in labels:
+#         s1 = {(s, e) for s, e, ll in set1 if ll == l}
+#         s2 = {(s, e) for s, e, ll in set2 if ll == l}
+#         m = s1 & s2
+#         print(f"  {l:28s} Matching_spans={len(m):.2f}  (ann1={len(s1)}, ann2={len(s2)})")
+
+#         results[f"{l}_num_spans_anno1"] = len(set1)
+#         results[f"{l}_num_spans_anno2"] = len(set2)
+#         results[f"{l}_matching_spans"] = len(m)
+
+    print(f"Exact-match spans with O -- annotator1: {len(set1_w_o)}, annotator2: {len(set2_w_o)}, matched: {len(tp_w_o)}\n")
+    labels_w_o = sorted(set(l for _, _, l in set1_w_o) | set(l for _, _, l in set2_w_o))
+    for l in labels_w_o:
+        s1_w_o = {(s, e) for s, e, ll in set1_w_o if ll == l}
+        s2_w_o = {(s, e) for s, e, ll in set2_w_o if ll == l}
+        m_w_o = s1_w_o & s2_w_o
+
+        print(f"  {l:28s} Matching_spans={len(m_w_o):.2f}  (ann1={len(s1_w_o)}, ann2={len(s2_w_o)})")
+
+        results[f"{l}_num_spans_anno1_with_O"] = len(s1_w_o)
+        results[f"{l}_num_spans_anno2_with_O"] = len(s2_w_o)
+        results[f"{l}_matching_spans_with_O"] = len(m_w_o)
+
+        # disagreements 
+        #disagr = s1_w_o & s2_w_o
+        #Counter(a for a, b in pairs_labels)
+
+        # p = len(m) / len(s2) if s2 else 0.0
+        # r = len(m) / len(s1) if s1 else 0.0
+        # f = 2 * p * r / (p + r) if (p + r) else 0.0
+        #results[f"{l}_precision"] = prec
+        #results[f"{l}_recall"] = rec
+        #results[f"{l}_f1"] = f1
     
     return results
-
 
 def compare_all_files(task: str):
     # Compare CMU
@@ -222,11 +257,12 @@ def compare_all_files(task: str):
     num_insts_model = 3
 
     token_kappa_list = []
+    disagreements = []
     token_kappa_per_model = defaultdict(float)
-    token_f1_per_label = defaultdict(float)
+    #token_f1_per_label = defaultdict(float)
     for model_dir in model_dirs:
         if model_dir != ".DS_Store":
-            anno_path = f"{task_path}/{model_dir}/annotated"
+            #anno_path = f"{task_path}/{model_dir}/annotated"
             anno_1_path = f"{task_path}/{model_dir}/annotated/annotator_1"
             anno_2_path = f"{task_path}/{model_dir}/annotated/annotator_2"
             
@@ -254,19 +290,39 @@ def compare_all_files(task: str):
                     token_results_per_model[model_dir][inst.split(".txt")[0]] = token_inst_results
                     token_kappa_list.append(token_inst_results["kappa"])
                     token_kappa_per_model[model_dir] += token_inst_results["kappa"]
+                    disagreements += token_inst_results["disagreements"]
 
-                    for lbl in LABELS:
-                        token_f1_per_label[lbl] += token_inst_results[f"{lbl}_f1"]
+                    # for lbl in LABELS:
+                    #     token_f1_per_label[lbl] += token_inst_results[f"{lbl}_f1"]
 
                     print()
                     print("=" * 60)
                     print("SPAN-LEVEL AGREEMENT (exact boundary + label match)")
                     print("=" * 60)
                     span_results_per_model[model_dir][inst.split(".txt")[0]] = span_level_report(spans1, spans2)
+                    print()
     
     token_kappa_avg = round((sum(token_kappa_list)/num_insts_total)*100, 2)
     token_kappa_per_model_avg = {model: round((kappa/num_insts_model)*100, 2) for model,kappa in token_kappa_per_model.items()}
-    token_f1_per_label_avg = {lbl: round((f1/num_insts_total)*100, 2) for lbl, f1 in token_f1_per_label.items()} 
+    #token_f1_per_label_avg = {lbl: round((f1/num_insts_total)*100, 2) for lbl, f1 in token_f1_per_label.items()} 
+    disagreements_total = defaultdict(int)
+    for disagr, count in disagreements:
+        disagreements_total[disagr] += count
+
+    df_disagr_total = pd.DataFrame({"Label Annotator1": [elem[0] for elem in disagreements_total.keys()], "Label Annotator2": [elem[1] for elem in disagreements_total.keys()], "Count": list(disagreements_total.values())})
+
+    sns.heatmap(
+        df_disagr_total.pivot(index="Label Annotator1", columns="Label Annotator2", values="Count").fillna(0), 
+        vmin = 0,
+        vmax = df_disagr_total["Count"].max(),
+        fmt = ".0f",
+        annot = True, 
+        cbar_kws={'label': 'Number of Disagreement Labels'}, 
+        annot_kws={"size": 5.0}
+    )
+    plt.tick_params(axis="both", labelsize=7)
+    plt.tight_layout()
+    plt.savefig(f"./visualizations/{task}/conv_disagreement.pdf")
 
     print("=" * 60)
     print("AVERAGE TOKEN-LEVEL AGREEMENT")
@@ -278,8 +334,11 @@ def compare_all_files(task: str):
     print("AVERAGE TOKEN-LEVEL KAPPA PER MODEL")
     pp(token_kappa_per_model_avg)
 
-    print("AVERAGE TOKEN-LEVEL KAPPA PER LABEL")
-    pp(token_f1_per_label_avg)
+    print("DISAGREEMENTS")
+    pp({k: v for k, v in sorted(disagreements_total.items(), key=lambda item: item[1], reverse = True)})
+
+    #print("AVERAGE TOKEN-LEVEL KAPPA PER LABEL")
+    #pp(token_f1_per_label_avg)
 
 def main():
     ap = argparse.ArgumentParser()

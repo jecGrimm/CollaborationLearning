@@ -164,7 +164,7 @@ class Agent:
 
         self.sampling_params = SamplingParams(
             max_tokens=self.max_new_tokens,
-            stop=["<|im_end|>", "<|endoftext|>"],
+            #stop=["<|im_end|>", "<|endoftext|>"],
             temperature = 0.7,
             top_p = top_p,
             top_k=top_k,
@@ -363,7 +363,7 @@ class SingleAgent(Agent):
 
             logger.run.config.update({"enable_batch_invariant": True})
 
-            self.init_vllm(logger = logger, thinking_budget=thinking_budget)
+            self.init_vllm(logger = logger)
         else:
             pipe, logger, _ = self.init_pipe(device = device, logger = logger, thinking_budget = thinking_budget) # processor not needed because models are only prompted once
     
@@ -397,12 +397,6 @@ class SingleAgent(Agent):
             # process shard
             shard_data = prompt_data.shard(num_shards=num_shards, index=shard_idx)
 
-            # prompt model
-            outputs = tqdm([out for out in pipe(
-                    list(shard_data["prompt"]),
-                    batch_size = batch_size
-                )], desc = "Processing batches", total = len(list(shard_data["prompt"])))
-            
             # store shard output
             output_list = []
             thinking_answer = []

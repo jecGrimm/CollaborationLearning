@@ -1,157 +1,31 @@
 ============================================================
-INSTANCE:  265_585.txt
-TOKEN-LEVEL AGREEMENT
-============================================================
-Tokens compared: 1287
-Raw agreement (accuracy): 0.7211
-Cohen's Kappa: 0.5635
-
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.701   1.000   0.824      615
-CORRECT_ARG                      0.528   1.000   0.691       28
-CORRECT_INFORMATION              0.959   0.740   0.835       96
-INCORRECT_ARG                    0.000   0.000   0.000        0
-INCORRECT_HYPO                   0.000   0.000   0.000        1
-INCORRECT_REJECT_ARG             0.000   0.000   0.000       66
-INCORRECT_SUPPORT_ARG            0.986   0.232   0.375      298
-INCORRECT_SUPPORT_HYPO           0.000   0.000   0.000        0
-O                                0.900   0.818   0.857       11
-REASONING                        0.805   0.791   0.798      172
-
-============================================================
-SPAN-LEVEL AGREEMENT (exact boundary + label match)
-============================================================
-Exact-match spans -- annotator1: 110, annotator2: 109, matched: 63
-Precision: 0.5780  Recall: 0.5727  F1: 0.5753
-
-Per-label exact-match F1:
-  COORDINATION                 P=0.500 R=0.800 F1=0.615  (ann1=20, ann2=32)
-  CORRECT_ARG                  P=0.071 R=1.000 F1=0.133  (ann1=1, ann2=14)
-  CORRECT_INFORMATION          P=0.889 R=0.653 F1=0.753  (ann1=49, ann2=36)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
-  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
-  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=0)
-  INCORRECT_SUPPORT_ARG        P=0.667 R=0.200 F1=0.308  (ann1=20, ann2=6)
-  INCORRECT_SUPPORT_HYPO       P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=1)
-  REASONING                    P=0.588 R=0.667 F1=0.625  (ann1=15, ann2=17)
-============================================================
-INSTANCE:  265_291.txt
-TOKEN-LEVEL AGREEMENT
-============================================================
-Tokens compared: 1236
-Raw agreement (accuracy): 0.9167
-Cohen's Kappa: 0.8977
-
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.912   0.997   0.952      310
-CORRECT_INFORMATION              0.926   0.897   0.911       97
-CORRECT_REJECT_ARG               1.000   0.987   0.994      316
-CORRECT_REJECT_HYPO              0.000   0.000   0.000       22
-CORRECT_SUPPORT_ARG              0.989   0.750   0.853      124
-CORRECT_SUPPORT_HYPO             0.083   1.000   0.154        2
-INCORRECT_ARG                    0.000   0.000   0.000        0
-INCORRECT_HYPO                   1.000   1.000   1.000       32
-INCORRECT_REJECT_ARG             1.000   1.000   1.000       31
-INCORRECT_SUPPORT_ARG            1.000   0.459   0.629       61
-O                                1.000   0.909   0.952       11
-REASONING                        0.958   0.996   0.977      230
-
-============================================================
-SPAN-LEVEL AGREEMENT (exact boundary + label match)
-============================================================
-Exact-match spans -- annotator1: 83, annotator2: 86, matched: 56
-Precision: 0.6512  Recall: 0.6747  F1: 0.6627
-
-Per-label exact-match F1:
-  COORDINATION                 P=0.615 R=0.727 F1=0.667  (ann1=11, ann2=13)
-  CORRECT_INFORMATION          P=0.677 R=0.677 F1=0.677  (ann1=31, ann2=31)
-  CORRECT_REJECT_ARG           P=0.667 R=0.714 F1=0.690  (ann1=14, ann2=15)
-  CORRECT_REJECT_HYPO          P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
-  CORRECT_SUPPORT_ARG          P=0.714 R=0.625 F1=0.667  (ann1=8, ann2=7)
-  CORRECT_SUPPORT_HYPO         P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=3)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
-  INCORRECT_HYPO               P=1.000 R=1.000 F1=1.000  (ann1=3, ann2=3)
-  INCORRECT_REJECT_ARG         P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
-  INCORRECT_SUPPORT_ARG        P=1.000 R=0.400 F1=0.571  (ann1=5, ann2=2)
-  REASONING                    P=0.714 R=0.833 F1=0.769  (ann1=6, ann2=7)
-============================================================
-INSTANCE:  265_293.txt
-TOKEN-LEVEL AGREEMENT
-============================================================
-Tokens compared: 1373
-Raw agreement (accuracy): 0.7720
-Cohen's Kappa: 0.7083
-
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.896   0.991   0.941      555
-CORRECT_ARG                      1.000   0.982   0.991       56
-CORRECT_INFORMATION              0.921   0.949   0.935       98
-CORRECT_REJECT_ARG               1.000   0.485   0.653      130
-CORRECT_REJECT_HYPO              1.000   1.000   1.000       11
-CORRECT_SUPPORT_ARG              0.000   0.000   0.000        0
-INCORRECT_ARG                    0.000   0.000   0.000        0
-INCORRECT_REJECT_ARG             1.000   0.354   0.523      158
-INCORRECT_SUPPORT_ARG            1.000   0.407   0.578      177
-O                                1.000   1.000   1.000        9
-REASONING                        0.968   0.844   0.901      179
-
-============================================================
-SPAN-LEVEL AGREEMENT (exact boundary + label match)
-============================================================
-Exact-match spans -- annotator1: 128, annotator2: 127, matched: 65
-Precision: 0.5118  Recall: 0.5078  F1: 0.5098
-
-Per-label exact-match F1:
-  COORDINATION                 P=0.447 R=0.548 F1=0.493  (ann1=31, ann2=38)
-  CORRECT_ARG                  P=0.667 R=0.667 F1=0.667  (ann1=3, ann2=3)
-  CORRECT_INFORMATION          P=0.604 R=0.604 F1=0.604  (ann1=53, ann2=53)
-  CORRECT_REJECT_ARG           P=0.600 R=0.200 F1=0.300  (ann1=15, ann2=5)
-  CORRECT_REJECT_HYPO          P=1.000 R=1.000 F1=1.000  (ann1=1, ann2=1)
-  CORRECT_SUPPORT_ARG          P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=10)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=4)
-  INCORRECT_REJECT_ARG         P=0.600 R=0.429 F1=0.500  (ann1=7, ann2=5)
-  INCORRECT_SUPPORT_ARG        P=1.000 R=0.273 F1=0.429  (ann1=11, ann2=3)
-  REASONING                    P=0.800 R=0.571 F1=0.667  (ann1=7, ann2=5)
-============================================================
 INSTANCE:  268_924.txt
 TOKEN-LEVEL AGREEMENT
 ============================================================
 Tokens compared: 822
 Raw agreement (accuracy): 0.7555
 Cohen's Kappa: 0.6937
+Disagreements: [(('INCORRECT_REJECT_ARG', 'REASONING'), 77), (('CORRECT_ARG', 'REASONING'), 39), (('INCORRECT_REJECT_ARG', 'INCORRECT_ARG'), 29), (('REASONING', 'CORRECT_SUPPORT_ARG'), 17), (('SUPPORT_ARG', 'COORDINATION'), 14), (('INCORRECT_REJECT_HYPO', 'INCORRECT_SUPPORT_HYPO'), 10), (('INCORRECT_REJECT_HYPO', 'INCORRECT_ARG'), 7), (('INCORRECT_SUPPORT_HYPO', 'INCORRECT_SUPPORT_ARG'), 7), (('COORDINATION', 'O'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.888   0.991   0.937      112
-CORRECT_ARG                      0.000   0.000   0.000       39
-CORRECT_INFORMATION              1.000   1.000   1.000       54
-CORRECT_SUPPORT_ARG              0.000   0.000   0.000        0
-INCORRECT_ARG                    0.000   0.000   0.000        0
-INCORRECT_REJECT_ARG             0.000   0.000   0.000      106
-INCORRECT_REJECT_HYPO            0.000   0.000   0.000       17
-INCORRECT_SUPPORT_ARG            0.960   1.000   0.979      166
-INCORRECT_SUPPORT_HYPO           0.831   0.875   0.852       56
-O                                0.889   1.000   0.941        8
-REASONING                        0.668   0.932   0.778      250
-SUPPORT_ARG                      0.000   0.000   0.000       14
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 63, annotator2: 60, matched: 41
-Precision: 0.6833  Recall: 0.6508  F1: 0.6667
+Exact-match spans with O -- annotator1: 120, annotator2: 115, matched: 91
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.700 R=0.778 F1=0.737  (ann1=9, ann2=10)
-  CORRECT_ARG                  P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
-  CORRECT_INFORMATION          P=1.000 R=1.000 F1=1.000  (ann1=18, ann2=18)
-  CORRECT_SUPPORT_ARG          P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=2)
-  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=3, ann2=0)
-  INCORRECT_REJECT_HYPO        P=0.000 R=0.000 F1=0.000  (ann1=3, ann2=0)
-  INCORRECT_SUPPORT_ARG        P=0.500 R=0.500 F1=0.500  (ann1=6, ann2=6)
-  INCORRECT_SUPPORT_HYPO       P=0.636 R=0.700 F1=0.667  (ann1=10, ann2=11)
-  REASONING                    P=0.600 R=0.500 F1=0.545  (ann1=12, ann2=10)
-  SUPPORT_ARG                  P=0.000 R=0.000 F1=0.000  (ann1=1, ann2=0)
+  COORDINATION                 Matching_spans=7.00  (ann1=9, ann2=10)
+  CORRECT_ARG                  Matching_spans=0.00  (ann1=1, ann2=0)
+  CORRECT_INFORMATION          Matching_spans=18.00  (ann1=18, ann2=18)
+  CORRECT_SUPPORT_ARG          Matching_spans=0.00  (ann1=0, ann2=3)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=0, ann2=2)
+  INCORRECT_REJECT_ARG         Matching_spans=0.00  (ann1=3, ann2=0)
+  INCORRECT_REJECT_HYPO        Matching_spans=0.00  (ann1=3, ann2=0)
+  INCORRECT_SUPPORT_ARG        Matching_spans=3.00  (ann1=6, ann2=6)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=7.00  (ann1=10, ann2=11)
+  O                            Matching_spans=50.00  (ann1=57, ann2=55)
+  REASONING                    Matching_spans=6.00  (ann1=12, ann2=10)
+  SUPPORT_ARG                  Matching_spans=0.00  (ann1=1, ann2=0)
+
 ============================================================
 INSTANCE:  268_863.txt
 TOKEN-LEVEL AGREEMENT
@@ -159,37 +33,26 @@ TOKEN-LEVEL AGREEMENT
 Tokens compared: 811
 Raw agreement (accuracy): 0.9642
 Cohen's Kappa: 0.9582
+Disagreements: [(('INCORRECT_REJECT_ARG', 'INCORRECT_REJECT_HYPO'), 12), (('INCORRECT_SUPPORT_ARG', 'INCORRECT_SUPPORT_HYPO'), 8), (('INCORRECT_REJECT_HYPO', 'INCORRECT_REJECT_ARG'), 6), (('CORRECT_INFORMATION', 'COORDINATION'), 2), (('COORDINATION', 'O'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.988   0.994   0.991      171
-CORRECT_ARG                      1.000   1.000   1.000       80
-CORRECT_INFORMATION              1.000   0.972   0.986       72
-CORRECT_SUPPORT_ARG              1.000   1.000   1.000      151
-CORRECT_SUPPORT_HYPO             1.000   1.000   1.000        6
-INCORRECT_REJECT_ARG             0.927   0.864   0.894       88
-INCORRECT_REJECT_HYPO            0.429   0.600   0.500       15
-INCORRECT_SUPPORT_ARG            1.000   0.864   0.927       59
-INCORRECT_SUPPORT_HYPO           0.680   1.000   0.810       17
-O                                0.889   1.000   0.941        8
-REASONING                        1.000   1.000   1.000      144
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 103, annotator2: 105, matched: 85
-Precision: 0.8095  Recall: 0.8252  F1: 0.8173
+Exact-match spans with O -- annotator1: 186, annotator2: 192, matched: 164
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.714 R=0.667 F1=0.690  (ann1=15, ann2=14)
-  CORRECT_ARG                  P=0.833 R=1.000 F1=0.909  (ann1=5, ann2=6)
-  CORRECT_INFORMATION          P=1.000 R=0.977 F1=0.988  (ann1=43, ann2=42)
-  CORRECT_SUPPORT_ARG          P=0.769 R=0.833 F1=0.800  (ann1=12, ann2=13)
-  CORRECT_SUPPORT_HYPO         P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
-  INCORRECT_REJECT_ARG         P=0.625 R=0.714 F1=0.667  (ann1=7, ann2=8)
-  INCORRECT_REJECT_HYPO        P=0.667 R=0.500 F1=0.571  (ann1=4, ann2=3)
-  INCORRECT_SUPPORT_ARG        P=0.500 R=0.333 F1=0.400  (ann1=6, ann2=4)
-  INCORRECT_SUPPORT_HYPO       P=0.167 R=0.333 F1=0.222  (ann1=3, ann2=6)
-  REASONING                    P=0.857 R=1.000 F1=0.923  (ann1=6, ann2=7)
+  COORDINATION                 Matching_spans=10.00  (ann1=15, ann2=14)
+  CORRECT_ARG                  Matching_spans=5.00  (ann1=5, ann2=6)
+  CORRECT_INFORMATION          Matching_spans=42.00  (ann1=43, ann2=42)
+  CORRECT_SUPPORT_ARG          Matching_spans=10.00  (ann1=12, ann2=13)
+  CORRECT_SUPPORT_HYPO         Matching_spans=2.00  (ann1=2, ann2=2)
+  INCORRECT_REJECT_ARG         Matching_spans=5.00  (ann1=7, ann2=8)
+  INCORRECT_REJECT_HYPO        Matching_spans=2.00  (ann1=4, ann2=3)
+  INCORRECT_SUPPORT_ARG        Matching_spans=2.00  (ann1=6, ann2=4)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=1.00  (ann1=3, ann2=6)
+  O                            Matching_spans=79.00  (ann1=83, ann2=87)
+  REASONING                    Matching_spans=6.00  (ann1=6, ann2=7)
+
 ============================================================
 INSTANCE:  268_283.txt
 TOKEN-LEVEL AGREEMENT
@@ -197,79 +60,110 @@ TOKEN-LEVEL AGREEMENT
 Tokens compared: 1740
 Raw agreement (accuracy): 0.5172
 Cohen's Kappa: 0.4446
+Disagreements: [(('CORRECT_REJECT_ARG', 'CORRECT_SUPPORT_ARG'), 350), (('REASONING', 'CORRECT_SUPPORT_ARG'), 202), (('INCORRECT_ARG', 'REASONING'), 82), (('COORDINATION', 'CORRECT_SUPPORT_ARG'), 35), (('CORRECT_SUPPORT_HYPO', 'CORRECT_SUPPORT_ARG'), 33), (('CORRECT_REJECT_ARG', 'REASONING'), 29), (('INCORRECT_REJECT_ARG', 'COORDINATION'), 28), (('INCORRECT_REJECT_ARG', 'INCORRECT_SUPPORT_ARG'), 14), (('CORRECT_REJECT_HYPO', 'CORRECT_SUPPORT_HYPO'), 13), (('INCORRECT_REJECT_ARG', 'INCORRECT_SUPPORT_HYPO'), 13), (('INCORRECT_HYPO', 'INCORRECT_SUPPORT_HYPO'), 12), (('CORRECT_REJECT_HYPO', 'CORRECT_HYPO'), 12), (('CORRECT_SUPPORT_ARG', 'CORRECT_SUPPORT_HYPO'), 6), (('CORRECT_REJECT_ARG', 'CORRECT_HYPO'), 3), (('REASONING', 'CORRECT_INFORMATION'), 3), (('CORRECT_REJECT_ARG', 'O'), 1), (('CORRECT_INFORMATION', 'CORRECT_HYPO'), 1), (('CORRECT_INFORMATION', 'CORRECT_SUPPORT_HYPO'), 1), (('CORRECT_INFORMATION', 'CORRECT_SUPPORT_ARG'), 1), (('CORRECT_INFORMATION', 'COORDINATION'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.826   0.798   0.812      173
-CORRECT_HYPO                     0.000   0.000   0.000        0
-CORRECT_INFORMATION              0.984   0.979   0.981      189
-CORRECT_REJECT_ARG               1.000   0.030   0.059      395
-CORRECT_REJECT_HYPO              0.000   0.000   0.000       25
-CORRECT_SUPPORT_ARG              0.292   0.977   0.450      262
-CORRECT_SUPPORT_HYPO             0.804   0.713   0.756      115
-INCORRECT_ARG                    1.000   0.311   0.474      119
-INCORRECT_HYPO                   0.000   0.000   0.000       12
-INCORRECT_REJECT_ARG             0.000   0.000   0.000       55
-INCORRECT_SUPPORT_ARG            0.767   1.000   0.868       46
-INCORRECT_SUPPORT_HYPO           0.286   1.000   0.444       10
-O                                0.900   1.000   0.947        9
-REASONING                        0.530   0.379   0.442      330
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 161, annotator2: 158, matched: 104
-Precision: 0.6582  Recall: 0.6460  F1: 0.6520
+Exact-match spans with O -- annotator1: 282, annotator2: 278, matched: 214
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.769 R=0.667 F1=0.714  (ann1=15, ann2=13)
-  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
-  CORRECT_INFORMATION          P=0.900 R=0.885 F1=0.893  (ann1=61, ann2=60)
-  CORRECT_REJECT_ARG           P=0.750 R=0.167 F1=0.273  (ann1=18, ann2=4)
-  CORRECT_REJECT_HYPO          P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
-  CORRECT_SUPPORT_ARG          P=0.405 R=0.682 F1=0.508  (ann1=22, ann2=37)
-  CORRECT_SUPPORT_HYPO         P=0.692 R=0.692 F1=0.692  (ann1=13, ann2=13)
-  INCORRECT_ARG                P=0.500 R=0.333 F1=0.400  (ann1=6, ann2=4)
-  INCORRECT_HYPO               P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
-  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=3, ann2=0)
-  INCORRECT_SUPPORT_ARG        P=0.600 R=0.750 F1=0.667  (ann1=4, ann2=5)
-  INCORRECT_SUPPORT_HYPO       P=0.429 R=1.000 F1=0.600  (ann1=3, ann2=7)
-  REASONING                    P=0.417 R=0.417 F1=0.417  (ann1=12, ann2=12)
+  COORDINATION                 Matching_spans=10.00  (ann1=15, ann2=13)
+  CORRECT_HYPO                 Matching_spans=0.00  (ann1=0, ann2=3)
+  CORRECT_INFORMATION          Matching_spans=54.00  (ann1=61, ann2=60)
+  CORRECT_REJECT_ARG           Matching_spans=3.00  (ann1=18, ann2=4)
+  CORRECT_REJECT_HYPO          Matching_spans=0.00  (ann1=2, ann2=0)
+  CORRECT_SUPPORT_ARG          Matching_spans=15.00  (ann1=22, ann2=37)
+  CORRECT_SUPPORT_HYPO         Matching_spans=9.00  (ann1=13, ann2=13)
+  INCORRECT_ARG                Matching_spans=2.00  (ann1=6, ann2=4)
+  INCORRECT_HYPO               Matching_spans=0.00  (ann1=2, ann2=0)
+  INCORRECT_REJECT_ARG         Matching_spans=0.00  (ann1=3, ann2=0)
+  INCORRECT_SUPPORT_ARG        Matching_spans=3.00  (ann1=4, ann2=5)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=3.00  (ann1=3, ann2=7)
+  O                            Matching_spans=110.00  (ann1=121, ann2=120)
+  REASONING                    Matching_spans=5.00  (ann1=12, ann2=12)
+
 ============================================================
-INSTANCE:  402_704.txt
+INSTANCE:  265_293.txt
 TOKEN-LEVEL AGREEMENT
 ============================================================
-Tokens compared: 1159
-Raw agreement (accuracy): 0.7429
-Cohen's Kappa: 0.6860
+Tokens compared: 1373
+Raw agreement (accuracy): 0.7720
+Cohen's Kappa: 0.7083
+Disagreements: [(('INCORRECT_REJECT_ARG', 'CORRECT_SUPPORT_ARG'), 102), (('CORRECT_REJECT_ARG', 'COORDINATION'), 43), (('INCORRECT_SUPPORT_ARG', 'INCORRECT_ARG'), 43), (('INCORRECT_SUPPORT_ARG', 'CORRECT_SUPPORT_ARG'), 41), (('REASONING', 'CORRECT_SUPPORT_ARG'), 28), (('CORRECT_REJECT_ARG', 'CORRECT_SUPPORT_ARG'), 22), (('INCORRECT_SUPPORT_ARG', 'COORDINATION'), 21), (('CORRECT_INFORMATION', 'REASONING'), 5), (('COORDINATION', 'CORRECT_INFORMATION'), 5), (('CORRECT_REJECT_ARG', 'CORRECT_INFORMATION'), 2), (('CORRECT_ARG', 'CORRECT_INFORMATION'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     1.000   0.830   0.907      282
-CORRECT_INFORMATION              1.000   1.000   1.000       50
-INCORRECT_ARG                    0.000   0.000   0.000      114
-INCORRECT_HYPO                   0.600   1.000   0.750       18
-INCORRECT_REJECT_ARG             0.441   1.000   0.612       63
-INCORRECT_REJECT_HYPO            1.000   0.387   0.558       31
-INCORRECT_SUPPORT_ARG            0.823   1.000   0.903      265
-INCORRECT_SUPPORT_HYPO           0.583   0.845   0.690       58
-O                                1.000   1.000   1.000        8
-REASONING                        0.587   0.600   0.593      270
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 98, annotator2: 98, matched: 72
-Precision: 0.7347  Recall: 0.7347  F1: 0.7347
+Exact-match spans with O -- annotator1: 227, annotator2: 237, matched: 157
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.909 R=0.769 F1=0.833  (ann1=13, ann2=11)
-  CORRECT_INFORMATION          P=1.000 R=1.000 F1=1.000  (ann1=37, ann2=37)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=5, ann2=0)
-  INCORRECT_HYPO               P=0.333 R=1.000 F1=0.500  (ann1=2, ann2=6)
-  INCORRECT_REJECT_ARG         P=0.429 R=0.600 F1=0.500  (ann1=5, ann2=7)
-  INCORRECT_REJECT_HYPO        P=1.000 R=0.333 F1=0.500  (ann1=6, ann2=2)
-  INCORRECT_SUPPORT_ARG        P=0.562 R=0.692 F1=0.621  (ann1=13, ann2=16)
-  INCORRECT_SUPPORT_HYPO       P=0.636 R=0.778 F1=0.700  (ann1=9, ann2=11)
-  REASONING                    P=0.250 R=0.250 F1=0.250  (ann1=8, ann2=8)
+  COORDINATION                 Matching_spans=17.00  (ann1=31, ann2=38)
+  CORRECT_ARG                  Matching_spans=2.00  (ann1=3, ann2=3)
+  CORRECT_INFORMATION          Matching_spans=32.00  (ann1=53, ann2=53)
+  CORRECT_REJECT_ARG           Matching_spans=3.00  (ann1=15, ann2=5)
+  CORRECT_REJECT_HYPO          Matching_spans=1.00  (ann1=1, ann2=1)
+  CORRECT_SUPPORT_ARG          Matching_spans=0.00  (ann1=0, ann2=10)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=0, ann2=4)
+  INCORRECT_REJECT_ARG         Matching_spans=3.00  (ann1=7, ann2=5)
+  INCORRECT_SUPPORT_ARG        Matching_spans=3.00  (ann1=11, ann2=3)
+  O                            Matching_spans=92.00  (ann1=99, ann2=110)
+  REASONING                    Matching_spans=4.00  (ann1=7, ann2=5)
+
+============================================================
+INSTANCE:  265_291.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1236
+Raw agreement (accuracy): 0.9167
+Cohen's Kappa: 0.8977
+Disagreements: [(('INCORRECT_SUPPORT_ARG', 'INCORRECT_ARG'), 33), (('CORRECT_SUPPORT_ARG', 'COORDINATION'), 30), (('CORRECT_REJECT_HYPO', 'CORRECT_SUPPORT_HYPO'), 21), (('CORRECT_INFORMATION', 'REASONING'), 10), (('CORRECT_REJECT_ARG', 'CORRECT_INFORMATION'), 4), (('CORRECT_REJECT_HYPO', 'CORRECT_INFORMATION'), 1), (('COORDINATION', 'CORRECT_INFORMATION'), 1), (('CORRECT_SUPPORT_ARG', 'CORRECT_INFORMATION'), 1), (('O', 'CORRECT_SUPPORT_ARG'), 1), (('REASONING', 'CORRECT_SUPPORT_HYPO'), 1)]
+
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans with O -- annotator1: 155, annotator2: 168, matched: 126
+
+  COORDINATION                 Matching_spans=8.00  (ann1=11, ann2=13)
+  CORRECT_INFORMATION          Matching_spans=21.00  (ann1=31, ann2=31)
+  CORRECT_REJECT_ARG           Matching_spans=10.00  (ann1=14, ann2=15)
+  CORRECT_REJECT_HYPO          Matching_spans=0.00  (ann1=2, ann2=0)
+  CORRECT_SUPPORT_ARG          Matching_spans=5.00  (ann1=8, ann2=7)
+  CORRECT_SUPPORT_HYPO         Matching_spans=0.00  (ann1=1, ann2=3)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=0, ann2=3)
+  INCORRECT_HYPO               Matching_spans=3.00  (ann1=3, ann2=3)
+  INCORRECT_REJECT_ARG         Matching_spans=2.00  (ann1=2, ann2=2)
+  INCORRECT_SUPPORT_ARG        Matching_spans=2.00  (ann1=5, ann2=2)
+  O                            Matching_spans=70.00  (ann1=72, ann2=82)
+  REASONING                    Matching_spans=5.00  (ann1=6, ann2=7)
+
+============================================================
+INSTANCE:  265_585.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1287
+Raw agreement (accuracy): 0.7211
+Cohen's Kappa: 0.5635
+Disagreements: [(('INCORRECT_SUPPORT_ARG', 'COORDINATION'), 162), (('INCORRECT_REJECT_ARG', 'COORDINATION'), 66), (('REASONING', 'COORDINATION'), 34), (('INCORRECT_SUPPORT_ARG', 'INCORRECT_ARG'), 33), (('INCORRECT_SUPPORT_ARG', 'REASONING'), 32), (('CORRECT_INFORMATION', 'CORRECT_ARG'), 24), (('REASONING', 'CORRECT_INFORMATION'), 2), (('CORRECT_INFORMATION', 'O'), 1), (('INCORRECT_SUPPORT_ARG', 'CORRECT_INFORMATION'), 1), (('O', 'REASONING'), 1), (('INCORRECT_SUPPORT_ARG', 'CORRECT_ARG'), 1), (('O', 'INCORRECT_SUPPORT_ARG'), 1), (('INCORRECT_HYPO', 'INCORRECT_SUPPORT_HYPO'), 1)]
+
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans with O -- annotator1: 209, annotator2: 213, matched: 156
+
+  COORDINATION                 Matching_spans=16.00  (ann1=20, ann2=32)
+  CORRECT_ARG                  Matching_spans=1.00  (ann1=1, ann2=14)
+  CORRECT_INFORMATION          Matching_spans=32.00  (ann1=49, ann2=36)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=0, ann2=3)
+  INCORRECT_HYPO               Matching_spans=0.00  (ann1=1, ann2=0)
+  INCORRECT_REJECT_ARG         Matching_spans=0.00  (ann1=4, ann2=0)
+  INCORRECT_SUPPORT_ARG        Matching_spans=4.00  (ann1=20, ann2=6)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=0.00  (ann1=0, ann2=1)
+  O                            Matching_spans=93.00  (ann1=99, ann2=104)
+  REASONING                    Matching_spans=10.00  (ann1=15, ann2=17)
+
 ============================================================
 INSTANCE:  402_86.txt
 TOKEN-LEVEL AGREEMENT
@@ -277,43 +171,55 @@ TOKEN-LEVEL AGREEMENT
 Tokens compared: 1558
 Raw agreement (accuracy): 0.7022
 Cohen's Kappa: 0.6426
+Disagreements: [(('INCORRECT_SUPPORT_ARG', 'INCORRECT_REJECT_ARG'), 113), (('CORRECT_ARG', 'CORRECT_SUPPORT_ARG'), 73), (('INCORRECT_REJECT_ARG', 'INCORRECT_ARG'), 71), (('CORRECT_SUPPORT_ARG', 'CORRECT_REJECT_ARG'), 65), (('COORDINATION', 'CORRECT_SUPPORT_ARG'), 30), (('CORRECT_SUPPORT_HYPO', 'CORRECT_SUPPORT_ARG'), 24), (('INCORRECT_SUPPORT_ARG', 'INCORRECT_SUPPORT_HYPO'), 20), (('INCORRECT_SUPPORT_HYPO', 'INCORRECT_REJECT_ARG'), 19), (('CORRECT_SUPPORT_ARG', 'CORRECT_HYPO'), 18), (('REASONING', 'CORRECT_SUPPORT_ARG'), 12), (('INCORRECT_REJECT_HYPO', 'INCORRECT_ARG'), 8), (('CORRECT_SUPPORT_HYPO', 'CORRECT_HYPO'), 7), (('COORDINATION', 'REASONING'), 1), (('REASONING', 'CORRECT_INFORMATION'), 1), (('REASONING', 'COORDINATION'), 1), (('O', 'INCORRECT_ARG'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.995   0.876   0.932      249
-CORRECT_ARG                      0.000   0.000   0.000       73
-CORRECT_HYPO                     0.500   1.000   0.667       25
-CORRECT_INFORMATION              0.993   1.000   0.996      142
-CORRECT_REJECT_ARG               0.000   0.000   0.000        0
-CORRECT_SUPPORT_ARG              0.727   0.817   0.770      454
-CORRECT_SUPPORT_HYPO             0.000   0.000   0.000       31
-INCORRECT_ARG                    0.000   0.000   0.000        0
-INCORRECT_REJECT_ARG             0.000   0.000   0.000       71
-INCORRECT_REJECT_HYPO            1.000   0.619   0.765       21
-INCORRECT_SUPPORT_ARG            0.000   0.000   0.000      133
-INCORRECT_SUPPORT_HYPO           0.615   0.627   0.621       51
-O                                1.000   0.900   0.947       10
-REASONING                        0.996   0.953   0.974      298
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 131, annotator2: 126, matched: 74
-Precision: 0.5873  Recall: 0.5649  F1: 0.5759
+Exact-match spans with O -- annotator1: 247, annotator2: 239, matched: 177
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.714 R=0.625 F1=0.667  (ann1=16, ann2=14)
-  CORRECT_ARG                  P=0.000 R=0.000 F1=0.000  (ann1=4, ann2=0)
-  CORRECT_HYPO                 P=0.400 R=1.000 F1=0.571  (ann1=2, ann2=5)
-  CORRECT_INFORMATION          P=0.920 R=0.939 F1=0.929  (ann1=49, ann2=50)
-  CORRECT_REJECT_ARG           P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=3)
-  CORRECT_SUPPORT_ARG          P=0.333 R=0.409 F1=0.367  (ann1=22, ann2=27)
-  CORRECT_SUPPORT_HYPO         P=0.000 R=0.000 F1=0.000  (ann1=7, ann2=0)
-  INCORRECT_ARG                P=0.000 R=0.000 F1=0.000  (ann1=0, ann2=7)
-  INCORRECT_REJECT_ARG         P=0.000 R=0.000 F1=0.000  (ann1=7, ann2=8)
-  INCORRECT_REJECT_HYPO        P=1.000 R=0.667 F1=0.800  (ann1=3, ann2=2)
-  INCORRECT_SUPPORT_ARG        P=0.000 R=0.000 F1=0.000  (ann1=7, ann2=0)
-  INCORRECT_SUPPORT_HYPO       P=0.600 R=0.429 F1=0.500  (ann1=7, ann2=5)
-  REASONING                    P=0.400 R=0.286 F1=0.333  (ann1=7, ann2=5)
+  COORDINATION                 Matching_spans=10.00  (ann1=16, ann2=14)
+  CORRECT_ARG                  Matching_spans=0.00  (ann1=4, ann2=0)
+  CORRECT_HYPO                 Matching_spans=2.00  (ann1=2, ann2=5)
+  CORRECT_INFORMATION          Matching_spans=46.00  (ann1=49, ann2=50)
+  CORRECT_REJECT_ARG           Matching_spans=0.00  (ann1=0, ann2=3)
+  CORRECT_SUPPORT_ARG          Matching_spans=9.00  (ann1=22, ann2=27)
+  CORRECT_SUPPORT_HYPO         Matching_spans=0.00  (ann1=7, ann2=0)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=0, ann2=7)
+  INCORRECT_REJECT_ARG         Matching_spans=0.00  (ann1=7, ann2=8)
+  INCORRECT_REJECT_HYPO        Matching_spans=2.00  (ann1=3, ann2=2)
+  INCORRECT_SUPPORT_ARG        Matching_spans=0.00  (ann1=7, ann2=0)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=3.00  (ann1=7, ann2=5)
+  O                            Matching_spans=103.00  (ann1=116, ann2=113)
+  REASONING                    Matching_spans=2.00  (ann1=7, ann2=5)
+
+============================================================
+INSTANCE:  402_704.txt
+TOKEN-LEVEL AGREEMENT
+============================================================
+Tokens compared: 1159
+Raw agreement (accuracy): 0.7429
+Cohen's Kappa: 0.6860
+Disagreements: [(('INCORRECT_ARG', 'REASONING'), 114), (('REASONING', 'INCORRECT_REJECT_ARG'), 73), (('COORDINATION', 'INCORRECT_SUPPORT_HYPO'), 35), (('REASONING', 'INCORRECT_SUPPORT_ARG'), 35), (('COORDINATION', 'INCORRECT_SUPPORT_ARG'), 13), (('INCORRECT_REJECT_HYPO', 'INCORRECT_HYPO'), 12), (('INCORRECT_SUPPORT_HYPO', 'INCORRECT_SUPPORT_ARG'), 9), (('INCORRECT_REJECT_HYPO', 'INCORRECT_REJECT_ARG'), 7)]
+
+
+============================================================
+SPAN-LEVEL AGREEMENT (exact boundary + label match)
+============================================================
+Exact-match spans with O -- annotator1: 187, annotator2: 186, matched: 155
+
+  COORDINATION                 Matching_spans=10.00  (ann1=13, ann2=11)
+  CORRECT_INFORMATION          Matching_spans=37.00  (ann1=37, ann2=37)
+  INCORRECT_ARG                Matching_spans=0.00  (ann1=5, ann2=0)
+  INCORRECT_HYPO               Matching_spans=2.00  (ann1=2, ann2=6)
+  INCORRECT_REJECT_ARG         Matching_spans=3.00  (ann1=5, ann2=7)
+  INCORRECT_REJECT_HYPO        Matching_spans=2.00  (ann1=6, ann2=2)
+  INCORRECT_SUPPORT_ARG        Matching_spans=9.00  (ann1=13, ann2=16)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=7.00  (ann1=9, ann2=11)
+  O                            Matching_spans=83.00  (ann1=89, ann2=88)
+  REASONING                    Matching_spans=2.00  (ann1=8, ann2=8)
+
 ============================================================
 INSTANCE:  402_383.txt
 TOKEN-LEVEL AGREEMENT
@@ -321,39 +227,27 @@ TOKEN-LEVEL AGREEMENT
 Tokens compared: 2011
 Raw agreement (accuracy): 0.9000
 Cohen's Kappa: 0.8834
+Disagreements: [(('REASONING', 'INCORRECT_REJECT_ARG'), 136), (('INCORRECT_REJECT_ARG', 'INCORRECT_SUPPORT_ARG'), 31), (('CORRECT_SUPPORT_ARG', 'CORRECT_ARG'), 12), (('CORRECT_HYPO', 'CORRECT_ARG'), 10), (('CORRECT_INFORMATION', 'COORDINATION'), 7), (('REASONING', 'CORRECT_INFORMATION'), 3), (('REASONING', 'COORDINATION'), 1), (('COORDINATION', 'INCORRECT_REJECT_ARG'), 1)]
 
-Label                             Prec     Rec      F1  Support
-COORDINATION                     0.977   0.997   0.987      335
-CORRECT_ARG                      0.786   1.000   0.880       81
-CORRECT_HYPO                     0.000   0.000   0.000       10
-CORRECT_INFORMATION              0.984   0.963   0.973      190
-CORRECT_SUPPORT_ARG              1.000   0.966   0.983      349
-CORRECT_SUPPORT_HYPO             1.000   1.000   1.000       27
-INCORRECT_REJECT_ARG             0.723   0.920   0.810      389
-INCORRECT_REJECT_HYPO            1.000   1.000   1.000       77
-INCORRECT_SUPPORT_ARG            0.821   1.000   0.902      142
-INCORRECT_SUPPORT_HYPO           1.000   1.000   1.000       47
-O                                1.000   1.000   1.000        9
-REASONING                        1.000   0.606   0.754      355
 
 ============================================================
 SPAN-LEVEL AGREEMENT (exact boundary + label match)
 ============================================================
-Exact-match spans -- annotator1: 151, annotator2: 152, matched: 129
-Precision: 0.8487  Recall: 0.8543  F1: 0.8515
+Exact-match spans with O -- annotator1: 279, annotator2: 279, matched: 254
 
-Per-label exact-match F1:
-  COORDINATION                 P=0.722 R=0.867 F1=0.788  (ann1=15, ann2=18)
-  CORRECT_ARG                  P=0.200 R=0.500 F1=0.286  (ann1=2, ann2=5)
-  CORRECT_HYPO                 P=0.000 R=0.000 F1=0.000  (ann1=2, ann2=0)
-  CORRECT_INFORMATION          P=0.964 R=0.931 F1=0.947  (ann1=58, ann2=56)
-  CORRECT_SUPPORT_ARG          P=1.000 R=0.889 F1=0.941  (ann1=18, ann2=16)
-  CORRECT_SUPPORT_HYPO         P=1.000 R=1.000 F1=1.000  (ann1=2, ann2=2)
-  INCORRECT_REJECT_ARG         P=0.773 R=0.810 F1=0.791  (ann1=21, ann2=22)
-  INCORRECT_REJECT_HYPO        P=0.800 R=0.800 F1=0.800  (ann1=5, ann2=5)
-  INCORRECT_SUPPORT_ARG        P=0.769 R=0.909 F1=0.833  (ann1=11, ann2=13)
-  INCORRECT_SUPPORT_HYPO       P=1.000 R=1.000 F1=1.000  (ann1=4, ann2=4)
-  REASONING                    P=0.727 R=0.615 F1=0.667  (ann1=13, ann2=11)
+  COORDINATION                 Matching_spans=13.00  (ann1=15, ann2=18)
+  CORRECT_ARG                  Matching_spans=1.00  (ann1=2, ann2=5)
+  CORRECT_HYPO                 Matching_spans=0.00  (ann1=2, ann2=0)
+  CORRECT_INFORMATION          Matching_spans=54.00  (ann1=58, ann2=56)
+  CORRECT_SUPPORT_ARG          Matching_spans=16.00  (ann1=18, ann2=16)
+  CORRECT_SUPPORT_HYPO         Matching_spans=2.00  (ann1=2, ann2=2)
+  INCORRECT_REJECT_ARG         Matching_spans=17.00  (ann1=21, ann2=22)
+  INCORRECT_REJECT_HYPO        Matching_spans=4.00  (ann1=5, ann2=5)
+  INCORRECT_SUPPORT_ARG        Matching_spans=10.00  (ann1=11, ann2=13)
+  INCORRECT_SUPPORT_HYPO       Matching_spans=4.00  (ann1=4, ann2=4)
+  O                            Matching_spans=125.00  (ann1=128, ann2=127)
+  REASONING                    Matching_spans=8.00  (ann1=13, ann2=11)
+
 ============================================================
 AVERAGE TOKEN-LEVEL AGREEMENT
 ============================================================
@@ -361,20 +255,74 @@ AVG TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 71.98
 HIGHEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 95.82
 LOWEST TOKEN-LEVEL KAPPA OVER ALL INSTANCES: 44.46
 AVERAGE TOKEN-LEVEL KAPPA PER MODEL
-{'Llama-3.1-8B-Instruct': 72.32, 'Qwen3-32B': 69.88, 'Qwen3-8B': 73.73}
-AVERAGE TOKEN-LEVEL KAPPA PER LABEL
-{'COORDINATION': 92.03,
- 'CORRECT_ARG': 39.59,
- 'CORRECT_HYPO': 7.41,
- 'CORRECT_INFORMATION': 95.76,
- 'CORRECT_REJECT_ARG': 18.95,
- 'CORRECT_REJECT_HYPO': 11.11,
- 'CORRECT_SUPPORT_ARG': 45.05,
- 'CORRECT_SUPPORT_HYPO': 32.33,
- 'INCORRECT_ARG': 5.27,
- 'INCORRECT_HYPO': 19.44,
- 'INCORRECT_REJECT_ARG': 42.66,
- 'INCORRECT_REJECT_HYPO': 31.36,
- 'INCORRECT_SUPPORT_ARG': 68.46,
- 'INCORRECT_SUPPORT_HYPO': 49.08,
- 'REASONING': 80.19}
+{'Qwen3-32B': 69.88, 'Llama-3.1-8B-Instruct': 72.32, 'Qwen3-8B': 73.73}
+DISAGREEMENTS
+{('CORRECT_REJECT_ARG', 'CORRECT_SUPPORT_ARG'): 372,
+ ('REASONING', 'CORRECT_SUPPORT_ARG'): 259,
+ ('REASONING', 'INCORRECT_REJECT_ARG'): 209,
+ ('INCORRECT_ARG', 'REASONING'): 196,
+ ('INCORRECT_SUPPORT_ARG', 'COORDINATION'): 183,
+ ('INCORRECT_SUPPORT_ARG', 'INCORRECT_REJECT_ARG'): 113,
+ ('INCORRECT_SUPPORT_ARG', 'INCORRECT_ARG'): 109,
+ ('INCORRECT_REJECT_ARG', 'CORRECT_SUPPORT_ARG'): 102,
+ ('INCORRECT_REJECT_ARG', 'INCORRECT_ARG'): 100,
+ ('INCORRECT_REJECT_ARG', 'COORDINATION'): 94,
+ ('INCORRECT_REJECT_ARG', 'REASONING'): 77,
+ ('CORRECT_ARG', 'CORRECT_SUPPORT_ARG'): 73,
+ ('COORDINATION', 'CORRECT_SUPPORT_ARG'): 65,
+ ('CORRECT_SUPPORT_ARG', 'CORRECT_REJECT_ARG'): 65,
+ ('CORRECT_SUPPORT_HYPO', 'CORRECT_SUPPORT_ARG'): 57,
+ ('INCORRECT_REJECT_ARG', 'INCORRECT_SUPPORT_ARG'): 45,
+ ('CORRECT_REJECT_ARG', 'COORDINATION'): 43,
+ ('INCORRECT_SUPPORT_ARG', 'CORRECT_SUPPORT_ARG'): 41,
+ ('CORRECT_ARG', 'REASONING'): 39,
+ ('REASONING', 'COORDINATION'): 36,
+ ('COORDINATION', 'INCORRECT_SUPPORT_HYPO'): 35,
+ ('REASONING', 'INCORRECT_SUPPORT_ARG'): 35,
+ ('CORRECT_REJECT_HYPO', 'CORRECT_SUPPORT_HYPO'): 34,
+ ('INCORRECT_SUPPORT_ARG', 'REASONING'): 32,
+ ('CORRECT_SUPPORT_ARG', 'COORDINATION'): 30,
+ ('CORRECT_REJECT_ARG', 'REASONING'): 29,
+ ('INCORRECT_SUPPORT_ARG', 'INCORRECT_SUPPORT_HYPO'): 28,
+ ('CORRECT_INFORMATION', 'CORRECT_ARG'): 24,
+ ('INCORRECT_SUPPORT_HYPO', 'INCORRECT_REJECT_ARG'): 19,
+ ('CORRECT_SUPPORT_ARG', 'CORRECT_HYPO'): 18,
+ ('INCORRECT_SUPPORT_HYPO', 'INCORRECT_SUPPORT_ARG'): 16,
+ ('INCORRECT_REJECT_HYPO', 'INCORRECT_ARG'): 15,
+ ('CORRECT_INFORMATION', 'REASONING'): 15,
+ ('SUPPORT_ARG', 'COORDINATION'): 14,
+ ('INCORRECT_REJECT_HYPO', 'INCORRECT_REJECT_ARG'): 13,
+ ('INCORRECT_REJECT_ARG', 'INCORRECT_SUPPORT_HYPO'): 13,
+ ('INCORRECT_HYPO', 'INCORRECT_SUPPORT_HYPO'): 13,
+ ('COORDINATION', 'INCORRECT_SUPPORT_ARG'): 13,
+ ('INCORRECT_REJECT_ARG', 'INCORRECT_REJECT_HYPO'): 12,
+ ('CORRECT_REJECT_HYPO', 'CORRECT_HYPO'): 12,
+ ('INCORRECT_REJECT_HYPO', 'INCORRECT_HYPO'): 12,
+ ('CORRECT_SUPPORT_ARG', 'CORRECT_ARG'): 12,
+ ('INCORRECT_REJECT_HYPO', 'INCORRECT_SUPPORT_HYPO'): 10,
+ ('CORRECT_INFORMATION', 'COORDINATION'): 10,
+ ('CORRECT_HYPO', 'CORRECT_ARG'): 10,
+ ('REASONING', 'CORRECT_INFORMATION'): 9,
+ ('CORRECT_SUPPORT_HYPO', 'CORRECT_HYPO'): 7,
+ ('CORRECT_SUPPORT_ARG', 'CORRECT_SUPPORT_HYPO'): 6,
+ ('COORDINATION', 'CORRECT_INFORMATION'): 6,
+ ('CORRECT_REJECT_ARG', 'CORRECT_INFORMATION'): 6,
+ ('CORRECT_REJECT_ARG', 'CORRECT_HYPO'): 3,
+ ('COORDINATION', 'O'): 2,
+ ('CORRECT_REJECT_ARG', 'O'): 1,
+ ('CORRECT_INFORMATION', 'CORRECT_HYPO'): 1,
+ ('CORRECT_INFORMATION', 'CORRECT_SUPPORT_HYPO'): 1,
+ ('CORRECT_INFORMATION', 'CORRECT_SUPPORT_ARG'): 1,
+ ('CORRECT_ARG', 'CORRECT_INFORMATION'): 1,
+ ('CORRECT_REJECT_HYPO', 'CORRECT_INFORMATION'): 1,
+ ('CORRECT_SUPPORT_ARG', 'CORRECT_INFORMATION'): 1,
+ ('O', 'CORRECT_SUPPORT_ARG'): 1,
+ ('REASONING', 'CORRECT_SUPPORT_HYPO'): 1,
+ ('CORRECT_INFORMATION', 'O'): 1,
+ ('INCORRECT_SUPPORT_ARG', 'CORRECT_INFORMATION'): 1,
+ ('O', 'REASONING'): 1,
+ ('INCORRECT_SUPPORT_ARG', 'CORRECT_ARG'): 1,
+ ('O', 'INCORRECT_SUPPORT_ARG'): 1,
+ ('COORDINATION', 'REASONING'): 1,
+ ('O', 'INCORRECT_ARG'): 1,
+ ('COORDINATION', 'INCORRECT_REJECT_ARG'): 1}
