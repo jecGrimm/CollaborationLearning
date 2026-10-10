@@ -1,13 +1,13 @@
 {
     "task": "cmu_booksum",
-    "version_idx": 0,
+    "version_idx": 1,
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests base for Qwen/Qwen3-32B.",
-    "candidate": "cmu_chain_base",
+    "desc": "This run tests improved wo knowledge for Qwen/Qwen3-32B.",
+    "candidate": "cmu_chain_improved",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
@@ -22,5 +22,5 @@
     "conv_format": "",
     "start": 0,
     "end": 1000,
-    "run_idx": 554
+    "run_idx": 570
 }

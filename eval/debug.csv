@@ -1,2 +1,3 @@
-model;format;task;output_0;output_1;output_2
-Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_493_494_549;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_495_496_497;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_498_499_500_501
+Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_560;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_561;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_562
+Qwen3-32B;Full;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_563;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_564;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_565
+Qwen3-32B;Args;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_566;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_567;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_568

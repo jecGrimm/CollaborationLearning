@@ -923,14 +923,12 @@ class Vis():
         err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
             #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
-
             cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
-
             cmu[col] = cmu_col_df.mean()
             err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
-        err_df_list = [err_cmu, err_roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -982,7 +980,7 @@ class Vis():
                 ylabel = ""
                 xticks = np.arange(11)
                 linepos = 4
-                finalpos = 9,
+                finalpos = 9
                 #yticks = None
 
             df_list[c].plot(
@@ -999,9 +997,15 @@ class Vis():
                 #marker='o',
                 #markersize=3
                 zorder= 2,
-                yerr=err_df_list[c],
+                #yerr=err_df_list[c].reindex(index=df_list[c].index, columns=df_list[c].columns).astype(float), # ensure that both dataframes are the same
                 #capsize = 2
             )
+
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
 
@@ -1017,6 +1021,10 @@ class Vis():
 
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
+
+            axes[c].set_ylim(0, 90)
+            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -1079,8 +1087,12 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
 
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/exploration_runs_cmu.csv", delimiter = ";")
@@ -1099,10 +1111,15 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -1159,6 +1176,12 @@ class Vis():
                 figsize=(4,2.25),
                 zorder=2
             )
+
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
 
@@ -1174,6 +1197,10 @@ class Vis():
 
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
+            
+            axes[c].set_ylim(0, 90)
+            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -1219,8 +1246,12 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
 
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/correctness_runs_cmu.csv", delimiter = ";")
@@ -1239,10 +1270,15 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -1299,6 +1335,11 @@ class Vis():
                 figsize=(4,2.25),
                 zorder = 2
             )
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
             
@@ -1314,6 +1355,10 @@ class Vis():
 
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
+
+            axes[c].set_ylim(0, 90)
+            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -1895,13 +1940,14 @@ if __name__ == "__main__":
     #vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
-    vis.plot_dist_split() 
+    #vis.plot_dist_split() 
 
+    vis.plot_correctness_changes()
     # Create Figure 4a -> ./visualizations/args_hypos.pdf
-    #vis.plot_arg_hypo_changes()
+    vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    #vis.plot_exploration_changes()
+    vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()

@@ -47,7 +47,7 @@ Qwen3-32B;Improved;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_557
 Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_560;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_561;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_562
 Qwen3-32B;Full;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_563;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_564;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_565
 Qwen3-32B;Args;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_566;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_567;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_568
-Qwen3-32B;Reject;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_514_517_516;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_518_519_520;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_537
+Qwen3-32B;Reject;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_550;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_569;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_537
 Qwen3-32B;Support;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_538;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_539;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_540
 Qwen3-32B;Correct;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_541_543;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_542_544;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_545
 Qwen3-32B;Incorrect;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_546;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_547;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_548

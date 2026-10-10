@@ -347,5 +347,13 @@
         "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nGenerate an answer to continue the current discussion.\n\n**Book:**\n{input_samples}\nAnswer:\n",
         "system_final": "You are a player in a conversational game with 3 other players. {rules}",
         "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\nPlease return only the title of the book with the different genre.\nAnswer:\n"
+    },
+    "cmu_chain_improved_wo_roles":{
+        "system": "You are a player in a conversational game with 3 other players. {rules}",
+        "rules": "Each player has been given a book summary. One of the books is in a different genre than the other two. Your goal is to work together by discussing which book is in a different genre than the other two. The game will end when a player includes 'STOP' in their response.",
+        "start": "**Book:**\n{input_samples}\n\nPlease share information about the book you have been given and propose a possible starting point or connection that could help in finding the book with a different genre.\nAnswer:\n",
+        "mid": "Analyze the conversation history provided below.\n\n**Conversation History:**\n{conversation}\nReflect critically on the suggestions of other players and generate an answer to continue the current discussion.\n\n**Book:**\n{input_samples}\nAnswer:\n",
+        "system_final": "You are a player in a conversational game with 3 other players. {rules}",
+        "final": "Analyze the conversation history provided below to create the final answer.\n\n**Conversation History:**\n{conversation}\n\n**Books:**\n{input_samples}\n\nPlease return only the title of the book with the different genre.\nAnswer:\n"
     }
 }
