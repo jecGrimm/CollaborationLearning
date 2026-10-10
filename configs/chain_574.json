@@ -1,13 +1,13 @@
 {
     "task": "cmu_booksum",
-    "version_idx": 1,
+    "version_idx": 2,
     "split": "test",
     "framework": "multi",
     "experiment_file": "",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
-    "desc": "This run tests improved with vllm for Qwen/Qwen3-32B.",
-    "candidate": "cmu_chain_improved",
+    "desc": "This run tests Improved without roles for Qwen3-32B.",
+    "candidate": "cmu_chain_improved_wo_roles",
     "thinking_budget": 0.0,
     "conversation_rounds": 2,
     "variation": "True",
@@ -22,5 +22,5 @@
     "conv_format": "",
     "start": 0,
     "end": 1000,
-    "run_idx": 558
+    "run_idx": 574
 }

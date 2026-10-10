@@ -1022,8 +1022,8 @@ class Vis():
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
 
-            axes[c].set_ylim(0, 90)
-            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
             axes[c].set_xticks(xticks)
 
             if c == 0:
@@ -1198,8 +1198,8 @@ class Vis():
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
             
-            axes[c].set_ylim(0, 90)
-            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
             axes[c].set_xticks(xticks)
 
             if c == 0:
@@ -1356,8 +1356,8 @@ class Vis():
             # if c == 0:
             #     axes[c].legend(loc = "upper left")
 
-            axes[c].set_ylim(0, 90)
-            axes[c].set_yticks(np.arange(0, 81, 10))
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
             axes[c].set_xticks(xticks)
 
             if c == 0:
