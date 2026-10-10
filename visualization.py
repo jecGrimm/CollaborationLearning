@@ -895,9 +895,13 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         # , index=["Hypo_llama", "Full_llama", "Args_llama", "Hypo_qwen", "Full_qwen", "Args_qwen"]
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
     
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_cmu.csv", delimiter = ";")
@@ -916,10 +920,17 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu, err_roc]
         
         nrow = 1
         ncol = 2
@@ -987,7 +998,9 @@ class Vis():
                 figsize=(4,2.25), #wxh
                 #marker='o',
                 #markersize=3
-                zorder= 2
+                zorder= 2,
+                yerr=err_df_list[c],
+                #capsize = 2
             )
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
@@ -1373,6 +1386,9 @@ class Vis():
         if self.last and framework != "single":
             results = evaluate(exp_file, framework = framework, task = self.task, structured = True, all=True, instances=instances)
             avg_metric = results[f"{metric}_last"]
+        elif framework == "random":
+            eval_data = load_dataset("json", data_files = f"{exp_file.replace("outputs", "eval")}.jsonl", split = "train")
+            avg_metric = sum(eval_data[metric])/len(eval_data)
         else:
             results = evaluate(exp_file, framework = framework, task = self.task, structured = False, all=True, instances=instances)
             avg_metric = results[metric]
@@ -1523,13 +1539,17 @@ class Vis():
                 output_2_acc = df_experiment_files["output_2"].map(lambda x: self.get_avg_metric(x, round_acc = True))
 
                 s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+                s_std = pd.DataFrame([output_0_acc, output_1_acc, output_2_acc]).std()
 
-                if "booksum" in self.task:
-                    s_acc[0] = 34.5 # keep same avg random boundary across 
+                # if "booksum" in self.task:
+                #     s_acc[0] = 34.5 # keep same avg random boundary across 
 
-                df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+                df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy"), s_std.rename("std")], axis=1)
                 plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') 
                 plot_df = plot_df.dropna(axis=1, how='all')
+
+                err_df = df_acc.pivot(index="task", columns="framework", values="std")
+                err_df = err_df.reindex(index=plot_df.index, columns=plot_df.columns)
 
                 original_cols = plot_df.columns
                 colors = [color_map[framework] for framework in original_cols]
@@ -1544,6 +1564,21 @@ class Vis():
                 if r == 1:
                     title = None
 
+                # df_acc["accuracy"].plot(
+                #     ax=ax, 
+                #     ylabel=ylabel, 
+                #     yticks=yticks,
+                #     color=colors, 
+                #     legend = (c==1 and r==0),
+                #     #figsize=(4.25,5.5), # w x h
+                #     figsize=(4, 5.25), # w x h
+                #     kind="bar",
+                #     rot=0,
+                #     xlabel = "",
+                #     edgecolor='black',
+                #     width = 0.85,
+                #     yerr = df_acc["std"]
+                # )
                 plot_df.plot(
                     ax=ax, 
                     ylabel=ylabel, 
@@ -1556,7 +1591,10 @@ class Vis():
                     rot=0,
                     xlabel = "",
                     edgecolor='black',
-                    width = 0.85
+                    width = 0.68,
+                    yerr = err_df,
+                    capsize = 2,
+                    error_kw={"elinewidth": 0.8}
                 )
 
                 if r == 0 and c == 1:
@@ -1567,9 +1605,9 @@ class Vis():
 
                 for i, patch in enumerate(ax.patches):
 
-                    original_width = patch.get_width()
-                    new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
-                    patch.set_width(new_width)
+                    #original_width = patch.get_width()
+                    #new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
+                    #patch.set_width(new_width)
 
                     # --- ANNOTATION (VALUE) LOGIC ---
                     height = patch.get_height()
@@ -1582,7 +1620,7 @@ class Vis():
                             xytext=(0, 3),                                   
                             textcoords='offset points',
                             rotation=0,                                     
-                            fontsize=8
+                            fontsize=6
                         )
 
         plt.tight_layout() 
@@ -1857,13 +1895,13 @@ if __name__ == "__main__":
     #vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
-    #vis.plot_dist_split() 
+    vis.plot_dist_split() 
 
     # Create Figure 4a -> ./visualizations/args_hypos.pdf
     #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    vis.plot_exploration_changes()
+    #vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()

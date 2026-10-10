@@ -1,0 +1,2 @@
+model;format;task;output_0;output_1;output_2
+Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_493_494_549;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_495_496_497;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_498_499_500_501

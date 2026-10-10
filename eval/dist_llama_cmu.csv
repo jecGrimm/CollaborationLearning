@@ -1,5 +1,5 @@
 model;framework;task;output_0;output_1;output_2
-Random;Random;BookDiff;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test
+Random;Random;BookDiff;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test_1;outputs/random/cmu_booksum/test_2
 Llama-3.1-8B-Instruct;Single;BookDiff;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_313
 Llama-3.1-8B-Instruct;Base;BookDiff;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_325;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328
 Llama-3.1-8B-Instruct;Improved;BookDiff;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_267;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_315

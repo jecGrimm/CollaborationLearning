@@ -5,6 +5,6 @@ Llama-3.1-8B-Instruct;Args;BookDiff;outputs/multi/Llama-3.1-8B-Instruct/cmu_book
 Qwen3-8B;Hypo;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_426;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_427;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_428
 Qwen3-8B;Full;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_429;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_430;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_431
 Qwen3-8B;Args;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_432;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_433;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_434
-Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_493_494_549;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_495_496_497;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_498_499_500_501
-Qwen3-32B;Full;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_502_503_504;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_505;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_506_512
-Qwen3-32B;Args;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_507_508;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_509_510_515;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_511_513
+Qwen3-32B;Hypo;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_560;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_561;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_562
+Qwen3-32B;Full;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_563;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_564;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_565
+Qwen3-32B;Args;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_566;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_567;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_568

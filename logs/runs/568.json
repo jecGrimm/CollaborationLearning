@@ -3,7 +3,7 @@
     "version_idx": 2,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_568_0",
+    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_568",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests args with Qwen32-32b.",
@@ -34,5 +34,10 @@
         "an expert"
     ],
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl",
-    "instances": 250
+    "instances": 1000,
+    "duration": 13304.549529790878,
+    "mean_acc": 0.557,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.001
 }
