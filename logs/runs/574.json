@@ -3,7 +3,7 @@
     "version_idx": 2,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_574_0",
+    "experiment_file": "./outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_574",
     "batch_size": 2,
     "model_id": "Qwen/Qwen3-32B",
     "desc": "This run tests Improved without roles for Qwen3-32B.",
@@ -29,5 +29,10 @@
     "rules": "Each player has been given a book summary. One of the books is in a different genre than the other two. Your goal is to work together by discussing which book is in a different genre than the other two. The game will end when a player includes 'STOP' in their response.",
     "names": null,
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl",
-    "instances": 250
+    "instances": 1000,
+    "duration": 8379.972101211548,
+    "mean_acc": 0.559,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.023
 }

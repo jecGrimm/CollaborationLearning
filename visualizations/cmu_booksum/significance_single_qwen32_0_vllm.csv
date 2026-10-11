@@ -1,0 +1,3 @@
+;first_exp_file;first_setup;first_mean;second_exp_file;second_setup;second_mean;Welch's t-test;p-value;significant
+0;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_551;single;0.429;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_554;base;0.556;-5.723768335885818;5.997457726144119e-09;True
+1;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_551;single;0.429;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_557;improved;0.562;-5.998501691301381;1.1789537897231264e-09;True

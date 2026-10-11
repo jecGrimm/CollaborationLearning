@@ -1925,13 +1925,17 @@ class Vis():
         plt.savefig(f"./visualizations/{topology}_changes.pdf")
         
 if __name__ == "__main__":
-    # experiment_files = {
-    #     "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
-    #     "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
-    # }
-    experiment_files = {}
-    vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
-    #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
+    # use for ttest
+    experiment_files = {
+        "single": "outputs/single/Qwen3-32B/cmu_booksum/test/outputs_553",
+        "base": "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_556",
+        "improved": "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_559",
+    }
+    #experiment_files = {}
+    vis = Vis(experiment_files=experiment_files, task = "cmu_booksum", variation = None, last = False)
+    
+    # statistical tests
+    vis.perform_ttest(comparison="single", exp_name="qwen32_2_vllm")
     #vis.perform_paired_bootstrap()
 
     #vis.compute_all_metrics("./eval/final.csv")
@@ -1942,12 +1946,11 @@ if __name__ == "__main__":
     # Create Figure 2 -> ./visualizations/dist_split.pdf
     #vis.plot_dist_split() 
 
-    vis.plot_correctness_changes()
     # Create Figure 4a -> ./visualizations/args_hypos.pdf
-    vis.plot_arg_hypo_changes()
+    #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    vis.plot_exploration_changes()
+    #vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
