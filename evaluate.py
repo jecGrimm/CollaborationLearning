@@ -46,10 +46,12 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
     else:
         results["accuracy"] = evaluator.evaluate_odd_one()
 
+    # Additional stats
     if framework == "multi":
         results["conv_length_faa"] = sum(evaluator.conv_length_faa)/instances
         results["stop"] = evaluator.stop
         results["stop_percentage"] = evaluator.stop/instances
+        #results["num_args_forwarded"] = evaluator.num_args_forwarded
 
     results["instances"] = instances
     results["wrong_format"] = evaluator.wrong_format
@@ -140,6 +142,7 @@ class Evaluator:
 
         if self.framework == "multi":
             self.conv_length_faa = [] # per instance: amount of tokens in conversation history forwarded to faa
+            #self.num_args_forwarded = []
 
         if self.task == "rocstories":
             self.gold_sents = []
@@ -346,8 +349,12 @@ class Evaluator:
             gold = get_sent_list(batch, i)
             self.gold_sents.append(gold)
 
+            #num_args_forwarded = 0
             if "turns" in batch.keys():
                 pred = self.extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip(), gold) # exclude thinking to retrieve only the final result
+            
+                #for i in range(len(batch["turns"][i])):
+
             else:
                 pred = self.extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip(), gold)
             

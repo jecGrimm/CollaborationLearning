@@ -14,6 +14,7 @@ from matplotlib import colors
 from matplotlib.patches import Patch
 import math
 from matplotlib.lines import Line2D
+import ast
 
 class Vis():
     def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories", instances: int = 1000):
@@ -720,11 +721,12 @@ class Vis():
                         # 2.5 compute p-value, significance, confidence interval
                         low, high = res.confidence_interval
                         stats_dict["confidence_interval"].append(tuple((float(res.confidence_interval[0]), float(res.confidence_interval[1])))) 
-                        stats_dict["significant"].append(bool(high < 0)) 
                         stats_dict["standard_error"].append(float(res.standard_error))
 
                         null = res.bootstrap_distribution - d.mean()
-                        stats_dict["p-value"].append(float((np.sum(null <= d.mean()) + 1) / (len(null) + 1)))
+                        p_value = float((np.sum(null <= d.mean()) + 1) / (len(null) + 1))
+                        stats_dict["p-value"].append(p_value)
+                        stats_dict["significant"].append(bool(p_value < alpha/m)) 
 
         stats_df = pd.DataFrame(stats_dict)
 
@@ -824,8 +826,13 @@ class Vis():
         # plot sankeys
         df_dict = df_experiment_files.T.to_dict()
         acc_changes = defaultdict(list)
+        num_args_forwarded = defaultdict(int)
+        num_oracle_inf = defaultdict(int)
         for row in df_dict.values():
-            conv_format = row["format"]
+            try:
+                conv_format = row["format"]
+            except:
+                conv_format = row["framework"]
 
             if row["task"].lower() == "storycon":
                 task = "rocstories"
@@ -846,7 +853,7 @@ class Vis():
             if one_model:
                 setup = conv_format
             else:
-                setup = f"{conv_format}_{model}"
+                setup = f"{conv_format}_{model}_{task}"
 
             if conv_format.lower() not in ["single", "random", "base", "improved"]:
                 self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower(), instances = instances)
@@ -860,18 +867,27 @@ class Vis():
 
                 self.corr_per_turn = [0]*self.num_turns
                 self.beliefs_per_turn = [0]*self.num_turns
+                self.num_args_forwarded_per_turn = [0]*self.num_turns
+                self.num_oracle_inf = [0]*self.num_turns
                 self.exp_data_hf[setup] = self.exp_data_hf[setup].select(range(instances)).map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
 
                 acc_per_turn = [0]*self.num_turns
+                
                 for i in range(self.num_turns):
                     if self.beliefs_per_turn[i] != 0:
                         acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
                 
                 acc_changes[setup] = acc_per_turn
+                num_args_forwarded[setup] = sum(self.num_args_forwarded_per_turn)
+                num_oracle_inf[setup] = sum(self.num_oracle_inf)
 
-        df_acc_changes = pd.DataFrame(acc_changes)
+        df_metric_changes = pd.DataFrame({
+            "precision": acc_changes, 
+            "num_args_forwarded": num_args_forwarded, 
+            "num_oracle_inf": num_oracle_inf
+            })
 
-        return df_acc_changes
+        return df_metric_changes
 
     def plot_arg_hypo_changes(self):
         '''
@@ -1395,17 +1411,57 @@ class Vis():
         out = self.exp_data_hf[setup].select([idx])[0]
         eval = self.eval_data_hf[setup].select([idx])[0]
 
+        # create beliefs
         if self.task == "rocstories":
             beliefs = self.evaluator.create_belief_instance_roc(out, eval)
         else:
             beliefs = self.evaluator.create_belief_instance_cmu(out, eval)
 
+        conv_format = setup.split("_")[0].lower()
         for belief in beliefs["beliefs"]:
             if belief["correct"] == "correct":
                 self.corr_per_turn[belief["turn"]-1] += 1
 
             self.beliefs_per_turn[belief["turn"]-1] += 1
-        
+
+        for i in range(len(out["turns"])):
+            turn = out["turns"][i]
+            if self.task == "rocstories":
+                conv_list = self.extract_conv_dict_rocstories(turn)
+                inf_key = "sentence"
+            else:
+                conv_list = self.extract_conv_dict_cmu(turn)
+                inf_key = "title"
+
+            for conv_dir in conv_list: 
+                if self.task == "rocstories":
+                    if conv_dir["sentence"] in eval["gold"]:
+                        correct_hypo = str(eval["gold"].index(conv_dir["sentence"]) + 1)
+                    else: 
+                        args_forwarded = []
+                        conv_format = None
+                else:
+                    correct_hypo = str(eval["gold"] == conv_dir["title"]).lower() 
+
+                if conv_format in ["full", "args"]:
+                    args_forwarded = [v for k, v in conv_dir.items() if "argument" in k]
+                    self.num_args_forwarded_per_turn[i] += len(args_forwarded)
+                else:
+                    if conv_format == "reject":
+                        # get hypos of last turn
+                        last_hypos = {str(x["hypo"]).lower() for x in beliefs["beliefs"] if x["turn"] == i and x[inf_key] == conv_dir[inf_key]}
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and k.split("_")[1] not in last_hypos]
+                    elif conv_format == "support":
+                        last_hypos = {str(x["hypo"]).lower() for x in beliefs["beliefs"] if x["turn"] == i and x[inf_key] == conv_dir[inf_key]}
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and k.split("_")[1] in last_hypos]
+                    elif conv_format == "correct":
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and correct_hypo in k]
+                    elif conv_format == "incorrect":
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and correct_hypo not in k]
+
+                self.num_args_forwarded_per_turn[i] += len(args_forwarded)
+                self.num_oracle_inf[i] += len([v for v in args_forwarded if correct_hypo in v])
+
     def get_avg_metric(self, exp_file: str, metric: str = "accuracy", round_acc: bool = True, instances: int = 1000):
         '''
         This method calculates the average accuracy for the specified experiment file.
@@ -1923,19 +1979,194 @@ class Vis():
         df_acc_changes.T.plot(xticks=np.arange(self.num_turns), yticks = np.arange(0, 101, 10), ylabel = "Micro precision", xlabel = "Turn")
 
         plt.savefig(f"./visualizations/{topology}_changes.pdf")
+
+    def compute_forwarded_arg_stats(self):
+        df_experiment_files = pd.read_csv("eval/debug.csv", delimiter = ";")
+        df_args_files = df_experiment_files.where(df_experiment_files["framework"].isin(["Full", "Args", "Reject", "Support", "Correct", "Incorrect"])).dropna()
         
-if __name__ == "__main__":
-    # use for ttest
-    experiment_files = {
-        "single": "outputs/single/Qwen3-32B/cmu_booksum/test/outputs_553",
-        "base": "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_556",
-        "improved": "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_559",
-    }
-    #experiment_files = {}
-    vis = Vis(experiment_files=experiment_files, task = "cmu_booksum", variation = None, last = False)
+        #self.task = "rocstories"
+        #df_roc_files = df_args_files.where(df_args_files["task"] == "StoryCon").dropna()
+        stats_per_output = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_args_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"output"})
+            stats_per_output = self.plot_acc_changes(df_experiment_files = df)
+            df_args_files[f"num_args_forwarded_{i}"] = list(stats_per_output["num_args_forwarded"])
+            df_args_files[f"num_oracle_inf_{i}"] = list(stats_per_output["num_oracle_inf"])
+            df_args_files[f"percentage_oracle_inf_{i}"] = list(stats_per_output["num_oracle_inf"]/stats_per_output["num_args_forwarded"])
+        
+        df_num_args = pd.DataFrame([df_args_files[f"num_args_forwarded_{i}"] for i in range(3)])
+        df_args_files[f"num_args_forwarded"] = df_num_args.mean()
+        df_args_files[f"num_args_forwarded_std"] = df_num_args.std()
+
+        df_num_args = pd.DataFrame([df_args_files[f"num_oracle_inf_{i}"] for i in range(3)])
+        df_args_files[f"num_oracle_inf"] = df_num_args.mean()
+        df_args_files[f"num_oracle_inf_std"] = df_num_args.std()
+
+        df_num_args = pd.DataFrame([df_args_files[f"percentage_oracle_inf_{i}"] for i in range(3)])
+        df_args_files[f"percentage_oracle_inf"] = df_num_args.mean()
+        df_args_files[f"percentage_oracle_inf_std"] = df_num_args.std()
+
+        df_args_files.to_csv("./visualizations/stats_full.csv")
+ 
+    def get_args_per_turn(self, inst, idx, setup):
+        '''
+        This method calculates the accuracy per turn for the specified instance in the experiment setup.
+
+        @params
+            inst: The instance data from the experiment setup.
+            idx: The index of the instance.
+            setup: The experiment setup name.
+        '''
+        out = self.exp_data_hf[setup].select([idx])[0]
+
+        conv_format = setup.split('_')[0].lower()
+        # collect num_args
+        for i in range(len(out["turns"])):
+            conv_str = out["turns"][i]
+            
+            try:
+                conv_list = ast.literal_eval(conv_str)
+                if self.task == "rocstories":
+                    return self.formulate_conv_roc(out, conv_list, conv_format)
+                else: 
+                    return self.formulate_conv_cmu(out, conv_list, conv_format) 
+            except:
+                if self.task == "rocstories":
+                    conv_list = self.extract_conv_dict_rocstories(conv_str)
+                    return self.formulate_conv_roc(out, conv_list, conv_format)
+                else:
+                    conv_list = self.extract_conv_dict_cmu(conv_str)
+                    return self.formulate_conv_cmu(out, conv_list, conv_format)
+                
+    def extract_conv_dict_rocstories(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for ROCStories.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
+        conv_list = []
+        sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        positions = re.findall(r"""position\': (\d)""", conv_str)
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, sent in enumerate(sentences):
+            conv_dict = defaultdict(str)
+
+            conv_dict["sentence"] = sent
+
+            if i < len(positions):
+                conv_dict["position"] = int(positions[i])
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+
+            if i < len(reason_3_list):
+                conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
+
+            if i < len(reason_4_list):
+                conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
+
+            if i < len(reason_5_list):
+                conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
+
+            conv_list.append(conv_dict)
+        
+        return conv_list
     
-    # statistical tests
-    vis.perform_ttest(comparison="single", exp_name="qwen32_2_vllm")
+    def extract_conv_dict_cmu(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for CMU.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
+        conv_list = []
+
+        titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        labels = [item[0] for item in re.findall(r"""label[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, title in enumerate(titles):
+            conv_dict = defaultdict(str)
+
+            conv_dict["title"] = title
+
+            if i < len(labels):
+                conv_dict["label"] = labels[i]
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_true"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_false"] = self.strip_arg(reason_2_list[i])
+            
+            conv_list.append(conv_dict)
+        return conv_list
+    
+    def strip_arg(self, item):
+        '''
+        This method strips the argument, position, or label from the item.
+
+        @params
+            item: string to be stripped
+        @returns
+            item: stripped string
+        '''
+        if "argument" in item:
+            item = item.strip("argument")
+        elif "position" in item:
+            item = item.strip("position")
+        elif "label" in item:
+            item = item.strip("label")
+        return item
+
+    def plot_additional_stats_correlation(self, mode: str = "length"):
+        if mode == "length":
+            df_experiment_files = pd.read_csv("visualizations/all_final.csv", delimiter = ";")
+            data_key = "conv_length_faa"
+
+        df_experiment_files.plot.scatter(x = "accuracy", y=data_key, c="framework")
+
+        plt.savefig("./visualizations/length.pdf")
+
+if __name__ == "__main__":
+    # experiment_files = {
+    #     "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
+    #     "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
+    # }
+    experiment_files = {}
+    vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
+    #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
     #vis.perform_paired_bootstrap()
 
     #vis.compute_all_metrics("./eval/final.csv")
@@ -1954,3 +2185,7 @@ if __name__ == "__main__":
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
+
+    vis.compute_forwarded_arg_stats()
+
+    #vis.plot_additional_stats_correlation(mode = "length")
