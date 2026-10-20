@@ -9,6 +9,10 @@ To use Llama with restricted access:
 2. Create Access token with write access to personal space on huggingface
 3. type "hf auth login" in terminal and paste token in it
 
+## Usage
+1. Create config in ./configs/.
+2. Run experiment with `python3 run_experiment.py -c ./configs/<yourconfig>.json` 
+
 ## Data sources
 ### BookDiff
 CMU Booksum (Bamman and Smith, 2013)
