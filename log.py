@@ -218,6 +218,27 @@ class ExperimentLog:
         else:
             print(f"\nThere are no runs with framework {framework}, split {split} and a duration value!")
 
+    def log_vllm(self, model_config, sampling_params):
+        """
+        This function logs the vllm inference specs.
+
+        @params
+            model_config: model configuration
+            sampling_params: inference parameters
+        """
+        self.run.config.update({
+            "model": model_config.hf_config.to_dict(),
+            "torch_dtype": str(model_config.dtype),
+            "temperature": sampling_params.temperature,
+            "max_new_tokens": sampling_params.max_tokens,
+            "presence_penalty": sampling_params.presence_penalty,
+            "frequency_penalty": sampling_params.frequency_penalty,
+            "repetition_penalty": sampling_params.repetition_penalty,
+            "top_p": sampling_params.top_p,
+            "top_k": sampling_params.top_k,
+            "min_p": sampling_params.min_p
+        }, allow_val_change=True)
+        
 if __name__ == "__main__":
     logger = ExperimentLog()
     logger.print_best_run(framework="multi", split = "dev")

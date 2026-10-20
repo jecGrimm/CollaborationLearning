@@ -3,16 +3,15 @@ import ast
 from data import get_sent_list
 import os
 import re
-import pandas as pd
 from log import ExperimentLog
 import os
 from collections import defaultdict
-import csv
-from tqdm import tqdm
 from scipy import stats
 import random
+import nltk
+from nltk.tokenize import word_tokenize
 
-def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False):
+def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLog(), structured: bool = False, sanity_checks: bool = False, all: bool = False, instances: int = None, last: bool = False, save_eval: bool = False):
     '''
     This function evaluates the model predictions for a given experiment output file.
 
@@ -43,6 +42,13 @@ def evaluate(outfile, framework, task: str, logger: ExperimentLog = ExperimentLo
         results["kendalltau"] = float(evaluator.eval_data.with_format("pandas")["kendalltau"].mean())
     else:
         results["accuracy"] = evaluator.evaluate_odd_one()
+
+    # Additional stats
+    if framework == "multi":
+        results["conv_length_faa"] = sum(evaluator.conv_length_faa)/instances
+        results["stop"] = evaluator.stop
+        results["stop_percentage"] = evaluator.stop/instances
+        #results["num_args_forwarded"] = evaluator.num_args_forwarded
 
     results["instances"] = instances
     results["wrong_format"] = evaluator.wrong_format
@@ -114,15 +120,25 @@ class Evaluator:
         self.zero_counter = 0
         self.double_counter = 0
         self.wrong_format = 0
+        
+        # length: avg per run -> one number per instance
 
         if self.task == "rocstories":
             self.pred_len = 5
+            self.idx_name = "storyid"
         else:
             self.pred_len = 3
+            self.idx_name = "id"
+        
+        if self.framework == "multi":
+            self.stop = len(self.exp_data.filter(lambda batch: [batch["stop"][i] == True for i in range(len(batch[self.idx_name]))], batched = True)) # amount of instances with a stop token in the second conversation round, i.e., early stopped conversations
         
     def initiate_metric_lists(self):
         self.pred_lists = []
         self.acc = []
+
+        if self.framework == "multi":
+            self.conv_length_faa = [] # per instance: amount of tokens in conversation history forwarded to faa
 
         if self.task == "rocstories":
             self.gold_sents = []
@@ -191,10 +207,12 @@ class Evaluator:
 
         return acc_mean
 
-    def evaluate_sent_order(self):
+    def evaluate_sent_order(self, save_eval: bool = False):
         """
         This function evaluates the model predictions for ROCStories. 
-
+        
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             acc_mean: mean accuracy over all instances
         """
@@ -206,15 +224,18 @@ class Evaluator:
         else:
             self.eval_data = self.exp_data.map(self.evaluate_order_answer_random, batched=True, remove_columns=self.exp_data.column_names)
         
-        self.save_eval_data()
+        if save_eval:
+            self.save_eval_data()
 
         acc_mean = self.report_accuracy()
         return acc_mean
 
-    def evaluate_odd_one(self):
+    def evaluate_odd_one(self, save_eval: bool = False):
         """
         This function evaluates the model predictions for CMU Booksum. 
 
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             acc_mean: mean accuracy over all instances
         """
@@ -225,7 +246,8 @@ class Evaluator:
         else:
             self.eval_data = self.exp_data.map(self.evaluate_odd_answer_random, batched=True, remove_columns=self.exp_data.column_names)
         
-        self.save_eval_data()
+        if save_eval: 
+            self.save_eval_data()
 
         acc_mean = self.report_accuracy()
         return acc_mean
@@ -262,7 +284,6 @@ class Evaluator:
             acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
         
         return {"id": batch["id"], "accuracy": acc, "predictions": pred_lists, "gold": gold_lbls}
-
 
     def evaluate_order_answer_single(self, batch):
         """
@@ -323,11 +344,22 @@ class Evaluator:
             gold = get_sent_list(batch, i)
             self.gold_sents.append(gold)
 
+            #num_args_forwarded = 0
             if "turns" in batch.keys():
                 pred = self.extract_answer_list(batch["turns"][i][-1].split("</think>")[-1].strip(), gold) # exclude thinking to retrieve only the final result
+            
+                #for i in range(len(batch["turns"][i])):
+
             else:
                 pred = self.extract_answer_list(batch["output"][i][-1]["answer"].split("</think>")[-1].strip(), gold)
             
+            # compute length of conversation history for final answer agent
+            try: 
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+            except:
+                nltk.download('punkt_tab')
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+
             self.pred_lists.append(pred)
 
             # metrics
@@ -364,12 +396,19 @@ class Evaluator:
             else:
                 out = batch["output"][i][-1]["answer"].split("</think>")[-1].strip()
 
+            # compute length of conversation history for final answer agent
+            try: 
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+            except:
+                nltk.download('punkt_tab')
+                self.conv_length_faa.append(len(word_tokenize(batch["conversation_history"][i], language='english', preserve_line=False)))
+
             pred = self.extract_pred_odd(out, batch["titles"][i])
             self.pred_lists.append(pred)
 
             # metrics
             self.acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
-        
+
         return {"id": batch["id"], "accuracy": self.acc, "predictions": self.pred_lists, "gold": list(batch["gold_title"])}
         
     def extract_pred_odd(self, pred, titles):
@@ -940,7 +979,7 @@ class Evaluator:
                     zero_count = True in [0 in conv_dir.values() for conv_dir in conv_list]
 
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and "sentence" in conv_dir.keys() and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
+                        if type(conv_dir) in [defaultdict, dict] and "sentence" in conv_dir.keys() and type(conv_dir["sentence"])==str and conv_dir["sentence"] in sent2gold.keys() and "position" in conv_dir.keys() and type(conv_dir["position"])==int:
                             if zero_count:
                                 pos = conv_dir["position"]+1
                             else:
@@ -991,7 +1030,7 @@ class Evaluator:
 
                 if type(conv_list) == list:
                     for conv_dir in conv_list:
-                        if type(conv_dir) in [defaultdict, dict] and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
+                        if type(conv_dir) in [defaultdict, dict] and "title" in conv_dir.keys() and conv_dir["title"] in out["titles"] and "label" in conv_dir.keys():                        
                             # Player, sentence, position, time-step
                             if "true" in conv_dir["label"].lower() and conv_dir["title"] == eval["gold"]:
                                 correct = "correct"
@@ -1012,10 +1051,12 @@ class Evaluator:
 
         return {"beliefs": beliefs}
 
-    def evaluate_last_beliefs(self):
+    def evaluate_last_beliefs(self, save_eval: bool = False):
         '''
         This method evaluates the last hypothesis of the multi-agent outputs for both ROCStories and CMU Booksum tasks.
 
+        @params
+            save_eval: if True, evaluation data is saved
         @returns
             accuracy of the last hypothesis for each instance
         '''
@@ -1032,7 +1073,8 @@ class Evaluator:
             preds = exp_beliefs.map(self.create_pred_from_belief_cmu, batched = False)
             self.eval_data = preds.map(lambda batch: self.calculate_metrics_cmu(batch), batched = True)
         
-        self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
+        if save_eval: 
+            self.save_eval_data(f"{eval_file.split('.jsonl')[0]}_last.jsonl")
 
         acc_mean = self.report_accuracy()
         return acc_mean
@@ -1143,8 +1185,6 @@ if __name__ == "__main__":
     outdir = "./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_354"
 
     results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True, last=False, all = False, instances = 1000)
-    
-    #results = evaluate(outdir, framework = "single", task = "cmu_booksum", structured = False)
     
     print(results)
 

@@ -1,4 +1,3 @@
-import csv 
 from datasets import load_dataset, load_from_disk, concatenate_datasets
 import random
 from evaluate import evaluate
@@ -80,7 +79,7 @@ def merge_outputs(outdirs: list, outpath: str, framework: str, task: str, struct
 
     full_data.save_to_disk(outpath)
 
-    evaluate(outpath, framework, task, structured=structured, all=True)
+    evaluate(outpath, framework, task, structured=structured, all=True, instances=len(full_data))
 
 def fix_outputs(outdir):
     '''
@@ -107,8 +106,7 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    #conv_output = "outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_304"
-    conv_output = "outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_435"
-    outfile = "visualizations/cmu_booksum/example_instance.txt"
+    conv_output = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_518_519_520"
+    outfile = "example_output.txt"
 
-    inspect_instances(conv_output, rand_idx=2, outfile=outfile)
+    inspect_instances(conv_output, outfile=outfile)

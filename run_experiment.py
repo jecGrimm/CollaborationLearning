@@ -47,7 +47,7 @@ def run_experiment(config: dict = None, logger: ExperimentLog = None):
             outfile = multi.define_outfile(logger, hf = True)
 
     # evaluate 
-    evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"], structured=config["structured"])
+    evaluate(outfile = outfile, framework = config["framework"], logger = logger, task = config["task"], structured=config["structured"], instances = logger.run_data["instances"])
 
     logger.store_run_data()
 

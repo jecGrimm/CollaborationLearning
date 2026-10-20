@@ -1,5 +1,5 @@
 model;framework;task;output_0;output_1;output_2
-Random;Random;BookDiff;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test
+Random;Random;BookDiff;outputs/random/cmu_booksum/test;outputs/random/cmu_booksum/test_1;outputs/random/cmu_booksum/test_2
 Qwen3-8B;Single;BookDiff;outputs/single/Qwen3-8B/cmu_booksum/test/outputs_396;outputs/single/Qwen3-8B/cmu_booksum/test/outputs_397;outputs/single/Qwen3-8B/cmu_booksum/test/outputs_398
-Qwen3-8Bt;Base;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_399;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_400;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_401
+Qwen3-8B;Base;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_399;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_400;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_401
 Qwen3-8B;Improved;BookDiff;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_402;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_403;outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_404

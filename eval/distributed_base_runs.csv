@@ -10,6 +10,6 @@ Random;random;CMU Booksum;outputs/random/cmu_booksum/test;outputs/random/cmu_boo
 Llama-3.1-8B-Instruct;Single;CMU Booksum;outputs/single/Llama-3.1-8B-Instruct/booksum/test/outputs_264;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_312;outputs/single/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_313
 Llama-3.1-8B-Instruct;Base;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_325;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_326;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_328
 Llama-3.1-8B-Instruct;Improved;CMU Booksum;outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_267;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_314;./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_315
-Qwen3-32B;Single;CMU Booksum;outputs/single/Qwen3-32B/booksum/test/outputs_269;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_366_0_1_371;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_366_0_1_371
-Qwen3-32B;Base;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268
-Qwen3-32B;Improved;CMU Booksum;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_268
+Qwen3-32B;Single;BookDiff;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_551;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_552;outputs/single/Qwen3-32B/cmu_booksum/test/outputs_553
+Qwen3-32B;Base;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_554;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_555;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_556
+Qwen3-32B;Improved;BookDiff;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_557;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_558;outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_559

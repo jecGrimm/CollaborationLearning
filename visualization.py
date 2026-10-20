@@ -9,10 +9,11 @@ import numpy as np
 from evaluate import Evaluator, evaluate
 import plotly.graph_objects as go
 from scipy.stats.mstats import ttest_ind
+from scipy.stats import bootstrap
 from matplotlib import colors
-from matplotlib.patches import Patch
 import math
 from matplotlib.lines import Line2D
+import ast
 
 class Vis():
     def __init__(self, experiment_files: dict = {}, variation: bool = True, conv_format: str = "", last: bool = False, task: bool = "rocstories", instances: int = 1000):
@@ -25,6 +26,7 @@ class Vis():
             conv_format: The conversational format of the outputs.
             last: A boolean indicating whether to use only the last turn of the conversation as final answer.
             task: The task being evaluated (e.g., "rocstories").
+            instances: The number of instances to load from the output datasets for evaluation.
         '''
         self.experiment_files = experiment_files
 
@@ -37,10 +39,12 @@ class Vis():
         self.evaluator = None
 
         if task == "rocstories":
-            if self.variation:
+            if self.variation == True:
                 self.vispath = f"visualizations/{self.task}/variation/{conv_format}"
-            else:
+            elif self.variation == False:
                 self.vispath = f"visualizations/{self.task}/no_variation/{conv_format}"
+            else:
+                self.vispath = f"visualizations/{self.task}/{conv_format}"
         else:
             self.vispath = f"visualizations/{self.task}/{conv_format}"
 
@@ -55,6 +59,8 @@ class Vis():
     def initialize_experiment_files(self, instances: int = 1000):
         '''
         This method loads the output datasets from disk and creates evaluation dataframes for each experiment setup.
+
+        @params instances: The number of instances to load from the output datasets for evaluation.
         '''
         self.exp_data_hf = {k: load_from_disk(v).select(range(instances)) for k, v in self.experiment_files.items()}
 
@@ -75,7 +81,10 @@ class Vis():
         else:
             eval_files = {k: f"{v.replace('outputs', 'eval')}.jsonl" for k, v in self.experiment_files.items()}
 
-        self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
+        try:
+            self.eval_data_hf = {k: self.load_eval_data(v, k) for k, v in eval_files.items()}
+        except:
+            self.eval_data_hf = {k: self.load_eval_data(v[:-6], k) for k, v in eval_files.items()}
 
         mean_preds = defaultdict(list)
 
@@ -90,14 +99,13 @@ class Vis():
 
         self.mean_preds_df = pd.DataFrame(mean_preds.values(), index=mean_preds.keys(), columns=self.metrics) 
 
-    def load_eval_data(self, eval_file, exp_name):
+    def load_eval_data(self, eval_file, instances: int = None):
         '''
         This method loads the evaluation data from the specified evaluation file. If the evaluation file is not found, it uses the Evaluator class to evaluate the experiment outputs and generate the evaluation data.
 
         @params
             eval_file: The path to the evaluation file.
-            exp_name: The name of the experiment setup.
-
+            instances: The number of instances to load from the evaluation data.
         @returns
             The evaluation data as a Hugging Face dataset.
         '''
@@ -107,10 +115,12 @@ class Vis():
             fw = ""
             if "single" in eval_file:
                 fw = "single"
+            elif "random" in eval_file:
+                fw = "random"
             else:
                 fw = "multi"
 
-            evaluator = Evaluator(self.experiment_files[exp_name], fw, last = self.last, task = self.task)
+            evaluator = Evaluator(eval_file.replace("eval", "outputs"), fw, last = self.last, task = self.task, instances=instances)
             
             if self.last and fw == "multi":
                     evaluator.evaluate_last_beliefs()
@@ -591,6 +601,8 @@ class Vis():
         @params
             comparison: The experiment setup that is tested to be significantly lower than the other setups.
             exp_name: An optional name for the experiment to include in the output file name.
+
+        @warning Welch's t-test can lead to brittle results for multiple comparisons and assumes independence of the samples. For a more robust statistical test, consider using perform_paired_bootstrap instead.
         '''
         first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
 
@@ -627,6 +639,97 @@ class Vis():
             outfile += f"_last"
 
         outfile += ".csv"
+        stats_df.to_csv(outfile, sep = ";")
+
+    def perform_paired_bootstrap(self):
+        '''
+        This method performs a paired bootstrap test to compare the accuracy of the specified comparison setup against all other setups. It saves the results as a CSV file.
+        '''
+        self.last = False
+        stats_dict = defaultdict(list)
+
+        # 1. load all experiment files
+        run_file = "eval/final.csv"
+
+        df_experiment_files = pd.read_csv(run_file, delimiter = ";")
+
+        tasks = ["StoryCon", "BookDiff"]
+        models = ["Llama-3.1-8B-Instruct", "Qwen3-8B", "Qwen3-32B"]
+        exp_comparisons = {
+            "Single": ["Base", "Improved", "Hypo", "Full", "Args", "Reject", "Support", "Correct", "Incorrect"],
+            "Hypo": ["Args"],
+            "Support": ["Reject"],
+            "Incorrect": ["Correct"]
+        }
+
+        # hyperparameters
+        m = len(tasks) * len(models) * sum([len(higher_exps) for higher_exps in exp_comparisons.values()]) # number of comparisons for bonferroni correction
+        alpha = 0.05
+        
+
+        # 2. bootstrapping
+        for task in tasks:
+            if task == "StoryCon":
+                self.task = "rocstories"
+            else:
+                self.task = "cmu_booksum"
+
+            for model in models:
+                for lower_exp, higher_exps in exp_comparisons.items():
+
+                    # 2.1 get scores for lower comparisons 
+                    # get exp files for all three runs
+                    lower_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == lower_exp]
+
+                    # get eval data for all three runs
+                    lower_eval_0 = self.load_eval_data(lower_exp_row["output_0"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+                    lower_eval_1 = self.load_eval_data(lower_exp_row["output_1"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+                    lower_eval_2 = self.load_eval_data(lower_exp_row["output_2"].item().replace("outputs", "eval"), lower_exp.lower(), instances=1000)
+
+                    # compute mean per instance across runs
+                    scores_A = pd.DataFrame([lower_eval_0["accuracy"], lower_eval_1["accuracy"], lower_eval_2["accuracy"]]).mean(axis=0)
+
+                    # 2.2 get higher comparison
+                    for higher_exp in higher_exps:
+                        stats_dict["task"].append(task)
+                        stats_dict["model"].append(model)
+                        stats_dict["first_setup"].append(lower_exp)
+                        stats_dict["first_exp_files"].append(", ".join([lower_exp_row[f"output_{i}"].item() for i in range(3)]))
+
+                        # get exp files for all three runs
+                        higher_exp_row = df_experiment_files.loc[lambda df_experiment_files: df_experiment_files["task"] == task].loc[df_experiment_files["model"] == model].loc[df_experiment_files["framework"] == higher_exp]
+                        stats_dict["second_setup"].append(higher_exp)
+
+                        # get eval data for all three runs
+                        higher_eval_0 = self.load_eval_data(higher_exp_row["output_0"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+                        higher_eval_1 = self.load_eval_data(higher_exp_row["output_1"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+                        higher_eval_2 = self.load_eval_data(higher_exp_row["output_2"].item().replace("outputs", "eval"), higher_exp.lower(), instances=1000)
+
+                        stats_dict["second_exp_files"].append(", ".join([higher_exp_row[f"output_{i}"].item() for i in range(3)]))
+
+                        # compute mean per instance across runs
+                        scores_B = pd.DataFrame([higher_eval_0["accuracy"], higher_eval_1["accuracy"], higher_eval_2["accuracy"]]).mean(axis=0)
+
+                        # 2.3 compute difference between compared runs
+                        d = scores_A - scores_B
+
+                        # 2.4 perform bootstrap
+                        res = bootstrap((d, ), np.mean, n_resamples=100000, confidence_level=1-alpha/m, method = "percentile", alternative = "less", rng = 0)
+                        stats_dict["corrected_alpha"].append(alpha/m)
+
+                        # 2.5 compute p-value, significance, confidence interval
+                        low, high = res.confidence_interval
+                        stats_dict["confidence_interval"].append(tuple((float(res.confidence_interval[0]), float(res.confidence_interval[1])))) 
+                        stats_dict["standard_error"].append(float(res.standard_error))
+
+                        null = res.bootstrap_distribution - d.mean()
+                        p_value = float((np.sum(null <= d.mean()) + 1) / (len(null) + 1))
+                        stats_dict["p-value"].append(p_value)
+                        stats_dict["significant"].append(bool(p_value < alpha/m)) 
+
+        stats_df = pd.DataFrame(stats_dict)
+
+        outfile = f"./visualizations/paired_bootstrap.csv"
         stats_df.to_csv(outfile, sep = ";")
 
     def correlate_last_final(self, setup):
@@ -714,6 +817,9 @@ class Vis():
         @params
             run_file: The path to the CSV file containing the experiment setups and their corresponding output files
             df_experiment_files: A DataFrame containing the experiment setups and their corresponding output files
+            instances: The number of instances to consider
+            one_model: A boolean indicating whether to append model and task to the setup name
+        @returns df_metric_changes: A DataFrame containing the accuracy changes, number of arguments forwarded, and number of oracle inferences for each setup
         '''
         if run_file:
             df_experiment_files = pd.read_csv(run_file, delimiter = ";")
@@ -722,8 +828,13 @@ class Vis():
         # plot sankeys
         df_dict = df_experiment_files.T.to_dict()
         acc_changes = defaultdict(list)
+        num_args_forwarded = defaultdict(int)
+        num_oracle_inf = defaultdict(int)
         for row in df_dict.values():
-            conv_format = row["format"]
+            try:
+                conv_format = row["format"]
+            except:
+                conv_format = row["framework"]
 
             if row["task"].lower() == "storycon":
                 task = "rocstories"
@@ -734,15 +845,17 @@ class Vis():
 
             if "llama" in row["model"].lower():
                 model = "llama"
-            else:
+            elif row["model"].lower() == "qwen3-8b":
                 model = "qwen"
+            else:
+                model = "qwen32"
 
             exp_file = row["output"]
 
             if one_model:
                 setup = conv_format
             else:
-                setup = f"{conv_format}_{model}"
+                setup = f"{conv_format}_{model}_{task}"
 
             if conv_format.lower() not in ["single", "random", "base", "improved"]:
                 self.__init__(experiment_files = {setup: exp_file}, variation = self.variation, conv_format = conv_format, last = self.last, task = task.lower(), instances = instances)
@@ -756,18 +869,27 @@ class Vis():
 
                 self.corr_per_turn = [0]*self.num_turns
                 self.beliefs_per_turn = [0]*self.num_turns
+                self.num_args_forwarded_per_turn = [0]*self.num_turns
+                self.num_oracle_inf = [0]*self.num_turns
                 self.exp_data_hf[setup] = self.exp_data_hf[setup].select(range(instances)).map(lambda x, idx: self.get_acc_per_turn(x, idx, setup), with_indices=True)
 
                 acc_per_turn = [0]*self.num_turns
+                
                 for i in range(self.num_turns):
                     if self.beliefs_per_turn[i] != 0:
                         acc_per_turn[i] = round((self.corr_per_turn[i]/self.beliefs_per_turn[i])*100, 2)
                 
                 acc_changes[setup] = acc_per_turn
+                num_args_forwarded[setup] = sum(self.num_args_forwarded_per_turn)
+                num_oracle_inf[setup] = sum(self.num_oracle_inf)
 
-        df_acc_changes = pd.DataFrame(acc_changes)
+        df_metric_changes = pd.DataFrame({
+            "precision": acc_changes, 
+            "num_args_forwarded": num_args_forwarded, 
+            "num_oracle_inf": num_oracle_inf
+            })
 
-        return df_acc_changes
+        return df_metric_changes
 
     def plot_arg_hypo_changes(self):
         '''
@@ -790,10 +912,12 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
-        # , index=["Hypo_llama", "Full_llama", "Args_llama", "Hypo_qwen", "Full_qwen", "Args_qwen"]
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
-
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
+    
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_cmu.csv", delimiter = ";")
 
@@ -811,10 +935,14 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -827,26 +955,24 @@ class Vis():
             'Args_llama': '#BE77E4',
             'Hypo_qwen': "#ffc7a2",
             'Full_qwen': "#17b2e1",
-            'Args_qwen': "#cbb2ff"               
+            'Args_qwen': "#cbb2ff",
+            'Hypo_qwen32': "#F17C08",
+            'Full_qwen32': "#0339EC",                
+            'Args_qwen32': "#A824EE",
         }
 
         linestyle = {
-            'Hypo_llama': 'dashed',# dashdot
+            'Hypo_llama': 'dashed',
             'Full_llama': "dashed",
             'Args_llama': 'dashed',
             'Hypo_qwen': '-',
             'Full_qwen': '-',
-            'Args_qwen': '-'
+            'Args_qwen': '-',
+            'Hypo_qwen32': 'dotted',
+            'Full_qwen32': 'dotted',
+            'Args_qwen32': 'dotted'
         }
 
-        marker_map = {
-            'Hypo_llama': '^',
-            'Hypo_qwen':  's',
-            'Full_llama': '^',
-            'Full_qwen':  's',
-            'Args_llama': '^',
-            'Args_qwen':  's',
-        }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -860,8 +986,7 @@ class Vis():
                 ylabel = ""
                 xticks = np.arange(11)
                 linepos = 4
-                finalpos = 9,
-                #yticks = None
+                finalpos = 9
 
             df_list[c].plot(
                 ax=axes[c], 
@@ -870,14 +995,16 @@ class Vis():
                 xticks = xticks, 
                 yticks=yticks, 
                 color=color_map,
-                #title = subtitle[c], 
                 legend = False,
-                #figsize=(4.5,2.5),
                 figsize=(4,2.25), #wxh
-                #marker='o',
-                #markersize=3
                 zorder= 2
             )
+
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
 
@@ -886,13 +1013,10 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map.get(col_name, 'o'))
-                    #line.set_markersize(4)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
 
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -913,14 +1037,15 @@ class Vis():
                 
                 # Second legend: Line styles (upper right)
                 style_legend = [
-                    Line2D([0], [0], color='darkgray', lw=1.5, linestyle='dashed', label='Llama'),
-                    Line2D([0], [0], color='lightgray', lw=1.5, linestyle='-', label='Qwen')
+                    Line2D([0], [0], color='darkgray', lw=2, linestyle=(0, (2.5, 0.5, 2.5, 0.5)), label='Llama'),
+                    Line2D([0], [0], color='lightgray', lw=2, linestyle='-', label='Qwen-8B'),
+                    Line2D([0], [0], color='dimgray', lw=2, linestyle='dotted', label='Qwen-32B')
                 ]
                 axes[c].legend(
                     handles=style_legend, 
                     loc="lower right", 
                     fontsize='small',
-                    #handlelength=1.0,      # Shorter line sample (default is 2.0)
+                    handlelength=1.0,      # Shorter line sample (default is 2.0)
                     handletextpad=0.4,     # Less space between line and text (default is 0.8)
                     borderpad=0.3,         # Less padding inside the box (default is 0.4)
                     borderaxespad=0.2,     # Less space between legend and axes edge
@@ -954,8 +1079,11 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
 
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/exploration_runs_cmu.csv", delimiter = ";")
@@ -974,10 +1102,14 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -988,7 +1120,9 @@ class Vis():
             'Reject_llama': '#BE77E4',
             'Support_llama': '#F08F2D',  
             'Reject_qwen': '#cbb2ff',
-            'Support_qwen': '#ffc7a2',                     
+            'Support_qwen': '#ffc7a2',
+            'Reject_qwen32': "#A824EE",
+            'Support_qwen32': "#F17C08",                        
         }
 
         linestyle = {
@@ -996,14 +1130,10 @@ class Vis():
             'Support_llama': "dashed",
             'Reject_qwen': '-',
             'Support_qwen': '-',
+            'Reject_qwen32': 'dotted',
+            'Support_qwen32': 'dotted',
         }
 
-        marker_map = {
-            'Reject_llama': '^',
-            'Support_llama':  '^',
-            'Reject_qwen': 's',
-            'Support_qwen':  's',
-        }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1030,6 +1160,12 @@ class Vis():
                 figsize=(4,2.25),
                 zorder=2
             )
+
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
 
@@ -1038,13 +1174,10 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map[col_name])
-                    #line.set_markersize(3)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
-
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
+            
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -1090,8 +1223,11 @@ class Vis():
             roc_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
+        err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
-            roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
+            roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
+            roc[col] = roc_col_df.mean()
+            err_roc[col] = roc_col_df.std()
 
         self.task = "cmu_booksum"
         df_experiment_files = pd.read_csv("eval/correctness_runs_cmu.csv", delimiter = ";")
@@ -1110,10 +1246,14 @@ class Vis():
             cmu_dfs.append(self.plot_acc_changes(df_experiment_files = df))
 
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
+        err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
+            cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
+            cmu[col] = cmu_col_df.mean()
+            err_cmu[col] = cmu_col_df.std()
 
         df_list = [cmu, roc]
+        err_df_list = [err_cmu.reindex(index=df_list[0].index, columns=df_list[0].columns), err_roc.reindex(index=df_list[1].index, columns=df_list[1].columns)]
         
         nrow = 1
         ncol = 2
@@ -1122,9 +1262,11 @@ class Vis():
         # plot counter
         color_map = {
             'Correct_llama': '#BE77E4',
-            'Incorrect_llama': '#F08F2D',
+            'Incorrect_llama': "#EA9D50",
             'Correct_qwen': '#cbb2ff',
-            'Incorrect_qwen': '#ffc7a2',                       
+            'Incorrect_qwen': '#ffc7a2',       
+            'Correct_qwen32': "#A824EE",
+            'Incorrect_qwen32': "#F17C08",                
         }
 
         linestyle = {
@@ -1132,14 +1274,10 @@ class Vis():
             'Incorrect_llama': "dashed",
             'Correct_qwen': '-',
             'Incorrect_qwen': '-',
+            'Correct_qwen32': 'dotted',
+            'Incorrect_qwen32': 'dotted',
         }
 
-        marker_map = {
-            'Correct_llama': '^',
-            'Incorrect_llama':  '^',
-            'Correct_qwen': 's',
-            'Incorrect_qwen':  's',
-        }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1166,6 +1304,11 @@ class Vis():
                 figsize=(4,2.25),
                 zorder = 2
             )
+            for col in df_list[c].columns:
+                m = df_list[c][col].astype(float)
+                s = err_df_list[c][col].astype(float)
+                axes[c].fill_between(m.index, m - s, m + s, color=color_map[col], alpha=0.4, linewidth=0, zorder=1)
+
             axes[c].axvline(linepos, color='lightgray', linestyle='--', zorder=1)
             axes[c].axvline(finalpos, color='darkgray', linestyle='--', zorder=1)
             
@@ -1174,13 +1317,10 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map[col_name])
-                    #line.set_markersize(3)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
 
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
+            axes[c].set_ylim(0, 100)
+            axes[c].set_yticks(np.arange(0, 101, 10))
+            axes[c].set_xticks(xticks)
 
             if c == 0:
                 # First legend: Colors (upper left)
@@ -1217,17 +1357,57 @@ class Vis():
         out = self.exp_data_hf[setup].select([idx])[0]
         eval = self.eval_data_hf[setup].select([idx])[0]
 
+        # create beliefs
         if self.task == "rocstories":
             beliefs = self.evaluator.create_belief_instance_roc(out, eval)
         else:
             beliefs = self.evaluator.create_belief_instance_cmu(out, eval)
 
+        conv_format = setup.split("_")[0].lower()
         for belief in beliefs["beliefs"]:
             if belief["correct"] == "correct":
                 self.corr_per_turn[belief["turn"]-1] += 1
 
             self.beliefs_per_turn[belief["turn"]-1] += 1
-        
+
+        for i in range(len(out["turns"])):
+            turn = out["turns"][i]
+            if self.task == "rocstories":
+                conv_list = self.extract_conv_dict_rocstories(turn)
+                inf_key = "sentence"
+            else:
+                conv_list = self.extract_conv_dict_cmu(turn)
+                inf_key = "title"
+
+            for conv_dir in conv_list: 
+                if self.task == "rocstories":
+                    if conv_dir["sentence"] in eval["gold"]:
+                        correct_hypo = str(eval["gold"].index(conv_dir["sentence"]) + 1)
+                    else: 
+                        args_forwarded = []
+                        conv_format = None
+                else:
+                    correct_hypo = str(eval["gold"] == conv_dir["title"]).lower() 
+
+                if conv_format in ["full", "args"]:
+                    args_forwarded = [v for k, v in conv_dir.items() if "argument" in k]
+                    self.num_args_forwarded_per_turn[i] += len(args_forwarded)
+                else:
+                    if conv_format == "reject":
+                        # get hypos of last turn
+                        last_hypos = {str(x["hypo"]).lower() for x in beliefs["beliefs"] if x["turn"] == i and x[inf_key] == conv_dir[inf_key]}
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and k.split("_")[1] not in last_hypos]
+                    elif conv_format == "support":
+                        last_hypos = {str(x["hypo"]).lower() for x in beliefs["beliefs"] if x["turn"] == i and x[inf_key] == conv_dir[inf_key]}
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and k.split("_")[1] in last_hypos]
+                    elif conv_format == "correct":
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and correct_hypo in k]
+                    elif conv_format == "incorrect":
+                        args_forwarded = [v for k, v in conv_dir.items() if "argument" in k and correct_hypo not in k]
+
+                self.num_args_forwarded_per_turn[i] += len(args_forwarded)
+                self.num_oracle_inf[i] += len([v for v in args_forwarded if correct_hypo in v])
+
     def get_avg_metric(self, exp_file: str, metric: str = "accuracy", round_acc: bool = True, instances: int = 1000):
         '''
         This method calculates the average accuracy for the specified experiment file.
@@ -1235,6 +1415,8 @@ class Vis():
         @params
             exp_file: The path to the experiment output file.
             metric: The metric to calculate the average for (default is "accuracy").
+            round_acc: A boolean indicating whether to round the accuracy to two decimal places (default is True).
+            instances: The number of instances to consider (default is 1000).
         @returns
             The average value of the specified metric over all instances.
         '''
@@ -1253,6 +1435,9 @@ class Vis():
         if self.last and framework != "single":
             results = evaluate(exp_file, framework = framework, task = self.task, structured = True, all=True, instances=instances)
             avg_metric = results[f"{metric}_last"]
+        elif framework == "random":
+            eval_data = load_dataset("json", data_files = f"{exp_file.replace("outputs", "eval")}.jsonl", split = "train")
+            avg_metric = sum(eval_data[metric])/len(eval_data)
         else:
             results = evaluate(exp_file, framework = framework, task = self.task, structured = False, all=True, instances=instances)
             avg_metric = results[metric]
@@ -1261,6 +1446,33 @@ class Vis():
             return round(avg_metric*100, 2)
         else:
             return avg_metric
+        
+    def get_avg_metrics(self, exp_file: str, instances: int = 1000):
+        '''
+        This method calculates the average accuracy for the specified experiment file.
+
+        @params
+            exp_file: The path to the experiment output file.
+            instances: The number of instances to consider (default is 1000).
+        @returns
+            A dictionary containing the metrics for the experiment.
+        '''
+        if "booksum" in exp_file:
+            self.task = "cmu_booksum"
+        else:
+            self.task = "rocstories"
+
+        if "multi" in exp_file:
+            framework = "multi"
+        elif "single" in exp_file:
+            framework = "single"
+        else:
+            framework = "random"
+
+        if self.last and framework != "single":
+            return evaluate(exp_file, framework = framework, task = self.task, structured = True, all=True, instances=instances)
+        else:
+            return evaluate(exp_file, framework = framework, task = self.task, structured = False, all=True, instances=instances)
     
     def get_sanity_checks(self, exp_file):
         '''
@@ -1293,6 +1505,10 @@ class Vis():
     def get_perf_changes(self, setup, sent_color = False):
         '''
         This method computes the intermediate precision per turn.
+
+        @params
+            setup: The experiment setup name.
+            sent_color: A boolean indicating whether to use sentence colors (default is False).
 
         @returns 
             acc_per_turn: micro precision per turn
@@ -1351,7 +1567,6 @@ class Vis():
         """
         This function plots Fig. 2, i.e., distributed knowledge results for llama and qwen in different subplots.
         """
-        #run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
         run_files = [["eval/dist_llama_cmu.csv", "eval/dist_llama_roc.csv"], ["eval/dist_qwen8_cmu.csv", "eval/dist_qwen8_roc.csv"], ["eval/dist_qwen32_cmu.csv", "eval/dist_qwen32_roc.csv"]]
 
         nrow = 3
@@ -1376,13 +1591,14 @@ class Vis():
                 output_2_acc = df_experiment_files["output_2"].map(lambda x: self.get_avg_metric(x, round_acc = True))
 
                 s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
+                s_std = pd.DataFrame([output_0_acc, output_1_acc, output_2_acc]).std()
 
-                if "booksum" in self.task:
-                    s_acc[0] = 34.5 # keep same avg random boundary across 
-
-                df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy")], axis=1)
+                df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy"), s_std.rename("std")], axis=1)
                 plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') 
                 plot_df = plot_df.dropna(axis=1, how='all')
+
+                err_df = df_acc.pivot(index="task", columns="framework", values="std")
+                err_df = err_df.reindex(index=plot_df.index, columns=plot_df.columns)
 
                 original_cols = plot_df.columns
                 colors = [color_map[framework] for framework in original_cols]
@@ -1409,7 +1625,10 @@ class Vis():
                     rot=0,
                     xlabel = "",
                     edgecolor='black',
-                    width = 0.85
+                    width = 0.68,
+                    yerr = err_df,
+                    capsize = 2,
+                    error_kw={"elinewidth": 0.8}
                 )
 
                 if r == 0 and c == 1:
@@ -1419,11 +1638,6 @@ class Vis():
                     ax.tick_params(labelleft=False)    
 
                 for i, patch in enumerate(ax.patches):
-
-                    original_width = patch.get_width()
-                    new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
-                    patch.set_width(new_width)
-
                     # --- ANNOTATION (VALUE) LOGIC ---
                     height = patch.get_height()
                     if not np.isnan(height) and height > 0:
@@ -1435,11 +1649,10 @@ class Vis():
                             xytext=(0, 3),                                   
                             textcoords='offset points',
                             rotation=0,                                     
-                            fontsize=8
+                            fontsize=6
                         )
 
         plt.tight_layout() 
-        #plt.subplots_adjust(wspace=0., hspace=0.)
         plt.subplots_adjust(wspace=0.05, hspace=0.2)
         plt.savefig(f"visualizations/dist_split.pdf")
 
@@ -1471,6 +1684,52 @@ class Vis():
 
         df_acc.to_csv("visualizations/final.csv")
 
+    def compute_all_metrics(self, exp_file: str = "./eval/final.csv", instances: int = 1000):
+        """
+        This method computes all metrics for all main experiments.
+
+        @params
+            exp_file: The path to the experiment output file (default is "./eval/final.csv").
+            instances: The number of instances to consider (default is 1000).
+        """
+        df_experiment_files = pd.read_csv(exp_file, delimiter = ";")    
+
+        self.last = False
+
+        # get result dicts for all three runs
+        res_0 = df_experiment_files["output_0"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+        res_1 = df_experiment_files["output_1"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+        res_2 = df_experiment_files["output_2"].map(lambda x: self.get_avg_metrics(x, instances=instances))
+
+        self.metrics = ["accuracy", "prec_1", "prec_2", "prec_3", "prec_4", "prec_5", "spearman", "kendalltau", "conv_length_faa", "stop", "stop_percentage", "instances", "wrong_format", "zero_counter", "zero_percentage", "double_counter", "double_percentage"]
+        dict_output_0 = defaultdict(list)
+        dict_output_1 = defaultdict(list)
+        dict_output_2 = defaultdict(list)
+        for metric in self.metrics:
+            for row in res_0.items():
+                if metric not in ["conv_length_faa", "stop", "instances", "wrong_format", "zero_counter", "double_counter"]:
+                    dict_output_0[metric].append(round(row[1][metric]*100, 2))
+                    dict_output_1[metric].append(round(res_1[row[0]][metric]*100, 2))
+                    dict_output_2[metric].append(round(res_2[row[0]][metric]*100, 2))
+                else:
+                    dict_output_0[metric].append(row[1][metric])
+                    dict_output_1[metric].append(res_1[row[0]][metric])
+                    dict_output_2[metric].append(res_2[row[0]][metric])
+
+        output_0 = pd.DataFrame.from_dict(dict_output_0)
+        output_1 = pd.DataFrame.from_dict(dict_output_1)
+        output_2 = pd.DataFrame.from_dict(dict_output_2)
+        # compute average
+        s_metrics = round(((output_0 + output_1 + output_2)/3), 2)
+
+        df_metrics = pd.concat([
+            df_experiment_files,
+            s_metrics
+            ],
+            axis=1)
+
+        df_metrics.to_csv("visualizations/all_final.csv", sep = ";")
+
     def plot_last(self):
         ''' 
         This method prints the accuracy of the final answer agent and of the last "player".
@@ -1488,6 +1747,10 @@ class Vis():
     def plot_roc_metrics_single_run(self, exp_file: str = "", instances: int = 1000):
         '''
         This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+
+        @params
+            exp_file: The path to the experiment output file (default is "").
+            instances: The number of instances to consider (default is 1000).
         '''
         df_experiment_files = pd.read_csv(exp_file, delimiter = ";")
 
@@ -1503,6 +1766,10 @@ class Vis():
     def plot_roc_metrics_three_runs(self, exp_file: str = "eval/final.csv", instances: int = 1000):
         '''
         This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+
+        @params
+            exp_file: The path to the experiment output file (default is "eval/final.csv").
+            instances: The number of instances to consider (default is 1000).
         '''
         df_experiment_files = pd.read_csv(exp_file, delimiter = ";") 
 
@@ -1541,7 +1808,7 @@ class Vis():
         df_experiment_files["wrong_format"] = df_experiment_files["output"].map(lambda x: vis.get_sanity_checks(x))
 
         print(df_experiment_files)
-        df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";") # multi:stimmt nicht
+        df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";")
 
     def plot_args_hypos_metrics(self):
         '''
@@ -1651,12 +1918,184 @@ class Vis():
         df_acc_changes.T.plot(xticks=np.arange(self.num_turns), yticks = np.arange(0, 101, 10), ylabel = "Micro precision", xlabel = "Turn")
 
         plt.savefig(f"./visualizations/{topology}_changes.pdf")
-        
-if __name__ == "__main__":
-    vis = Vis(experiment_files={}, task = "rocstories", variation = True, last = False)
 
-    # Compute average experiment results and std -> ./visualizations/final.csv
-    #vis.compute_std()
+    def compute_forwarded_arg_stats(self):
+        df_experiment_files = pd.read_csv("eval/debug.csv", delimiter = ";")
+        df_args_files = df_experiment_files.where(df_experiment_files["framework"].isin(["Full", "Args", "Reject", "Support", "Correct", "Incorrect"])).dropna()
+        
+        stats_per_output = [] 
+        version_ids = [0, 1, 2]
+        for i in version_ids:
+            drop = [idx for idx in version_ids if idx != i]
+
+            df = df_args_files
+            for drop_idx in drop:
+                df = df.drop(f"output_{drop_idx}", axis = 1) # specify axis to remove columns
+
+            df = df.rename(columns={f"output_{i}":"output"})
+            stats_per_output = self.plot_acc_changes(df_experiment_files = df)
+            df_args_files[f"num_args_forwarded_{i}"] = list(stats_per_output["num_args_forwarded"])
+            df_args_files[f"num_oracle_inf_{i}"] = list(stats_per_output["num_oracle_inf"])
+            df_args_files[f"percentage_oracle_inf_{i}"] = list(stats_per_output["num_oracle_inf"]/stats_per_output["num_args_forwarded"])
+        
+        df_num_args = pd.DataFrame([df_args_files[f"num_args_forwarded_{i}"] for i in range(3)])
+        df_args_files[f"num_args_forwarded"] = df_num_args.mean()
+        df_args_files[f"num_args_forwarded_std"] = df_num_args.std()
+
+        df_num_args = pd.DataFrame([df_args_files[f"num_oracle_inf_{i}"] for i in range(3)])
+        df_args_files[f"num_oracle_inf"] = df_num_args.mean()
+        df_args_files[f"num_oracle_inf_std"] = df_num_args.std()
+
+        df_num_args = pd.DataFrame([df_args_files[f"percentage_oracle_inf_{i}"] for i in range(3)])
+        df_args_files[f"percentage_oracle_inf"] = df_num_args.mean()
+        df_args_files[f"percentage_oracle_inf_std"] = df_num_args.std()
+
+        df_args_files.to_csv("./visualizations/stats_full.csv")
+ 
+    def get_args_per_turn(self, inst, idx, setup):
+        '''
+        This method calculates the accuracy per turn for the specified instance in the experiment setup.
+
+        @params
+            inst: The instance data from the experiment setup.
+            idx: The index of the instance.
+            setup: The experiment setup name.
+        '''
+        out = self.exp_data_hf[setup].select([idx])[0]
+
+        conv_format = setup.split('_')[0].lower()
+        # collect num_args
+        for i in range(len(out["turns"])):
+            conv_str = out["turns"][i]
+            
+            try:
+                conv_list = ast.literal_eval(conv_str)
+                if self.task == "rocstories":
+                    return self.formulate_conv_roc(out, conv_list, conv_format)
+                else: 
+                    return self.formulate_conv_cmu(out, conv_list, conv_format) 
+            except:
+                if self.task == "rocstories":
+                    conv_list = self.extract_conv_dict_rocstories(conv_str)
+                    return self.formulate_conv_roc(out, conv_list, conv_format)
+                else:
+                    conv_list = self.extract_conv_dict_cmu(conv_str)
+                    return self.formulate_conv_cmu(out, conv_list, conv_format)
+                
+    def extract_conv_dict_rocstories(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for ROCStories.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
+        conv_list = []
+        sentences = [item[0] for item in re.findall(r"""sentence[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        positions = re.findall(r"""position\': (\d)""", conv_str)
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_1[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_2[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_3_list = [item[0] for item in re.findall(r"""argument_3[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_4_list = [item[0] for item in re.findall(r"""argument_4[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_5_list = [item[0] for item in re.findall(r"""argument_5[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, sent in enumerate(sentences):
+            conv_dict = defaultdict(str)
+
+            conv_dict["sentence"] = sent
+
+            if i < len(positions):
+                conv_dict["position"] = int(positions[i])
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_1"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_2"] = self.strip_arg(reason_2_list[i])
+
+            if i < len(reason_3_list):
+                conv_dict["argument_3"] = self.strip_arg(reason_3_list[i])
+
+            if i < len(reason_4_list):
+                conv_dict["argument_4"] = self.strip_arg(reason_4_list[i])
+
+            if i < len(reason_5_list):
+                conv_dict["argument_5"] = self.strip_arg(reason_5_list[i])
+
+            conv_list.append(conv_dict)
+        
+        return conv_list
+    
+    def extract_conv_dict_cmu(self, conv_str: str):
+        '''
+        This method extracts the conversation dictionary from the model output for CMU.
+
+        @params
+            conv_str: model output
+        @returns
+            conv_list: list of dictionaries containing the conversation
+        '''
+        conv_list = []
+
+        titles = [item[0] for item in re.findall(r"""title[\'"]: [\'"]([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        
+        labels = [item[0] for item in re.findall(r"""label[\'"]: [\'"]([\w \.,]+(\\'[\w \.,]+)*)""", conv_str)]
+        reasoning_list = [item[0] for item in re.findall(r"""reasoning[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_1_list = [item[0] for item in re.findall(r"""argument_true[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+        reason_2_list = [item[0] for item in re.findall(r"""argument_false[\'"]: [\'"]?([\w \.,-]+(\\'[\w \.,-]+)*)""", conv_str)]
+
+        for i, title in enumerate(titles):
+            conv_dict = defaultdict(str)
+
+            conv_dict["title"] = title
+
+            if i < len(labels):
+                conv_dict["label"] = labels[i]
+
+            if i < len(reasoning_list):                        
+                conv_dict["reasoning"] = self.strip_arg(reasoning_list[i])
+            
+            if i < len(reason_1_list):
+                conv_dict["argument_true"] = self.strip_arg(reason_1_list[i])
+
+            if i < len(reason_2_list):
+                conv_dict["argument_false"] = self.strip_arg(reason_2_list[i])
+            
+            conv_list.append(conv_dict)
+        return conv_list
+    
+    def strip_arg(self, item):
+        '''
+        This method strips the argument, position, or label from the item.
+
+        @params
+            item: string to be stripped
+        @returns
+            item: stripped string
+        '''
+        if "argument" in item:
+            item = item.strip("argument")
+        elif "position" in item:
+            item = item.strip("position")
+        elif "label" in item:
+            item = item.strip("label")
+        return item
+
+if __name__ == "__main__":
+    # experiment_files = {
+    #     "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
+    #     "correct": "outputs/multi/Qwen3-32B/rocstories/test/outputs_486_487",
+    # }
+    experiment_files = {}
+    vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
+
+    #vis.compute_all_metrics("./eval/final.csv")
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
     #vis.plot_dist_split() 
@@ -1665,7 +2104,16 @@ if __name__ == "__main__":
     #vis.plot_arg_hypo_changes()
 
     # Create Figure 4b -> ./visualizations/exploration.pdf
-    vis.plot_exploration_changes()
+    #vis.plot_exploration_changes()
 
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
+
+    # Create Table 15 -> ./visualizations/paired_bootstrap.csv
+    #vis.perform_paired_bootstrap()
+
+    # Create Table 17 -> ./visualizations/rocstories/secondary_roc.csv
+    #vis.plot_roc_metrics_three_runs()
+
+    # Create Tables 18 and 19 -> ./visualizations/stats.csv
+    #vis.compute_forwarded_arg_stats()

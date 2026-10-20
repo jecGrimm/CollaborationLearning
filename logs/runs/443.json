@@ -3,7 +3,7 @@
     "version_idx": 2,
     "split": "test",
     "framework": "multi",
-    "experiment_file": "./outputs/multi/Qwen3-8B/cmu_booksum/test/ckps/outputs_443_0",
+    "experiment_file": "./outputs/multi/Qwen3-8B/cmu_booksum/test/outputs_443",
     "batch_size": 16,
     "model_id": "Qwen/Qwen3-8B",
     "desc": "This run tests reject with Qwen3-8b.",
@@ -130,5 +130,10 @@
     "top_k": 20,
     "min_p": 0,
     "arranged_file": "./data/cmu_booksum/CMU_BookSum_arranged_test.jsonl",
-    "instances": 250
+    "instances": 750,
+    "duration": 15482.800306081772,
+    "mean_acc": 0.43866666666666665,
+    "zero_percentage": 0.0,
+    "double_percentage": 0.0,
+    "wrong_format": 0.004
 }

@@ -1,0 +1,2 @@
+;first_exp_file;first_setup;first_mean;second_exp_file;second_setup;second_mean;Welch's t-test;p-value;significant
+0;outputs/multi/Qwen3-32B/rocstories/test/outputs_474_475_476_477;support;0.7464;outputs/multi/Qwen3-32B/rocstories/test/outputs_463;reject;0.7539999999999999;-0.5793882944542503;0.2811962598469957;False
