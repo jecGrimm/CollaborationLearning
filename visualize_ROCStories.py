@@ -88,7 +88,7 @@ def main():
     if len(sys.argv) > 1:
         csv_path = Path(sys.argv[1])
     else:
-        csv_path = Path(__file__).parent / "annotated_ROCStories_150.csv"
+        csv_path = Path(__file__).parent / "annotated:ROCStories_150.csv"
 
     if not csv_path.exists():
         sys.exit(f"CSV file not found: {csv_path}\n"
