@@ -129,18 +129,23 @@ class Agent:
     
     def init_vllm(self, logger):
         '''
-        @warning reasoning not implemented
+        This method initializes the vLLM model.
+
+        @params
+            logger: ExperimentLog object to log the initialization process
+        @returns
+            logger: ExperimentLog object with updated run_data
+        @warning thinking-mode not yet implemented
         '''
         quant_models = ["qwen/qwen3-32b"]
 
         if self.model_id.lower() in quant_models:
-            # quantization="bitsandbytes",
             self.llm = LLM(
                 model=self.model_id,
                 dtype="bfloat16",
                 trust_remote_code=True,
                 limit_mm_per_prompt={}, # text-only version
-                gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
+                gpu_memory_utilization=0.7, # Lower from 0.9 to 0.7 to avoid VRAM-overhead
                 max_model_len=32768,         
                 quantization="bitsandbytes"
             )
@@ -150,7 +155,7 @@ class Agent:
                 dtype="bfloat16",
                 trust_remote_code=True,
                 limit_mm_per_prompt={}, # text-only version
-                gpu_memory_utilization=0.7, # Von 0.9 auf 0.7 senken, um VRAM-Overhead abzufangen
+                gpu_memory_utilization=0.7, # Lower from 0.9 to 0.7 to avoid VRAM-overhead
                 max_model_len=32768         
             )
 
@@ -164,12 +169,10 @@ class Agent:
 
         self.sampling_params = SamplingParams(
             max_tokens=self.max_new_tokens,
-            #stop=["<|im_end|>", "<|endoftext|>"],
             temperature = 0.7,
             top_p = top_p,
             top_k=top_k,
             min_p = 0
-            #thinking_token_budget=int(self.max_new_tokens * thinking_budget),
         )
 
         model_config = self.llm.llm_engine.model_config
@@ -359,7 +362,7 @@ class SingleAgent(Agent):
         if vllm:
             # VLLM raises an error if this is not set
             os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
-            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducability
+            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducibility
 
             logger.run.config.update({"enable_batch_invariant": True})
 
@@ -404,7 +407,6 @@ class SingleAgent(Agent):
                 outputs = self.llm.chat(messages = list(shard_data["prompt"]), sampling_params = self.sampling_params, chat_template_kwargs={"enable_thinking": enable_think}) # TODO: test thinking
 
                 for output in outputs:
-                    #print(f"Antwort: {output.outputs[0].text}\n")
                     model_answer = output.outputs[0].text
                     output_list.append(model_answer.split("</think>")[-1].strip())
 
@@ -425,7 +427,6 @@ class SingleAgent(Agent):
                         thinking_answer.append(model_answer)
 
             full_output_list += output_list
-            #full_thinking_answer += thinking_answer
 
             output_data = shard_data.add_column("output", output_list)
             if thinking_budget > 0.0:
@@ -1362,7 +1363,7 @@ class MultiAgent(Agent):
             # VLLM raises an error if this is not set, control how dependencies are loaded
             os.environ['VLLM_WORKER_MULTIPROC_METHOD'] = 'spawn'
 
-            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducability
+            os.environ["VLLM_BATCH_INVARIANT"] = "1" # ensures that batch size has no impact on the performance -> better reproducibility
 
             logger.run.config.update({"enable_batch_invariant": True})
             logger = self.init_vllm(logger = logger)
@@ -1372,7 +1373,7 @@ class MultiAgent(Agent):
 
         # prepare dataset
         if self.task == "rocstories":
-            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx) # TODO: ADD version_idx
+            roc_data = ROCStories(split = self.split, variation = variation, start = start, end = end, version_idx = version_idx)
             logger.run_data.update({
                 "shuffle_file": roc_data.shuffle_file, 
                 "batch_size": batch_size, 
@@ -1511,7 +1512,7 @@ class MultiAgent(Agent):
             end: end index of the dataset
 
         @warning
-            This function is not yet updated to vllm (including thinking).
+            This function is not yet updated to vllm and version-idxs.
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1610,7 +1611,7 @@ class MultiAgent(Agent):
             end: end index of the dataset
 
         @warning
-            This function is not yet updated to vllm (including thinking).
+            This function is not yet updated to vllm and version-idxs.
         """
         # initialize pipeline
         torch.cuda.empty_cache()
@@ -1770,7 +1771,7 @@ class MultiAgent(Agent):
             conv_format: str indicating the output format, can be "hypo", "full", "reasons", "support", "reject", "correct", or "incorrect"
         
         @warning
-            This function is not yet updated to vllm!
+            This function is not yet updated to vllm and version-idxs!
         """
         # initialize pipeline
         torch.cuda.empty_cache()

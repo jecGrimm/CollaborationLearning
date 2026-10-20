@@ -3,12 +3,9 @@ import ast
 from data import get_sent_list
 import os
 import re
-import pandas as pd
 from log import ExperimentLog
 import os
 from collections import defaultdict
-import csv
-from tqdm import tqdm
 from scipy import stats
 import random
 import nltk
@@ -142,7 +139,6 @@ class Evaluator:
 
         if self.framework == "multi":
             self.conv_length_faa = [] # per instance: amount of tokens in conversation history forwarded to faa
-            #self.num_args_forwarded = []
 
         if self.task == "rocstories":
             self.gold_sents = []
@@ -288,7 +284,6 @@ class Evaluator:
             acc.append(self.compute_accuracy_odd(pred, gold, batch["titles"][i].index(gold)+1))
         
         return {"id": batch["id"], "accuracy": acc, "predictions": pred_lists, "gold": gold_lbls}
-
 
     def evaluate_order_answer_single(self, batch):
         """
@@ -1190,8 +1185,6 @@ if __name__ == "__main__":
     outdir = "./outputs/multi/Llama-3.1-8B-Instruct/cmu_booksum/test/outputs_354"
 
     results = evaluate(outfile = outdir,framework= "multi", task = "cmu_booksum", structured=True, last=False, all = False, instances = 1000)
-    
-    #results = evaluate(outdir, framework = "single", task = "cmu_booksum", structured = False)
     
     print(results)
 

@@ -11,7 +11,6 @@ import plotly.graph_objects as go
 from scipy.stats.mstats import ttest_ind
 from scipy.stats import bootstrap
 from matplotlib import colors
-from matplotlib.patches import Patch
 import math
 from matplotlib.lines import Line2D
 import ast
@@ -27,6 +26,7 @@ class Vis():
             conv_format: The conversational format of the outputs.
             last: A boolean indicating whether to use only the last turn of the conversation as final answer.
             task: The task being evaluated (e.g., "rocstories").
+            instances: The number of instances to load from the output datasets for evaluation.
         '''
         self.experiment_files = experiment_files
 
@@ -59,6 +59,8 @@ class Vis():
     def initialize_experiment_files(self, instances: int = 1000):
         '''
         This method loads the output datasets from disk and creates evaluation dataframes for each experiment setup.
+
+        @params instances: The number of instances to load from the output datasets for evaluation.
         '''
         self.exp_data_hf = {k: load_from_disk(v).select(range(instances)) for k, v in self.experiment_files.items()}
 
@@ -97,14 +99,13 @@ class Vis():
 
         self.mean_preds_df = pd.DataFrame(mean_preds.values(), index=mean_preds.keys(), columns=self.metrics) 
 
-    def load_eval_data(self, eval_file, exp_name, instances: int = None):
+    def load_eval_data(self, eval_file, instances: int = None):
         '''
         This method loads the evaluation data from the specified evaluation file. If the evaluation file is not found, it uses the Evaluator class to evaluate the experiment outputs and generate the evaluation data.
 
         @params
             eval_file: The path to the evaluation file.
-            exp_name: The name of the experiment setup.
-
+            instances: The number of instances to load from the evaluation data.
         @returns
             The evaluation data as a Hugging Face dataset.
         '''
@@ -600,6 +601,8 @@ class Vis():
         @params
             comparison: The experiment setup that is tested to be significantly lower than the other setups.
             exp_name: An optional name for the experiment to include in the output file name.
+
+        @warning Welch's t-test can lead to brittle results for multiple comparisons and assumes independence of the samples. For a more robust statistical test, consider using perform_paired_bootstrap instead.
         '''
         first_accs = [list(eval_data['accuracy']) for setup, eval_data in self.eval_data_hf.items() if comparison in setup][0]
 
@@ -640,11 +643,7 @@ class Vis():
 
     def perform_paired_bootstrap(self):
         '''
-        This method performs a paired bootstrap test to compare the accuracy of the specified comparison setup against all other setups. It saves the results as a CSV file in the specified visualization path.
-
-        @params
-            comparison: The experiment setup that is tested to be significantly lower than the other setups.
-            exp_name: An optional name for the experiment to include in the output file name.
+        This method performs a paired bootstrap test to compare the accuracy of the specified comparison setup against all other setups. It saves the results as a CSV file.
         '''
         self.last = False
         stats_dict = defaultdict(list)
@@ -818,6 +817,9 @@ class Vis():
         @params
             run_file: The path to the CSV file containing the experiment setups and their corresponding output files
             df_experiment_files: A DataFrame containing the experiment setups and their corresponding output files
+            instances: The number of instances to consider
+            one_model: A boolean indicating whether to append model and task to the setup name
+        @returns df_metric_changes: A DataFrame containing the accuracy changes, number of arguments forwarded, and number of oracle inferences for each setup
         '''
         if run_file:
             df_experiment_files = pd.read_csv(run_file, delimiter = ";")
@@ -895,7 +897,6 @@ class Vis():
         '''
         self.task = "rocstories"
         df_experiment_files = pd.read_csv("eval/args_hypo_runs_roc.csv", delimiter = ";")
-        #df_experiment_files = pd.read_csv("eval/debug.csv", delimiter = ";")
 
         roc_dfs = [] 
         version_ids = [0, 1, 2]
@@ -912,10 +913,8 @@ class Vis():
 
         roc = pd.DataFrame(columns=roc_dfs[0].columns)
         err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
-        # , index=["Hypo_llama", "Full_llama", "Args_llama", "Hypo_qwen", "Full_qwen", "Args_qwen"]
         for col in roc_dfs[0].columns:
             roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
-            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
             roc[col] = roc_col_df.mean()
             err_roc[col] = roc_col_df.std()
     
@@ -938,7 +937,6 @@ class Vis():
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
             cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
             cmu[col] = cmu_col_df.mean()
             err_cmu[col] = cmu_col_df.std()
@@ -964,7 +962,7 @@ class Vis():
         }
 
         linestyle = {
-            'Hypo_llama': 'dashed',# dashdot
+            'Hypo_llama': 'dashed',
             'Full_llama': "dashed",
             'Args_llama': 'dashed',
             'Hypo_qwen': '-',
@@ -975,14 +973,6 @@ class Vis():
             'Args_qwen32': 'dotted'
         }
 
-        # marker_map = {
-        #     'Hypo_llama': '^',
-        #     'Hypo_qwen':  's',
-        #     'Full_llama': '^',
-        #     'Full_qwen':  's',
-        #     'Args_llama': '^',
-        #     'Args_qwen':  's',
-        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -997,7 +987,6 @@ class Vis():
                 xticks = np.arange(11)
                 linepos = 4
                 finalpos = 9
-                #yticks = None
 
             df_list[c].plot(
                 ax=axes[c], 
@@ -1006,15 +995,9 @@ class Vis():
                 xticks = xticks, 
                 yticks=yticks, 
                 color=color_map,
-                #title = subtitle[c], 
                 legend = False,
-                #figsize=(4.5,2.5),
                 figsize=(4,2.25), #wxh
-                #marker='o',
-                #markersize=3
-                zorder= 2,
-                #yerr=err_df_list[c].reindex(index=df_list[c].index, columns=df_list[c].columns).astype(float), # ensure that both dataframes are the same
-                #capsize = 2
+                zorder= 2
             )
 
             for col in df_list[c].columns:
@@ -1030,13 +1013,6 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map.get(col_name, 'o'))
-                    #line.set_markersize(4)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
-
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
 
             axes[c].set_ylim(0, 100)
             axes[c].set_yticks(np.arange(0, 101, 10))
@@ -1106,7 +1082,6 @@ class Vis():
         err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
             roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
-            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
             roc[col] = roc_col_df.mean()
             err_roc[col] = roc_col_df.std()
 
@@ -1129,7 +1104,6 @@ class Vis():
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
             cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
             cmu[col] = cmu_col_df.mean()
             err_cmu[col] = cmu_col_df.std()
@@ -1160,12 +1134,6 @@ class Vis():
             'Support_qwen32': 'dotted',
         }
 
-        # marker_map = {
-        #     'Reject_llama': '^',
-        #     'Support_llama':  '^',
-        #     'Reject_qwen': 's',
-        #     'Support_qwen':  's',
-        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1206,13 +1174,6 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map[col_name])
-                    #line.set_markersize(3)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
-
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
             
             axes[c].set_ylim(0, 100)
             axes[c].set_yticks(np.arange(0, 101, 10))
@@ -1265,7 +1226,6 @@ class Vis():
         err_roc = pd.DataFrame(columns=roc_dfs[0].columns)
         for col in roc_dfs[0].columns:
             roc_col_df = pd.DataFrame([roc_dfs[0][col], roc_dfs[1][col], roc_dfs[2][col]])
-            #roc[col] = (roc_dfs[0][col] + roc_dfs[1][col] + roc_dfs[2][col])/3
             roc[col] = roc_col_df.mean()
             err_roc[col] = roc_col_df.std()
 
@@ -1288,7 +1248,6 @@ class Vis():
         cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         err_cmu = pd.DataFrame(columns=cmu_dfs[0].columns)
         for col in cmu_dfs[0].columns:
-            #cmu[col] = (cmu_dfs[0][col] + cmu_dfs[1][col] + cmu_dfs[2][col])/3
             cmu_col_df = pd.DataFrame([cmu_dfs[0][col], cmu_dfs[1][col], cmu_dfs[2][col]])
             cmu[col] = cmu_col_df.mean()
             err_cmu[col] = cmu_col_df.std()
@@ -1319,12 +1278,6 @@ class Vis():
             'Incorrect_qwen32': 'dotted',
         }
 
-        # marker_map = {
-        #     'Correct_llama': '^',
-        #     'Incorrect_llama':  '^',
-        #     'Correct_qwen': 's',
-        #     'Incorrect_qwen':  's',
-        # }
         subtitle = ["BookDiff", "StoryCon"]
 
         for c in range(ncol):
@@ -1364,13 +1317,6 @@ class Vis():
                 col_name = line.get_label()
                 if col_name in linestyle:
                     line.set_linestyle(linestyle[col_name])
-                    #line.set_marker(marker_map[col_name])
-                    #line.set_markersize(3)
-                    #line.set_markeredgecolor('black')  
-                    #line.set_markeredgewidth(0.1)
-
-            # if c == 0:
-            #     axes[c].legend(loc = "upper left")
 
             axes[c].set_ylim(0, 100)
             axes[c].set_yticks(np.arange(0, 101, 10))
@@ -1469,6 +1415,8 @@ class Vis():
         @params
             exp_file: The path to the experiment output file.
             metric: The metric to calculate the average for (default is "accuracy").
+            round_acc: A boolean indicating whether to round the accuracy to two decimal places (default is True).
+            instances: The number of instances to consider (default is 1000).
         @returns
             The average value of the specified metric over all instances.
         '''
@@ -1499,15 +1447,15 @@ class Vis():
         else:
             return avg_metric
         
-    def get_avg_metrics(self, exp_file: str, instances: int = 1000, inlcude_random: bool = False):
+    def get_avg_metrics(self, exp_file: str, instances: int = 1000):
         '''
         This method calculates the average accuracy for the specified experiment file.
 
         @params
             exp_file: The path to the experiment output file.
-            metric: The metric to calculate the average for (default is "accuracy").
+            instances: The number of instances to consider (default is 1000).
         @returns
-            The average value of the specified metric over all instances.
+            A dictionary containing the metrics for the experiment.
         '''
         if "booksum" in exp_file:
             self.task = "cmu_booksum"
@@ -1557,6 +1505,10 @@ class Vis():
     def get_perf_changes(self, setup, sent_color = False):
         '''
         This method computes the intermediate precision per turn.
+
+        @params
+            setup: The experiment setup name.
+            sent_color: A boolean indicating whether to use sentence colors (default is False).
 
         @returns 
             acc_per_turn: micro precision per turn
@@ -1615,7 +1567,6 @@ class Vis():
         """
         This function plots Fig. 2, i.e., distributed knowledge results for llama and qwen in different subplots.
         """
-        #run_files = [["eval/dist_llama_roc.csv", "eval/dist_llama_cmu.csv"], ["eval/dist_qwen8_roc.csv", "eval/dist_qwen8_cmu.csv"], ["eval/dist_qwen_roc.csv", "eval/dist_qwen_cmu.csv"]]
         run_files = [["eval/dist_llama_cmu.csv", "eval/dist_llama_roc.csv"], ["eval/dist_qwen8_cmu.csv", "eval/dist_qwen8_roc.csv"], ["eval/dist_qwen32_cmu.csv", "eval/dist_qwen32_roc.csv"]]
 
         nrow = 3
@@ -1642,9 +1593,6 @@ class Vis():
                 s_acc = (output_0_acc + output_1_acc + output_2_acc)/3
                 s_std = pd.DataFrame([output_0_acc, output_1_acc, output_2_acc]).std()
 
-                # if "booksum" in self.task:
-                #     s_acc[0] = 34.5 # keep same avg random boundary across 
-
                 df_acc = pd.concat([df_experiment_files, s_acc.rename("accuracy"), s_std.rename("std")], axis=1)
                 plot_df = df_acc.pivot(index='task', columns='framework', values='accuracy') 
                 plot_df = plot_df.dropna(axis=1, how='all')
@@ -1665,21 +1613,6 @@ class Vis():
                 if r == 1:
                     title = None
 
-                # df_acc["accuracy"].plot(
-                #     ax=ax, 
-                #     ylabel=ylabel, 
-                #     yticks=yticks,
-                #     color=colors, 
-                #     legend = (c==1 and r==0),
-                #     #figsize=(4.25,5.5), # w x h
-                #     figsize=(4, 5.25), # w x h
-                #     kind="bar",
-                #     rot=0,
-                #     xlabel = "",
-                #     edgecolor='black',
-                #     width = 0.85,
-                #     yerr = df_acc["std"]
-                # )
                 plot_df.plot(
                     ax=ax, 
                     ylabel=ylabel, 
@@ -1705,11 +1638,6 @@ class Vis():
                     ax.tick_params(labelleft=False)    
 
                 for i, patch in enumerate(ax.patches):
-
-                    #original_width = patch.get_width()
-                    #new_width = original_width * 0.8 # Shrink bar to 80% to create a gap
-                    #patch.set_width(new_width)
-
                     # --- ANNOTATION (VALUE) LOGIC ---
                     height = patch.get_height()
                     if not np.isnan(height) and height > 0:
@@ -1725,7 +1653,6 @@ class Vis():
                         )
 
         plt.tight_layout() 
-        #plt.subplots_adjust(wspace=0., hspace=0.)
         plt.subplots_adjust(wspace=0.05, hspace=0.2)
         plt.savefig(f"visualizations/dist_split.pdf")
 
@@ -1760,6 +1687,10 @@ class Vis():
     def compute_all_metrics(self, exp_file: str = "./eval/final.csv", instances: int = 1000):
         """
         This method computes all metrics for all main experiments.
+
+        @params
+            exp_file: The path to the experiment output file (default is "./eval/final.csv").
+            instances: The number of instances to consider (default is 1000).
         """
         df_experiment_files = pd.read_csv(exp_file, delimiter = ";")    
 
@@ -1816,6 +1747,10 @@ class Vis():
     def plot_roc_metrics_single_run(self, exp_file: str = "", instances: int = 1000):
         '''
         This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+
+        @params
+            exp_file: The path to the experiment output file (default is "").
+            instances: The number of instances to consider (default is 1000).
         '''
         df_experiment_files = pd.read_csv(exp_file, delimiter = ";")
 
@@ -1831,6 +1766,10 @@ class Vis():
     def plot_roc_metrics_three_runs(self, exp_file: str = "eval/final.csv", instances: int = 1000):
         '''
         This method prints all secondary metrics for ROCStories on distributed base results (single vs. base vs. improved).
+
+        @params
+            exp_file: The path to the experiment output file (default is "eval/final.csv").
+            instances: The number of instances to consider (default is 1000).
         '''
         df_experiment_files = pd.read_csv(exp_file, delimiter = ";") 
 
@@ -1869,7 +1808,7 @@ class Vis():
         df_experiment_files["wrong_format"] = df_experiment_files["output"].map(lambda x: vis.get_sanity_checks(x))
 
         print(df_experiment_files)
-        df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";") # multi:stimmt nicht
+        df_experiment_files.to_csv("./visualizations/distributed_base_sanity.csv", sep = ";")
 
     def plot_args_hypos_metrics(self):
         '''
@@ -1984,8 +1923,6 @@ class Vis():
         df_experiment_files = pd.read_csv("eval/debug.csv", delimiter = ";")
         df_args_files = df_experiment_files.where(df_experiment_files["framework"].isin(["Full", "Args", "Reject", "Support", "Correct", "Incorrect"])).dropna()
         
-        #self.task = "rocstories"
-        #df_roc_files = df_args_files.where(df_args_files["task"] == "StoryCon").dropna()
         stats_per_output = [] 
         version_ids = [0, 1, 2]
         for i in version_ids:
@@ -2150,15 +2087,6 @@ class Vis():
             item = item.strip("label")
         return item
 
-    def plot_additional_stats_correlation(self, mode: str = "length"):
-        if mode == "length":
-            df_experiment_files = pd.read_csv("visualizations/all_final.csv", delimiter = ";")
-            data_key = "conv_length_faa"
-
-        df_experiment_files.plot.scatter(x = "accuracy", y=data_key, c="framework")
-
-        plt.savefig("./visualizations/length.pdf")
-
 if __name__ == "__main__":
     # experiment_files = {
     #     "single": "outputs/single/Qwen3-32B/rocstories/test/outputs_360",
@@ -2166,13 +2094,8 @@ if __name__ == "__main__":
     # }
     experiment_files = {}
     vis = Vis(experiment_files=experiment_files, task = "rocstories", variation = None, last = False)
-    #vis.perform_ttest(comparison="single", exp_name="correct_qwen32_2")
-    #vis.perform_paired_bootstrap()
 
     #vis.compute_all_metrics("./eval/final.csv")
-
-    # Create Table 13 -> ./visualizations/rocstories/secondary_roc.csv
-    #vis.plot_roc_metrics_three_runs()
 
     # Create Figure 2 -> ./visualizations/dist_split.pdf
     #vis.plot_dist_split() 
@@ -2186,6 +2109,11 @@ if __name__ == "__main__":
     # Create Figure 4c -> ./visualizations/correctness.pdf
     #vis.plot_correctness_changes()
 
-    vis.compute_forwarded_arg_stats()
+    # Create Table 15 -> ./visualizations/paired_bootstrap.csv
+    #vis.perform_paired_bootstrap()
 
-    #vis.plot_additional_stats_correlation(mode = "length")
+    # Create Table 17 -> ./visualizations/rocstories/secondary_roc.csv
+    #vis.plot_roc_metrics_three_runs()
+
+    # Create Tables 18 and 19 -> ./visualizations/stats.csv
+    #vis.compute_forwarded_arg_stats()

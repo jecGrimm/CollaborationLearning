@@ -1,4 +1,3 @@
-import csv 
 from datasets import load_dataset, load_from_disk, concatenate_datasets
 import random
 from evaluate import evaluate
@@ -107,22 +106,7 @@ def split_think(inst):
     return {"output": inst["thinking_output"].split("</think>")[-1].strip()}
 
 if __name__ == "__main__":
-    conv_output = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_518_{i}"
-    conv_output1 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_519"
-    conv_output2 = "outputs/multi/Qwen3-32B/cmu_booksum/test/ckps/outputs_520_0"
-    #conv_output3 = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_512"
-    
-    outfile = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_518_519_520"
+    conv_output = "outputs/multi/Qwen3-32B/cmu_booksum/test/outputs_518_519_520"
+    outfile = "example_output.txt"
 
-    #inspect_instances(conv_output, outfile=outfile)
-
-    merge_files = []
-    ckp_files = [conv_output.format(i= i) for i in range(3)]
-    
-    for f in ckp_files:
-        merge_files.append(f) 
-
-    merge_files.append(conv_output1) 
-    merge_files.append(conv_output2)
-
-    merge_outputs(merge_files, outfile, framework="multi", task="cmu_booksum", structured=True)
+    inspect_instances(conv_output, outfile=outfile)

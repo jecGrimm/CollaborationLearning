@@ -5,7 +5,7 @@ import os
 class CLI:
     def __init__(self):
         """
-        This class defines the cli used for our experiments.
+        This class defines the cli used for our experiments. The cli receives the path to a configuration json-file (via the -c argument) and reads the arguments in the file.
         """
         parser = argparse.ArgumentParser()
         parser.add_argument('--config', '-c', help='configuration file', default = "configs/mini_cpu_single_exp.json")
