@@ -179,4 +179,4 @@ Mostafazadeh, Nasrin, Nathanael Chambers, Xiaodong He, et al. “A Corpus and Cl
 
 ## License
 - **Code**: [MIT License](LICENSE)
-- **Datasets** (`data/`): [CC BY-SA 4.0](LICENSE-DATA)
+- **Datasets** (`data/`): [CC BY-SA 3.0 US](LICENSE-DATA)
