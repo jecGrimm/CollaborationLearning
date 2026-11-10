@@ -174,3 +174,6 @@ Bamman, David, and Noah A. Smith. “New Alignment Methods for Discriminative Bo
 
 Mostafazadeh, Nasrin, Nathanael Chambers, Xiaodong He, et al. “A Corpus and Cloze Evaluation for Deeper Understanding of Commonsense Stories.” In Proceedings of the 2016 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, edited by Kevin Knight, Ani Nenkova, and Owen Rambow. Association for Computational Linguistics, 2016. https://doi.org/10.18653/v1/N16-1098.
 
+## License
+- **Code**: [MIT License](LICENSE)
+- **Datasets** (`data/`): [CC BY-SA 4.0](LICENSE-DATA)
