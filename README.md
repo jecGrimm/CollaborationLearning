@@ -146,7 +146,10 @@ Script with additional functionalities that are not part of the main experiment.
 Used to add large files to `.gitignore`.
 
 ### LICENSE
-MIT-License for use with citations.
+MIT-License for code files.
+
+### LICENSE-DATA
+Creative Commons Attribution-ShareAlike License for data files.
 
 ### log.py
 Creates a logging object to save all experiment configurations.
