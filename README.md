@@ -146,7 +146,10 @@ Script with additional functionalities that are not part of the main experiment.
 Used to add large files to `.gitignore`.
 
 ### LICENSE
-MIT-License for use with citations.
+MIT-License for code files.
+
+### LICENSE-DATA
+Creative Commons Attribution-ShareAlike License for data files.
 
 ### log.py
 Creates a logging object to save all experiment configurations.
@@ -174,3 +177,6 @@ Bamman, David, and Noah A. Smith. “New Alignment Methods for Discriminative Bo
 
 Mostafazadeh, Nasrin, Nathanael Chambers, Xiaodong He, et al. “A Corpus and Cloze Evaluation for Deeper Understanding of Commonsense Stories.” In Proceedings of the 2016 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, edited by Kevin Knight, Ani Nenkova, and Owen Rambow. Association for Computational Linguistics, 2016. https://doi.org/10.18653/v1/N16-1098.
 
+## License
+- **Code**: [MIT License](LICENSE)
+- **Datasets** (`data/`): [CC BY-SA 3.0 US](LICENSE-DATA)
