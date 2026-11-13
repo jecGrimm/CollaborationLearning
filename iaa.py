@@ -322,8 +322,11 @@ def compare_files(path1, path2):
         path1: The path to the first annotated file.
         path2: The path to the second annotated file.    
     """
-    annos1 = pd.read_csv(path1)["order"].map(lambda x: json.loads(x)[0]["ranker"]["order"])
-    annos2 = pd.read_csv(path2)["order"].map(lambda x: json.loads(x)[0]["ranker"]["order"])
+    sorted_annos1 = pd.read_csv(path1).sort_values(by = "storyid", ignore_index=True)
+    sorted_annos2 = pd.read_csv(path2).sort_values(by = "storyid", ignore_index=True)
+
+    annos1 = sorted_annos1["order"].map(lambda x: json.loads(x)[0]["ranker"]["order"])
+    annos2 = sorted_annos2["order"].map(lambda x: json.loads(x)[0]["ranker"]["order"])
 
     label_pairs_exact = []
     kappas_position = []
@@ -347,6 +350,35 @@ def compare_files(path1, path2):
 
     macro_kappa = sum(kappas_position)/len(kappas_position)
     print("macro kappa:", macro_kappa)
+
+def compare_files_bookdiff(path1, path2):
+    """
+    This function computes the inter-annotator agreement for the task annotations. Itcompares the annotations of two files and computes inter-annotator agreement metrics, including exact match and macro kappa.
+
+    @param 
+        path1: The path to the first annotated file.
+        path2: The path to the second annotated file.    
+    """
+    sorted_annos1 = pd.read_csv(path1).sort_values(by = "id", ignore_index=True)
+    sorted_annos2 = pd.read_csv(path2).sort_values(by = "id", ignore_index=True)
+
+    annos1 = sorted_annos1["different_genre"]
+    annos2 = sorted_annos2["different_genre"]
+
+    label_pairs_exact = []
+    kappas_position = []
+    for i in range(len(annos2)):
+        anno1 = annos1[i]
+        anno2 = annos2[i]
+
+        label_pairs_exact.append((anno1, anno2))
+
+        if anno1 != anno2:
+            print(f"Disagreement {i}: {anno1} vs. {anno2}")
+            
+    exact_kappa = cohen_kappa(label_pairs_exact)
+    print("exact kappa:", exact_kappa)
+
 
 def main():
     """
@@ -379,7 +411,9 @@ def main():
 
 
 if __name__ == "__main__":
-    anno1 = "annotation/multi/storycon_anno1_330_379.csv"
-    anno2 = "annotation/multi/storycon_anno2_330_379.csv"
+    anno1 = "annotation/task_annotations/bookdiff_anno1_150.csv"
+    anno2 = "annotation/task_annotations/bookdiff_anno2_150.csv"
     
-    compare_files(anno1, anno2)
+    #anno1 = "annotation/task_annotations/storycon_anno1_330_379.csv"
+    #anno2 = "annotation/task_annotations/storycon_anno2_330_379.csv"
+    compare_files_bookdiff(anno1, anno2)

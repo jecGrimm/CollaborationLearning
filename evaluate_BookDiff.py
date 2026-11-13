@@ -67,9 +67,11 @@ def report(rows):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python evaluate_annotations.py <file.csv>")
-        sys.exit(1)
+    # if len(sys.argv) != 2:
+    #     print("Usage: python evaluate_annotations.py <file.csv>")
+    #     sys.exit(1)
+    
+    #rows = evaluate(sys.argv[1])
 
-    rows = evaluate(sys.argv[1])
+    rows = evaluate("annotation/task_annotations/bookdiff_anno1_150.csv")
     report(rows)

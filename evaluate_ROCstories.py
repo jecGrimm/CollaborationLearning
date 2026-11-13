@@ -71,5 +71,8 @@ def report(rows):
 
 
 if __name__ == "__main__":
-    anno1 = "annotation/multi/annotated:ROCStories_150.csv"
-    anno2 = "annotation/multi/storycon_anno2_330_379.csv"
+    anno1 = "annotation/task_annotations/storycon_anno2_150.csv"
+    #anno2 = "annotation/multi/storycon_anno2_330_379.csv"
+
+    rows = evaluate(anno1)
+    report(rows)
